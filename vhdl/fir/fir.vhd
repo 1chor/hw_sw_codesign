@@ -120,7 +120,7 @@ begin
 			
 	end process sync_state_proc;
 	
-	fir_proc: process (state, stin_valid, x_n, coefficients, result_mult)
+	fir_proc: process (state, stin_valid, x_n, coefficients, result_mult, sum_result)
 	begin
 		state_next <= state;
 		
@@ -173,7 +173,7 @@ begin
 			
 	end process fir_proc;
 	
-	coefficient_proc: process (res_n, clk)
+	coefficient_proc: process (res_n, clk, write, writedata, read, coefficients)
 	begin
 		if res_n = '0' then -- Reset signals
 			coefficients <= (others => (others => '0'));
