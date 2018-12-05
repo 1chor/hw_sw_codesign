@@ -5,7 +5,8 @@ function correlation_wav_files(infile1, infile2)
 
 	[infile1_pathstr,infile1_name,infile1_ext] = fileparts(infile1);
 
-	if size(signal1)(2) ~= 2
+    size_sig1 =size(signal1);
+	if size_sig1(2) ~= 2
 		disp "infile1 not stereo!";
 		return;
 	end
@@ -15,7 +16,8 @@ function correlation_wav_files(infile1, infile2)
 
 	[infile2_pathstr,infile2_name,infile2_ext] = fileparts(infile2);
 
-	if size(signal2)(2) ~= 2
+    size_sig2 =size(signal2);
+	if size_sig2(2) ~= 2
 		disp "infile2 not stereo!";
 		return;
 	end
@@ -26,14 +28,13 @@ function correlation_wav_files(infile1, infile2)
 	correlation = (left+right)/2;
 
 
-	printf("qualitiy check on [%s] and [%s] \n", infile1, infile2);
-	printf("%s%s: length = %i samples \n", infile1_name, infile1_ext, length(signal1(:,1)) );
-	printf("%s%s: length = %i samples \n", infile2_name, infile2_ext, length(signal2(:,1)) );
-	minLength = min(length(signal1(:,1)), length(signal2(:,1)));
-	printf("\n");
-	printf("max difference left channel: %f  \n", max(abs(signal1(1:minLength,1) - signal2(1:minLength,1))) );
-	printf("max difference right channel: %f \n", max(abs(signal1(1:minLength,2) - signal2(1:minLength,2))) );
-	printf("correlation: %f \n", correlation); 
+	sprintf("qualitiy check on [%s] and [%s]", infile1, infile2)
+	sprintf("%s%s: length = %i samples", infile1_name, infile1_ext, length(signal1(:,1)) )
+	sprintf("%s%s: length = %i samples", infile2_name, infile2_ext, length(signal2(:,1)) )
+	minLength = min(length(signal1(:,1)), length(signal2(:,1)))
+	sprintf("max difference left channel: %f", max(abs(signal1(1:minLength,1) - signal2(1:minLength,1))) )
+	sprintf("max difference right channel: %f", max(abs(signal1(1:minLength,2) - signal2(1:minLength,2))) )
+	sprintf("correlation: %f \n", correlation) 
 
 	
 	%plotStart = 44100 * 2;

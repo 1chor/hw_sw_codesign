@@ -4,6 +4,7 @@
     infile = '.\..\sample_files\input.wav';
     outfile = '.\..\sample_files\output.wav';
     impluseresponsefile = '.\..\sample_files\ir_short.wav';
+    rightfile = '.\..\sample_files\output_richtig.wav';
     
 	[ir_signal, ir_sampleRate] = audioread(impluseresponsefile);
 	[input_signal, input_sampleRate] = audioread(infile);
@@ -51,6 +52,9 @@
 	% this is avoids an buffer overflow for the last block
 	output_signal = zeros(length(input_signal)+1*block_length,2);
 
+    fir_1 = filter(ir_signal(1:2*block_length,1),1,input_signal(:,1));
+    fir_2 = filter(ir_signal(1:2*block_length,2),1,input_signal(:,2));
+   
 	for i=0:num_input_blocks-1
 		%left channel
 		output_buffer = zeros(fft_length,1);
@@ -66,12 +70,14 @@
 			input_block = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,1);zeros(block_length,1)];
 			ir_block = [ir_signal(1+j*block_length:(j+1)*block_length,1);zeros(block_length,1)];
 			%perform the mulitplication in the freuqency domain
-			output_buffer = output_buffer + fft(input_block) .* fft(ir_block);
+			
+            if(j>1)
+                output_buffer = output_buffer + fft(input_block) .* fft(ir_block);
+            end
         end
-		output_buffer = real(ifft(output_buffer));
+		output_buffer = real(ifft(output_buffer)) + [fir_1(1+i*block_length:(i+1)*block_length);zeros(block_length,1)];
 		
 		output_signal(1+i*block_length:(i+2)*block_length,1) = output_buffer + output_signal(1+i*block_length:(i+2)*block_length,1);
-		
 		
 		%right channel
 		output_buffer = zeros(fft_length,1);
@@ -82,13 +88,16 @@
             end
 			input_block = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,2);zeros(block_length,1)];
 			ir_block = [ir_signal(1+j*block_length:(j+1)*block_length,2);zeros(block_length,1)];
-			output_buffer = output_buffer + fft(input_block) .* fft(ir_block);
+			
+            if(j>1)
+                output_buffer = output_buffer + fft(input_block) .* fft(ir_block);
+            end
         end
-		output_buffer = real(ifft(output_buffer));
+		output_buffer = real(ifft(output_buffer)) + [fir_2(1+i*block_length:(i+1)*block_length);zeros(block_length,1)];
 		
 		output_signal(1+i*block_length:(i+2)*block_length,2) = output_buffer + output_signal(1+i*block_length:(i+2)*block_length,2);
     end
-
+   
 	% crop the size of the output_signal to that of the input signal 
 	output_signal = output_signal(1:length(input_signal),:);
 
