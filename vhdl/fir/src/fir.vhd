@@ -15,7 +15,7 @@ entity fir is
 		res_n : in std_logic;
 		
 		-- streaming sink (input)
-		stin_data  : in std_logic_vector(31 downto 0);
+		stin_data  : in std_logic_vector(15 downto 0);
 		stin_valid : in std_logic;
 		stin_ready : out std_logic;
 		
@@ -37,8 +37,8 @@ end entity;
 architecture arch of fir is
 	
 	type array_type is array (NUM_COEFFICIENTS-1 downto 0) of std_logic_vector(15 downto 0);
-	signal coefficients		 : coeff_type := (others => (others => '0'));
-	signal coefficients_mult : coeff_type := (others => (others => '0'));
+	signal coefficients		 : array_type := (others => (others => '0'));
+	signal coefficients_mult : array_type := (others => (others => '0'));
 	
 	signal x_n 		: array_type := (others => (others => '0'));	
 	signal x_n_mult : array_type := (others => (others => '0'));	
@@ -59,31 +59,31 @@ architecture arch of fir is
 	);
 	signal state, state_next : state_type := STATE_IDLE;
 
-	-- Component for multiplier
-	component mult
-		port
-		(
-			dataa		: in std_logic_vector (15 downto 0);
-			datab		: in std_logic_vector (15 downto 0);
-			result		: out std_logic_vector (31 downto 0)
-		);
-	end component;
+	--~ -- Component for multiplier
+	--~ component mult
+		--~ port
+		--~ (
+			--~ dataa  : in std_logic_vector (15 downto 0);
+			--~ datab  : in std_logic_vector (15 downto 0);
+			--~ result : out std_logic_vector (31 downto 0)
+		--~ );
+	--~ end component;
 	
-	-- Component for adder
-	component add
-		port
-		(
-			dataa		: in std_logic_vector (31 downto 0);
-			datab		: in std_logic_vector (31 downto 0);
-			result		: out std_logic_vector (31 downto 0)
-		);
-	end component;
+	--~ -- Component for adder
+	--~ component add
+		--~ port
+		--~ (
+			--~ dataa  : in std_logic_vector (31 downto 0);
+			--~ datab  : in std_logic_vector (31 downto 0);
+			--~ result : out std_logic_vector (31 downto 0)
+		--~ );
+	--~ end component;
 	
 begin
 	-- generate multiplier
 	gen_mult:
 	for i in 0 to NUM_COEFFICIENTS-1 generate
-		mult: mult
+		mult: entity work.mult
 		port map (
 			x_n_mult(i),
 			coefficients_mult(i),
@@ -94,7 +94,7 @@ begin
 	-- generate adder
 	gen_add:
 	for i in 0 to NUM_COEFFICIENTS-2 generate
-		add: add
+		add: entity work.add
 		port map (
 			sum_a(i),
 			sum_b(i),
@@ -133,7 +133,7 @@ begin
 				stin_ready <= '1'; --Ready for Input
 								
 				if stin_valid = '1' then
-					--stin_ready <= '0'; --Activate for simulation
+					stin_ready <= '0'; --Activate for simulation
 					state_next <= STATE_MULT;
 				end if;
 						
@@ -173,7 +173,7 @@ begin
 			
 	end process fir_proc;
 	
-	coefficient_proc: process (res_n, clk, write, writedata, read, coefficients)
+	coefficient_proc: process (res_n, clk)
 	begin
 		if res_n = '0' then -- Reset signals
 			coefficients <= (others => (others => '0'));

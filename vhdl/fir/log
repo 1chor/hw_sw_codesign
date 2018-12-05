@@ -1,0 +1,70 @@
+** Warning: (vlib-34) Library already exists at "work".
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../math/src/math_pkg.vhd 
+-- Loading package STANDARD
+-- Compiling package math_pkg
+-- Compiling package body math_pkg
+-- Loading package math_pkg
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../mult/mult.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity mult
+-- Compiling architecture SYN of mult
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../add/add.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity add
+-- Compiling architecture SYN of add
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/src/fir.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package math_pkg
+-- Compiling entity fir
+-- Compiling architecture arch of fir
+-- Loading entity mult
+-- Loading entity add
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../tb/tb_util_pkg.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling package tb_util_pkg
+-- Compiling package body tb_util_pkg
+-- Loading package tb_util_pkg
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 09:53:59 on Dec 05,2018
+vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/tb/fir_tb.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package math_pkg
+-- Loading package tb_util_pkg
+-- Compiling entity fir_tb
+-- Compiling architecture bench of fir_tb
+End time: 09:53:59 on Dec 05,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0, Suppressed Warnings: 6

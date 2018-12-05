@@ -13,7 +13,7 @@
 --refer to the applicable agreement for further details.
 
 
-component mult
+component mult is
 	PORT
 	(
 		dataa		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
