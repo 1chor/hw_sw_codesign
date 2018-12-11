@@ -1,0 +1,140 @@
+
+========================================================================
+Memory Options
+========================================================================
+
+SRAM
+
+* 2 MB (2.097.152 bytes)
+* 16-bit wide entries
+* max. 125 MHz
+
+Access time
+
+* read: 2 cycles
+* write: 1 cycle
+
+SDRAM
+
+* 128 MB
+* 32-bit wide entries
+* max. 100 MHz
+
+Access time
+
+* read: 5 ns TODO source
+
+Tightly coupled memories (On-chip RAM)
+
+* Size dependent on free space on PL
+* custom width entries
+
+Access time
+
+* read: 1 or 2 clock cycles
+
+========================================================================
+Impractical memory options
+========================================================================
+
+vll lassen wir das auch ganz weg.
+
+* Flash
+* EEPROM
+* Nios II data cache (? vll doch brauchbar)
+
+========================================================================
+Memory usage
+========================================================================
+
+Input signal
+
+* 4096 deep memory in FIFO/On-chip RAM
+
+Impulse response
+
+* h0 (512-bits) for FIR in FIFO/On-chip RAM
+* H1-Hn (transformed) in SRAM
+
+Output signal (for 2nd mode)
+
+* saved in SDRAM
+
+========================================================================
+Timing
+========================================================================
+
+* 48 KHz Sampling frequency
+* 100 MHz clock
+
+* => new sample every 2080 cycles
+
+========================================================================
+FFT - Structure
+========================================================================
+
+Power Point
+
+========================================================================
+FFT - Header
+========================================================================
+
+* 14 blocks with 256 samples each
+* result has to be computed after 265 samples or 532.480 cycles
+
+* 265 samples * 2080 cylces/sample = 532.480 cycles
+
+* Calculating header blocks requires
+
+** 1 cycle for saving new x
+** 256 cycles for FFT ( x -> X )
+
+** for each block
+** 512 cycles for reading Hn ( read from SRAM is 2 cycles )
+** ?? cycles for multiplication ( X * Hn )
+** 1 cycle for accumulation
+
+** 512 cycles for iFFT ( X -> x )
+
+* This has to be done for 14 header blocks two times (stereo)
+
+* Assuming 500.000 cylces time for the multiplication
+
+* ( 256 * 14 * 2 ) * x = 500.000 => x ~ 69 cycles time for each multiplication
+
+========================================================================
+FFT - Body
+========================================================================
+
+* 23 blocks with 4096 samples each
+* result has to be computed after 4096 samples or 8.519.680 cycles
+
+* 4096 samples * 2080 cylces/sample = 8.519.680 cycles
+
+* Calculating body blocks requires
+
+** 1 cycle for saving new x
+** 4096 cycles for FFT ( x -> X )
+
+** for each block
+** 8192 cycles for reading Hn ( read from SRAM is 2 cycles )
+** ?? cycles for multiplication ( X * Hn )
+** 1 cycle for accumulation
+
+** 8192 cycles for iFFT ( X -> x )
+
+* This has to be done for 23 body blocks two times (stereo)
+
+* Assuming 8.400.000 cylces time for the multiplication
+
+* ( 4096 * 23 * 2 ) * x = 8.400.000 => x ~ 44 cycles time for each multiplication
+
+========================================================================
+FFT - Bottleneck
+========================================================================
+
+* Calculating FFT-header and FFT-body at the same time
+
+* According to estimates one FFT-Body can be finished after one FFT-Header was calculated
+
+

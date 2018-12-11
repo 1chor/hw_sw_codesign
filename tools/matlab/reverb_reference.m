@@ -185,10 +185,10 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length,1) = output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length,1) + output_buffer_1;
+        output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length) = output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length) + output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length,1) = output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length,1) + output_buffer_2;
+        output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length) = output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length) + output_buffer_2;
         
         cnt_header = cnt_header + 1;
         
@@ -236,10 +236,10 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) + output_buffer_1;
+        output_buffer_fft_1(1+i*block_length:(i+2)*block_length) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length) + output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) + output_buffer_2;
+        output_buffer_fft_2(1+i*block_length:(i+2)*block_length) = output_buffer_fft_2(1+i*block_length:(i+2)*block_length) + output_buffer_2;
         
     end
     
