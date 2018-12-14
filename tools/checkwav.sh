@@ -13,4 +13,4 @@ DIRECTORY=$(dirname "$BASH_SOURCE")
 FILE_1=$1
 FILE_2=$2
 
-octave --silent --eval "addpath ('$DIRECTORY/octave'); correlation_wav_files('$FILE_1','$FILE_2')"
+octave --silent --eval "addpath ('$DIRECTORY/matlab'); correlation_wav_files('$FILE_1','$FILE_2')"
