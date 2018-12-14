@@ -13,7 +13,8 @@
   rightfile = './../sample_files/output_richtig.wav';
   
   use_custom_fir = false;
-  use_custom_fft = true;
+  use_custom_fft = false;
+  %use_custom_fft = true;
   
   [ir_signal, ir_sampleRate] = audioread(impluseresponsefile);
   [input_signal, input_sampleRate] = audioread(infile);
@@ -42,9 +43,15 @@
   sprintf("Original file lengths [# stero samples]:")
   sprintf("  input file: %d", length(input_signal))
   sprintf("  ir file: %d", length(ir_signal))
-
+  
+  % keine ahnung warum das ceil shit hier ist.
+  % hab den direkten wert danach eingetragen.
+  
   ir_length = ceil(length(ir_signal)/(fft_length/2))*(fft_length/2);
   input_length = ceil(length(input_signal)/(fft_length/2))*(fft_length/2);
+  
+  ir_length = 96000;
+  input_length = 174250;
 
   ir_signal = [ir_signal;zeros(ir_length-length(ir_signal),2)];
   input_signal = [input_signal;zeros(input_length-length(input_signal),2)];
@@ -67,8 +74,8 @@
   output_buffer_fir_1 = zeros(length(input_signal),1);
   output_buffer_fir_2 = zeros(length(input_signal),1);
   
-  output_buffer_fft_1 = zeros(length(input_signal)+1*block_length,1);
-  output_buffer_fft_2 = zeros(length(input_signal)+1*block_length,1);
+  output_buffer_fft_1 = zeros(length(input_signal)+3*block_length,1);
+  output_buffer_fft_2 = zeros(length(input_signal)+3*block_length,1);
   
   % initialize output signal and make it one block longer than the input signal
   % this is avoids an buffer overflow for the last block
@@ -83,6 +90,12 @@
   
   input_buffer_fir_1 = zeros(N_length,1);
   input_buffer_fir_2 = zeros(N_length,1);
+  
+  %input_buffer_fft_1_history = zeros( header_length, num_input_blocks );
+  %input_buffer_fft_2_history = zeros( header_length, num_input_blocks );
+  
+  input_buffer_fft_1_history = zeros( header_length, num_ir_blocks );
+  input_buffer_fft_2_history = zeros( header_length, num_ir_blocks );
   
   % ----------------------------------------------------------------------------
   % FIR
@@ -146,10 +159,12 @@
   
   if ( use_custom_fft == true )
     
+    
+    
     input_buffer_fft_1 = zeros(block_length,1);
     input_buffer_fft_2 = zeros(block_length,1);
     
-    cnt_header = 0;
+    cnt_header = 1;
     
     for s=0:input_length-1
       
@@ -161,34 +176,57 @@
       
       if ( ( mod(s,block_length-1) == 0 ) && ( s > 0 ) )
         
-        output_buffer_1 = zeros(2 * block_length,1);
-        output_buffer_2 = zeros(2 * block_length,1);
+        % jetzt haben wir einen input block. dieser wird mit h verdingst.
         
-        for j=2:num_ir_blocks-1
-            
-            % load the required blocks and zero-extend them to fft_length
-            % rememer that the length of the result of a convolution is 
-            % given by the addition of the lengths of the inputs signals 
-            
-            input_block_1 = [input_buffer_fft_1;zeros(block_length,1)];
-            ir_block_1 = [ir_signal(1+j*block_length:(j+1)*block_length,1);zeros(block_length,1)];
-            
-            %disp(input_block_1);
-            %return;
-            
-            output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
-            
-            input_block_2 = [input_buffer_fft_2;zeros(block_length,1)];
-            ir_block_2 = [ir_signal(1+j*block_length:(j+1)*block_length,2);zeros(block_length,1)];
-            
-            output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
+        input_buffer_fft_1_history( 1 : block_length, cnt_header ) = input_buffer_fft_1;
+        input_buffer_fft_2_history( 1 : block_length, cnt_header ) = input_buffer_fft_2;
+        
+        % wir gehen die schleife durch von cnt_header bis nach 0.
+        % also von hinten nach vorne.
+        
+        % wir machen so viele bloecke wie wir inputs haben.
+        % ich werde einfach fuer das h eine variable mitlaufen lassen.
+        
+        % bei h beginnen wir ja vorne. j wurde es in der angabe genannt.
+        
+        j = 0;
+        i = cnt_header;
+        
+        disp(cnt_header);
+        
+        for fuck_me = 1:cnt_header
+          
+          fprintf("for\n");
+          
+          output_buffer_1 = zeros(2 * block_length,1);
+          output_buffer_2 = zeros(2 * block_length,1);
+          
+          % die ir schleife gehen wir von 0 an rauf.
+          % also von vorne nach hinten.
+          
+          input_block_1 = [input_buffer_fft_1_history(:,cnt_header);zeros(block_length,1)];
+          ir_block_1 = [ir_signal(1+(j+2)*block_length:((j+2)+1)*block_length,1);zeros(block_length,1)];
+          
+          output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
+          
+          input_block_2 = [input_buffer_fft_2_history(:,cnt_header);zeros(block_length,1)];
+          ir_block_2 = [ir_signal(1+(j+2)*block_length:((j+2)+1)*block_length,2);zeros(block_length,1)];
+          
+          output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
+          
+          j = j + 1;
+          
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length) = output_buffer_fft_1(1+cnt_header*block_length:(cnt_header+2)*block_length) + output_buffer_1;
+        
+        disp(output_buffer_1);
+        return;
+        
+        output_buffer_fft_1( 1 + ((cnt_header-1) * block_length ) : ( (cnt_header-1) + 2 ) * block_length , 1) += output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length) = output_buffer_fft_2(1+cnt_header*block_length:(cnt_header+2)*block_length) + output_buffer_2;
+        output_buffer_fft_2( 1 + ((cnt_header-1) * block_length ) : ( (cnt_header-1) + 2 ) * block_length , 1) += output_buffer_2;
         
         cnt_header = cnt_header + 1;
         
@@ -198,11 +236,63 @@
     
   else
     
+    % als erstes werde ich das ir signal in die bloecke aufteilen
+    % damit ich leichter daruaf zugreifen kann
+    
+    h_header_1 = zeros(block_length, 375);
+    h_header_2 = zeros(block_length, 375);
+    
+    % der erste block wird richtig gespeichert.  i==0. beginnt mit  3.0518e-05
+    % der zweite block wird richtig gespeichert. i==1. beginnt mit -9.1553e-05
+    % der dritte block wird richtig gespeichert. i==2. beginnt mit  0.00006
+    % der block bei i == 373 wird richtig gespeichert
+    % bei i == 374 kommt nichts mehr
+    
+    % DER ERSTE BLOCK IST BEI INDEX 1 GESPEICHERT.
+    
+    % we start with 0.
+    % therefore the each index in the loop has to be incremented by 1.
+    % if the loop did not start with 0, it would not be possible to select
+    % the data starting with range 1.
+    
+    for i=0:374
+      
+      h_header_1( :,i+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,1);
+      h_header_2( :,i+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,2);
+      
+      %if (i == 2)
+        %disp(ir_signal(1+i*block_length:(i+1)*block_length,1));
+        %disp(h_header_1( :,i+1 ));
+        %return
+      %end
+      
+    end
+    
+    %i_header_1 = zeros(block_length, 682);
+    %i_header_2 = zeros(block_length, 682);
+    
+    %174.080
+    %174.250
+    
+    %170 samples fehlen.
+    
+    %die muss ich am schluss dran haengen.
+    
+    % dieser loop wird auch noch fuer 681 ausgefuehrt
+    
+    %for i=1:681
+      
+      %i_header_1( :,i ) = input_signal(1+i*block_length:(i+1)*block_length,1);
+      %i_header_2( :,i ) = input_signal(1+i*block_length:(i+1)*block_length,2);
+      
+    %end
+    
+    %i_header_1( 1:171,682 ) = input_signal(1+681*block_length:(i+1)*block_length,2);
+    
+    % bei den schleifen nehme ich scheinbar immer normale indices an und
+    % muss dann bei den array zugriffen 1 dazu addieren.
+    
     for i=0:num_input_blocks-1
-        
-        % ------------------------------------------------------------------------
-        % left channel
-        % ------------------------------------------------------------------------
         
         output_buffer_1 = zeros(2 * block_length,1);
         output_buffer_2 = zeros(2 * block_length,1);
@@ -218,28 +308,60 @@
             end
             
             % load the required blocks and zero-extend them to fft_length
-            % rememer that the length of the result of a convolution is 
-            % given by the addition of the lengths of the inputs signals 
+            % rememer that the length of the result of a convolution is
+            % given by the addition of the lengths of the inputs signals
             
             input_block_1 = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,1);zeros(block_length,1)];
-            ir_block_1 = [ir_signal(1+j*block_length:(j+1)*block_length,1);zeros(block_length,1)];
+            
+            %ir_block_1 = [ir_signal(1+j*block_length:(j+1)*block_length,1);zeros(block_length,1)];
+            ir_block_1 = [h_header_1(:,j+1);zeros(block_length,1)];
+            
+            % hier lese ich das richtige von h_header_1
+            % und zwar das was ich auch beim erstellen das arrays gesehen habe.
+            
+            % bei ir_signal sehe ich folgendes:
+            % 0.00006
+            %-0.00003
+            % 0.00000
+            %-0.00003
+            
+            % das ist der dritte block. also lese ich hier irgendwie etwas falsches.
+            
+            % wir wollen hier mit dem dritten block beginnen, da der ja bei index 3 ist.
+            % daher muss ich bei meinem neuen block system noch 1 zu dem j addieren.
+            
+            %disp(ir_signal(1+j*block_length:(j+1)*block_length,1));
+            %disp(h_header_1(:,j+1));
+            %return;
             
             %disp(input_block_1);
+            %disp(ir_block_1);
             %return;
             
             output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
             
+            %disp(output_buffer_1);
+            %return;
+            
             input_block_2 = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,2);zeros(block_length,1)];
-            ir_block_2 = [ir_signal(1+j*block_length:(j+1)*block_length,2);zeros(block_length,1)];
+            ir_block_2 = [h_header_2(:,j+1);zeros(block_length,1)];
+            
+            %disp(input_block_2);
+            %disp(ir_block_2);
+            %return;
             
             output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+i*block_length:(i+2)*block_length) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length) + output_buffer_1;
+        
+        %disp(output_buffer_1(1:20));
+        %return;
+        
+        output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) + output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+i*block_length:(i+2)*block_length) = output_buffer_fft_2(1+i*block_length:(i+2)*block_length) + output_buffer_2;
+        output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) + output_buffer_2;
         
     end
     
@@ -250,8 +372,8 @@
   output_signal(1:length(input_signal),1) = fir_1;
   output_signal(1:length(input_signal),2) = fir_2;
   
-  output_signal(:,1) = output_signal(:,1) + output_buffer_fft_1;
-  output_signal(:,2) = output_signal(:,2) + output_buffer_fft_2;
+  output_signal(:,1) = output_signal(:,1) + output_buffer_fft_1(1:length(output_signal));
+  output_signal(:,2) = output_signal(:,2) + output_buffer_fft_2(1:length(output_signal));
   
   % crop the size of the output_signal to that of the input signal 
   output_signal = output_signal(1:length(input_signal),:);
@@ -271,19 +393,19 @@
 
 %% Cost Analysis
 
-syms N B; %Creates symbolic variable
-syms k T;
+%syms N B; %Creates symbolic variable
+%syms k T;
 %k = 1.5; %Proportionality constant
 %T = ir_length; %Length of filter impulse response
-f_s = 48000; %Samplefrequenz
-f_fpga = 100000000; %Clockfrequenz vom FPGA
-cycle = f_fpga / f_s; %Zeit fuer direkt FFT
+%f_s = 48000; %Samplefrequenz
+%f_fpga = 100000000; %Clockfrequenz vom FPGA
+%cycle = f_fpga / f_s; %Zeit fuer direkt FFT
 
-sprintf("Cost of Single-FDL Convolution")
-O_SFDL = 4*k*log2(2*N) + 4*T/N; %Cost of Single-FDL Convolution
-N_opt = solve(diff(O_SFDL,N)==0,N) %Optimal value for Single-FDL Convolution
+%sprintf("Cost of Single-FDL Convolution")
+%O_SFDL = 4*k*log2(2*N) + 4*T/N; %Cost of Single-FDL Convolution
+%N_opt = solve(diff(O_SFDL,N)==0,N) %Optimal value for Single-FDL Convolution
 
-sprintf("Cost of Double-FDL Convolution")
-O_DoubleFDL = 4*k*log2(2*N) + 4*B/N + 4*k*log2(2*B) + 4*(T/B-1); %Cost of Double-FDL Convolution
-B_opt = solve(diff(O_DoubleFDL,B)==0,B) %Optimal value for Double-FDL Convolution
+%sprintf("Cost of Double-FDL Convolution")
+%O_DoubleFDL = 4*k*log2(2*N) + 4*B/N + 4*k*log2(2*B) + 4*(T/B-1); %Cost of Double-FDL Convolution
+%B_opt = solve(diff(O_DoubleFDL,B)==0,B) %Optimal value for Double-FDL Convolution
 
