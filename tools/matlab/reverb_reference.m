@@ -271,12 +271,6 @@
       h_header_1( :,i+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,1);
       h_header_2( :,i+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,2);
       
-      %if (i == 375)
-        %disp(ir_signal(1+i*block_length:(i+1)*block_length,1));
-        %disp(h_header_1( :,i+1 ));
-        %return
-      %end
-      
     end
     
     % i == 0 passt -> 0.00000, -0.00015
@@ -292,40 +286,7 @@
       i_header_1( :,i+1 ) = input_signal(1+i*block_length:(i+1)*block_length,1);
       i_header_2( :,i+1 ) = input_signal(1+i*block_length:(i+1)*block_length,2);
       
-      %if (i == num_input_blocks-1)
-        %disp(input_signal(1+i*block_length:(i+1)*block_length,1));
-        %disp(i_header_1( :,i+1 ));
-        %return
-      %end
-      
     end
-    
-    
-    
-    
-    
-    % FALLS SICH DAS NICHT SO GENAU AUSGEHT
-    
-    %i_header_1 = zeros(block_length, 682);
-    %i_header_2 = zeros(block_length, 682);
-    
-    %174.080
-    %174.250
-    
-    %170 samples fehlen.
-    
-    %die muss ich am schluss dran haengen.
-    
-    % dieser loop wird auch noch fuer 681 ausgefuehrt
-    
-    %for i=1:681
-      
-      %i_header_1( :,i ) = input_signal(1+i*block_length:(i+1)*block_length,1);
-      %i_header_2( :,i ) = input_signal(1+i*block_length:(i+1)*block_length,2);
-      
-    %end
-    
-    %i_header_1( 1:171,682 ) = input_signal(1+681*block_length:(i+1)*block_length,2);
     
     % bei den schleifen nehme ich scheinbar immer normale indices an und
     % muss dann bei den array zugriffen 1 dazu addieren.
@@ -349,57 +310,18 @@
             % rememer that the length of the result of a convolution is
             % given by the addition of the lengths of the inputs signals
             
-            %input_block_1 = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,1);zeros(block_length,1)];
             input_block_1 = [i_header_1(:,input_block_index+1);zeros(block_length,1)];
-            
-            %ir_block_1 = [ir_signal(1+j*block_length:(j+1)*block_length,1);zeros(block_length,1)];
             ir_block_1 = [h_header_1(:,j+1);zeros(block_length,1)];
-            
-            % hier lese ich das richtige von h_header_1
-            % und zwar das was ich auch beim erstellen das arrays gesehen habe.
-            
-            % bei ir_signal sehe ich folgendes:
-            % 0.00006
-            %-0.00003
-            % 0.00000
-            %-0.00003
-            
-            % das ist der dritte block. also lese ich hier irgendwie etwas falsches.
-            
-            % wir wollen hier mit dem dritten block beginnen, da der ja bei index 3 ist.
-            % daher muss ich bei meinem neuen block system noch 1 zu dem j addieren.
-            
-            %disp(ir_signal(1+j*block_length:(j+1)*block_length,1));
-            %disp(h_header_1(:,j+1));
-            %return;
-            
-            %disp(input_block_1);
-            %disp(ir_block_1);
-            %return;
             
             output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
             
-            %disp(output_buffer_1);
-            %return;
-            
-            %input_block_2 = [input_signal(1+input_block_index*block_length:(input_block_index+1)*block_length,2);zeros(block_length,1)];
             input_block_2 = [i_header_2(:,input_block_index+1);zeros(block_length,1)];
-            
-            %ir_block_2 = [ir_signal(1+j*block_length:(j+1)*block_length,2);zeros(block_length,1)];
             ir_block_2 = [h_header_2(:,j+1);zeros(block_length,1)];
-            
-            %disp(input_block_2);
-            %disp(ir_block_2);
-            %return;
             
             output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        
-        %disp(output_buffer_1(1:20));
-        %return;
-        
         output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) + output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
