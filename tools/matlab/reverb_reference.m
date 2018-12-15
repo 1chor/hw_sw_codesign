@@ -281,29 +281,6 @@
     i_header_1 = zeros(block_length, num_input_blocks);
     i_header_2 = zeros(block_length, num_input_blocks);
     
-    %for i=0:num_input_blocks-1
-      
-      %i_header_1( :,i+1 ) = input_signal(1+i*block_length:(i+1)*block_length,1);
-      %i_header_2( :,i+1 ) = input_signal(1+i*block_length:(i+1)*block_length,2);
-      
-      %if ( i == 2 )
-        %disp(i_header_1_buffer);
-        %disp("hallo");
-        %disp(i_header_1(block_length-2:block_length, 1));
-        %return;
-      %end
-      
-    %end
-    
-    % die letzten drei werte von den i_header_1 block 1 sind:
-    % 4.2725e-04
-    %-7.1716e-03
-    %-1.7578e-02
-    
-    % 4.2725e-04
-    %-7.1716e-03
-    %-1.7578e-02
-    
     i = 0;
     
     i_header_1_buffer = zeros(block_length, 1);
@@ -311,50 +288,29 @@
     
     for s=0:input_length-1
       
-      %Buffer for fir filter
-      
       i_header_1_buffer(1:block_length-1) = i_header_1_buffer(2:block_length);
       i_header_1_buffer(block_length) = input_signal(s+1,1);
       
       i_header_2_buffer(1:block_length-1) = i_header_2_buffer(2:block_length);
       i_header_2_buffer(block_length) = input_signal(s+1,2);
       
-      % das sollte eingeltich nicht als block gemacht werden, aber sonst ist
-      % es zu langsam
-      
-      % wenn ich das block_length-1 nicht habe schifte ich oben zu viel raus.
-      
+      % diese mod operation funktioniert nicht
       %if ( ( mod(s, block_length-1) == 0 ) && ( s > 0 ) )
       
       if ( s > 0 )
         
         if ( s == (block_length*(i+1)-1) )
           
-          fprintf( "s: %i\n", s);
-          fprintf( "b: %i\n", block_length*(i+1)-1);
-          
           i_header_1( :,i+1 ) = i_header_1_buffer(1:block_length);
           i_header_2( :,i+1 ) = i_header_2_buffer(1:block_length);
           
-          %if ( i == 2 )
-            %disp(i_header_1_buffer);
-            %disp(i_header_1);
-            %disp(i_header_1(block_length-2:block_length, 1));
-            %return;
-            
-          %end
-          
           i = i + 1;
-          
           
         end
         
       end
       
-      %end
-      
     end
-    
     
     % bei den schleifen nehme ich scheinbar immer normale indices an und
     % muss dann bei den array zugriffen 1 dazu addieren.
@@ -377,19 +333,6 @@
             % load the required blocks and zero-extend them to fft_length
             % rememer that the length of the result of a convolution is
             % given by the addition of the lengths of the inputs signals
-            
-            % im internet sieht es so aus als wuerde das ";" bedeuten, dass sich
-            % die dimension des arrays aendert
-            
-            %https://stackoverflow.com/a/5859200/9571395
-            
-            %A = [ 1 2 3;4 5 6; 7 8 9]
-            %
-            %A =
-            %    1     2     3
-            %    4     5     6
-            %    7     8     9
-            
             
             input_block_1 = [i_header_1(:,input_block_index+1);zeros(block_length,1)];
             ir_block_1 = [h_header_1(:,j+1);zeros(block_length,1)];
