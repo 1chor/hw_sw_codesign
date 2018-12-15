@@ -166,82 +166,9 @@
   
   if ( use_custom_fft == true )
     
-    
-    
-    input_buffer_fft_1 = zeros(block_length,1);
-    input_buffer_fft_2 = zeros(block_length,1);
-    
-    cnt_header = 1;
-    
-    for s=0:input_length-1
-      
-      input_buffer_fft_1(1:block_length-1) = input_buffer_fft_1(2:block_length);
-      input_buffer_fft_1(block_length) = input_signal(s+1,1);
-      
-      input_buffer_fft_2(1:block_length-1) = input_buffer_fft_2(2:block_length);
-      input_buffer_fft_2(block_length) = input_signal(s+1,2);
-      
-      if ( ( mod(s,block_length-1) == 0 ) && ( s > 0 ) )
-        
-        % jetzt haben wir einen input block. dieser wird mit h verdingst.
-        
-        input_buffer_fft_1_history( 1 : block_length, cnt_header ) = input_buffer_fft_1;
-        input_buffer_fft_2_history( 1 : block_length, cnt_header ) = input_buffer_fft_2;
-        
-        % wir gehen die schleife durch von cnt_header bis nach 0.
-        % also von hinten nach vorne.
-        
-        % wir machen so viele bloecke wie wir inputs haben.
-        % ich werde einfach fuer das h eine variable mitlaufen lassen.
-        
-        % bei h beginnen wir ja vorne. j wurde es in der angabe genannt.
-        
-        j = 0;
-        i = cnt_header;
-        
-        disp(cnt_header);
-        
-        for fuck_me = 1:cnt_header
-          
-          fprintf("for\n");
-          
-          output_buffer_1 = zeros(2 * block_length,1);
-          output_buffer_2 = zeros(2 * block_length,1);
-          
-          % die ir schleife gehen wir von 0 an rauf.
-          % also von vorne nach hinten.
-          
-          input_block_1 = [input_buffer_fft_1_history(:,cnt_header);zeros(block_length,1)];
-          ir_block_1 = [ir_signal(1+(j+2)*block_length:((j+2)+1)*block_length,1);zeros(block_length,1)];
-          
-          output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
-          
-          input_block_2 = [input_buffer_fft_2_history(:,cnt_header);zeros(block_length,1)];
-          ir_block_2 = [ir_signal(1+(j+2)*block_length:((j+2)+1)*block_length,2);zeros(block_length,1)];
-          
-          output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
-          
-          j = j + 1;
-          
-        end
-        
-        output_buffer_1 = real(ifft(output_buffer_1));
-        
-        disp(output_buffer_1);
-        return;
-        
-        output_buffer_fft_1( 1 + ((cnt_header-1) * block_length ) : ( (cnt_header-1) + 2 ) * block_length , 1) += output_buffer_1;
-        
-        output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2( 1 + ((cnt_header-1) * block_length ) : ( (cnt_header-1) + 2 ) * block_length , 1) += output_buffer_2;
-        
-        cnt_header = cnt_header + 1;
-        
-      end
-      
-    end
-    
-  else
+    % ----------------------------------------------------------------------------
+    % PROCESS H
+    % ----------------------------------------------------------------------------
     
     % als erstes werde ich das ir signal in die bloecke aufteilen
     % damit ich leichter daruaf zugreifen kann
@@ -272,6 +199,10 @@
       h_header_2( :,i+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,2);
       
     end
+    
+    % ----------------------------------------------------------------------------
+    % PROCESS I
+    % ----------------------------------------------------------------------------
     
     % i == 0 passt -> 0.00000, -0.00015
     % i == 1 passt -> -3.6163e-02, -6.5094e-02
@@ -312,46 +243,92 @@
       
     end
     
+    % ----------------------------------------------------------------------------
+    % PROCESS BLOCKS
+    % ----------------------------------------------------------------------------
+    
     % bei den schleifen nehme ich scheinbar immer normale indices an und
     % muss dann bei den array zugriffen 1 dazu addieren.
+    
+    % fuer jeden input block rennen die ganzen ir bloecke durch
+    
+    % so wie ich das verstehe muss ich jeden ir block durchlaufen und
+    % das dann für jeden input block von jetzt bis in die vergangenheit
+    
+    % also fuer jeden input block alle ir blocks.
+    % daher muss das input der outer loop sein.
+    
+    % normalerweise koennte ich alles durchlaufen, da der rest mit 0 gefuellt ist.
+    % hier habe ich aber schon alles und muss daher aufpassen.
+    
+    % i0*h0
+    % i1*h0 + i0*h1
+    % i2*h0 + i1*h1 + i0*h2
+    
+    % da matlab mit index 1 beginnt haben wir eigentlich:
+    
+    % i1*h1
+    % i2*h1 + i1*h2
+    % i3*h1 + i2*h2 + i1*h3
+    
+    p = 1; % am anfang haben wir ja einen block
+    j = 0;
     
     for i=0:num_input_blocks-1
         
         output_buffer_1 = zeros(2 * block_length,1);
         output_buffer_2 = zeros(2 * block_length,1);
         
-        for j=2:num_ir_blocks-1
-            
-            input_block_index = i-j;
-            
-            %at the beginning of the file there is no history yet --> exit loop
-            
-            if(input_block_index < 0)
-              break;
-            end
-            
-            % load the required blocks and zero-extend them to fft_length
-            % rememer that the length of the result of a convolution is
-            % given by the addition of the lengths of the inputs signals
-            
-            input_block_1 = [i_header_1(:,input_block_index+1);zeros(block_length,1)];
-            ir_block_1 = [h_header_1(:,j+1);zeros(block_length,1)];
-            
-            output_buffer_1 = output_buffer_1 + fft(input_block_1) .* fft(ir_block_1);
-            
-            input_block_2 = [i_header_2(:,input_block_index+1);zeros(block_length,1)];
-            ir_block_2 = [h_header_2(:,j+1);zeros(block_length,1)];
-            
-            output_buffer_2 = output_buffer_2 + fft(input_block_2) .* fft(ir_block_2);
+        % am anfang wird das 1 mal durchgemacht, dann 2 mal
+        % das soll die history darstellen
+        
+        p = min(p, num_ir_blocks);
+        
+        i_index = p-1;
+        h_index = 0;
+        
+        for i=0:p-1
+          
+%          fprintf("i%i * h%i\n", i_index+1, h_index+1);
+          
+          in_block_1 = [i_header_1(:,i_index+1);zeros(block_length,1)];
+          ir_block_1 = [h_header_1(:,h_index+1);zeros(block_length,1)];
+          
+          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
+          
+          in_block_2 = [i_header_2(:,i_index+1);zeros(block_length,1)];
+          ir_block_2 = [h_header_2(:,h_index+1);zeros(block_length,1)];
+          
+          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+          
+          i_index = i_index - 1;
+          h_index = h_index + 1;
+          
         end
         
+%        fprintf("--- done ---\n");
+        
+%        if (p==3)
+%        return;
+%        end
+        
+        
+        
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) + output_buffer_1;
+        output_buffer_fft_1(1+p*block_length:(p+2)*block_length,1) += output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) = output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) + output_buffer_2;
+        output_buffer_fft_2(1+p*block_length:(p+2)*block_length,1) += output_buffer_2;
+        
+        p = p + 1;
         
     end
+    
+    
+    
+  else
+    
+    
     
   end
   
