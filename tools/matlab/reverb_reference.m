@@ -15,8 +15,8 @@
   use_custom_fir = false;
 %  use_custom_fir = true;
 
-  use_custom_fft = false;
-%  use_custom_fft = true;
+%  use_custom_fft = false;
+  use_custom_fft = true;
   
   [ir_signal, ir_sampleRate] = audioread(impluseresponsefile);
   [input_signal, input_sampleRate] = audioread(infile);
@@ -81,6 +81,7 @@
   num_ir_blocks = length(ir_signal)/block_length
   
   num_ir_header_blocks = num_ir_blocks - 2;
+  num_in_header_blocks = length(input_signal)/header_length
   
   output_buffer_fir_1 = zeros(length(input_signal),1);
   output_buffer_fir_2 = zeros(length(input_signal),1);
@@ -160,86 +161,46 @@
   % FFT
   % ----------------------------------------------------------------------------
   
-  %Buffer for header FDL
-  %input_buffer_header_1 = buffer(input_signal(s+1,1),header_length);
-  %input_buffer_header_2 = buffer(input_signal(s+1,2),header_length);
- 
-  %Buffer for body FDL
-  %input_buffer_body_1 = buffer(input_signal(s+1,1),body_length);
-  %input_buffer_body_2 = buffer(input_signal(s+1,2),body_length);
-  
   if ( use_custom_fft == true )
     
     % ----------------------------------------------------------------------------
-    % PROCESS H
+    % HEADER
     % ----------------------------------------------------------------------------
     
-    % als erstes werde ich das ir signal in die bloecke aufteilen
-    % damit ich leichter daruaf zugreifen kann
-    
-    % num_ir_blocks ist 375 wenn ich die laenge des ir signals auf
-    % 96.000 festlege. wenn das zero extended wird, dann ist es groesser.
-    
-    h_header_1 = zeros(block_length, num_ir_blocks);
-    h_header_2 = zeros(block_length, num_ir_blocks);
-    
-    % der erste block wird richtig gespeichert.  i==0. beginnt mit  3.0518e-05
-    % der zweite block wird richtig gespeichert. i==1. beginnt mit -9.1553e-05
-    % der dritte block wird richtig gespeichert. i==2. beginnt mit  0.00006
-    % der block bei i == 373 wird richtig gespeichert
-    % der block bei i == 374 wird richtig gespeichert
-    % bei i == 375 kommt nichts mehr
-    
-    % DER ERSTE BLOCK IST BEI INDEX 1 GESPEICHERT.
-    
-    % we start with 0.
-    % therefore the each index in the loop has to be incremented by 1.
-    % if the loop did not start with 0, it would not be possible to select
-    % the data starting with range 1.
+    h_header_1 = zeros(header_length, num_ir_header_blocks);
+    h_header_2 = zeros(header_length, num_ir_header_blocks);
     
     h_header_index = 0;
     
     for i=2:num_ir_blocks-1
       
-      h_header_1( :,h_header_index+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,1);
-      h_header_2( :,h_header_index+1 ) = ir_signal(1+i*block_length:(i+1)*block_length,2);
+      h_header_1( :,h_header_index+1 ) = ir_signal(1+i*header_length:(i+1)*header_length,1);
+      h_header_2( :,h_header_index+1 ) = ir_signal(1+i*header_length:(i+1)*header_length,2);
       
       h_header_index = h_header_index + 1;
       
     end
     
-    % ----------------------------------------------------------------------------
-    % PROCESS I
-    % ----------------------------------------------------------------------------
-    
-    % i == 0 passt -> 0.00000, -0.00015
-    % i == 1 passt -> -3.6163e-02, -6.5094e-02
-    % i == 2 passt -> -0.4235535, -0.4453125
-    % i == num-1 passt -> 0, 0 -> ist ja von dem zero extended
-    
-    i_header_1 = zeros(block_length, num_input_blocks);
-    i_header_2 = zeros(block_length, num_input_blocks);
+    i_header_1 = zeros(header_length, num_input_blocks);
+    i_header_2 = zeros(header_length, num_input_blocks);
     
     i = 0;
     
-    i_header_1_buffer = zeros(block_length, 1);
-    i_header_2_buffer = zeros(block_length, 1);
+    i_header_1_buffer = zeros(header_length, 1);
+    i_header_2_buffer = zeros(header_length, 1);
     
     for s=0:input_length-1
       
-      i_header_1_buffer(1:block_length-1) = i_header_1_buffer(2:block_length);
-      i_header_1_buffer(block_length) = input_signal(s+1,1);
+      i_header_1_buffer(1:header_length-1) = i_header_1_buffer(2:header_length);
+      i_header_1_buffer(header_length) = input_signal(s+1,1);
       
-      i_header_2_buffer(1:block_length-1) = i_header_2_buffer(2:block_length);
-      i_header_2_buffer(block_length) = input_signal(s+1,2);
-      
-      % diese mod operation funktioniert nicht
-      %if ( ( mod(s, block_length-1) == 0 ) && ( s > 0 ) )
+      i_header_2_buffer(1:header_length-1) = i_header_2_buffer(2:header_length);
+      i_header_2_buffer(header_length) = input_signal(s+1,2);
       
       if ( s > 0 )
-        if ( s == (block_length*(i+1)-1) )
-          i_header_1( :,i+1 ) = i_header_1_buffer(1:block_length);
-          i_header_2( :,i+1 ) = i_header_2_buffer(1:block_length);
+        if ( s == (header_length*(i+1)-1) )
+          i_header_1( :,i+1 ) = i_header_1_buffer(1:header_length);
+          i_header_2( :,i+1 ) = i_header_2_buffer(1:header_length);
           
           i = i + 1;
         end
@@ -247,79 +208,47 @@
       
     end
     
-    % ----------------------------------------------------------------------------
-    % PROCESS BLOCKS
-    % ----------------------------------------------------------------------------
-    
-    % bei den schleifen nehme ich scheinbar immer normale indices an und
-    % muss dann bei den array zugriffen 1 dazu addieren.
-    
-    % fuer jeden input block rennen die ganzen ir bloecke durch
-    
-    % so wie ich das verstehe muss ich jeden ir block durchlaufen und
-    % das dann für jeden input block von jetzt bis in die vergangenheit
-    
-    % also fuer jeden input block alle ir blocks.
-    % daher muss das input der outer loop sein.
-    
-    % normalerweise koennte ich alles durchlaufen, da der rest mit 0 gefuellt ist.
-    % hier habe ich aber schon alles und muss daher aufpassen.
-    
-    % i0*h0
-    % i1*h0 + i0*h1
-    % i2*h0 + i1*h1 + i0*h2
-    
-    % da matlab mit index 1 beginnt haben wir eigentlich:
-    
-    % i1*h1
-    % i2*h1 + i1*h2
-    % i3*h1 + i2*h2 + i1*h3
-    
-    p = 1; % am anfang haben wir ja einen block
-    j = 0;
-    
-    for i=0:num_input_blocks-1
+    for i=0:num_in_header_blocks-1
+      
+      output_buffer_1 = zeros(2 * header_length,1);
+      output_buffer_2 = zeros(2 * header_length,1);
+      
+      for j=0:num_ir_header_blocks-1
         
-        output_buffer_1 = zeros(2 * block_length,1);
-        output_buffer_2 = zeros(2 * block_length,1);
+        input_block_index = i-j;
         
-        % am anfang wird das 1 mal durchgemacht, dann 2 mal
-        % das soll die history darstellen
+        %at the beginning of the file there is no history yet --> exit loop
         
-        p = min(p, num_ir_header_blocks);
-        
-        i_index = p-1;
-        h_index = 0;
-        
-        for a=0:p-1
-          
-          in_block_1 = [i_header_1(:,i_index+1);zeros(block_length,1)];
-          ir_block_1 = [h_header_1(:,h_index+1);zeros(block_length,1)];
-          
-          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
-          
-%          disp(output_buffer_1);
-%          return;
-          
-          in_block_2 = [i_header_2(:,i_index+1);zeros(block_length,1)];
-          ir_block_2 = [h_header_2(:,h_index+1);zeros(block_length,1)];
-          
-          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
-          
-          i_index = i_index - 1;
-          h_index = h_index + 1;
-          
+        if(input_block_index < 0)
+          break;
         end
         
-        output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_fft_1(1+i*block_length:(i+2)*block_length,1) += output_buffer_1;
+        % load the required blocks and zero-extend them to fft_length
+        % rememer that the length of the result of a convolution is
+        % given by the addition of the lengths of the inputs signals
         
-        output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_fft_2(1+i*block_length:(i+2)*block_length,1) += output_buffer_2;
+        in_block_1 = [i_header_1(:,input_block_index+1);zeros(header_length,1)];
+        ir_block_1 = [h_header_1(:,j+1);zeros(header_length,1)];
         
-        p = p + 1;
+        output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
         
+        in_block_2 = [i_header_2(:,input_block_index+1);zeros(header_length,1)];
+        ir_block_2 = [h_header_2(:,j+1);zeros(header_length,1)];
+        
+        output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+      end
+      
+      output_buffer_1 = real(ifft(output_buffer_1));
+      output_buffer_fft_1(1+i*header_length:(i+2)*header_length,1) += output_buffer_1;
+      
+      output_buffer_2 = real(ifft(output_buffer_2));
+      output_buffer_fft_2(1+i*header_length:(i+2)*header_length,1) += output_buffer_2;
+      
     end
+    
+    % ----------------------------------------------------------------------------
+    % BODY
+    % ----------------------------------------------------------------------------
     
   else
     
@@ -400,8 +329,6 @@
     % bei den schleifen nehme ich scheinbar immer normale indices an und
     % muss dann bei den array zugriffen 1 dazu addieren.
     
-    test = false;
-    
     for i=0:num_input_blocks-1
       
       output_buffer_1 = zeros(2 * block_length,1);
@@ -425,8 +352,6 @@
         ir_block_1 = [h_header_1(:,j+1);zeros(block_length,1)];
         
         output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
-        
-        test = true;
         
         in_block_2 = [i_header_2(:,input_block_index+1);zeros(block_length,1)];
         ir_block_2 = [h_header_2(:,j+1);zeros(block_length,1)];
@@ -455,8 +380,8 @@
   % das fft muss verschoben auf das output signal addiert werden
   % da die fft ja erst ab dem 2. block beginnt.
   
-  output_signal((block_length*2+1):length(output_signal),1) += output_buffer_fft_1( 1 : ( length(output_signal) - (block_length*2) ) );
-  output_signal((block_length*2+1):length(output_signal),2) += output_buffer_fft_2( 1 : ( length(output_signal) - (block_length*2) ) );
+  output_signal((header_length*2+1):length(output_signal),1) += output_buffer_fft_1( 1 : ( length(output_signal) - (header_length*2) ) );
+  output_signal((header_length*2+1):length(output_signal),2) += output_buffer_fft_2( 1 : ( length(output_signal) - (header_length*2) ) );
   
   % crop the size of the output_signal to that of the input signal 
   output_signal = output_signal(1:length(input_signal),:);
