@@ -203,8 +203,11 @@
   output_buffer_body_2 = zeros(length(input_signal)+3*body_length,1);
   
   % ----------------------------------------------------------------------------
-  % HEADER
+  % H ( IR_SIGNAL )
   % ----------------------------------------------------------------------------
+  
+  % header
+  % --------------------
   
   % zeros(256, 14)
   
@@ -224,15 +227,54 @@
     
   end
   
+  % body
+  % --------------------
+  
+  h_body_1 = zeros(body_length, num_ir_body_blocks);
+  h_body_2 = zeros(body_length, num_ir_body_blocks);
+  
+  h_body_index = 0;
+  
+  for i=0:num_ir_body_blocks-1
+    
+    h_body_1( :,h_body_index+1 ) = ir_body_signal_1(1+i*body_length:(i+1)*body_length,1);
+    h_body_2( :,h_body_index+1 ) = ir_body_signal_2(1+i*body_length:(i+1)*body_length,1);
+    
+    h_body_index = h_body_index + 1;
+    
+  end
+  
+  % ----------------------------------------------------------------------------
+  % I ( INPUT_SIGNAL )
+  % ----------------------------------------------------------------------------
+  
+  % header
+  % --------------------
+  
   i_header_1 = zeros(header_length, num_in_header_blocks);
   i_header_2 = zeros(header_length, num_in_header_blocks);
-  
-  i = 0;
   
   i_header_1_buffer = zeros(header_length, 1);
   i_header_2_buffer = zeros(header_length, 1);
   
+  % body
+  % --------------------
+  
+  i_body_1 = zeros(body_length, num_in_body_blocks);
+  i_body_2 = zeros(body_length, num_in_body_blocks);
+  
+  i_body_1_buffer = zeros(body_length, 1);
+  i_body_2_buffer = zeros(body_length, 1);
+  
+  % indices
+  
+  i_h = 0;
+  i_b = 0;
+  
   for s=0:input_length-1
+    
+    % header
+    % --------------------
     
     i_header_1_buffer(1:header_length-1) = i_header_1_buffer(2:header_length);
     i_header_1_buffer(header_length) = input_signal(s+1,1);
@@ -240,10 +282,21 @@
     i_header_2_buffer(1:header_length-1) = i_header_2_buffer(2:header_length);
     i_header_2_buffer(header_length) = input_signal(s+1,2);
     
+    % body
+    % --------------------
+    
+    i_body_1_buffer(1:body_length-1) = i_body_1_buffer(2:body_length);
+    i_body_1_buffer(body_length) = input_signal(s+1,1);
+    
+    i_body_2_buffer(1:body_length-1) = i_body_2_buffer(2:body_length);
+    i_body_2_buffer(body_length) = input_signal(s+1,2);
+    
     if ( s > 0 )
-      if ( s == (header_length*(i+1)-1) )
-        i_header_1( :,i+1 ) = i_header_1_buffer(1:header_length);
-        i_header_2( :,i+1 ) = i_header_2_buffer(1:header_length);
+      
+      if ( s == (header_length*(i_h+1)-1) )
+        
+        i_header_1( :,i_h+1 ) = i_header_1_buffer(1:header_length);
+        i_header_2( :,i_h+1 ) = i_header_2_buffer(1:header_length);
         
         % jetzt haben wir einen header block fertig und koennen eigentlich damit
         % beginnen diese zu verarbeiten.
@@ -257,7 +310,7 @@
         
         for j=0:num_ir_header_blocks-1
           
-          input_block_index = i-j;
+          input_block_index = i_h-j;
           
           %at the beginning of the file there is no history yet --> exit loop
           
@@ -281,64 +334,25 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_header_1(1+i*header_length:(i+2)*header_length,1) += output_buffer_1;
+        output_buffer_header_1(1+i_h*header_length:(i_h+2)*header_length,1) += output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_header_2(1+i*header_length:(i+2)*header_length,1) += output_buffer_2;
+        output_buffer_header_2(1+i_h*header_length:(i_h+2)*header_length,1) += output_buffer_2;
         
-        i = i + 1;
+        i_h = i_h + 1;
         
       end
-    end
-    
-    
-  end
-  
-  % ----------------------------------------------------------------------------
-  % BODY
-  % ----------------------------------------------------------------------------
-  
-  h_body_1 = zeros(body_length, num_ir_body_blocks);
-  h_body_2 = zeros(body_length, num_ir_body_blocks);
-  
-  h_body_index = 0;
-  
-  for i=0:num_ir_body_blocks-1
-    
-    h_body_1( :,h_body_index+1 ) = ir_body_signal_1(1+i*body_length:(i+1)*body_length,1);
-    h_body_2( :,h_body_index+1 ) = ir_body_signal_2(1+i*body_length:(i+1)*body_length,1);
-    
-    h_body_index = h_body_index + 1;
-    
-  end
-  
-  i_body_1 = zeros(body_length, num_in_body_blocks);
-  i_body_2 = zeros(body_length, num_in_body_blocks);
-  
-  i = 0;
-  
-  i_body_1_buffer = zeros(body_length, 1);
-  i_body_2_buffer = zeros(body_length, 1);
-  
-  for s=0:input_length-1
-    
-    i_body_1_buffer(1:body_length-1) = i_body_1_buffer(2:body_length);
-    i_body_1_buffer(body_length) = input_signal(s+1,1);
-    
-    i_body_2_buffer(1:body_length-1) = i_body_2_buffer(2:body_length);
-    i_body_2_buffer(body_length) = input_signal(s+1,2);
-    
-    if ( s > 0 )
-      if ( s == (body_length*(i+1)-1) )
-        i_body_1( :,i+1 ) = i_body_1_buffer(1:body_length);
-        i_body_2( :,i+1 ) = i_body_2_buffer(1:body_length);
+      
+      if ( s == (body_length*(i_b+1)-1) )
+        i_body_1( :,i_b+1 ) = i_body_1_buffer(1:body_length);
+        i_body_2( :,i_b+1 ) = i_body_2_buffer(1:body_length);
         
         output_buffer_1 = zeros(2 * body_length,1);
         output_buffer_2 = zeros(2 * body_length,1);
         
         for j=0:num_ir_body_blocks-1
           
-          input_block_index = i-j;
+          input_block_index = i_b-j;
           
           %at the beginning of the file there is no history yet --> exit loop
           
@@ -362,15 +376,16 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_body_1(1+i*body_length:(i+2)*body_length,1) += output_buffer_1;
+        output_buffer_body_1(1+i_b*body_length:(i_b+2)*body_length,1) += output_buffer_1;
         
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_body_2(1+i*body_length:(i+2)*body_length,1) += output_buffer_2;
+        output_buffer_body_2(1+i_b*body_length:(i_b+2)*body_length,1) += output_buffer_2;
         
-        i = i + 1;
+        i_b = i_b + 1;
+        
       end
+      
     end
-    
   end
   
   % ----------------------------------------------------------------------------
