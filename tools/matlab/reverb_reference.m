@@ -92,7 +92,6 @@
   num_input_blocks = length(input_signal)/block_length
   num_ir_blocks = length(ir_signal)/block_length
   
-  %num_ir_header_blocks = num_ir_blocks - 2;
   num_ir_header_blocks = 14;
   num_in_header_blocks = length(input_signal)/header_length;
   
@@ -102,9 +101,6 @@
   % ----------------------------------------------------------------------------
   % SIGNALS - other
   % ----------------------------------------------------------------------------
-  
-  %fprintf( "%i : %i\n", fir_length+1 , 14*header_length+fir_length );
-  %fprintf( "%i : %i\n", (fir_length+1)+(14*header_length) , length(ir_signal) );
   
   % len = 3584 = 256*14
   % 513 : 4096 => 4096 - 513 = 3583
@@ -380,20 +376,29 @@
     
   end
   
+  % ----------------------------------------------------------------------------
+  % OUTPUT SIGNAL
+  % ----------------------------------------------------------------------------
   
   % hier wird das output signal gebastelt
   
-%  disp(output_buffer_fft_1(  (length(output_signal)-(block_length*3)) :  (length(output_signal)-(block_length*2))  ) );
-%  return;
+  % add fir
+  % --------------------
   
   output_signal(1:length(input_signal),1) = fir_1;
   output_signal(1:length(input_signal),2) = fir_2;
+  
+  % add header fft
+  % --------------------
   
   % das fft muss verschoben auf das output signal addiert werden
   % da die fft ja erst ab dem 2. block beginnt.
   
   output_signal((header_length*2+1):length(output_signal),1) += output_buffer_header_1( 1 : ( length(output_signal) - (header_length*2) ) );
   output_signal((header_length*2+1):length(output_signal),2) += output_buffer_header_2( 1 : ( length(output_signal) - (header_length*2) ) );
+  
+  % add body fft
+  % --------------------
   
   output_signal((header_length*16+1):length(output_signal),1) += output_buffer_body_1( 1 : ( length(output_signal) - (header_length*16) ) );
   output_signal((header_length*16+1):length(output_signal),2) += output_buffer_body_2( 1 : ( length(output_signal) - (header_length*16) ) );
