@@ -213,20 +213,18 @@
   % header
   % --------------------
   
-  h_header_1 = zeros(header_length*2, num_ir_header_blocks);
-  h_header_2 = zeros(header_length*2, num_ir_header_blocks);
+  header_ram_1 = zeros(header_length*2, num_ir_header_blocks*2);
+  header_ram_2 = zeros(header_length*2, num_ir_header_blocks*2);
   
   h_header_index = 0;
-  
-  % i=0:14-3
   
   for i=0:num_ir_header_blocks-1
     
     h_header_1_zero_extended = [ir_header_signal_1(1+i*header_length:(i+1)*header_length,1);zeros(header_length,1)];
     h_header_2_zero_extended = [ir_header_signal_2(1+i*header_length:(i+1)*header_length,1);zeros(header_length,1)];
     
-    h_header_1( :,h_header_index+1 ) = fft( h_header_1_zero_extended );
-    h_header_2( :,h_header_index+1 ) = fft( h_header_2_zero_extended );
+    header_ram_1( :,h_header_index+1 ) = fft( h_header_1_zero_extended );
+    header_ram_2( :,h_header_index+1 ) = fft( h_header_2_zero_extended );
     
     h_header_index = h_header_index + 1;
     
@@ -279,6 +277,10 @@
   i_h = 0;
   i_b = 0;
   
+  % 15 ist das erste wo nichts mehr von dem h gespeichert ist.
+  
+  header_ram_p = 15;
+  
   for s=0:input_length-1
     
     % header
@@ -301,10 +303,16 @@
     
     if ( s > 0 )
       
+      % header
+      % --------------------
+      
       if ( s == (header_length*(i_h+1)-1) )
         
-        i_header_1( :,i_h+1 ) = i_header_1_buffer(1:header_length);
-        i_header_2( :,i_h+1 ) = i_header_2_buffer(1:header_length);
+        i_header_1_zero_extended = [i_header_1_buffer(1:header_length);zeros(header_length,1)];
+        i_header_2_zero_extended = [i_header_2_buffer(1:header_length);zeros(header_length,1)];
+        
+        header_ram_1( :,header_ram_p ) = fft( i_header_1_zero_extended );
+        header_ram_2( :,header_ram_p ) = fft( i_header_2_zero_extended );
         
         % jetzt haben wir einen header block fertig und koennen eigentlich damit
         % beginnen diese zu verarbeiten.
@@ -314,29 +322,34 @@
         output_buffer_1 = zeros(2 * header_length,1);
         output_buffer_2 = zeros(2 * header_length,1);
         
+        ibi = header_ram_p;
+        
         for j=0:num_ir_header_blocks-1
           
-          input_block_index = i_h-j;
-          
           %at the beginning of the file there is no history yet --> exit loop
-          
-          if(input_block_index < 0)
-            break;
-          end
           
           % load the required blocks and zero-extend them to fft_length
           % rememer that the length of the result of a convolution is
           % given by the addition of the lengths of the inputs signals
           
-          in_block_1 = [i_header_1(:,input_block_index+1);zeros(header_length,1)];
-          ir_block_1 = h_header_1(:,j+1);
+          in_block_1 = header_ram_1(:,ibi);
+          ir_block_1 = header_ram_1(:,j+1);
           
-          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* ir_block_1;
+          output_buffer_1 = output_buffer_1 + in_block_1 .* ir_block_1;
           
-          in_block_2 = [i_header_2(:,input_block_index+1);zeros(header_length,1)];
-          ir_block_2 = h_header_2(:,j+1);
+          in_block_2 = header_ram_2(:,ibi);
+          ir_block_2 = header_ram_2(:,j+1);
           
-          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* ir_block_2;
+          output_buffer_2 = output_buffer_2 + in_block_2 .* ir_block_2;
+          
+          % hier habe ich schon auf das 15. zugegriffen.
+          
+          if ( ibi == 15 )
+            ibi = 28;
+          else
+            ibi = ibi - 1;
+          end
+          
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
@@ -349,7 +362,16 @@
         
         i_h = i_h + 1;
         
+        if ( header_ram_p == 28 )
+          header_ram_p = 15;
+        else
+          header_ram_p = header_ram_p + 1;
+        end
+        
       end
+      
+      % body
+      % --------------------
       
       if ( s == (body_length*(i_b+1)-1) )
         
