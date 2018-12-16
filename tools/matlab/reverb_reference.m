@@ -245,51 +245,52 @@
         i_header_1( :,i+1 ) = i_header_1_buffer(1:header_length);
         i_header_2( :,i+1 ) = i_header_2_buffer(1:header_length);
         
+        % jetzt haben wir einen header block fertig und koennen eigentlich damit
+        % beginnen diese zu verarbeiten.
+        
+        % i gibt auch an wie viele blocke wir schon haben.
+        
+        output_buffer_1 = zeros(2 * header_length,1);
+        output_buffer_2 = zeros(2 * header_length,1);
+        
+        % 0:14-1
+        
+        for j=0:num_ir_header_blocks-1
+          
+          input_block_index = i-j;
+          
+          %at the beginning of the file there is no history yet --> exit loop
+          
+          if(input_block_index < 0)
+            break;
+          end
+          
+          % load the required blocks and zero-extend them to fft_length
+          % rememer that the length of the result of a convolution is
+          % given by the addition of the lengths of the inputs signals
+          
+          in_block_1 = [i_header_1(:,input_block_index+1);zeros(header_length,1)];
+          ir_block_1 = [h_header_1(:,j+1);zeros(header_length,1)];
+          
+          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
+          
+          in_block_2 = [i_header_2(:,input_block_index+1);zeros(header_length,1)];
+          ir_block_2 = [h_header_2(:,j+1);zeros(header_length,1)];
+          
+          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+        end
+        
+        output_buffer_1 = real(ifft(output_buffer_1));
+        output_buffer_header_1(1+i*header_length:(i+2)*header_length,1) += output_buffer_1;
+        
+        output_buffer_2 = real(ifft(output_buffer_2));
+        output_buffer_header_2(1+i*header_length:(i+2)*header_length,1) += output_buffer_2;
+        
         i = i + 1;
+        
       end
     end
     
-  end
-  
-  % i=0:688-1
-  
-  for i=0:num_in_header_blocks-1
-    
-    output_buffer_1 = zeros(2 * header_length,1);
-    output_buffer_2 = zeros(2 * header_length,1);
-    
-    % 0:14-1
-    
-    for j=0:num_ir_header_blocks-1
-      
-      input_block_index = i-j;
-      
-      %at the beginning of the file there is no history yet --> exit loop
-      
-      if(input_block_index < 0)
-        break;
-      end
-      
-      % load the required blocks and zero-extend them to fft_length
-      % rememer that the length of the result of a convolution is
-      % given by the addition of the lengths of the inputs signals
-      
-      in_block_1 = [i_header_1(:,input_block_index+1);zeros(header_length,1)];
-      ir_block_1 = [h_header_1(:,j+1);zeros(header_length,1)];
-      
-      output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
-      
-      in_block_2 = [i_header_2(:,input_block_index+1);zeros(header_length,1)];
-      ir_block_2 = [h_header_2(:,j+1);zeros(header_length,1)];
-      
-      output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
-    end
-    
-    output_buffer_1 = real(ifft(output_buffer_1));
-    output_buffer_header_1(1+i*header_length:(i+2)*header_length,1) += output_buffer_1;
-    
-    output_buffer_2 = real(ifft(output_buffer_2));
-    output_buffer_header_2(1+i*header_length:(i+2)*header_length,1) += output_buffer_2;
     
   end
   
@@ -332,47 +333,43 @@
         i_body_1( :,i+1 ) = i_body_1_buffer(1:body_length);
         i_body_2( :,i+1 ) = i_body_2_buffer(1:body_length);
         
+        output_buffer_1 = zeros(2 * body_length,1);
+        output_buffer_2 = zeros(2 * body_length,1);
+        
+        for j=0:num_ir_body_blocks-1
+          
+          input_block_index = i-j;
+          
+          %at the beginning of the file there is no history yet --> exit loop
+          
+          if(input_block_index < 0)
+            break;
+          end
+          
+          % load the required blocks and zero-extend them to fft_length
+          % rememer that the length of the result of a convolution is
+          % given by the addition of the lengths of the inputs signals
+          
+          in_block_1 = [i_body_1(:,input_block_index+1);zeros(body_length,1)];
+          ir_block_1 = [h_body_1(:,j+1);zeros(body_length,1)];
+          
+          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
+          
+          in_block_2 = [i_body_2(:,input_block_index+1);zeros(body_length,1)];
+          ir_block_2 = [h_body_2(:,j+1);zeros(body_length,1)];
+          
+          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+        end
+        
+        output_buffer_1 = real(ifft(output_buffer_1));
+        output_buffer_body_1(1+i*body_length:(i+2)*body_length,1) += output_buffer_1;
+        
+        output_buffer_2 = real(ifft(output_buffer_2));
+        output_buffer_body_2(1+i*body_length:(i+2)*body_length,1) += output_buffer_2;
+        
         i = i + 1;
       end
     end
-    
-  end
-  
-  for i=0:num_in_body_blocks-1
-    
-    output_buffer_1 = zeros(2 * body_length,1);
-    output_buffer_2 = zeros(2 * body_length,1);
-    
-    for j=0:num_ir_body_blocks-1
-      
-      input_block_index = i-j;
-      
-      %at the beginning of the file there is no history yet --> exit loop
-      
-      if(input_block_index < 0)
-        break;
-      end
-      
-      % load the required blocks and zero-extend them to fft_length
-      % rememer that the length of the result of a convolution is
-      % given by the addition of the lengths of the inputs signals
-      
-      in_block_1 = [i_body_1(:,input_block_index+1);zeros(body_length,1)];
-      ir_block_1 = [h_body_1(:,j+1);zeros(body_length,1)];
-      
-      output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
-      
-      in_block_2 = [i_body_2(:,input_block_index+1);zeros(body_length,1)];
-      ir_block_2 = [h_body_2(:,j+1);zeros(body_length,1)];
-      
-      output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
-    end
-    
-    output_buffer_1 = real(ifft(output_buffer_1));
-    output_buffer_body_1(1+i*body_length:(i+2)*body_length,1) += output_buffer_1;
-    
-    output_buffer_2 = real(ifft(output_buffer_2));
-    output_buffer_body_2(1+i*body_length:(i+2)*body_length,1) += output_buffer_2;
     
   end
   
