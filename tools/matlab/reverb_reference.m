@@ -216,6 +216,9 @@
   header_ram_1 = zeros(header_length*2, num_ir_header_blocks*2);
   header_ram_2 = zeros(header_length*2, num_ir_header_blocks*2);
   
+  header_ram_1_sa = zeros( header_length*2 + num_ir_header_blocks*2, 1 );
+  header_ram_2_sa = zeros( header_length*2 + num_ir_header_blocks*2, 1 );
+  
   h_header_index = 0;
   
   for i=0:num_ir_header_blocks-1
@@ -227,6 +230,22 @@
     header_ram_2( :,h_header_index+1 ) = fft( h_header_2_zero_extended );
     
     h_header_index = h_header_index + 1;
+    
+  end
+  
+  % load single access ram
+  
+  cnt = 1;
+  
+  for i=1:num_ir_header_blocks
+    
+    for j=1:header_length*2
+      
+      header_ram_1_sa( cnt,1 ) = header_ram_1( j,i );
+      
+      cnt += 1;
+      
+    end
     
   end
   
@@ -335,7 +354,12 @@
           in_block_1 = header_ram_1(:,ibi);
           ir_block_1 = header_ram_1(:,j+1);
           
-          output_buffer_1 = output_buffer_1 + in_block_1 .* ir_block_1;
+          % das wird fuer einen block durchgelaufen.
+          
+          for i=1:2*header_length
+            %output_buffer_1( i,1 ) += in_block_1( i,1 ) * ir_block_1( i,1 );
+            output_buffer_1( i,1 ) += in_block_1( i,1 ) * header_ram_1_sa( (j*512)+i,1 );
+          end
           
           in_block_2 = header_ram_2(:,ibi);
           ir_block_2 = header_ram_2(:,j+1);
