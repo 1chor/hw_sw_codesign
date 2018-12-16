@@ -68,7 +68,12 @@
   sprintf("File lengths after zero-extension [# stero samples]:")
   sprintf("  input file: %d", length(input_signal))
   sprintf("  ir file: %d", length(ir_signal))
-
+  
+  ir_header_signal_1 = zeros(length(ir_signal)-512, 1);
+  ir_header_signal_1 = ir_signal( 513:length(ir_signal), 1 );
+  
+  ir_header_signal_2 = zeros(length(ir_signal)-512, 1);
+  ir_header_signal_2 = ir_signal( 513:length(ir_signal), 2 );
 
   % To perform the convolution using the overlap-add method we chop up the input
   % signal and the impulse response into chunks of length block_length 
@@ -172,10 +177,10 @@
     
     h_header_index = 0;
     
-    for i=2:num_ir_blocks-1
+    for i=0:num_ir_header_blocks-1
       
-      h_header_1( :,h_header_index+1 ) = ir_signal(1+i*header_length:(i+1)*header_length,1);
-      h_header_2( :,h_header_index+1 ) = ir_signal(1+i*header_length:(i+1)*header_length,2);
+      h_header_1( :,h_header_index+1 ) = ir_header_signal_1(1+i*header_length:(i+1)*header_length,1);
+      h_header_2( :,h_header_index+1 ) = ir_header_signal_2(1+i*header_length:(i+1)*header_length,1);
       
       h_header_index = h_header_index + 1;
       
