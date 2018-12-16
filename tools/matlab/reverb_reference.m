@@ -126,7 +126,8 @@
   % TODO - block_length = 256. das muss hier wahrscheinlich noch geaendert werden.
   % sollte aber eher einen gerinen effekt auf den ausgang haben.
   
-  output_signal = zeros(length(input_signal)+1*block_length,2);
+  %output_signal = zeros(length(input_signal)+1*block_length,2);
+  output_signal = zeros(length(input_signal)+2*body_length,2);
   
   % ----------------------------------------------------------------------------
   % UNUSED
@@ -191,6 +192,9 @@
     fir_2 = filter(ir_signal(1:fir_length,2),1,input_signal(:,2));
     
   end
+  
+  output_signal(1:length(input_signal),1) = fir_1;
+  output_signal(1:length(input_signal),2) = fir_2;
   
   % ----------------------------------------------------------------------------
   % FFT
@@ -306,8 +310,6 @@
         output_buffer_1 = zeros(2 * header_length,1);
         output_buffer_2 = zeros(2 * header_length,1);
         
-        % 0:14-1
-        
         for j=0:num_ir_header_blocks-1
           
           input_block_index = i_h-j;
@@ -334,16 +336,19 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_header_1(1+i_h*header_length:(i_h+2)*header_length,1) += output_buffer_1;
-        
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_header_2(1+i_h*header_length:(i_h+2)*header_length,1) += output_buffer_2;
+        
+        offset = ( header_length * 2 ); % fir
+        
+        output_signal(offset + (i_h*header_length) + 1 : offset + ((i_h+2)*header_length) , 1) += output_buffer_1;
+        output_signal(offset + (i_h*header_length) + 1 : offset + ((i_h+2)*header_length) , 2) += output_buffer_2;
         
         i_h = i_h + 1;
         
       end
       
       if ( s == (body_length*(i_b+1)-1) )
+        
         i_body_1( :,i_b+1 ) = i_body_1_buffer(1:body_length);
         i_body_2( :,i_b+1 ) = i_body_2_buffer(1:body_length);
         
@@ -376,10 +381,12 @@
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
-        output_buffer_body_1(1+i_b*body_length:(i_b+2)*body_length,1) += output_buffer_1;
-        
         output_buffer_2 = real(ifft(output_buffer_2));
-        output_buffer_body_2(1+i_b*body_length:(i_b+2)*body_length,1) += output_buffer_2;
+        
+        offset = ( header_length * 16 ); % fir + header
+        
+        output_signal(offset + (i_b*body_length) + 1 : offset + ((i_b+2)*body_length) , 1) += output_buffer_1;
+        output_signal(offset + (i_b*body_length) + 1 : offset + ((i_b+2)*body_length) , 2) += output_buffer_2;
         
         i_b = i_b + 1;
         
@@ -387,33 +394,6 @@
       
     end
   end
-  
-  % ----------------------------------------------------------------------------
-  % OUTPUT SIGNAL
-  % ----------------------------------------------------------------------------
-  
-  % hier wird das output signal gebastelt
-  
-  % add fir
-  % --------------------
-  
-  output_signal(1:length(input_signal),1) = fir_1;
-  output_signal(1:length(input_signal),2) = fir_2;
-  
-  % add header fft
-  % --------------------
-  
-  % das fft muss verschoben auf das output signal addiert werden
-  % da die fft ja erst ab dem 2. block beginnt.
-  
-  output_signal((header_length*2+1):length(output_signal),1) += output_buffer_header_1( 1 : ( length(output_signal) - (header_length*2) ) );
-  output_signal((header_length*2+1):length(output_signal),2) += output_buffer_header_2( 1 : ( length(output_signal) - (header_length*2) ) );
-  
-  % add body fft
-  % --------------------
-  
-  output_signal((header_length*16+1):length(output_signal),1) += output_buffer_body_1( 1 : ( length(output_signal) - (header_length*16) ) );
-  output_signal((header_length*16+1):length(output_signal),2) += output_buffer_body_2( 1 : ( length(output_signal) - (header_length*16) ) );
   
   % crop the size of the output_signal to that of the input signal 
   output_signal = output_signal(1:length(input_signal),:);
