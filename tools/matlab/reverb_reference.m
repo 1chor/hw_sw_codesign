@@ -213,10 +213,8 @@
   % header
   % --------------------
   
-  % zeros(256, 14)
-  
-  h_header_1 = zeros(header_length, num_ir_header_blocks);
-  h_header_2 = zeros(header_length, num_ir_header_blocks);
+  h_header_1 = zeros(header_length*2, num_ir_header_blocks);
+  h_header_2 = zeros(header_length*2, num_ir_header_blocks);
   
   h_header_index = 0;
   
@@ -224,8 +222,11 @@
   
   for i=0:num_ir_header_blocks-1
     
-    h_header_1( :,h_header_index+1 ) = ir_header_signal_1(1+i*header_length:(i+1)*header_length,1);
-    h_header_2( :,h_header_index+1 ) = ir_header_signal_2(1+i*header_length:(i+1)*header_length,1);
+    h_header_1_zero_extended = [ir_header_signal_1(1+i*header_length:(i+1)*header_length,1);zeros(header_length,1)];
+    h_header_2_zero_extended = [ir_header_signal_2(1+i*header_length:(i+1)*header_length,1);zeros(header_length,1)];
+    
+    h_header_1( :,h_header_index+1 ) = fft( h_header_1_zero_extended );
+    h_header_2( :,h_header_index+1 ) = fft( h_header_2_zero_extended );
     
     h_header_index = h_header_index + 1;
     
@@ -234,15 +235,18 @@
   % body
   % --------------------
   
-  h_body_1 = zeros(body_length, num_ir_body_blocks);
-  h_body_2 = zeros(body_length, num_ir_body_blocks);
+  h_body_1 = zeros(body_length*2, num_ir_body_blocks);
+  h_body_2 = zeros(body_length*2, num_ir_body_blocks);
   
   h_body_index = 0;
   
   for i=0:num_ir_body_blocks-1
     
-    h_body_1( :,h_body_index+1 ) = ir_body_signal_1(1+i*body_length:(i+1)*body_length,1);
-    h_body_2( :,h_body_index+1 ) = ir_body_signal_2(1+i*body_length:(i+1)*body_length,1);
+    h_body_1_zero_extended = [ir_body_signal_1(1+i*body_length:(i+1)*body_length,1);zeros(body_length,1)];
+    h_body_2_zero_extended = [ir_body_signal_2(1+i*body_length:(i+1)*body_length,1);zeros(body_length,1)];
+    
+    h_body_1( :,h_body_index+1 ) = fft( h_body_1_zero_extended );
+    h_body_2( :,h_body_index+1 ) = fft( h_body_2_zero_extended );
     
     h_body_index = h_body_index + 1;
     
@@ -325,14 +329,14 @@
           % given by the addition of the lengths of the inputs signals
           
           in_block_1 = [i_header_1(:,input_block_index+1);zeros(header_length,1)];
-          ir_block_1 = [h_header_1(:,j+1);zeros(header_length,1)];
+          ir_block_1 = h_header_1(:,j+1);
           
-          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
+          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* ir_block_1;
           
           in_block_2 = [i_header_2(:,input_block_index+1);zeros(header_length,1)];
-          ir_block_2 = [h_header_2(:,j+1);zeros(header_length,1)];
+          ir_block_2 = h_header_2(:,j+1);
           
-          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* ir_block_2;
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
@@ -370,14 +374,14 @@
           % given by the addition of the lengths of the inputs signals
           
           in_block_1 = [i_body_1(:,input_block_index+1);zeros(body_length,1)];
-          ir_block_1 = [h_body_1(:,j+1);zeros(body_length,1)];
+          ir_block_1 = h_body_1(:,j+1);
           
-          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* fft(ir_block_1);
+          output_buffer_1 = output_buffer_1 + fft(in_block_1) .* ir_block_1;
           
           in_block_2 = [i_body_2(:,input_block_index+1);zeros(body_length,1)];
-          ir_block_2 = [h_body_2(:,j+1);zeros(body_length,1)];
+          ir_block_2 = h_body_2(:,j+1);
           
-          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* fft(ir_block_2);
+          output_buffer_2 = output_buffer_2 + fft(in_block_2) .* ir_block_2;
         end
         
         output_buffer_1 = real(ifft(output_buffer_1));
