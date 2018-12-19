@@ -398,19 +398,20 @@ void test()
     // auf jeden fall die nachkommastelle.
     
     kiss_fft( kiss_cfg, cin, cout );
+    kiss_fft( kiss_cfg_i, cout, ctest );
     
-    for ( i = 0; i < 1; i++ )
+    for ( i = 0; i < 50; i++ )
     {
-        printf("%lx\n", cout[i].r);
-        printf("%lx\n", cout[i].r>>16);
-        print_9q23( cout[i].r );
-        print_1q15( cout[i].r );
+        //~ printf("%lx\n", ctest[i].r);
+        //~ printf("%lx\n", ctest[i].r>>16);
+        //~ print_9q23( ctest[i].r );
+        print_1q15( cin[i].r );
+        print_1q15( ctest[i].r );
         printf("-----------\n");
     }
     
     return;
     
-    kiss_fft( kiss_cfg_i, cout, ctest );
     
     printf("loading input file\n");
     struct wav* input = wav_read("/input.wav");
