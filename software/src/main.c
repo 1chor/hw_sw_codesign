@@ -6,6 +6,7 @@
 #include "io.h"
 #include "nios2.h"
 
+#include <math.h>
 
 #include "Altera_UP_SD_Card_Avalon_Interface.h"
 #include "altera_up_avalon_audio.h"
@@ -317,37 +318,54 @@ void test()
     printf("=========================\n");
     printf("\n");
     
-    uint32_t l_buf;
-    uint32_t r_buf;
+    //~ uint32_t l_buf;
+    //~ uint32_t r_buf;
+    uint16_t l_buf;
+    uint16_t r_buf;
     
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
     
     kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
+    kiss_fft_cfg kiss_cfg_i = kiss_fft_alloc( 512, 1, 0, 0 );
     
     kiss_fft_cpx cin[512];
     kiss_fft_cpx cout[512];
+    kiss_fft_cpx ctest[512];
     
     uint32_t i = 0;
     
     // ich werde mal versuchen nur die linken samples zu verarbeiten.
     
-    //~ uint32_t sample_counter_ir = 512;
-    uint32_t sample_counter_ir = 0;
+    // ich muss hier bei 512 anfange, da die geraden indices immer
+    // die linken samples beinhalten
+    
+    uint32_t sample_counter_ir = 512;
+    //~ uint32_t sample_counter_ir = 0;
     
     // wir nehmen nur 256 da das ja zero extended sein soll.
     
     for ( i = 0; i < 256; i++ )
     {
+        // in diesem gottverdammten wav struct wird auf die samples
+        // mit einem uint8_t zugegriffen. keine ahnung warum.
+        // wir brauchen ja 16 bits pro sample und daher
+        // kommt wahrscheinlich das 2*sample_counter her.
+        // weiters muss ich den counter immer um 1 erhoehen.
+        // keine ahnung warum, aber dann stimmen die werte.
+        
         // wenn ich das ganze ohne den 16 left shit einlese bekomme ich
         // das aus ich auch mit hexdump aus der datei gelesen habe.
         
         //~ l_buf = wav_get_uint16( ir, 2*sample_counter_ir )<<16;
+        //~ r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 )<<16;
         l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
+        r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
         
         //~ cin[i].r = (int16_t)l_buf;
-        cin[i].r = (uint16_t)l_buf;
+        //~ cin[i].r = (uint16_t)l_buf;
+        cin[i].r = l_buf;
         cin[i].i = 0x0;
         
         sample_counter_ir += 1;
@@ -359,141 +377,26 @@ void test()
     
     for ( i = 256; i < 512; i++ )
     {
-        cin[i].r = 0x0;
-        cin[i].i = 0x0;
+        cin[i].r = (uint16_t)0x0;
+        cin[i].i = (uint16_t)0x0;
     }
+    
+    for ( i = 0; i < 50; i++ )
+    {
+        print_1q15( cin[i].r );
+    }
+    
+    return;
     
     kiss_fft( kiss_cfg, cin, cout );
     
-    /* kiss fft test.
-     * 
-     * =====
-     * float
-     * -----
-     * %f
-     * (float)
-     * =====
-     * 
-     * werte die ich als input verwende.
-     * 
-     * aus matlab:    aus c:
-     *     0.00006    cin: 131072.000000
-     *    -0.00003    cin: 4294901760.000000
-     *     0.00000    cin: 0.000000
-     *    -0.00003    cin: 4294901760.000000
-     *    -0.00012    cin: 4294705152.000000
-     *     0.00003    cin: 65536.000000
-     *    -0.00006    cin: 4294836224.000000
-     *    -0.00006    cin: 4294836224.000000
-     * 
-     * es sieht auf jeden fall so aus als haetten wir einen konsitenz bei dem
-     * shit.
-     * 
-     * das heisst, dass der offset den ich gewaehlt habe mit den 512 richtig
-     * zu sein scheint.
-     * 
-     * sehen wir uns einmal den output dazu an.
-     * 
-     *  aus matlab:                  aus c:
-     *     4.60498 + 0.00000i         cout:  542465064960.000000 + 0.000000i
-     *    -2.54973 - 3.04959i         cout: -10923509760.000000  - 353808220160.000000i
-     *    -0.44168 + 2.25434i         cout: -16339774464.000000  + 7348365824.000000i
-     *     0.13616 + 0.00749i         cout: -11477932032.000000  - 114444189696.000000i
-     *     1.80491 + 0.65703i         cout: -25481361408.000000  + 22640885760.000000i
-     *    -0.87179 - 3.18312i         cout:  3491680256.000000   - 42400972800.000000i
-     *    -2.48987 + 2.89965i         cout: -4009669120.000000   + 26507876352.000000i
-     *     3.51965 + 0.52373i         cout:  20267790336.000000  - 18661820416.000000i
-     * 
-     * jetzt wird es schwerer die zahlen zu vergleichen, da zahlen jetzt eher selten den gleichen
-     * wert haben werden.
-     * 
-     * das erste imag ist auf jeden fall 0 was erfreulich ist.
-     * 
-     * warum muss das immer so ein clusterfuck sein.
-     * 
-     * ich werde mir mal die werte von cin in unterschliedlichen formaten anzeigen lassen.
-     * 
-     * %f (double) ist das gleiche
-     * 
-    **/
-    
-    /* 
-     * hexdump der ir_short datei
-     * 
-     * 0000000 4952 4646 dc24 0005 4157 4556 6d66 2074 header
-     * 0000010 0010 0000 0001 0002 bb80 0000 ee00 0002
-     * 0000020 0004 0010 6164 6174 dc00 0005/-----------------
-     * ------------------------------------/ 0001 0000 data
-     * 0000030 fffb 0005 ffff 0005 fffa 0003 ffff fffd
-     * 0000040 0002 ffff 0002 fffe 0003 fffd 0003 fffa
-     * 0000050 0001 0001 0004 ffff fffc ffff 0003 0005
-     * 0000060 fffc fffe fffd 0005 0004 fffb fffe 0002
-     * 0000070 0002 0002 fff8 0005 0000 0003 fff9 0002
-     * 0000080 0002 0000 fffc 0002 0002 fffc 0004 fffe
-     * 0000090 0004 fffa 0005 fffc 0002 0000 ffff 0002
-     * 00000a0 fffb 0004 0001 ffff 0000 ffff 0001 0000
-     * 00000b0 fffe 0001 0000 0001 ffff fffe 0003 0000
-     * 00000c0 fffd 0002 0002 fffc 0001 0002 0001 ffff
-     * 00000d0 ffff 0001 fffe 0001 fffe 0002 ffff 0001
-     * 00000e0 0000 fffe 0000 0000 0001 0002 ffff 0001
-     * 00000f0 fffe ffff 0001 fffd 0003 0001 0000 0001
-     * 0000100 fffd 0002 fffe 0004 fffb 0000 0001 0003
-     * 0000110 0001 fffe ffff 0001 ffff 0000 0000 0003
-     * 0000120 fffa 0003 0000 0003 fffc 0004 fffc 0002
-     * 0000130 fffe 0002 ffff fffe 0000 0002 0006 fff8
-     * 0000140 0000 0000 0006 fffe fffe fffd 0002 0004
-     * 0000150 fffe fffc 0003 0003 fffd fffd 0006 fffd
-     * 0000160 0002 fffe ffff 0002 0003 0000 fffa ffff
-     * 
-     * left channel:
-     * 
-     * 0001
-     * fffb
-     * ffff
-     * fffa
-     * ffff
-     * 0002
-     * 0002
-     * 0003 <- bis hier ueberprueft
-     * 0003
-     * 0001
-     * 0004
-     * fffc
-     * 0003
-     * fffc
-     * fffd
-     * 0004
-     * fffe
-     * 0002
-     * fff8
-     * 0000
-     * fff9
-     * 0002
-     * 
-     * wenn ich das beim einlesen nicht um 16 schifte, dann bekomme ich
-     * auf jeden fall die richtigen hex zahlen.
-     * 
-     * bei:
-     * %x (int16_t)
-     * 
-    **/
-    
-    printf( "cin: %x + i*%x\n", (int16_t)cin[0].r, (int16_t)cin[0].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[1].r, (int16_t)cin[1].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[2].r, (int16_t)cin[2].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[3].r, (int16_t)cin[3].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[4].r, (int16_t)cin[4].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[5].r, (int16_t)cin[5].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[6].r, (int16_t)cin[6].i );
-    printf( "cin: %x + i*%x\n", (int16_t)cin[7].r, (int16_t)cin[7].i );
-    
     return;
+    
+    kiss_fft( kiss_cfg_i, cout, ctest );
     
     printf("loading input file\n");
     struct wav* input = wav_read("/input.wav");
     printf(">done\n\n");
-    
-    
     
     uint32_t sample_counter = 0;
     uint32_t samples_in_file = wav_sample_count(input);
@@ -534,3 +437,72 @@ void test()
     
 }
 
+/*
+ * zahlen von unterschiedlichen quellen
+ * 
+ *   matlab  | c %x | hexdump |  c printf_1q15
+ *  ---------+------+---------+---------------
+ *   0.00003 | 0001 | 0001    |  0.000031
+ *   0.00000 | 0000 | 0000    |  0.000000
+ *  -0.00015 | fffb | fffb    | -0.000153
+ *   0.00015 | 0005 | 0005    |  0.000153
+ *  -0.00003 | ffff | ffff    | -0.000031
+ *   0.00015 | 0005 | 0005    |  0.000153
+ *  -0.00018 | fffa | fffa    | -0.000183
+ *   0.00009 | 0003 | 0003    |  0.000092
+ *  -0.00003 | ffff | ffff    | -0.000031
+ *  -0.00009 | fffd | fffd    | -0.000092
+ *   0.00006 | 0002 | 0002    |  0.000061
+ *  -0.00003 | ffff | ffff    | -0.000031
+ *   0.00006 | 0002 | 0002    |  0.000061
+ *  -0.00006 | fffe | fffe    | -0.000061
+**/
+
+void print_1q15( uint16_t num )
+{
+    uint8_t i = 0;
+    uint8_t shift_by = 0;
+    
+    float num_float = 0;
+    
+    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
+    // das += 1 ist weil es ein 2er kompliment ist
+    
+    // wir printen auch gleich ein "-"
+    
+    //~ printf( "%x - ", num );
+    
+    if ( 0 > (int16_t)num )
+    {
+        num = ~num;
+        num += 1;
+        
+        printf( "-" );
+    }
+    else
+    {
+        printf( " " );
+    }
+    
+    // bei dem 1q15 format muessen wir bei 15 anfangen.
+    // das kleinste was addiert werden kann ist dann 2^-15
+    
+    for ( i = 15; i > 0; i-- )
+    {
+        // wenn das lsb 1 ist ...
+        
+        if ( ( (num>>shift_by) & 1 ) == 1 )
+        {
+            // ... dann wird 2^-i dazu addiert
+            num_float += pow( 2, i*(-1) );
+        }
+        
+        // das naechste mal werden wir eins weiter shiften
+        
+        shift_by += 1;
+    }
+    
+    //~ printf( "%f\n", num_float );
+    //~ printf( "%.10e\n", num_float );
+    printf( "%f\n", num_float );
+}
