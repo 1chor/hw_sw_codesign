@@ -14,6 +14,9 @@
 #include "fatlib/fat_filelib.h"
 #include "wav.h"
 #include "display.h"
+
+#define FIXED_POINT 32
+
 #include "kiss_fft.h"
 
 #define HAL_PLATFORM_RESET() \
@@ -318,10 +321,10 @@ void test()
     printf("=========================\n");
     printf("\n");
     
-    //~ uint32_t l_buf;
-    //~ uint32_t r_buf;
-    uint16_t l_buf;
-    uint16_t r_buf;
+    uint32_t l_buf;
+    uint32_t r_buf;
+    //~ uint16_t l_buf;
+    //~ uint16_t r_buf;
     
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
@@ -377,18 +380,33 @@ void test()
     
     for ( i = 256; i < 512; i++ )
     {
-        cin[i].r = (uint16_t)0x0;
-        cin[i].i = (uint16_t)0x0;
+        cin[i].r = (uint32_t)0x0;
+        cin[i].i = (uint32_t)0x0;
+        //~ cin[i].r = (uint16_t)0x0;
+        //~ cin[i].i = (uint16_t)0x0;
     }
     
-    for ( i = 0; i < 50; i++ )
-    {
-        print_1q15( cin[i].r );
-    }
+    //~ for ( i = 0; i < 50; i++ )
+    //~ {
+        //~ print_1q15( cin[i].r );
+    //~ }
     
-    return;
+    //~ return;
+    
+    // bevor ich begonnen habe mit dem kiss_fft herum zu scheissen
+    // habe ich wenigstens den ersten wert richtig bekommen.
+    // auf jeden fall die nachkommastelle.
     
     kiss_fft( kiss_cfg, cin, cout );
+    
+    for ( i = 0; i < 1; i++ )
+    {
+        printf("%lx\n", cout[i].r);
+        printf("%lx\n", cout[i].r>>16);
+        print_9q23( cout[i].r );
+        print_1q15( cout[i].r );
+        printf("-----------\n");
+    }
     
     return;
     
@@ -485,6 +503,62 @@ void print_1q15( uint16_t num )
     }
     
     // bei dem 1q15 format muessen wir bei 15 anfangen.
+    // das kleinste was addiert werden kann ist dann 2^-15
+    
+    for ( i = 15; i > 0; i-- )
+    {
+        // wenn das lsb 1 ist ...
+        
+        if ( ( (num>>shift_by) & 1 ) == 1 )
+        {
+            // ... dann wird 2^-i dazu addiert
+            num_float += pow( 2, i*(-1) );
+        }
+        
+        // das naechste mal werden wir eins weiter shiften
+        
+        shift_by += 1;
+    }
+    
+    //~ printf( "%f\n", num_float );
+    //~ printf( "%.10e\n", num_float );
+    printf( "%f\n", num_float );
+}
+
+void print_9q23( uint32_t num )
+{
+    uint8_t i = 0;
+    uint8_t shift_by = 0;
+    
+    float num_float = 0;
+    
+    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
+    // das += 1 ist weil es ein 2er kompliment ist
+    
+    // wir printen auch gleich ein "-"
+    
+    //~ printf( "%x - ", num );
+    
+    if ( 0 > (int32_t)num )
+    {
+        num = ~num;
+        num += 1;
+        
+        printf( "-" );
+    }
+    else
+    {
+        printf( " " );
+    }
+    
+    // die 9 hoechsten bits raus holen.
+    
+    printf( "%lx\n", num );
+    printf( "%lx>>23\n", num>>23 );
+    
+    num_float += num>>23;
+    
+    // bei dem 16q15 format muessen wir bei 15 anfangen.
     // das kleinste was addiert werden kann ist dann 2^-15
     
     for ( i = 15; i > 0; i-- )
