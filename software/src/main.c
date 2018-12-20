@@ -15,9 +15,7 @@
 #include "wav.h"
 #include "display.h"
 
-#define FIXED_POINT 32
-
-#include "kiss_fft.h"
+#include "fix_fft.h"
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -321,21 +319,26 @@ void test()
     printf("=========================\n");
     printf("\n");
     
-    uint32_t l_buf;
-    uint32_t r_buf;
-    //~ uint16_t l_buf;
-    //~ uint16_t r_buf;
+    //~ uint32_t l_buf;
+    //~ uint32_t r_buf;
+    uint16_t l_buf;
+    uint16_t r_buf;
     
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
     
-    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
-    kiss_fft_cfg kiss_cfg_i = kiss_fft_alloc( 512, 1, 0, 0 );
+    //~ uint16_t fft_r[512];
+    //~ uint16_t fft_i[512];
     
-    kiss_fft_cpx cin[512];
-    kiss_fft_cpx cout[512];
-    kiss_fft_cpx ctest[512];
+    short fft_ref_r[512];
+    short fft_ref_i[512];
+    
+    //~ short fft_r[512];
+    //~ short fft_i[512];
+    
+    short* fft_r = (short*)malloc( 512 * sizeof(short) );
+    short* fft_i = (short*)malloc( 512 * sizeof(short) );
     
     uint32_t i = 0;
     
@@ -366,10 +369,11 @@ void test()
         l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
         r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
         
-        //~ cin[i].r = (int16_t)l_buf;
-        //~ cin[i].r = (uint16_t)l_buf;
-        cin[i].r = l_buf;
-        cin[i].i = 0x0;
+        fft_ref_r[i] = (short)l_buf;
+        fft_ref_i[i] = (short)0x0;
+        
+        fft_r[i] = (short)l_buf;
+        fft_i[i] = (short)0x0;
         
         sample_counter_ir += 1;
     }
@@ -380,10 +384,11 @@ void test()
     
     for ( i = 256; i < 512; i++ )
     {
-        cin[i].r = (uint32_t)0x0;
-        cin[i].i = (uint32_t)0x0;
-        //~ cin[i].r = (uint16_t)0x0;
-        //~ cin[i].i = (uint16_t)0x0;
+        fft_ref_r[i] = (short)0x0;
+        fft_ref_i[i] = (short)0x0;
+        
+        fft_r[i] = (short)0x0;
+        fft_i[i] = (short)0x0;
     }
     
     //~ for ( i = 0; i < 50; i++ )
@@ -393,20 +398,18 @@ void test()
     
     //~ return;
     
-    // bevor ich begonnen habe mit dem kiss_fft herum zu scheissen
-    // habe ich wenigstens den ersten wert richtig bekommen.
-    // auf jeden fall die nachkommastelle.
+    (void) fix_fft( fft_r, fft_i, 512, 0 );
+    //~ (void) fix_fft( fft_r, fft_i, 512, 1 );
     
-    kiss_fft( kiss_cfg, cin, cout );
-    kiss_fft( kiss_cfg_i, cout, ctest );
-    
-    for ( i = 0; i < 50; i++ )
+    for ( i = 0; i < 10; i++ )
     {
-        //~ printf("%lx\n", ctest[i].r);
-        //~ printf("%lx\n", ctest[i].r>>16);
-        //~ print_9q23( ctest[i].r );
-        print_1q15( cin[i].r );
-        print_1q15( ctest[i].r );
+        //~ printf("%i\n", fft_ref_r[i]);
+        //~ printf("%i\n", fft_r[i]);
+        
+        //~ print_1q15( (uint16_t)fft_ref_r[i] );
+        print_1q15( (uint16_t)fft_r[i] );
+        //~ print_1q15( (uint16_t)fft_i[i] );
+        
         printf("-----------\n");
     }
     
@@ -426,23 +429,23 @@ void test()
     
     printf("processing starting\n");
     
-    while (1)
-    {
-        l_buf = wav_get_uint16(input, 2*sample_counter)<<16;
-        r_buf = wav_get_uint16(input, 2*sample_counter+1)<<16;
+    //~ while (1)
+    //~ {
+        //~ l_buf = wav_get_uint16(input, 2*sample_counter)<<16;
+        //~ r_buf = wav_get_uint16(input, 2*sample_counter+1)<<16;
         
-        ((uint16_t*)output->samples)[2*sample_counter]   = (uint16_t)(l_buf>>16);
-        ((uint16_t*)output->samples)[2*sample_counter+1] = (uint16_t)(r_buf>>16);
+        //~ ((uint16_t*)output->samples)[2*sample_counter]   = (uint16_t)(l_buf>>16);
+        //~ ((uint16_t*)output->samples)[2*sample_counter+1] = (uint16_t)(r_buf>>16);
         
-        sample_counter += 1;
+        //~ sample_counter += 1;
         
-        if ( sample_counter >= samples_in_file )
-        {
-            printf(">done\n\n");
+        //~ if ( sample_counter >= samples_in_file )
+        //~ {
+            //~ printf(">done\n\n");
             
-            break;
-        }
-    }
+            //~ break;
+        //~ }
+    //~ }
     
     printf("storing file\n");
     wav_write("/recording.wav", output);
@@ -489,7 +492,7 @@ void print_1q15( uint16_t num )
     
     // wir printen auch gleich ein "-"
     
-    //~ printf( "%x - ", num );
+    printf( "%x - ", num );
     
     if ( 0 > (int16_t)num )
     {
@@ -503,10 +506,13 @@ void print_1q15( uint16_t num )
         printf( " " );
     }
     
+    num_float += ( num>>6 );
+    
     // bei dem 1q15 format muessen wir bei 15 anfangen.
     // das kleinste was addiert werden kann ist dann 2^-15
     
-    for ( i = 15; i > 0; i-- )
+    //~ for ( i = 15; i > 0; i-- )
+    for ( i = 6; i > 0; i-- )
     {
         // wenn das lsb 1 ist ...
         
