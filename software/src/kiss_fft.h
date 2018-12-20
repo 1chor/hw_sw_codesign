@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-#define FIXED_POINT 32
+//~ #define FIXED_POINT 32
 
 /*
  ATTENTION!
@@ -49,32 +49,32 @@ extern "C" {
 #include <stdint.h>
 //~ #define kiss_fft_scalar int16_t
 //~ #define kiss_fft_scalar int32_t
-
-#ifdef FIXED_POINT
-
-#include <sys/types.h>
-
-# if (FIXED_POINT == 32)
-#  define kiss_fft_scalar int32_t
-# else
-#  define kiss_fft_scalar int16_t
-# endif
-
-#else
-
-# ifndef kiss_fft_scalar
-/*  default is float */
 #   define kiss_fft_scalar float
-// damit er das scheiss int16_t nimmt
-// #include <stdint.h>
-#   define kiss_fft_scalar int16_t
-# endif
+//~ #ifdef FIXED_POINT
 
-#endif
+//~ #include <sys/types.h>
+
+//~ # if (FIXED_POINT == 32)
+//~ #  define kiss_fft_scalar int32_t
+//~ # else
+//~ #  define kiss_fft_scalar int16_t
+//~ # endif
+
+//~ #else
+
+//~ # ifndef kiss_fft_scalar
+//~ /*  default is float */
+//~ #   define kiss_fft_scalar float
+//~ // damit er das scheiss int16_t nimmt
+//~ // #include <stdint.h>
+//~ #   define kiss_fft_scalar int16_t
+//~ # endif
+
+//~ #endif
 
 typedef struct {
-    kiss_fft_scalar r;
-    kiss_fft_scalar i;
+    float r;
+    float i;
 }kiss_fft_cpx;
 
 typedef struct kiss_fft_state* kiss_fft_cfg;
