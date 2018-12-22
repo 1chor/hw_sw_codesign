@@ -317,8 +317,6 @@ void test()
     printf("=========================\n");
     printf("\n");
     
-    //~ uint32_t l_buf;
-    //~ uint32_t r_buf;
     uint16_t l_buf;
     uint16_t r_buf;
     
@@ -386,7 +384,11 @@ void test()
     
     for ( i = 0; i < 10; i++ )
     {
-        printf( "%f %fi\n", cout[i].r, cout[i].i );
+        //~ printf( "%f %fi\n", cout[i].r, cout[i].i );
+        
+        uint32_t test = (uint32_t)(cout[i].r * (1 << 23));
+        
+        printf( "%f %f\n", cout[i].r, convert_9q23( test ));
     }
     
     return;

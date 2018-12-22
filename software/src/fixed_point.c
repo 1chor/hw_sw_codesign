@@ -70,59 +70,29 @@ float convert_1q15( uint16_t num )
     return num_float;
 }
 
-void print_1q15( uint16_t num )
-{
-    if ( 0 > (int16_t)num )
-    {
-        printf( "-" );
-    }
-    else
-    {
-        printf( " " );
-    }
-    
-    printf( "%f\n", convert_1q15(num) );
-    
-    return;
-}
-
-void print_9q23( uint32_t num )
+float convert_9q23( uint32_t num )
 {
     uint8_t i = 0;
     uint8_t shift_by = 0;
     
     float num_float = 0;
     
+    uint8_t invert = 0;
+    
     // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
     // das += 1 ist weil es ein 2er kompliment ist
     
-    // wir printen auch gleich ein "-"
-    
-    //~ printf( "%x - ", num );
-    
     if ( 0 > (int32_t)num )
     {
+        invert = 1;
+        
         num = ~num;
         num += 1;
-        
-        printf( "-" );
     }
-    else
-    {
-        printf( " " );
-    }
-    
-    // die 9 hoechsten bits raus holen.
-    
-    printf( "%lx\n", num );
-    printf( "%lx>>23\n", num>>23 );
     
     num_float += num>>23;
     
-    // bei dem 16q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    for ( i = 15; i > 0; i-- )
+    for ( i = 23; i > 0; i-- )
     {
         // wenn das lsb 1 ist ...
         
@@ -137,7 +107,10 @@ void print_9q23( uint32_t num )
         shift_by += 1;
     }
     
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    printf( "%f\n", num_float );
+    if ( invert == 1 )
+    {
+        num_float *= -1;
+    }
+    
+    return num_float;
 }
