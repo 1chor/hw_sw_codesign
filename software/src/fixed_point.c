@@ -31,11 +31,15 @@ float convert_1q15( uint16_t num )
     
     float num_float = 0;
     
+    uint8_t invert = 0;
+    
     // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
     // das += 1 ist weil es ein 2er kompliment ist
     
     if ( 0 > (int16_t)num )
     {
+        invert = 1;
+        
         num = ~num;
         num += 1;
     }
@@ -56,6 +60,11 @@ float convert_1q15( uint16_t num )
         // das naechste mal werden wir eins weiter shiften
         
         shift_by += 1;
+    }
+    
+    if ( invert == 1 )
+    {
+        num_float *= -1;
     }
     
     return num_float;
