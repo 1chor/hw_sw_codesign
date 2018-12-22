@@ -15,20 +15,18 @@
 #include "wav.h"
 #include "display.h"
 
-//~ #define FIXED_POINT 32
-
 #include "kiss_fft.h"
+
+#include "fixed_point.h"
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
   NIOS2_WRITE_IENABLE(0); \
   ((void (*) (void)) NIOS2_RESET_ADDR) ()
 
-
 #define FAT_OFFSET 0
 
 alt_up_audio_dev * audio_dev;
-
 
 extern volatile char *buffer_memory;
 extern bool Write_Sector_Data(int sector_index, int partition_offset);
@@ -43,8 +41,6 @@ int get_button();
 void line_in_demo();
 void play_file_demo();
 void record_demo();
-
-float convert_1q15( uint16_t );
 
 int main()
 {
@@ -75,8 +71,6 @@ int main()
     } else {
         alt_printf ("done\n");
     }
-    
-    //~ printf("ich bin ein test\n");
     
     test();
 
@@ -332,6 +326,8 @@ void test()
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
     
+    // das 2. argument gibt an ob es eine inverse fft ist
+    
     kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
     kiss_fft_cfg kiss_cfg_i = kiss_fft_alloc( 512, 1, 0, 0 );
     
@@ -340,8 +336,6 @@ void test()
     kiss_fft_cpx ctest[512];
     
     uint32_t i = 0;
-    
-    // ich werde mal versuchen nur die linken samples zu verarbeiten.
     
     // ich muss hier bei 512 anfange, da die geraden indices immer
     // die linken samples beinhalten
@@ -353,13 +347,6 @@ void test()
     
     for ( i = 0; i < 256; i++ )
     {
-        // in diesem gottverdammten wav struct wird auf die samples
-        // mit einem uint8_t zugegriffen. keine ahnung warum.
-        // wir brauchen ja 16 bits pro sample und daher
-        // kommt wahrscheinlich das 2*sample_counter her.
-        // weiters muss ich den counter immer um 1 erhoehen.
-        // keine ahnung warum, aber dann stimmen die werte.
-        
         // wenn ich das ganze ohne den 16 left shit einlese bekomme ich
         // das aus ich auch mit hexdump aus der datei gelesen habe.
         
@@ -368,10 +355,7 @@ void test()
         l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
         r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
         
-        //~ cin[i].r = (int16_t)l_buf;
-        //~ cin[i].r = (uint16_t)l_buf;
-        
-        //~ printf("%f\n", convert_1q15(l_buf));
+        // convert the binary value to float
         
         cin[i].r = convert_1q15(l_buf);
         cin[i].i = 0;
@@ -379,57 +363,33 @@ void test()
         sample_counter_ir += 1;
     }
     
-    for ( i = 0; i < 10; i++ )
-    {
-    
-        //~ printf( "%f\n", cin[i].r );
-        
-    }
-    
     // zero extension
-    
     // wenn ich das nicht mit 0 fuelle, dann kann auch nan drinnen stehen.
     
     for ( i = 256; i < 512; i++ )
     {
         cin[i].r = 0;
         cin[i].i = 0;
-        //~ cin[i].r = (uint16_t)0x0;
-        //~ cin[i].i = (uint16_t)0x0;
     }
     
-    //~ for ( i = 0; i < 50; i++ )
-    //~ {
-        //~ print_1q15( cin[i].r );
-    //~ }
-    
-    //~ return;
-    
-    // bevor ich begonnen habe mit dem kiss_fft herum zu scheissen
-    // habe ich wenigstens den ersten wert richtig bekommen.
-    // auf jeden fall die nachkommastelle.
+    // kiss fft
     
     kiss_fft( kiss_cfg, cin, cout );
-    kiss_fft( kiss_cfg_i, cout, ctest );
-    
-    //~ for ( i = 0; i < 10; i++ )
-    //~ {
-    
-        //~ printf( "%f\n", cin[i].r );
-        
-    //~ }
-    
-    //~ printf("-----------\n");
+    //~ kiss_fft( kiss_cfg_i, cout, ctest );
     
     for ( i = 0; i < 10; i++ )
     {
-        printf( "%f\n", ctest[i].r );
+        printf( "%f\n", cin[i].r );
+    }
     
-        
+    printf("-----------\n");
+    
+    for ( i = 0; i < 10; i++ )
+    {
+        printf( "%f %fi\n", cout[i].r, cout[i].i );
     }
     
     return;
-    
     
     printf("loading input file\n");
     struct wav* input = wav_read("/input.wav");
@@ -472,180 +432,4 @@ void test()
     printf("end\n");
     printf("===\n");
     
-}
-
-/*
- * zahlen von unterschiedlichen quellen
- * 
- *   matlab  | c %x | hexdump |  c printf_1q15
- *  ---------+------+---------+---------------
- *   0.00003 | 0001 | 0001    |  0.000031
- *   0.00000 | 0000 | 0000    |  0.000000
- *  -0.00015 | fffb | fffb    | -0.000153
- *   0.00015 | 0005 | 0005    |  0.000153
- *  -0.00003 | ffff | ffff    | -0.000031
- *   0.00015 | 0005 | 0005    |  0.000153
- *  -0.00018 | fffa | fffa    | -0.000183
- *   0.00009 | 0003 | 0003    |  0.000092
- *  -0.00003 | ffff | ffff    | -0.000031
- *  -0.00009 | fffd | fffd    | -0.000092
- *   0.00006 | 0002 | 0002    |  0.000061
- *  -0.00003 | ffff | ffff    | -0.000031
- *   0.00006 | 0002 | 0002    |  0.000061
- *  -0.00006 | fffe | fffe    | -0.000061
-**/
-
-void print_1q15( uint16_t num )
-{
-    uint8_t i = 0;
-    uint8_t shift_by = 0;
-    
-    float num_float = 0;
-    
-    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
-    // das += 1 ist weil es ein 2er kompliment ist
-    
-    // wir printen auch gleich ein "-"
-    
-    //~ printf( "%x - ", num );
-    
-    if ( 0 > (int16_t)num )
-    {
-        num = ~num;
-        num += 1;
-        
-        printf( "-" );
-    }
-    else
-    {
-        printf( " " );
-    }
-    
-    // bei dem 1q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    for ( i = 15; i > 0; i-- )
-    {
-        // wenn das lsb 1 ist ...
-        
-        if ( ( (num>>shift_by) & 1 ) == 1 )
-        {
-            // ... dann wird 2^-i dazu addiert
-            num_float += pow( 2, i*(-1) );
-        }
-        
-        // das naechste mal werden wir eins weiter shiften
-        
-        shift_by += 1;
-    }
-    
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    printf( "%f\n", num_float );
-}
-
-float convert_1q15( uint16_t num )
-{
-    uint8_t i = 0;
-    uint8_t shift_by = 0;
-    
-    float num_float = 0;
-    
-    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
-    // das += 1 ist weil es ein 2er kompliment ist
-    
-    // wir printen auch gleich ein "-"
-    
-    //~ printf( "%x - ", num );
-    
-    if ( 0 > (int16_t)num )
-    {
-        num = ~num;
-        num += 1;
-        
-        //~ printf( "-" );
-    }
-    else
-    {
-        //~ printf( " " );
-    }
-    
-    // bei dem 1q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    for ( i = 15; i > 0; i-- )
-    {
-        // wenn das lsb 1 ist ...
-        
-        if ( ( (num>>shift_by) & 1 ) == 1 )
-        {
-            // ... dann wird 2^-i dazu addiert
-            num_float += pow( 2, i*(-1) );
-        }
-        
-        // das naechste mal werden wir eins weiter shiften
-        
-        shift_by += 1;
-    }
-    
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    //~ printf( "%f\n", num_float );
-    return num_float;
-}
-
-void print_9q23( uint32_t num )
-{
-    uint8_t i = 0;
-    uint8_t shift_by = 0;
-    
-    float num_float = 0;
-    
-    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
-    // das += 1 ist weil es ein 2er kompliment ist
-    
-    // wir printen auch gleich ein "-"
-    
-    //~ printf( "%x - ", num );
-    
-    if ( 0 > (int32_t)num )
-    {
-        num = ~num;
-        num += 1;
-        
-        printf( "-" );
-    }
-    else
-    {
-        printf( " " );
-    }
-    
-    // die 9 hoechsten bits raus holen.
-    
-    printf( "%lx\n", num );
-    printf( "%lx>>23\n", num>>23 );
-    
-    num_float += num>>23;
-    
-    // bei dem 16q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    for ( i = 15; i > 0; i-- )
-    {
-        // wenn das lsb 1 ist ...
-        
-        if ( ( (num>>shift_by) & 1 ) == 1 )
-        {
-            // ... dann wird 2^-i dazu addiert
-            num_float += pow( 2, i*(-1) );
-        }
-        
-        // das naechste mal werden wir eins weiter shiften
-        
-        shift_by += 1;
-    }
-    
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    printf( "%f\n", num_float );
 }
