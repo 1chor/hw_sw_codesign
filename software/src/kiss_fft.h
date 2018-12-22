@@ -33,15 +33,15 @@ extern "C" {
   in the tools/ directory.
 */
 
-#ifdef USE_SIMD
-# include <xmmintrin.h>
-# define kiss_fft_scalar __m128
-#define KISS_FFT_MALLOC(nbytes) _mm_malloc(nbytes,16)
-#define KISS_FFT_FREE _mm_free
-#else	
+//~ #ifdef USE_SIMD
+//~ # include <xmmintrin.h>
+//~ # define kiss_fft_scalar __m128
+//~ #define KISS_FFT_MALLOC(nbytes) _mm_malloc(nbytes,16)
+//~ #define KISS_FFT_FREE _mm_free
+//~ #else	
 #define KISS_FFT_MALLOC malloc
 #define KISS_FFT_FREE free
-#endif	
+//~ #endif	
 
 
 //~ #define kiss_fft_scalar float
@@ -71,6 +71,8 @@ extern "C" {
 //~ # endif
 
 //~ #endif
+
+// wenn ich hier kein float rein schreibe, dann funktioniert es scheinbar nicht
 
 typedef struct {
     float r;
