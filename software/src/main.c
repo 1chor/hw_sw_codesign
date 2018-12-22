@@ -18,6 +18,7 @@
 #include "kiss_fft.h"
 
 #include "fixed_point.h"
+#include "sram.h"
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -396,6 +397,31 @@ void test()
     IOWR ( SRAM_0_BASE, 0, 0x15 );
     
     printf( "%lx\n", IORD( SRAM_0_BASE, 0) );
+    
+    uint32_t h_header_1_r = (uint32_t)(cout[1].r * (1 << 23));
+    uint32_t h_header_1_i = (uint32_t)(cout[1].i * (1 << 23));
+    
+    complex_32_t c_w;
+    complex_32_t c_r;
+    
+    // write to sram
+    
+    c_w.r = h_header_1_r;
+    c_w.i = h_header_1_i;
+    
+    (void) sram_write( c_w, 5 );
+    
+    // read from sram
+    
+    c_r = sram_read( 5 );
+    
+    // print
+    
+    printf( "%lx - %lx\n", h_header_1_r, h_header_1_i );
+    printf( "%lx - %lx\n", c_r.r       , c_r.i        );
+    
+    printf( "%f - %f\n", convert_9q23(h_header_1_r), convert_9q23(h_header_1_i) );
+    printf( "%f - %f\n", convert_9q23(c_r.r)       , convert_9q23(c_r.i)        );
     
     return;
     
