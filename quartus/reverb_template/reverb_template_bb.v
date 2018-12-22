@@ -38,7 +38,14 @@ module reverb_template (
 	touch_cntrl_ext_adc_dclk,
 	touch_cntrl_ext_adc_din,
 	touch_cntrl_ext_adc_dout,
-	touch_cntrl_ext_adc_penirq_n);	
+	touch_cntrl_ext_adc_penirq_n,
+	sram_DQ,
+	sram_ADDR,
+	sram_LB_N,
+	sram_UB_N,
+	sram_CE_N,
+	sram_OE_N,
+	sram_WE_N);	
 
 	input		audio_ADCDAT;
 	input		audio_ADCLRCK;
@@ -79,4 +86,11 @@ module reverb_template (
 	output		touch_cntrl_ext_adc_din;
 	input		touch_cntrl_ext_adc_dout;
 	input		touch_cntrl_ext_adc_penirq_n;
+	inout	[15:0]	sram_DQ;
+	output	[19:0]	sram_ADDR;
+	output		sram_LB_N;
+	output		sram_UB_N;
+	output		sram_CE_N;
+	output		sram_OE_N;
+	output		sram_WE_N;
 endmodule

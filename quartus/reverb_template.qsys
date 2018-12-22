@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "135275600";
+         value = "268440640";
          type = "String";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum baseAddress
       {
-         value = "135275632";
+         value = "268440688";
          type = "String";
       }
    }
@@ -61,7 +61,7 @@
    {
       datum baseAddress
       {
-         value = "135275616";
+         value = "268440672";
          type = "String";
       }
    }
@@ -93,7 +93,7 @@
    {
       datum baseAddress
       {
-         value = "135275648";
+         value = "268440704";
          type = "String";
       }
    }
@@ -125,7 +125,7 @@
    {
       datum baseAddress
       {
-         value = "135272448";
+         value = "268437504";
          type = "String";
       }
    }
@@ -173,7 +173,7 @@
    {
       datum baseAddress
       {
-         value = "135274496";
+         value = "268439552";
          type = "String";
       }
    }
@@ -189,8 +189,16 @@
    {
       datum baseAddress
       {
-         value = "0";
+         value = "134217728";
          type = "String";
+      }
+   }
+   element sram_0
+   {
+      datum _sortIndex
+      {
+         value = "14";
+         type = "int";
       }
    }
    element sys_clk
@@ -213,7 +221,7 @@
    {
       datum baseAddress
       {
-         value = "135275520";
+         value = "268440576";
          type = "String";
       }
    }
@@ -229,7 +237,7 @@
    {
       datum baseAddress
       {
-         value = "135275584";
+         value = "268440656";
          type = "String";
       }
    }
@@ -337,6 +345,11 @@
    internal="clock_bridge_sdram.out_clk"
    type="clock"
    dir="start" />
+ <interface
+   name="sram"
+   internal="sram_0.external_interface"
+   type="conduit"
+   dir="end" />
  <interface
    name="textmode"
    internal="textmode_controller.conduits"
@@ -641,10 +654,10 @@
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="28" />
+  <parameter name="dataAddrWidth" value="29" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x8101800' end='0x8102000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x8102000' end='0x8102400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x8102400' end='0x8102440' type='textmode_controller.avalon_slave' /><slave name='touch_cntrl.avalon_slave' start='0x8102440' end='0x8102450' type='avalon_touch_cntrl.avalon_slave' /><slave name='altpll.pll_slave' start='0x8102450' end='0x8102460' type='altpll.pll_slave' /><slave name='av_config.avalon_av_config_slave' start='0x8102460' end='0x8102470' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x8102470' end='0x8102480' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8102480' end='0x8102488' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sram_0.avalon_sram_slave' start='0x0' end='0x200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x10000800' end='0x10001000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x10001000' end='0x10001400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x10001400' end='0x10001440' type='textmode_controller.avalon_slave' /><slave name='altpll.pll_slave' start='0x10001440' end='0x10001450' type='altpll.pll_slave' /><slave name='touch_cntrl.avalon_slave' start='0x10001450' end='0x10001460' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x10001460' end='0x10001470' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x10001470' end='0x10001480' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10001480' end='0x10001488' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -682,8 +695,8 @@
   <parameter name="icache_size" value="2048" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
-  <parameter name="instAddrWidth" value="28" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x8101800' end='0x8102000' type='altera_nios2_gen2.debug_mem_slave' /></address-map>]]></parameter>
+  <parameter name="instAddrWidth" value="29" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x10000800' end='0x10001000' type='altera_nios2_gen2.debug_mem_slave' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
@@ -839,6 +852,12 @@
   <parameter name="registerDataIn" value="true" />
   <parameter name="rowWidth" value="13" />
  </module>
+ <module name="sram_0" kind="altera_up_avalon_sram" version="18.0" enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+  <parameter name="board" value="DE2-115" />
+  <parameter name="pixel_buffer" value="false" />
+ </module>
  <module name="sys_clk" kind="clock_source" version="18.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -867,7 +886,7 @@
    start="nios2.data_master"
    end="audio.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102470" />
+  <parameter name="baseAddress" value="0x10001470" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -876,7 +895,7 @@
    start="nios2.data_master"
    end="av_config.avalon_av_config_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102460" />
+  <parameter name="baseAddress" value="0x10001460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -885,7 +904,7 @@
    start="nios2.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102480" />
+  <parameter name="baseAddress" value="0x10001480" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -894,7 +913,7 @@
    start="nios2.data_master"
    end="sdcard_interface.avalon_sdcard_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102000" />
+  <parameter name="baseAddress" value="0x10001000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -903,7 +922,7 @@
    start="nios2.data_master"
    end="textmode_controller.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102400" />
+  <parameter name="baseAddress" value="0x10001400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -912,7 +931,16 @@
    start="nios2.data_master"
    end="touch_cntrl.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102440" />
+  <parameter name="baseAddress" value="0x10001450" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="nios2.data_master"
+   end="sram_0.avalon_sram_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -921,7 +949,7 @@
    start="nios2.data_master"
    end="nios2.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08101800" />
+  <parameter name="baseAddress" value="0x10000800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -930,7 +958,7 @@
    start="nios2.data_master"
    end="altpll.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08102450" />
+  <parameter name="baseAddress" value="0x10001440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -944,7 +972,7 @@
  </connection>
  <connection kind="avalon" version="18.1" start="nios2.data_master" end="sdram.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x08000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -953,7 +981,7 @@
    start="nios2.instruction_master"
    end="nios2.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08101800" />
+  <parameter name="baseAddress" value="0x10000800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -971,7 +999,7 @@
    start="nios2.instruction_master"
    end="sdram.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x08000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="clock" version="18.1" start="altpll.c0" end="nios2.clk" />
@@ -982,6 +1010,7 @@
    version="18.1"
    start="altpll.c0"
    end="sdcard_interface.clk" />
+ <connection kind="clock" version="18.1" start="altpll.c0" end="sram_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="main_memory.clk1" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="touch_cntrl.clock" />
  <connection
@@ -1085,6 +1114,11 @@
    version="18.1"
    start="sys_clk.clk_reset"
    end="touch_cntrl.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="sys_clk.clk_reset"
+   end="sram_0.reset" />
  <connection
    kind="reset"
    version="18.1"

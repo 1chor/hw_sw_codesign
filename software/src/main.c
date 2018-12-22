@@ -391,6 +391,12 @@ void test()
         printf( "%f %f\n", cout[i].r, convert_9q23( test ));
     }
     
+    printf("writing to sram\n");
+    
+    IOWR ( SRAM_0_BASE, 0, 0x15 );
+    
+    printf( "%lx\n", IORD( SRAM_0_BASE, 0) );
+    
     return;
     
     printf("loading input file\n");

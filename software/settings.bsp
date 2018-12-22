@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Oct 29, 2018 5:14:08 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1540829648237</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Dec 22, 2018 5:01:41 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1545494501139</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -899,50 +899,56 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
+                <slaveDescriptor>sram_0</slaveDescriptor>
+                <addressRange>0x00000000 - 0x001FFFFF</addressRange>
+                <addressSpan>2097152</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>sdram</slaveDescriptor>
-                <addressRange>0x00000000 - 0x07FFFFFF</addressRange>
+                <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>
                 <addressSpan>134217728</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sdcard_interface</slaveDescriptor>
-                <addressRange>0x08102000 - 0x081023FF</addressRange>
+                <addressRange>0x10001000 - 0x100013FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>textmode_controller</slaveDescriptor>
-                <addressRange>0x08102400 - 0x0810243F</addressRange>
+                <addressRange>0x10001400 - 0x1000143F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>touch_cntrl</slaveDescriptor>
-                <addressRange>0x08102440 - 0x0810244F</addressRange>
+                <slaveDescriptor>altpll</slaveDescriptor>
+                <addressRange>0x10001440 - 0x1000144F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>altpll</slaveDescriptor>
-                <addressRange>0x08102450 - 0x0810245F</addressRange>
+                <slaveDescriptor>touch_cntrl</slaveDescriptor>
+                <addressRange>0x10001450 - 0x1000145F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>av_config</slaveDescriptor>
-                <addressRange>0x08102460 - 0x0810246F</addressRange>
+                <addressRange>0x10001460 - 0x1000146F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>audio</slaveDescriptor>
-                <addressRange>0x08102470 - 0x0810247F</addressRange>
+                <addressRange>0x10001470 - 0x1000147F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x08102480 - 0x08102487</addressRange>
+                <addressRange>0x10001480 - 0x10001487</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
