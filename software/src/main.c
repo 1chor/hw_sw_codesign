@@ -398,8 +398,11 @@ void test()
     
     printf( "%lx\n", IORD( SRAM_0_BASE, 0) );
     
-    uint32_t h_header_1_r = (uint32_t)(cout[1].r * (1 << 23));
-    uint32_t h_header_1_i = (uint32_t)(cout[1].i * (1 << 23));
+    //~ uint32_t h_header_1_r = (uint32_t)(cout[1].r * (1 << 23));
+    //~ uint32_t h_header_1_i = (uint32_t)(cout[1].i * (1 << 23));
+    
+    uint32_t h_header_1_r = convert_to_fixed_9q23( cout[1].r );
+    uint32_t h_header_1_i = convert_to_fixed_9q23( cout[1].i );
     
     complex_32_t c_w;
     complex_32_t c_r;

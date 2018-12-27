@@ -70,6 +70,8 @@ float convert_1q15( uint16_t num )
     return num_float;
 }
 
+
+
 float convert_9q23( uint32_t num )
 {
     uint8_t i = 0;
@@ -113,4 +115,14 @@ float convert_9q23( uint32_t num )
     }
     
     return num_float;
+}
+
+uint16_t convert_to_fixed_1q15( float num )
+{
+    return (uint16_t)(num * (1 << 15));
+}
+
+uint32_t convert_to_fixed_9q23( float num )
+{
+    return (uint32_t)(num * (1 << 23));
 }
