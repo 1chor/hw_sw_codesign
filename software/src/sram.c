@@ -73,8 +73,6 @@ complex_32_t sram_read_from_block( uint32_t block, uint32_t i )
 
 uint8_t sram_test()
 {
-    printf( ">SRAM test\n" );
-    
     // naming:
     // c_blockindex_sampleindex
     
@@ -131,6 +129,4 @@ uint8_t sram_test()
     (void) cmp_complex( c_11_022, c_11_022_right );
     (void) cmp_complex( c_12_022, c_12_022_right );
     (void) cmp_complex( c_13_255, c_13_255_right );
-    
-    printf(">finished\n");
 }

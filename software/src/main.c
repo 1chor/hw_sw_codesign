@@ -335,9 +335,11 @@ void test()
     
     uint8_t header_blocks_h_i = 0;
     
+    printf( "processing header blocks h\n" );
+    
     for ( header_blocks_h_i = 0; header_blocks_h_i < 14; header_blocks_h_i ++ )
     {
-        printf( "processing header block h index: %i\n", header_blocks_h_i );
+        printf( "block: %i\n", header_blocks_h_i );
         
         kiss_fft_cpx cin[512];
         kiss_fft_cpx cout[512];
@@ -395,7 +397,13 @@ void test()
         (void) sram_write_block( samples, header_blocks_h_i );
     }
     
+    printf(">done\n\n");
+    
+    printf( "SRAM test\n" );
+    
     (void) sram_test();
+    
+    printf(">done\n\n");
     
     return;
     
