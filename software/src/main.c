@@ -376,55 +376,27 @@ void test()
     kiss_fft( kiss_cfg, cin, cout );
     //~ kiss_fft( kiss_cfg_i, cout, ctest );
     
-    for ( i = 0; i < 10; i++ )
+    // write block to sram
+    
+    // the fft result has to be stored in a complex_32_t.
+    // the complex_32_t takes uint32_t so the vales have
+    // to be converted.
+    
+    complex_32_t samples[512];
+    
+    for ( i = 0; i < 512; i++ )
     {
-        printf( "%f\n", cin[i].r );
+        samples[i].r = convert_to_fixed_9q23( cout[i].r );
+        samples[i].i = convert_to_fixed_9q23( cout[i].i );
     }
     
-    printf("-----------\n");
+    // write the whole block to sram
     
-    for ( i = 0; i < 10; i++ )
-    {
-        //~ printf( "%f %fi\n", cout[i].r, cout[i].i );
-        
-        uint32_t test = (uint32_t)(cout[i].r * (1 << 23));
-        
-        printf( "%f %f\n", cout[i].r, convert_9q23( test ));
-    }
+    (void) sram_write_block( samples, 0 );
     
-    printf("writing to sram\n");
+    uint8_t ret = sram_test();
     
-    IOWR ( SRAM_0_BASE, 0, 0x15 );
-    
-    printf( "%lx\n", IORD( SRAM_0_BASE, 0) );
-    
-    //~ uint32_t h_header_1_r = (uint32_t)(cout[1].r * (1 << 23));
-    //~ uint32_t h_header_1_i = (uint32_t)(cout[1].i * (1 << 23));
-    
-    uint32_t h_header_1_r = convert_to_fixed_9q23( cout[1].r );
-    uint32_t h_header_1_i = convert_to_fixed_9q23( cout[1].i );
-    
-    complex_32_t c_w;
-    complex_32_t c_r;
-    
-    // write to sram
-    
-    c_w.r = h_header_1_r;
-    c_w.i = h_header_1_i;
-    
-    (void) sram_write( c_w, 5 );
-    
-    // read from sram
-    
-    c_r = sram_read( 5 );
-    
-    // print
-    
-    printf( "%lx - %lx\n", h_header_1_r, h_header_1_i );
-    printf( "%lx - %lx\n", c_r.r       , c_r.i        );
-    
-    printf( "%f - %f\n", convert_9q23(h_header_1_r), convert_9q23(h_header_1_i) );
-    printf( "%f - %f\n", convert_9q23(c_r.r)       , convert_9q23(c_r.i)        );
+    if ( ret != 0 ) { return; }
     
     return;
     
