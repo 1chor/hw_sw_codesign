@@ -10,6 +10,7 @@
 #include "nios2.h"
 
 #include "sram.h"
+#include "complex.h"
 
 void sram_write( complex_32_t sample, uint32_t i )
 {
@@ -22,6 +23,18 @@ void sram_write( complex_32_t sample, uint32_t i )
     
     IOWR ( SRAM_0_BASE, (4*i)+2, (uint16_t)( sample.i >> 16) );
     IOWR ( SRAM_0_BASE, (4*i)+3, (uint16_t)( sample.i      ) );
+}
+
+void sram_write_block( complex_32_t* samples, uint32_t block )
+{
+    uint16_t i = 0;
+    
+    uint32_t block_base = block * 512;
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        (void) sram_write( samples[i], block_base + i );
+    }
 }
 
 complex_32_t sram_read( uint32_t i )
@@ -45,14 +58,30 @@ complex_32_t sram_read( uint32_t i )
     return c;
 }
 
-void sram_write_block( complex_32_t* samples, uint32_t base )
+complex_32_t sram_read_from_block( uint32_t block, uint32_t i )
 {
-    uint16_t i = 0;
+    complex_32_t c;
     
-    for ( i = 0; i < 512; i++ )
-    {
-        (void) sram_write( samples[i], base + i );
-    }
+    uint32_t block_base = block * 512;
+    
+    c = sram_read( block_base + i );
+    
+    return c;
+}
+
+uint8_t sram_test_cmp()
+{
+    complex_32_t c_001 = sram_read_from_block( 0,   1 );
+    complex_32_t c_015 = sram_read_from_block( 0,  15 );
+    complex_32_t c_255 = sram_read_from_block( 0, 255 );
+    
+    complex_32_t c_001_right = complex_from_float_9q23( -2.54973  , -3.04959   );
+    complex_32_t c_015_right = complex_from_float_9q23( -1.1204   , -1.6117    );
+    complex_32_t c_255_right = complex_from_float_9q23(  0.0237411,  0.0038374 );
+    
+    (void) cmp_complex( c_001, c_001_right );
+    (void) cmp_complex( c_015, c_015_right );
+    (void) cmp_complex( c_255, c_255_right );
 }
 
 uint8_t sram_test()
@@ -61,9 +90,9 @@ uint8_t sram_test()
     
     uint8_t ret = 0;
     
-    complex_32_t c_001 = sram_read(   1 );
-    complex_32_t c_015 = sram_read(  15 );
-    complex_32_t c_255 = sram_read( 255 );
+    complex_32_t c_001 = sram_read_from_block( 0,   1 );
+    complex_32_t c_015 = sram_read_from_block( 0,  15 );
+    complex_32_t c_255 = sram_read_from_block( 0, 255 );
     
     float c_001_r;
     float c_001_i;

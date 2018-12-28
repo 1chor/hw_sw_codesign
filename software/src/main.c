@@ -19,6 +19,7 @@
 
 #include "fixed_point.h"
 #include "sram.h"
+#include "complex.h"
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -330,71 +331,73 @@ void test()
     kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
     kiss_fft_cfg kiss_cfg_i = kiss_fft_alloc( 512, 1, 0, 0 );
     
-    kiss_fft_cpx cin[512];
-    kiss_fft_cpx cout[512];
-    kiss_fft_cpx ctest[512];
-    
     uint32_t i = 0;
     
-    // ich muss hier bei 512 anfange, da die geraden indices immer
-    // die linken samples beinhalten
+    uint8_t header_blocks_h_i = 0;
     
-    uint32_t sample_counter_ir = 512;
-    //~ uint32_t sample_counter_ir = 0;
-    
-    // wir nehmen nur 256 da das ja zero extended sein soll.
-    
-    for ( i = 0; i < 256; i++ )
+    for ( header_blocks_h_i = 0; header_blocks_h_i < 14; header_blocks_h_i ++ )
     {
-        // wenn ich das ganze ohne den 16 left shit einlese bekomme ich
-        // das aus ich auch mit hexdump aus der datei gelesen habe.
+        printf( "processing header block h index: %i\n", header_blocks_h_i );
         
-        //~ l_buf = wav_get_uint16( ir, 2*sample_counter_ir )<<16;
-        //~ r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 )<<16;
-        l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
-        r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
+        kiss_fft_cpx cin[512];
+        kiss_fft_cpx cout[512];
         
-        // convert the binary value to float
+        // ich muss hier bei 512 anfange, da die geraden indices immer
+        // die linken samples beinhalten
         
-        cin[i].r = convert_1q15(l_buf);
-        cin[i].i = 0;
+        uint32_t sample_counter_ir = 512 + ( header_blocks_h_i * 256 );
         
-        sample_counter_ir += 1;
+        // wir nehmen nur 256 da das ja zero extended sein soll.
+        
+        for ( i = 0; i < 256; i++ )
+        {
+            l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
+            r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
+            
+            // convert the binary value to float
+            
+            cin[i].r = convert_1q15(l_buf);
+            cin[i].i = 0;
+            
+            sample_counter_ir += 1;
+        }
+        
+        // zero extension
+        // wenn ich das nicht mit 0 fuelle, dann kann auch nan drinnen stehen.
+        
+        for ( i = 256; i < 512; i++ )
+        {
+            cin[i].r = 0;
+            cin[i].i = 0;
+        }
+        
+        // kiss fft
+        
+        kiss_fft( kiss_cfg, cin, cout );
+        //~ kiss_fft( kiss_cfg_i, cout, ctest );
+        
+        // write block to sram
+        
+        // the fft result has to be stored in a complex_32_t.
+        // the complex_32_t takes uint32_t so the vales have
+        // to be converted.
+        
+        complex_32_t samples[512];
+        
+        for ( i = 0; i < 512; i++ )
+        {
+            samples[i].r = convert_to_fixed_9q23( cout[i].r );
+            samples[i].i = convert_to_fixed_9q23( cout[i].i );
+        }
+        
+        // write the whole block to sram
+        
+        (void) sram_write_block( samples, header_blocks_h_i );
     }
-    
-    // zero extension
-    // wenn ich das nicht mit 0 fuelle, dann kann auch nan drinnen stehen.
-    
-    for ( i = 256; i < 512; i++ )
-    {
-        cin[i].r = 0;
-        cin[i].i = 0;
-    }
-    
-    // kiss fft
-    
-    kiss_fft( kiss_cfg, cin, cout );
-    //~ kiss_fft( kiss_cfg_i, cout, ctest );
-    
-    // write block to sram
-    
-    // the fft result has to be stored in a complex_32_t.
-    // the complex_32_t takes uint32_t so the vales have
-    // to be converted.
-    
-    complex_32_t samples[512];
-    
-    for ( i = 0; i < 512; i++ )
-    {
-        samples[i].r = convert_to_fixed_9q23( cout[i].r );
-        samples[i].i = convert_to_fixed_9q23( cout[i].i );
-    }
-    
-    // write the whole block to sram
-    
-    (void) sram_write_block( samples, 0 );
     
     uint8_t ret = sram_test();
+    
+    (void) sram_test_cmp();
     
     if ( ret != 0 ) { return; }
     
