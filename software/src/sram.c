@@ -64,95 +64,73 @@ complex_32_t sram_read_from_block( uint32_t block, uint32_t i )
     
     uint32_t block_base = block * 512;
     
+    //~ printf( "block_base %i\n", block_base+i );
+    
     c = sram_read( block_base + i );
     
     return c;
-}
-
-uint8_t sram_test_cmp()
-{
-    complex_32_t c_001 = sram_read_from_block( 0,   1 );
-    complex_32_t c_015 = sram_read_from_block( 0,  15 );
-    complex_32_t c_255 = sram_read_from_block( 0, 255 );
-    
-    complex_32_t c_001_right = complex_from_float_9q23( -2.54973  , -3.04959   );
-    complex_32_t c_015_right = complex_from_float_9q23( -1.1204   , -1.6117    );
-    complex_32_t c_255_right = complex_from_float_9q23(  0.0237411,  0.0038374 );
-    
-    (void) cmp_complex( c_001, c_001_right );
-    (void) cmp_complex( c_015, c_015_right );
-    (void) cmp_complex( c_255, c_255_right );
 }
 
 uint8_t sram_test()
 {
     printf( ">SRAM test\n" );
     
-    uint8_t ret = 0;
+    // naming:
+    // c_blockindex_sampleindex
     
-    complex_32_t c_001 = sram_read_from_block( 0,   1 );
-    complex_32_t c_015 = sram_read_from_block( 0,  15 );
-    complex_32_t c_255 = sram_read_from_block( 0, 255 );
+    complex_32_t c_00_001 = sram_read_from_block(  0,   1 );
+    complex_32_t c_00_015 = sram_read_from_block(  0,  15 );
+    complex_32_t c_00_255 = sram_read_from_block(  0, 255 );
+    complex_32_t c_01_000 = sram_read_from_block(  1,   0 );
+    complex_32_t c_01_021 = sram_read_from_block(  1,  21 );
+    complex_32_t c_02_022 = sram_read_from_block(  2,  22 );
+    complex_32_t c_03_022 = sram_read_from_block(  3,  22 );
+    complex_32_t c_04_022 = sram_read_from_block(  4,  22 );
+    complex_32_t c_05_022 = sram_read_from_block(  5,  22 );
+    complex_32_t c_06_022 = sram_read_from_block(  6,  22 );
+    complex_32_t c_07_022 = sram_read_from_block(  7,  22 );
+    complex_32_t c_08_021 = sram_read_from_block(  8,  21 );
+    complex_32_t c_09_022 = sram_read_from_block(  9,  22 );
+    complex_32_t c_10_022 = sram_read_from_block( 10,  22 );
+    complex_32_t c_11_022 = sram_read_from_block( 11,  22 );
+    complex_32_t c_12_022 = sram_read_from_block( 12,  22 );
+    complex_32_t c_13_255 = sram_read_from_block( 13, 255 );
     
-    float c_001_r;
-    float c_001_i;
-    float c_015_r;
-    float c_015_i;
-    float c_255_r;
-    float c_255_i;
+    complex_32_t c_00_001_right = complex_from_float_9q23( -2.54973  , -3.04959   );
+    complex_32_t c_00_015_right = complex_from_float_9q23( -1.1204   , -1.6117    );
+    complex_32_t c_00_255_right = complex_from_float_9q23(  0.0237411,  0.0038374 );
+    complex_32_t c_01_000_right = complex_from_float_9q23( -1.2316   ,  0         );
+    complex_32_t c_01_021_right = complex_from_float_9q23( -1.4315   , -3.6922    );
+    complex_32_t c_02_022_right = complex_from_float_9q23( -1.3793   , -1.1449    );
+    complex_32_t c_03_022_right = complex_from_float_9q23(  0.043728 ,  3.442955  );
+    complex_32_t c_04_022_right = complex_from_float_9q23( -0.30478  ,  1.27823   );
+    complex_32_t c_05_022_right = complex_from_float_9q23( -0.064440 , -0.450381  );
+    complex_32_t c_06_022_right = complex_from_float_9q23(  0.28450  , -1.20484   );
+    complex_32_t c_07_022_right = complex_from_float_9q23(  1.1722   , -1.5835    );
+    complex_32_t c_08_021_right = complex_from_float_9q23( -0.45846  ,  1.00286   );
+    complex_32_t c_09_022_right = complex_from_float_9q23(  0.86276  , -0.10841   );
+    complex_32_t c_10_022_right = complex_from_float_9q23(  0.17272  , -0.58791   );
+    complex_32_t c_11_022_right = complex_from_float_9q23( -0.25955  , -1.26607   );
+    complex_32_t c_12_022_right = complex_from_float_9q23( -0.78818  , -1.98829   );
+    complex_32_t c_13_255_right = complex_from_float_9q23(  0.0146159,  0.0010956 );
     
-    // hier muss ich das pointer zeugs verwenden
-    // sonst funktioniert es nicht.
+    (void) cmp_complex( c_00_001, c_00_001_right );
+    (void) cmp_complex( c_00_015, c_00_015_right );
+    (void) cmp_complex( c_00_255, c_00_255_right );
+    (void) cmp_complex( c_01_000, c_01_000_right );
+    (void) cmp_complex( c_01_021, c_01_021_right );
+    (void) cmp_complex( c_02_022, c_02_022_right );
+    (void) cmp_complex( c_03_022, c_03_022_right );
+    (void) cmp_complex( c_04_022, c_04_022_right );
+    (void) cmp_complex( c_05_022, c_05_022_right );
+    (void) cmp_complex( c_06_022, c_06_022_right );
+    (void) cmp_complex( c_07_022, c_07_022_right );
+    (void) cmp_complex( c_08_021, c_08_021_right );
+    (void) cmp_complex( c_09_022, c_09_022_right );
+    (void) cmp_complex( c_10_022, c_10_022_right );
+    (void) cmp_complex( c_11_022, c_11_022_right );
+    (void) cmp_complex( c_12_022, c_12_022_right );
+    (void) cmp_complex( c_13_255, c_13_255_right );
     
-    (void) convert_9q23_pointer( &c_001_r, c_001.r);
-    (void) convert_9q23_pointer( &c_001_i, c_001.i);
-    (void) convert_9q23_pointer( &c_015_r, c_015.r);
-    (void) convert_9q23_pointer( &c_015_i, c_015.i);
-    (void) convert_9q23_pointer( &c_255_r, c_255.r);
-    (void) convert_9q23_pointer( &c_255_i, c_255.i);
-    
-    // -2.54973 - 3.04959i
-    // -1.1204 - 1.6117i
-    //  0.0237411 + 0.0038374i
-    
-    float c_001_r_right = -2.54973;
-    float c_001_i_right = -3.04959;
-    
-    float c_015_r_right = -1.1204;
-    float c_015_i_right = -1.6117;
-    
-    float c_255_r_right = 0.0237411;
-    float c_255_i_right = 0.0038374;
-    
-    if (
-        ( (c_001_r - c_001_r_right) > 0.5 ) ||
-        ( (c_001_i - c_001_i_right) > 0.5 )
-    )
-    {
-        printf(">failed for 001\n");
-        ret = 1;
-    }
-    
-    if (
-        ( (c_015_r - c_015_r_right) > 0.5 ) ||
-        ( (c_015_i - c_015_i_right) > 0.5 )
-    )
-    {
-        printf(">failed for 015\n");
-        ret = 1;
-    }
-    
-    if (
-        ( (c_255_r - c_255_r_right) > 0.5 ) ||
-        ( (c_255_i - c_255_i_right) > 0.5 )
-    )
-    {
-        printf(">failed for 255\n");
-        ret = 1;
-    }
-    
-    if ( ret != 0 ) { printf( ">>failed!\n"  ); }
-    else            { printf( ">>success!\n" ); }
-    
-    return ret;
+    printf(">finished\n");
 }

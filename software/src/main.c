@@ -395,11 +395,7 @@ void test()
         (void) sram_write_block( samples, header_blocks_h_i );
     }
     
-    uint8_t ret = sram_test();
-    
-    (void) sram_test_cmp();
-    
-    if ( ret != 0 ) { return; }
+    (void) sram_test();
     
     return;
     

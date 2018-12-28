@@ -59,6 +59,11 @@ uint8_t cmp_complex( complex_32_t a, complex_32_t b )
         ( (a_i - b_i) > 0.5 )
     )
     {
+        printf("failed for\n");
+        printf(">%f %f i\n", a_r, a_i);
+        printf(">%f %f i\n", b_r, b_i);
+        printf("---------------------\n");
+        
         return 1;
     }
     
