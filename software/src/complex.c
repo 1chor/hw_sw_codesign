@@ -79,3 +79,19 @@ complex_32_t complex_from_float_9q23( float r, float i )
     
     return c;
 }
+
+void c_print( complex_32_t c )
+{
+    printf("%lx %lx i\n", c.r, c.i);
+}
+
+void c_print_as_float( complex_32_t c )
+{
+    float c_r;
+    float c_i;
+    
+    (void) convert_9q23_pointer( &c_r, c.r);
+    (void) convert_9q23_pointer( &c_i, c.i);
+    
+    printf("%f %f i\n", c_r, c_i);
+}

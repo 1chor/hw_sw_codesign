@@ -24,4 +24,7 @@ uint8_t cmp_complex( complex_32_t, complex_32_t );
 
 complex_32_t complex_from_float_9q23( float, float );
 
+void c_print( complex_32_t );
+void c_print_as_float( complex_32_t );
+
 #endif
