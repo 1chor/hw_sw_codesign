@@ -7,8 +7,8 @@ use work.math_pkg.all;
 
 entity fir is
 	generic (
-		NUM_COEFFICIENTS : integer := 512; 
-		ADDR_WIDTH       : integer := 9 
+		NUM_COEFFICIENTS : integer := 16; 
+		ADDR_WIDTH       : integer := 4 
 	);
 	port (
 		clk   : in std_logic;
