@@ -12,6 +12,13 @@
 #include "sram.h"
 #include "complex.h"
 
+// blocks
+
+//  0 - 13 header left
+// 14 - 27 header right
+// 28 - 41 input left
+// 42 - 55 input right
+
 void sram_write( complex_32_t sample, uint32_t i )
 {
     // write real part
@@ -34,6 +41,7 @@ void sram_write_block( complex_32_t* samples, uint32_t block )
     for ( i = 0; i < 512; i++ )
     {
         (void) sram_write( samples[i], block_base + i );
+        //~ printf( "%i\n", block_base + i );
     }
 }
 
@@ -56,6 +64,16 @@ complex_32_t sram_read( uint32_t i )
     c.i = ( sample_i_msb << 16 ) | sample_i_lsb;
     
     return c;
+}
+
+void sram_read_block( complex_32_t* samples, uint32_t block )
+{
+    uint16_t i = 0;
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        samples[i] = sram_read_from_block( block, i );
+    }
 }
 
 complex_32_t sram_read_from_block( uint32_t block, uint32_t i )
