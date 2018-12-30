@@ -421,19 +421,25 @@ void test()
     struct wav* input = wav_read("/ir_cave.wav");
     printf(">done\n\n");
     
+    uint32_t samples_in_file = wav_sample_count(input);
+    
+    //~ printf("preparing output file\n");
+    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
+    //~ printf(">done\n\n");
+    
     uint32_t sample_counter = 0;
     uint32_t sample_counter_local = 0;
-    uint32_t samples_in_file = wav_sample_count(input);
     
     kiss_fft_cpx i_in[512];
     kiss_fft_cpx i_out[512];
+    kiss_fft_cpx i_ifft[512];
     
     // der input block wird dort gespeichert
     
     uint8_t i_pointer = 41;
     uint8_t ibi = 41;
     
-    uint8_t asdf = 0;
+    //~ uint8_t asdf = 0;
     
     while (1)
     {
@@ -537,6 +543,36 @@ void test()
                 }
             }
             
+            // jetzt ist die ganze mul fertig und wir koennen einen ifft
+            // machen.
+            
+            // complex_32_t to kiss_fft_cpx
+            
+            printf( "performing ifft\n" );
+            
+            for ( i = 0; i < 512; i++ )
+            {
+                
+                float output_buffer_r;
+                float output_buffer_i;
+                
+                convert_9q23_pointer( &output_buffer_r, output_buffer[i].r );
+                convert_9q23_pointer( &output_buffer_i, output_buffer[i].i );
+                
+                // i_in is reused here.
+                
+                i_in[i].r = output_buffer_r;
+                i_in[i].i = output_buffer_i;
+            }
+            
+            kiss_fft( kiss_cfg_i, i_in, i_ifft );
+            
+            for ( i = 50; i < 60; i++ )
+            {
+                printf( "ifft: %i: %f\n", i, i_ifft[i].r );
+            }
+            
+            return;
             
             if ( i_pointer == 41 )
             {
@@ -547,26 +583,29 @@ void test()
                 i_pointer += 1;
             }
             
-            asdf += 1;
+            //~ asdf += 1;
             
-            if ( asdf == 2 )
-            {
-                printf("======\n");
+            //~ if ( asdf == 2 )
+            //~ {
+                //~ printf("======\n");
                 
-                for ( i = 0; i < 10; i++ )
-                {
-                    c_print_as_float( output_buffer[i] );
+                //~ for ( i = 0; i < 10; i++ )
+                //~ {
+                    //~ c_print_as_float( output_buffer[i] );
                     
-                }
-                return;
-            }
+                //~ }
+                //~ return;
+            //~ }
             
             printf( ">done\n\n" );
         }
         
+        
+        
+        
         if ( sample_counter >= samples_in_file )
         {
-            printf(">done\n\n");
+            printf(">done done\n\n");
             
             break;
         }
