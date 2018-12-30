@@ -84,37 +84,23 @@ complex_32_t c_mul( complex_32_t i, complex_32_t r )
 {
     complex_32_t c_return;
     
-    uint32_t a = i.r;
-    uint32_t b = i.i;
+    int32_t a = (int32_t)i.r;
+    int32_t b = (int32_t)i.i;
+    int32_t c = (int32_t)r.r;
+    int32_t d = (int32_t)r.i;
     
-    uint32_t c = r.r;
-    uint32_t d = r.i;
+    int64_t temp_64;
+    int32_t temp_32;
     
-    float a_f;
-    float b_f;
-    float c_f;
-    float d_f;
+    temp_64 = ( (int64_t)a * (int64_t)c ) - ( (int64_t)b * (int64_t)d );
+    temp_32 = (int32_t)(temp_64>>23);
     
-    convert_9q23_pointer( &a_f, a );
-    convert_9q23_pointer( &b_f, b );
-    convert_9q23_pointer( &c_f, c );
-    convert_9q23_pointer( &d_f, d );
+    c_return.r = (uint32_t)(temp_32);
     
-    float c_ret_r = 0;
-    float c_ret_i = 0;
+    temp_64 = ( (int64_t)a * (int64_t)d ) + ( (int64_t)b * (int64_t)c );
+    temp_32 = (int32_t)(temp_64 >> 23);
     
-    c_ret_r = (a_f * c_f) - (b_f * d_f);
-    c_ret_i = (a_f * d_f) + (b_f * c_f);
-    
-    c_return.r = convert_to_fixed_9q23( c_ret_r );
-    c_return.i = convert_to_fixed_9q23( c_ret_i );
-    
-    //~ c_return.r = (a * c) - (b * d);
-    //~ c_return.i = (a * d) + (b * c);
-    
-    //~ c_print_as_float( i );
-    //~ c_print_as_float( r );
-    //~ c_print_as_float( c_return );
+    c_return.i = (uint32_t)(temp_32);
     
     return c_return;
 }
