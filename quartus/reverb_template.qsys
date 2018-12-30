@@ -853,7 +853,7 @@
   <parameter name="rowWidth" value="13" />
  </module>
  <module name="sram_0" kind="altera_up_avalon_sram" version="18.0" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
   <parameter name="board" value="DE2-115" />
   <parameter name="pixel_buffer" value="false" />
@@ -1010,7 +1010,6 @@
    version="18.1"
    start="altpll.c0"
    end="sdcard_interface.clk" />
- <connection kind="clock" version="18.1" start="altpll.c0" end="sram_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="main_memory.clk1" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="touch_cntrl.clock" />
  <connection
@@ -1030,6 +1029,7 @@
    end="clock_bridge_25.in_clk" />
  <connection kind="clock" version="18.1" start="sys_clk.clk" end="av_config.clk" />
  <connection kind="clock" version="18.1" start="sys_clk.clk" end="audio.clk" />
+ <connection kind="clock" version="18.1" start="sys_clk.clk" end="sram_0.clk" />
  <connection
    kind="clock"
    version="18.1"

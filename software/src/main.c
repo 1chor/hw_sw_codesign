@@ -332,6 +332,8 @@ void test()
     kiss_fft_cfg kiss_cfg_i = kiss_fft_alloc( 512, 1, 0, 0 );
     
     uint32_t i = 0;
+    uint32_t j = 0;
+    uint32_t k = 0;
     
     uint8_t header_blocks_h_i = 0;
     
@@ -385,7 +387,6 @@ void test()
         // to be converted.
         
         complex_32_t samples[512];
-        
         for ( i = 0; i < 512; i++ )
         {
             samples[i].r = convert_to_fixed_9q23( cout[i].r );
@@ -400,35 +401,130 @@ void test()
     printf(">done\n\n");
     
     printf( "SRAM test\n" );
-    
     (void) sram_test();
-    
     printf(">done\n\n");
     
-    return;
+    printf( "clearing SRAM for input data\n" );
+    complex_32_t dummy_samples[512];
+    sram_clear_block( dummy_samples );
+    
+    // 28 - 41 input left
+    
+    for ( i = 28; i < 42; i++ )
+    {
+        sram_write_block( dummy_samples, i );
+    }
+    printf(">done\n\n");
     
     printf("loading input file\n");
-    struct wav* input = wav_read("/input.wav");
+    //~ struct wav* input = wav_read("/input.wav");
+    struct wav* input = wav_read("/ir_cave.wav");
     printf(">done\n\n");
     
     uint32_t sample_counter = 0;
     uint32_t samples_in_file = wav_sample_count(input);
     
-    printf("preparing output file\n");
-    struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
-    printf(">done\n\n");
+    kiss_fft_cpx i_in[512];
+    kiss_fft_cpx i_out[512];
     
-    printf("processing starting\n");
+    // der input block wird dort gespeichert
+    
+    uint8_t i_pointer = 41;
+    uint8_t ibi = 41;
     
     while (1)
     {
-        l_buf = wav_get_uint16(input, 2*sample_counter)<<16;
-        r_buf = wav_get_uint16(input, 2*sample_counter+1)<<16;
+        l_buf = wav_get_uint16(input, 2*sample_counter);
+        r_buf = wav_get_uint16(input, 2*sample_counter+1);
         
-        ((uint16_t*)output->samples)[2*sample_counter]   = (uint16_t)(l_buf>>16);
-        ((uint16_t*)output->samples)[2*sample_counter+1] = (uint16_t)(r_buf>>16);
+        i_in[sample_counter].r = convert_1q15(l_buf);
+        i_in[sample_counter].i = 0;
         
-        sample_counter += 1;
+        if (
+            ( (sample_counter % 255) == 0 ) &&
+            ( sample_counter > 0 )
+        )
+        {
+            printf( "full header I block collected\n" );
+            
+            // jetzt haben wir einen ganzen block
+            
+            // zero extension
+            
+            for ( i = 256; i < 512; i++ )
+            {
+                i_in[i].r = 0;
+                i_in[i].i = 0;
+            }
+            
+            kiss_fft( kiss_cfg, i_in, i_out );
+            
+            complex_32_t samples[512];
+            for ( i = 0; i < 512; i++ )
+            {
+                samples[i].r = convert_to_fixed_9q23( i_out[i].r );
+                samples[i].i = convert_to_fixed_9q23( i_out[i].i );
+            }
+            
+            // der block wird gespeichert
+            
+            (void) sram_write_block( samples, i_pointer );
+            
+            // frequency mul
+            
+            complex_32_t output_buffer[512];
+            
+            // clear output buffer
+            // behebt dinge die eigentlich durch timig shit verursacht werden
+            
+            sram_clear_block( output_buffer );
+            
+            complex_32_t mul_temp;
+            ibi = i_pointer;
+            
+            // wir gehen alle ir blocks durch
+            
+            printf( "performing mul\n" );
+            
+            for ( j = 0; j < 14; j++ )
+            {
+                printf("%i / 14\n", j);
+                
+                // get ir and in blocks from sram
+                
+                complex_32_t in_block[512];
+                complex_32_t ir_block[512];
+                
+                (void) sram_read_block( &in_block, ibi );
+                (void) sram_read_block( &ir_block,   j );
+                
+                // perform mul for each sample
+                
+                for ( k = 0; k < 512; k++ )
+                {
+                    mul_temp = c_mul( in_block[k], ir_block[k] );
+                    
+                    output_buffer[k].r += mul_temp.r;
+                    output_buffer[k].i += mul_temp.i;
+                }
+                
+                if ( ibi == 28 )
+                {
+                    ibi = 41;
+                }
+                else
+                {
+                    ibi -= 1;
+                }
+            }
+            
+            for ( i = 0; i < 10; i++ )
+            {
+                c_print_as_float( output_buffer[i] );
+            }
+            
+            return;
+        }
         
         if ( sample_counter >= samples_in_file )
         {
@@ -436,16 +532,47 @@ void test()
             
             break;
         }
+        
+        sample_counter += 1;
     }
     
-    printf("storing file\n");
-    wav_write("/recording.wav", output);
-    printf(">done\n\n");
+    return;
     
-    wav_free(output);
+    //~ uint32_t sample_counter = 0;
+    //~ uint32_t samples_in_file = wav_sample_count(input);
     
-    printf("===\n");
-    printf("end\n");
-    printf("===\n");
+    //~ printf("preparing output file\n");
+    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
+    //~ printf(">done\n\n");
+    
+    //~ printf("processing starting\n");
+    
+    //~ while (1)
+    //~ {
+        //~ l_buf = wav_get_uint16(input, 2*sample_counter)<<16;
+        //~ r_buf = wav_get_uint16(input, 2*sample_counter+1)<<16;
+        
+        //~ ((uint16_t*)output->samples)[2*sample_counter]   = (uint16_t)(l_buf>>16);
+        //~ ((uint16_t*)output->samples)[2*sample_counter+1] = (uint16_t)(r_buf>>16);
+        
+        //~ sample_counter += 1;
+        
+        //~ if ( sample_counter >= samples_in_file )
+        //~ {
+            //~ printf(">done\n\n");
+            
+            //~ break;
+        //~ }
+    //~ }
+    
+    //~ printf("storing file\n");
+    //~ wav_write("/recording.wav", output);
+    //~ printf(">done\n\n");
+    
+    //~ wav_free(output);
+    
+    //~ printf("===\n");
+    //~ printf("end\n");
+    //~ printf("===\n");
     
 }

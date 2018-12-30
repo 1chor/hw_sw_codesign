@@ -43,6 +43,8 @@ void sram_write_block( complex_32_t* samples, uint32_t block )
         (void) sram_write( samples[i], block_base + i );
         //~ printf( "%i\n", block_base + i );
     }
+    
+    sram_check_block( samples, block );
 }
 
 complex_32_t sram_read( uint32_t i )
@@ -87,6 +89,42 @@ complex_32_t sram_read_from_block( uint32_t block, uint32_t i )
     c = sram_read( block_base + i );
     
     return c;
+}
+
+void sram_clear_block( complex_32_t* samples )
+{
+    uint16_t i = 0;
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        samples[i].r = 0;
+        samples[i].i = 0;
+    }
+}
+
+void sram_check_block( complex_32_t* ref, uint32_t block )
+{
+    //~ printf("checking block\n");
+    
+    complex_32_t read[512];
+    
+    sram_read_block( read, block );
+    
+    uint16_t i = 0;
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        if (
+            ( read[i].r != ref[i].r ) ||
+            ( read[i].i != ref[i].i )
+        )
+        {
+            printf("-----\n");
+            printf( "check block failed r: %i: read %lx | ref %lx\n", i, read[i].r, ref[i].r );
+            printf( "check block failed i: %i: read %lx | ref %lx\n", i, read[i].i, ref[i].i );
+            printf("-----\n");
+        }
+    }
 }
 
 uint8_t sram_test()
