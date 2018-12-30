@@ -422,6 +422,7 @@ void test()
     printf(">done\n\n");
     
     uint32_t sample_counter = 0;
+    uint32_t sample_counter_local = 0;
     uint32_t samples_in_file = wav_sample_count(input);
     
     kiss_fft_cpx i_in[512];
@@ -432,19 +433,25 @@ void test()
     uint8_t i_pointer = 41;
     uint8_t ibi = 41;
     
+    uint8_t asdf = 0;
+    
     while (1)
     {
         l_buf = wav_get_uint16(input, 2*sample_counter);
         r_buf = wav_get_uint16(input, 2*sample_counter+1);
         
-        i_in[sample_counter].r = convert_1q15(l_buf);
-        i_in[sample_counter].i = 0;
+        i_in[sample_counter_local].r = convert_1q15(l_buf);
+        i_in[sample_counter_local].i = 0;
+        
+        sample_counter_local += 1;
         
         if (
-            ( (sample_counter % 255) == 0 ) &&
+            ( ((sample_counter+1) % 256) == 0 ) &&
             ( sample_counter > 0 )
         )
         {
+            sample_counter_local = 0;
+            
             printf( "full header I block collected\n" );
             
             // jetzt haben wir einen ganzen block
@@ -460,6 +467,7 @@ void test()
             kiss_fft( kiss_cfg, i_in, i_out );
             
             complex_32_t samples[512];
+            sram_clear_block( samples );
             for ( i = 0; i < 512; i++ )
             {
                 samples[i].r = convert_to_fixed_9q23( i_out[i].r );
@@ -467,6 +475,8 @@ void test()
             }
             
             // der block wird gespeichert
+            
+            printf( "writing block to %i\n", i_pointer );
             
             (void) sram_write_block( samples, i_pointer );
             
@@ -488,9 +498,11 @@ void test()
             
             for ( j = 0; j < 14; j++ )
             {
-                printf("%i / 14\n", j);
+                printf("%i / 14 | ", j);
                 
                 // get ir and in blocks from sram
+                
+                printf( "in_block %i | ir_block %i\n", ibi, j );
                 
                 complex_32_t in_block[512];
                 complex_32_t ir_block[512];
@@ -518,12 +530,31 @@ void test()
                 }
             }
             
-            for ( i = 0; i < 10; i++ )
+            
+            if ( i_pointer == 41 )
             {
-                c_print_as_float( output_buffer[i] );
+                i_pointer = 28;
+            }
+            else
+            {
+                i_pointer += 1;
             }
             
-            return;
+            asdf += 1;
+            
+            if ( asdf == 2 )
+            {
+                printf("======\n");
+                
+                for ( i = 0; i < 10; i++ )
+                {
+                    c_print_as_float( output_buffer[i] );
+                    
+                }
+                return;
+            }
+            
+            printf( ">done\n\n" );
         }
         
         if ( sample_counter >= samples_in_file )
