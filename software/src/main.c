@@ -512,9 +512,16 @@ void test()
                 
                 // perform mul for each sample
                 
+                //~ complex_32_t a;
+                //~ complex_32_t b;
+                
                 for ( k = 0; k < 512; k++ )
                 {
+                    //~ a = sram_read_from_block( ibi, k );
+                    //~ b = sram_read_from_block(   j, k );
+                    
                     mul_temp = c_mul( in_block[k], ir_block[k] );
+                    //~ mul_temp = c_mul( a, b );
                     
                     output_buffer[k].r += mul_temp.r;
                     output_buffer[k].i += mul_temp.i;

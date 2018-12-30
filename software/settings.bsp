@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Dec 30, 2018 4:22:11 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1546183331875</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Dec 30, 2018 6:39:34 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1546191574708</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -899,56 +899,62 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>sram_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x001FFFFF</addressRange>
-                <addressSpan>2097152</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>sdram</slaveDescriptor>
                 <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>
                 <addressSpan>134217728</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>sram_0</slaveDescriptor>
+                <addressRange>0x10000000 - 0x101FFFFF</addressRange>
+                <addressSpan>2097152</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>sdcard_interface</slaveDescriptor>
-                <addressRange>0x10001000 - 0x100013FF</addressRange>
+                <addressRange>0x10201000 - 0x102013FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>textmode_controller</slaveDescriptor>
-                <addressRange>0x10001400 - 0x1000143F</addressRange>
+                <addressRange>0x10201400 - 0x1020143F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>altpll_sram</slaveDescriptor>
+                <addressRange>0x10201440 - 0x1020144F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>altpll</slaveDescriptor>
-                <addressRange>0x10001440 - 0x1000144F</addressRange>
+                <addressRange>0x10201450 - 0x1020145F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>touch_cntrl</slaveDescriptor>
-                <addressRange>0x10001450 - 0x1000145F</addressRange>
+                <addressRange>0x10201460 - 0x1020146F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>av_config</slaveDescriptor>
-                <addressRange>0x10001460 - 0x1000146F</addressRange>
+                <addressRange>0x10201470 - 0x1020147F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>audio</slaveDescriptor>
-                <addressRange>0x10001470 - 0x1000147F</addressRange>
+                <addressRange>0x10201480 - 0x1020148F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x10001480 - 0x10001487</addressRange>
+                <addressRange>0x10201490 - 0x10201497</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
