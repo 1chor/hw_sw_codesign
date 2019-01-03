@@ -17,16 +17,16 @@ entity top is
 		LTM_G         : out   std_logic_vector(7 downto 0);     -- g
 		LTM_B         : out   std_logic_vector(7 downto 0);     -- b
 		
-		DRAM_ADDR     : out std_logic_vector(12 downto 0);
-		DRAM_BA       : out std_logic_vector(1 downto 0);
-		DRAM_CAS_N    : out std_logic;
-		DRAM_CKE      : out std_logic;
-		DRAM_CS_N     : out std_logic;
-		DRAM_DQ       : inout std_logic_vector(31 downto 0) := (others => 'X');
-		DRAM_DQM      : out std_logic_vector (3 downto 0);
-		DRAM_RAS_N    : out std_logic;
-		DRAM_WE_N     : out std_logic;
-		DRAM_CLK      : out std_logic;
+--		DRAM_ADDR     : out std_logic_vector(12 downto 0);
+--		DRAM_BA       : out std_logic_vector(1 downto 0);
+--		DRAM_CAS_N    : out std_logic;
+--		DRAM_CKE      : out std_logic;
+--		DRAM_CS_N     : out std_logic;
+--		DRAM_DQ       : inout std_logic_vector(31 downto 0) := (others => 'X');
+--		DRAM_DQM      : out std_logic_vector (3 downto 0);
+--		DRAM_RAS_N    : out std_logic;
+--		DRAM_WE_N     : out std_logic;
+--		DRAM_CLK      : out std_logic;
 		
 		SRAM_DQ                      : inout std_logic_vector(15 downto 0) := (others => 'X'); -- DQ
 		SRAM_ADDR                    : out   std_logic_vector(19 downto 0);                    -- ADDR
@@ -85,16 +85,16 @@ architecture arch of top is
             sdcard_b_SD_dat              : inout std_logic                     := 'X';             -- b_SD_dat
             sdcard_b_SD_dat3             : inout std_logic                     := 'X';             -- b_SD_dat3
             sdcard_o_SD_clock            : out   std_logic;                                        -- o_SD_clock
-            sdram_addr                   : out   std_logic_vector(12 downto 0);                    -- addr
-            sdram_ba                     : out   std_logic_vector(1 downto 0);                     -- ba
-            sdram_cas_n                  : out   std_logic;                                        -- cas_n
-            sdram_cke                    : out   std_logic;                                        -- cke
-            sdram_cs_n                   : out   std_logic;                                        -- cs_n
-            sdram_dq                     : inout std_logic_vector(31 downto 0) := (others => 'X'); -- dq
-            sdram_dqm                    : out   std_logic_vector(3 downto 0);                     -- dqm
-            sdram_ras_n                  : out   std_logic;                                        -- ras_n
-            sdram_we_n                   : out   std_logic;                                        -- we_n
-            sdram_clk_clk                : out   std_logic;                                        -- clk
+--            sdram_addr                   : out   std_logic_vector(12 downto 0);                    -- addr
+--            sdram_ba                     : out   std_logic_vector(1 downto 0);                     -- ba
+--            sdram_cas_n                  : out   std_logic;                                        -- cas_n
+--            sdram_cke                    : out   std_logic;                                        -- cke
+--            sdram_cs_n                   : out   std_logic;                                        -- cs_n
+--            sdram_dq                     : inout std_logic_vector(31 downto 0) := (others => 'X'); -- dq
+--            sdram_dqm                    : out   std_logic_vector(3 downto 0);                     -- dqm
+--            sdram_ras_n                  : out   std_logic;                                        -- ras_n
+--            sdram_we_n                   : out   std_logic;                                        -- we_n
+--            sdram_clk_clk                : out   std_logic;                                        -- clk
             
 				sram_DQ                      : inout std_logic_vector(15 downto 0) := (others => 'X'); -- DQ
             sram_ADDR                    : out   std_logic_vector(19 downto 0);                    -- ADDR
@@ -151,16 +151,16 @@ begin
 			textmode_g                          => LTM_G,
 			textmode_b                          => LTM_B,
 			
-			sdram_addr                          => DRAM_ADDR,
-			sdram_ba                            => DRAM_BA,
-			sdram_cas_n                         => DRAM_CAS_N,
-			sdram_cke                           => DRAM_CKE,
-			sdram_cs_n                          => DRAM_CS_N,
-			sdram_dq                            => DRAM_DQ,
-			sdram_dqm                           => DRAM_DQM,
-			sdram_ras_n                         => DRAM_RAS_N,
-			sdram_we_n         						=> DRAM_WE_N,
-			sdram_clk_clk                       => DRAM_CLK,
+--			sdram_addr                          => DRAM_ADDR,
+--			sdram_ba                            => DRAM_BA,
+--			sdram_cas_n                         => DRAM_CAS_N,
+--			sdram_cke                           => DRAM_CKE,
+--			sdram_cs_n                          => DRAM_CS_N,
+--			sdram_dq                            => DRAM_DQ,
+--			sdram_dqm                           => DRAM_DQM,
+--			sdram_ras_n                         => DRAM_RAS_N,
+--			sdram_we_n         						=> DRAM_WE_N,
+--			sdram_clk_clk                       => DRAM_CLK,
 			
 			sram_DQ                      => SRAM_DQ,                      --            sram.DQ
 			sram_ADDR                    => SRAM_ADDR,                    --                .ADDR
