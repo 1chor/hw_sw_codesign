@@ -4,6 +4,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.math_pkg.all;
+use work.ram_pkg.all;
 
 entity fir is
 	generic (
@@ -38,10 +39,10 @@ end entity;
 
 architecture arch of fir is
 	
-	subtype coeff_cnt is integer range 0 to (NUM_COEFFS-1);
-	signal mul_cnt 			  : coeff_cnt;
-    signal mul_cnt_next 	  : coeff_cnt;
-	signal data_addr_oldest 	  : coeff_cnt;
+	subtype coeff_cnt is integer range 0 to (NUM_COEFFICIENTS-1);
+	signal mul_cnt 			  	 : coeff_cnt;
+    signal mul_cnt_next 	  	 : coeff_cnt;
+	signal data_addr_oldest 	 : coeff_cnt;
 	signal data_addr_oldest_next : coeff_cnt;
 	
 	signal coeff_dout 	 : std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -69,48 +70,48 @@ begin
 
 	mm_readdata <= (others => '0'); --default value, not used
 	
-	--RAM-Block for coefficients
-	ram_coeff: entity work.dp_ram_1c1r1w 
+	--RAM block for coefficients
+	ram_coeff: dp_ram_1c1r1w 
 	generic map (
-		ADDR_WIDTH => ADDR_WIDTH; -- Address bus width
+		ADDR_WIDTH => ADDR_WIDTH, -- Address bus width
 		DATA_WIDTH => DATA_WIDTH  -- Data bus width
-	);
+	)
 	port map (
-		clk => clk; -- Connection for the clock signal.
+		clk => clk, -- Connection for the clock signal.
 		
 		-- read port
-		rd_addr => coeff_rd_addr; -- The address bus for a reader of the dual port RAM.
-		rd_data => coeff_dout; -- The data bus for a reader of the dual port RAM.
-		rd      => coeff_read; -- The indicator signal for a reader of the dual port RAM (must  be set high in order to be able to read).
+		rd_addr => coeff_rd_addr, -- The address bus for a reader of the dual port RAM.
+		rd_data => coeff_dout, -- The data bus for a reader of the dual port RAM.
+		rd      => coeff_read, -- The indicator signal for a reader of the dual port RAM (must  be set high in order to be able to read).
 		
 		-- write port
-		wr_addr => mm_address; -- The address bus for a writer of the dual port RAM.
-		wr_data => mm_writedata; -- The data bus for a writer of the dual port RAM.
-		wr      => mm_write  -- The indicator signal for a writer of the dual port RAM (must be set high in order to be able to write).
+		wr_addr => mm_address, -- The address bus for a writer of the dual port RAM.
+		wr_data => mm_writedata, -- The data bus for a writer of the dual port RAM.
+		wr      => mm_write -- The indicator signal for a writer of the dual port RAM (must be set high in order to be able to write).
 	);
 	
 	--need to use mul_cnt_next because of one latency cycle inside the RAM
 	coeff_rd_addr <= std_logic_vector(to_unsigned(mul_cnt_next + 1, ADDR_WIDTH));
 	
-	--RAM-Block for data
-	ram_data: entity work.dp_ram_1c1r1w 
+	--RAM block for data
+	ram_data: dp_ram_1c1r1w 
 	generic map (
-		ADDR_WIDTH => ADDR_WIDTH;
+		ADDR_WIDTH => ADDR_WIDTH,
 		DATA_WIDTH => DATA_WIDTH
-	);
+	)
 	port map (
-		clk => clk;
+		clk => clk,
 		
 		-- read port
-		rd_addr => data_rd_addr; 
-		rd_data => data_dout; 
-		rd      => data_read; 
+		rd_addr => data_rd_addr, 
+		rd_data => data_dout, 
+		rd      => data_read, 
 		
 		-- write port
-		wr_addr => data_wr_addr; 
-		wr_data => ; 
+		wr_addr => data_wr_addr, 
+		wr_data => stin_data, 
 		wr      => data_write 
-		);
+	);
 	
 	--need to use mul_cnt_next because of one latency cycle inside the RAM
     data_wr_addr <= std_logic_vector(to_unsigned(data_addr_oldest, ADDR_WIDTH));
@@ -133,9 +134,9 @@ begin
 			
 	end process sync_state_proc;
 	
-	fir_proc: process (all)
+	fir_proc: process (state, data_addr_oldest, temp, stin_valid, coeff_dout, data_dout, mul_cnt, stout_ready)
 	begin
-		--default values to prevent latches
+		-- default values to prevent latches
 		state_next <= state;
 		
 		data_addr_oldest_next <= data_addr_oldest;
@@ -152,35 +153,37 @@ begin
 		case state is
 		
 			when STATE_IDLE =>
-				stin_ready <= '1'; --Ready for Input
+				stin_ready <= '1'; -- Ready for Input
 								
 				if stin_valid = '1' then
 					data_write <= '1';
+					
+					coeff_read <= '1';
+                    data_read <= '1';
 					state_next <= STATE_MULT;
 				end if;
 						
 			when STATE_MULT =>
-				coeff_read <= '1';
-				data_read <= '1';
-				
 				temp_next <= temp + signed(coeff_dout) * signed(data_dout);
 				
-				if mul_cnt = NUM_COEFFS-1 then --catch overflow
+				if mul_cnt = NUM_COEFFICIENTS-1 then -- catch overflow
 					state_next <= STATE_OUTPUT;
 				else
 					mul_cnt_next <= mul_cnt + 1;
+					coeff_read <= '1';
+                    data_read <= '1';
 				end if;
 				
 			when STATE_OUTPUT =>
 				if stout_ready = '1' then
-					--Set Output
+					-- Set Output
 					stout_data <= std_logic_vector(temp(47 downto 16));
 					stout_valid <= '1';
 					
 					temp_next <= (others => '0');
 					
 					if data_addr_oldest = 0 then
-						data_addr_oldest_next <= NUM_COEFFS - 1;
+						data_addr_oldest_next <= NUM_COEFFICIENTS - 1;
 					else
 						data_addr_oldest_next <= data_addr_oldest - 1;
 					end if;
