@@ -1352,8 +1352,8 @@
  <connection kind="clock" version="18.1" start="altpll_sram.c0" end="sram_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="sdram.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="main_memory.clk1" />
- <connection kind="clock" version="18.1" start="altpll.c0" end="m2s_fifo0.clk_in" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="s2m_fifo0.clk_in" />
+ <connection kind="clock" version="18.1" start="altpll.c0" end="m2s_fifo0.clk_in" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="touch_cntrl.clock" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="fir_0.clock" />
  <connection

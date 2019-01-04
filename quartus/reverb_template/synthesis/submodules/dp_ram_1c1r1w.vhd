@@ -49,12 +49,11 @@ begin
 				ram_block(to_integer(unsigned(wr_addr))) <= wr_data;
 			end if;
 			if (rd='1') then
-				--rd_addr_reg <= to_integer(unsigned(rd_addr));
-				rd_data <= ram_block(to_integer(unsigned(rd_addr)));
+				rd_addr_reg <= to_integer(unsigned(rd_addr));
 			end if;
 		end if;
 	end process;
-	--rd_data <= ram_block(rd_addr_reg);
+	rd_data <= ram_block(rd_addr_reg);
 end architecture;
 
 

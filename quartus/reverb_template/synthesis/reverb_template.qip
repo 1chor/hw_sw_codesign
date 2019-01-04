@@ -2,7 +2,7 @@ set_global_assignment -entity "reverb_template" -library "reverb_template" -name
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_TOOL_VERSION "18.1"
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "reverb_template" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../reverb_template.sopcinfo"]
-set_global_assignment -entity "reverb_template" -library "reverb_template" -name SLD_INFO "QSYS_NAME reverb_template HAS_SOPCINFO 1 GENERATION_ID 1546606568"
+set_global_assignment -entity "reverb_template" -library "reverb_template" -name SLD_INFO "QSYS_NAME reverb_template HAS_SOPCINFO 1 GENERATION_ID 1546614857"
 set_global_assignment -library "reverb_template" -name MISC_FILE [file join $::quartus(qip_path) "../reverb_template.cmp"]
 set_global_assignment -library "reverb_template" -name SLD_FILE [file join $::quartus(qip_path) "reverb_template.regmap"]
 set_global_assignment -library "reverb_template" -name SLD_FILE [file join $::quartus(qip_path) "reverb_template.debuginfo"]
@@ -16,7 +16,7 @@ set_global_assignment -entity "reverb_template" -library "reverb_template" -name
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_REPORT_HIERARCHY "On"
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_INTERNAL "Off"
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_VERSION "MS4w"
-set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTU0NjYwNjU2OA==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTU0NjYxNDg1Nw==::QXV0byBHRU5FUkFUSU9OX0lE"
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBJViBF::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::RVA0Q0UxMTVGMjlDNw==::QXV0byBERVZJQ0U="
 set_global_assignment -entity "reverb_template" -library "reverb_template" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::Nw==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
@@ -1812,6 +1812,7 @@ set_global_assignment -library "reverb_template" -name VERILOG_FILE [file join $
 set_global_assignment -library "reverb_template" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/reverb_template_jtag_uart.v"]
 set_global_assignment -library "reverb_template" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/fir.vhd"]
 set_global_assignment -library "reverb_template" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/ram_pkg.vhd"]
+set_global_assignment -library "reverb_template" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/dp_ram_1c1r1w.vhd"]
 set_global_assignment -library "reverb_template" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_up_av_config_serial_bus_controller.v"]
 set_global_assignment -library "reverb_template" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_up_slow_clock_generator.v"]
 set_global_assignment -library "reverb_template" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_up_av_config_auto_init.v"]

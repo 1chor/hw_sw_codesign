@@ -177,7 +177,7 @@ begin
 			when STATE_OUTPUT =>
 				if stout_ready = '1' then
 					-- Set Output
-					stout_data <= std_logic_vector(temp(47 downto 16));
+					stout_data <= std_logic_vector(temp(62 downto 31)); -- 2Q30 Format
 					stout_valid <= '1';
 					
 					temp_next <= (others => '0');

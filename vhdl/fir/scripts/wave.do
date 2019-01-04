@@ -9,6 +9,7 @@ add wave -noupdate /fir_tb/stin_ready
 add wave -noupdate -divider {Streaming OUT}
 add wave -noupdate -radix hexadecimal /fir_tb/stout_data
 add wave -noupdate /fir_tb/stout_valid
+add wave -noupdate /fir_tb/stout_ready
 add wave -noupdate -divider {Avalon MM}
 add wave -noupdate /fir_tb/mm_address
 add wave -noupdate /fir_tb/mm_write
@@ -17,6 +18,8 @@ add wave -noupdate /fir_tb/mm_writedata
 add wave -noupdate /fir_tb/mm_readdata
 add wave -noupdate -divider other
 add wave -noupdate /fir_tb/NUM_COEFFICIENTS
+add wave -noupdate /fir_tb/DATA_WIDTH
+add wave -noupdate /fir_tb/ADDR_WIDTH
 add wave -noupdate /fir_tb/CLK_PERIOD
 add wave -noupdate /fir_tb/stop_clock
 TreeUpdate [SetDefaultTree]

@@ -6,8 +6,8 @@ VCOM_ARGS=-check_synthesis -2008 -work work -suppress 1236
 #additional source files can be added here (compilation order is important!)
 VHDL_FILES = \
 	../math/src/math_pkg.vhd\
-	../mult/mult.vhd\
-	../add/add.vhd\
+	../ram/ram_pkg.vhd\
+	../ram/dp_ram_1c1r1w.vhd\
 	../fir/src/fir.vhd
 
 #list of source files needed for simulation
