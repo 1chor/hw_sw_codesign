@@ -15,12 +15,16 @@
 #include "wav.h"
 #include "display.h"
 
+#include "fir.h"
+
 #include "kiss_fft.h"
 #include "fft_fp.h"
 
 #include "fixed_point.h"
 #include "sram.h"
 #include "complex.h"
+
+#define FIR_HW (0)
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -332,7 +336,7 @@ void pre_process_h_header( struct wav* ir )
     
     for ( header_blocks_h_i = 0; header_blocks_h_i < 14; header_blocks_h_i ++ )
     {
-        printf( "block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
+        printf( "pre-processing block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
         
         kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
         kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
@@ -468,57 +472,6 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
     free( f_2 );
 }
 
-void fir_filter_sample
-(
-     int32_t* sample_result_1
-    ,int32_t* sample_result_2
-    ,uint16_t* i_samples_1
-    ,uint16_t* i_samples_2
-    ,uint16_t* h_samples_1
-    ,uint16_t* h_samples_2
-)
-{
-    int16_t kk = 0;
-    
-    int16_t hh = 0;
-    int16_t ii = 0;
-    
-    int32_t temp_32 = 0;
-    
-    int32_t temp_result_1 = 0;
-    int32_t temp_result_2 = 0;
-    
-    for ( kk = 0; kk < 512; kk++ )
-    {
-        // fixed point version
-        
-        // left channel
-        
-        hh = (int16_t)h_samples_1[kk];
-        ii = (int16_t)i_samples_1[511-kk];
-        
-        temp_32 = ( (int32_t)hh * (int32_t)ii );
-        temp_result_1 += temp_32;
-        
-        // right channel
-        
-        hh = (int16_t)h_samples_2[kk];
-        ii = (int16_t)i_samples_2[511-kk];
-        
-        temp_32 = ( (int32_t)hh * (int32_t)ii );
-        temp_result_2 += temp_32;
-        
-        // float version
-        
-        //~ float h = (float)convert_1q15( fir_h_1[kk] );
-        //~ float f = (float)convert_1q15( fir_i_1[n-kk] );
-        
-        //~ fir_output[n] += h * f;
-    }
-    
-    *sample_result_1 = temp_result_1;
-    *sample_result_2 = temp_result_2;
-}
 
 
 void test()
@@ -543,7 +496,7 @@ void test()
     uint32_t j = 0;
     uint32_t k = 0;
     
-    printf( "processing header blocks h\n" );
+    printf( "pre-processing header blocks (H)\n" );
     pre_process_h_header( ir );
     
     //~ complex_32_t test_samples[512];
@@ -589,126 +542,26 @@ void test()
     
     printf( "fir\n" );
     
+    // wird fuer das setup benoetigt.
+    
     uint16_t* fir_h_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
     uint16_t* fir_h_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    
+    // wird unten bei dem endless loop als shift reg verwendet.
     
     uint16_t* fir_i_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
     uint16_t* fir_i_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
     
-    int32_t* fir_output_32_1 = (int32_t*)malloc( 2048 * sizeof(int32_t) );
-    int32_t* fir_output_32_2 = (int32_t*)malloc( 2048 * sizeof(int32_t) );
+    fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
-    for ( i = 0; i < 512; i++ )
-    {
-        fir_h_1[i] = 0;
-        fir_h_2[i] = 0;
-    }
-    
-    for ( i = 0; i < 512; i++ )
-    {
-        fir_i_1[i] = 0;
-        fir_i_2[i] = 0;
-    }
-    
-    // collect ir samples
-    
-    uint32_t sample_counter_fir = 0;
-    
-    for ( i = 0; i < 512; i++ )
-    {
-        l_buf = wav_get_uint16( ir, 2*sample_counter_fir );
-        r_buf = wav_get_uint16( ir, 2*sample_counter_fir+1 );
-        
-        fir_h_1[i] = l_buf;
-        fir_h_2[i] = r_buf;
-        
-        sample_counter_fir += 1;
-    }
-    
-    // collect input samples
-    
-    sample_counter_fir = 0;
+    // wird auch bei dem endless loop verwendet.
     
     int32_t sample_result_1 = 0;
     int32_t sample_result_2 = 0;
     
-    //~ for ( i = 0; i < 512; i++ )
-    //~ {
-        //~ l_buf = wav_get_uint16( input, 2*sample_counter_fir );
-        //~ r_buf = wav_get_uint16( input, 2*sample_counter_fir+1 );
-        
-        //~ // samples_buffer_shift
-        
-        //~ for ( j = 1; j < 512; j++ )
-        //~ {
-            //~ fir_i_1[j-1] = fir_i_1[j];
-            //~ fir_i_2[j-1] = fir_i_2[j];
-        //~ }
-        
-        //~ fir_i_1[511] = l_buf;
-        //~ fir_i_2[511] = r_buf;
-        
-        //~ sample_result_1 = 0;
-        //~ sample_result_2 = 0;
-        
-        //~ fir_filter_sample
-        //~ (
-             //~ &sample_result_1
-            //~ ,&sample_result_2
-            //~ ,fir_i_1
-            //~ ,fir_i_2
-            //~ ,fir_h_1
-            //~ ,fir_h_2
-        //~ );
-        
-        //~ fir_output_32_1[i] = sample_result_1;
-        //~ fir_output_32_2[i] = sample_result_2;
-        
-        //~ sample_counter_fir += 1;
-    //~ }
-    
-    //~ float fir_output[2048];
-    
-    // malloc due to memory problems
-    
-    
-    
-    //~ for ( i = 0; i < 2048; i++ )
-    //~ {
-        //~ fir_output[i] = 0;
-        
-        //~ fir_output_32_1[i] = 0;
-        //~ fir_output_32_2[i] = 0;
-    //~ }
-    
-    
-    
-    
-    //~ printf( "fir output\n" );
-    
-    //~ for ( i = 2000; i < 2048; i++ )
-    //~ {
-        //~ float fuck_me;
-        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
-        //~ printf( "i: %i: %lf\n", i, fuck_me );
-    //~ }
-    
-    //~ printf( "------\n" );
-    
-    //~ for ( i = 2000; i < 2048; i++ )
-    //~ {
-        //~ float fuck_me;
-        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_2[i] );
-        //~ printf( "i: %i: %lf\n", i, fuck_me );
-    //~ }
-    
-    //~ free( fir_h_1 );
-    //~ free( fir_h_2 );
-    
-    //~ free( fir_i_1 );
-    //~ free( fir_i_2 );
-    
     printf(">done\n\n");
+    
+    // wir brauchen die ir file ab hier nicht mehr.
     
     wav_free( ir );
     
@@ -731,14 +584,6 @@ void test()
         output_buffer_header_2[i] = 0;
     }
     
-    //~ // fill output with output from fir
-    
-    //~ for ( i = 0; i < 512; i++ )
-    //~ {
-        //~ output_buffer_header_1[i] = (uint16_t)(fir_output_32_1[i]>>15);
-        //~ output_buffer_header_2[i] = (uint16_t)(fir_output_32_2[i]>>15);
-    //~ }
-    
     // das sollte jetzt zwar ungenau, aber immer noch richtig abgespeichert geworden sein.
     
     printf( "das haben wir jetzt im output buffer\n" );
@@ -757,8 +602,6 @@ void test()
     
     //~ printf( "%f\n", convert_1q15( output_buffer_header[240] ) );
     
-    free( fir_output_32_1 );
-    free( fir_output_32_2 );
     
     uint32_t sample_counter = 0;
     uint32_t sample_counter_local = 0;
@@ -802,6 +645,9 @@ void test()
         
         // fir
         
+        // wie ein shiftregister werden die samples weiter geschoben
+        // und das neue hinten dran gehaengt.
+        
         for ( j = 1; j < 512; j++ )
         {
             fir_i_1[j-1] = fir_i_1[j];
@@ -811,10 +657,16 @@ void test()
         fir_i_1[511] = l_buf;
         fir_i_2[511] = r_buf;
         
+        // zur sicherheit werden die sample results auf 0 gesetzt.
+        
         sample_result_1 = 0;
         sample_result_2 = 0;
         
-        fir_filter_sample
+        // die neuen results werden berechnet.
+        // da es keinen bestimmten speicher fuer den fir gibt wird alles
+        // als pointer uebergeben.
+        
+        fir_filter_sample_sw
         (
              &sample_result_1
             ,&sample_result_2
@@ -824,8 +676,9 @@ void test()
             ,fir_h_2
         );
         
-        //~ output_buffer_header_1[sample_counter] += (uint16_t)(sample_result_1>>15);
-        //~ output_buffer_header_2[sample_counter] += (uint16_t)(sample_result_2>>15);
+        // die neuen fir filter samples werden an den output addiert.
+        // das ganze casten dient zur vermeidung von fehlern und ist
+        // wahrscheinlich nicht noetig.
         
         uint16_t sample_result_16_1 = (uint16_t)(sample_result_1>>15);
         uint16_t sample_result_16_2 = (uint16_t)(sample_result_2>>15);
@@ -919,9 +772,9 @@ void test()
             
             //~ printf( "%i - %i\n", 512 + (i_h*256), 512 + ((i_h+2)*256) );
             
-            printf( "das habe wir noch im output buffer:\n" );
+            printf( "das habe wir im output buffer:\n\n" );
             
-            printf("davor\n");
+            printf( "bevor die neuen fft werte addiert werden\n" );
             
             for ( i = 740; i < 760; i++ )
             {
@@ -939,7 +792,7 @@ void test()
                 ii += 1;
             }
             
-            printf("----------------\ndanach\n");
+            printf("----------------\nnachdem die neuen fft werte addiert wurden.\n");
             
             for ( i = 740; i < 760; i++ )
             {
@@ -964,7 +817,11 @@ void test()
             
             if ( asdf == 4 )
             {
-                printf("======\n");
+                printf( "======\n" );
+                printf( "fertig\n" )
+                printf( "======\n\n" );
+                
+                printf( "der erste wert sollte 0.388245 sein!\n" );
                 
                 for ( i = 740; i < 760; i++ )
                 {
