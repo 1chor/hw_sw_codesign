@@ -27,6 +27,13 @@ module reverb_template (
 	sdram_ras_n,
 	sdram_we_n,
 	sdram_clk_clk,
+	sram_DQ,
+	sram_ADDR,
+	sram_LB_N,
+	sram_UB_N,
+	sram_CE_N,
+	sram_OE_N,
+	sram_WE_N,
 	textmode_b,
 	textmode_den,
 	textmode_g,
@@ -67,6 +74,13 @@ module reverb_template (
 	output		sdram_ras_n;
 	output		sdram_we_n;
 	output		sdram_clk_clk;
+	inout	[15:0]	sram_DQ;
+	output	[19:0]	sram_ADDR;
+	output		sram_LB_N;
+	output		sram_UB_N;
+	output		sram_CE_N;
+	output		sram_OE_N;
+	output		sram_WE_N;
 	output	[7:0]	textmode_b;
 	output		textmode_den;
 	output	[7:0]	textmode_g;

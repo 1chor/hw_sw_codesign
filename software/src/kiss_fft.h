@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-#define FIXED_POINT 32
+//~ #define FIXED_POINT 32
 
 /*
  ATTENTION!
@@ -33,15 +33,15 @@ extern "C" {
   in the tools/ directory.
 */
 
-#ifdef USE_SIMD
-# include <xmmintrin.h>
-# define kiss_fft_scalar __m128
-#define KISS_FFT_MALLOC(nbytes) _mm_malloc(nbytes,16)
-#define KISS_FFT_FREE _mm_free
-#else	
+//~ #ifdef USE_SIMD
+//~ # include <xmmintrin.h>
+//~ # define kiss_fft_scalar __m128
+//~ #define KISS_FFT_MALLOC(nbytes) _mm_malloc(nbytes,16)
+//~ #define KISS_FFT_FREE _mm_free
+//~ #else	
 #define KISS_FFT_MALLOC malloc
 #define KISS_FFT_FREE free
-#endif	
+//~ #endif	
 
 
 //~ #define kiss_fft_scalar float
@@ -49,32 +49,34 @@ extern "C" {
 #include <stdint.h>
 //~ #define kiss_fft_scalar int16_t
 //~ #define kiss_fft_scalar int32_t
-
-#ifdef FIXED_POINT
-
-#include <sys/types.h>
-
-# if (FIXED_POINT == 32)
-#  define kiss_fft_scalar int32_t
-# else
-#  define kiss_fft_scalar int16_t
-# endif
-
-#else
-
-# ifndef kiss_fft_scalar
-/*  default is float */
 #   define kiss_fft_scalar float
-// damit er das scheiss int16_t nimmt
-// #include <stdint.h>
-#   define kiss_fft_scalar int16_t
-# endif
+//~ #ifdef FIXED_POINT
 
-#endif
+//~ #include <sys/types.h>
+
+//~ # if (FIXED_POINT == 32)
+//~ #  define kiss_fft_scalar int32_t
+//~ # else
+//~ #  define kiss_fft_scalar int16_t
+//~ # endif
+
+//~ #else
+
+//~ # ifndef kiss_fft_scalar
+//~ /*  default is float */
+//~ #   define kiss_fft_scalar float
+//~ // damit er das scheiss int16_t nimmt
+//~ // #include <stdint.h>
+//~ #   define kiss_fft_scalar int16_t
+//~ # endif
+
+//~ #endif
+
+// wenn ich hier kein float rein schreibe, dann funktioniert es scheinbar nicht
 
 typedef struct {
-    kiss_fft_scalar r;
-    kiss_fft_scalar i;
+    float r;
+    float i;
 }kiss_fft_cpx;
 
 typedef struct kiss_fft_state* kiss_fft_cfg;

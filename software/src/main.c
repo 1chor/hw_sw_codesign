@@ -15,18 +15,21 @@
 #include "wav.h"
 #include "display.h"
 
-#include "fix_fft.h"
+#include "kiss_fft.h"
+#include "fft_fp.h"
+
+#include "fixed_point.h"
+#include "sram.h"
+#include "complex.h"
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
   NIOS2_WRITE_IENABLE(0); \
   ((void (*) (void)) NIOS2_RESET_ADDR) ()
 
-
 #define FAT_OFFSET 0
 
 alt_up_audio_dev * audio_dev;
-
 
 extern volatile char *buffer_memory;
 extern bool Write_Sector_Data(int sector_index, int partition_offset);
@@ -41,6 +44,15 @@ int get_button();
 void line_in_demo();
 void play_file_demo();
 void record_demo();
+
+void pre_process_h_header( struct wav* );
+void process_header_block( kiss_fft_cpx*, kiss_fft_cpx*, uint8_t, uint8_t );
+void ifft_on_mac_buffer( uint16_t*, uint16_t*, complex_32_t*, complex_32_t* );
+
+void freq_mac_blocks( complex_32_t*, uint32_t, uint32_t );
+void print_c_block_9q23( complex_32_t*, uint16_t, uint16_t );
+
+void zero_extend_256( kiss_fft_cpx* );
 
 int main()
 {
@@ -71,8 +83,6 @@ int main()
     } else {
         alt_printf ("done\n");
     }
-    
-    //~ printf("ich bin ein test\n");
     
     test();
 
@@ -311,6 +321,205 @@ void record_demo()
 
 }
 
+void pre_process_h_header( struct wav* ir )
+{
+    uint16_t l_buf;
+    uint16_t r_buf;
+    
+    uint16_t i = 0;
+    
+    uint8_t header_blocks_h_i = 0;
+    
+    for ( header_blocks_h_i = 0; header_blocks_h_i < 14; header_blocks_h_i ++ )
+    {
+        printf( "block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
+        
+        kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+        kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+        
+        // ich muss hier bei 512 anfange, da die geraden indices immer
+        // die linken samples beinhalten
+        
+        uint32_t sample_counter_ir = 512 + ( header_blocks_h_i * 256 );
+        
+        // wir nehmen nur 256 da das ja zero extended sein soll.
+        
+        for ( i = 0; i < 256; i++ )
+        {
+            l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
+            r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
+            
+            // convert the binary value to float
+            
+            cin_1[i].r = convert_1q15(l_buf);
+            cin_1[i].i = 0;
+            
+            cin_2[i].r = convert_1q15(r_buf);
+            cin_2[i].i = 0;
+            
+            sample_counter_ir += 1;
+        }
+        
+        // cin_X will be freed in func
+        
+        process_header_block( cin_1, cin_2, header_blocks_h_i, 1 );
+    }
+}
+
+void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block, uint8_t free_input )
+{
+    uint16_t i = 0;
+    
+    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
+    
+    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    
+    zero_extend_256( in_1 );
+    zero_extend_256( in_2 );
+    
+    kiss_fft( kiss_cfg, in_1, out_1 );
+    kiss_fft( kiss_cfg, in_2, out_2 );
+    
+    if ( free_input == 1 )
+    {
+        free( in_1 );
+        free( in_2 );
+    }
+    
+    free( kiss_cfg );
+    
+    complex_32_t* samples_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+    complex_32_t* samples_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
+        samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
+        
+        samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
+        samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );
+    }
+    
+    free( out_1 );
+    free( out_2 );
+    
+    // der block wird gespeichert
+    // TODO - in der finalen version wird das gemacht waehrend
+    // die MAC im freq bereich laeuft. vll sollte das hier auch
+    // schon irgendwie dargestellt werden.
+    
+    printf( "writing block to %i | %i\n", block, 14 + block );
+    
+    (void) sram_write_block( samples_1, block );
+    (void) sram_write_block( samples_2, 14 + block );
+    
+    free( samples_1 );
+    free( samples_2 );
+}
+
+void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, complex_32_t* mac_buffer_1, complex_32_t* mac_buffer_2 )
+{
+    uint16_t i = 0;
+    
+    complex_float_t* f_1 = (complex_float_t*)malloc( 512 * sizeof(complex_float_t) );
+    complex_float_t* f_2 = (complex_float_t*)malloc( 512 * sizeof(complex_float_t) );
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        float mac_buffer_r_1_f;
+        float mac_buffer_i_1_f;
+        
+        float mac_buffer_r_2_f;
+        float mac_buffer_i_2_f;
+        
+        convert_9q23_pointer( &mac_buffer_r_1_f, mac_buffer_1[i].r );
+        convert_9q23_pointer( &mac_buffer_i_1_f, mac_buffer_1[i].i );
+        
+        convert_9q23_pointer( &mac_buffer_r_2_f, mac_buffer_2[i].r );
+        convert_9q23_pointer( &mac_buffer_i_2_f, mac_buffer_2[i].i );
+        
+        f_1[i].real = mac_buffer_r_1_f;
+        f_1[i].imag = mac_buffer_i_1_f;
+        
+        f_2[i].real = mac_buffer_r_2_f;
+        f_2[i].imag = mac_buffer_i_2_f;
+    }
+    
+    free( mac_buffer_1 );
+    free( mac_buffer_2 );
+    
+    (void) fft_cfp( f_1, 9, 1 );
+    (void) fft_cfp( f_2, 9, 1 );
+    
+    // ---------------------------------------------------------
+    // C O N V E R T   T O   1 6   B I T   F I X E D
+    // ---------------------------------------------------------
+    
+    // versuchen die floats auf 1q15 zu bekommen.
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        mac_buffer_16_1[i] = convert_to_fixed_1q15( f_1[i].real );
+        mac_buffer_16_2[i] = convert_to_fixed_1q15( f_2[i].real );
+    }
+    
+    free( f_1 );
+    free( f_2 );
+}
+
+void fir_filter_sample
+(
+     int32_t* sample_result_1
+    ,int32_t* sample_result_2
+    ,uint16_t* i_samples_1
+    ,uint16_t* i_samples_2
+    ,uint16_t* h_samples_1
+    ,uint16_t* h_samples_2
+)
+{
+    int16_t kk = 0;
+    
+    int16_t hh = 0;
+    int16_t ii = 0;
+    
+    int32_t temp_32 = 0;
+    
+    int32_t temp_result_1 = 0;
+    int32_t temp_result_2 = 0;
+    
+    for ( kk = 0; kk < 512; kk++ )
+    {
+        // fixed point version
+        
+        // left channel
+        
+        hh = (int16_t)h_samples_1[kk];
+        ii = (int16_t)i_samples_1[511-kk];
+        
+        temp_32 = ( (int32_t)hh * (int32_t)ii );
+        temp_result_1 += temp_32;
+        
+        // right channel
+        
+        hh = (int16_t)h_samples_2[kk];
+        ii = (int16_t)i_samples_2[511-kk];
+        
+        temp_32 = ( (int32_t)hh * (int32_t)ii );
+        temp_result_2 += temp_32;
+        
+        // float version
+        
+        //~ float h = (float)convert_1q15( fir_h_1[kk] );
+        //~ float f = (float)convert_1q15( fir_i_1[n-kk] );
+        
+        //~ fir_output[n] += h * f;
+    }
+    
+    *sample_result_1 = temp_result_1;
+    *sample_result_2 = temp_result_2;
+}
+
 
 void test()
 {
@@ -319,8 +528,6 @@ void test()
     printf("=========================\n");
     printf("\n");
     
-    //~ uint32_t l_buf;
-    //~ uint32_t r_buf;
     uint16_t l_buf;
     uint16_t r_buf;
     
@@ -328,106 +535,470 @@ void test()
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
     
-    //~ uint16_t fft_r[512];
-    //~ uint16_t fft_i[512];
+    // das 2. argument gibt an ob es eine inverse fft ist
     
-    short fft_ref_r[512];
-    short fft_ref_i[512];
-    
-    //~ short fft_r[512];
-    //~ short fft_i[512];
-    
-    short* fft_r = (short*)malloc( 512 * sizeof(short) );
-    short* fft_i = (short*)malloc( 512 * sizeof(short) );
+    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
     
     uint32_t i = 0;
+    uint32_t j = 0;
+    uint32_t k = 0;
     
-    // ich werde mal versuchen nur die linken samples zu verarbeiten.
+    printf( "processing header blocks h\n" );
+    pre_process_h_header( ir );
     
-    // ich muss hier bei 512 anfange, da die geraden indices immer
-    // die linken samples beinhalten
+    //~ complex_32_t test_samples[512];
+    //~ sram_read_block(test_samples, 2);
+    //~ print_c_block_9q23( test_samples, 10, 20 );
     
-    uint32_t sample_counter_ir = 512;
-    //~ uint32_t sample_counter_ir = 0;
+    //~ printf("-----------\n");
     
-    // wir nehmen nur 256 da das ja zero extended sein soll.
-    
-    for ( i = 0; i < 256; i++ )
-    {
-        // in diesem gottverdammten wav struct wird auf die samples
-        // mit einem uint8_t zugegriffen. keine ahnung warum.
-        // wir brauchen ja 16 bits pro sample und daher
-        // kommt wahrscheinlich das 2*sample_counter her.
-        // weiters muss ich den counter immer um 1 erhoehen.
-        // keine ahnung warum, aber dann stimmen die werte.
-        
-        // wenn ich das ganze ohne den 16 left shit einlese bekomme ich
-        // das aus ich auch mit hexdump aus der datei gelesen habe.
-        
-        //~ l_buf = wav_get_uint16( ir, 2*sample_counter_ir )<<16;
-        //~ r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 )<<16;
-        l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
-        r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
-        
-        fft_ref_r[i] = (short)l_buf;
-        fft_ref_i[i] = (short)0x0;
-        
-        fft_r[i] = (short)l_buf;
-        fft_i[i] = (short)0x0;
-        
-        sample_counter_ir += 1;
-    }
-    
-    // zero extension
-    
-    // wenn ich das nicht mit 0 fuelle, dann kann auch nan drinnen stehen.
-    
-    for ( i = 256; i < 512; i++ )
-    {
-        fft_ref_r[i] = (short)0x0;
-        fft_ref_i[i] = (short)0x0;
-        
-        fft_r[i] = (short)0x0;
-        fft_i[i] = (short)0x0;
-    }
-    
-    //~ for ( i = 0; i < 50; i++ )
-    //~ {
-        //~ print_1q15( cin[i].r );
-    //~ }
+    //~ complex_32_t test_samples_2[512];
+    //~ sram_read_block(test_samples_2, 14 + 2);
+    //~ print_c_block_9q23( test_samples_2, 10, 20 );
     
     //~ return;
     
-    (void) fix_fft( fft_r, fft_i, 512, 0 );
-    //~ (void) fix_fft( fft_r, fft_i, 512, 1 );
+    printf(">done\n\n");
     
-    for ( i = 0; i < 10; i++ )
+    //~ printf( "SRAM test\n" );
+    //~ (void) sram_test();
+    //~ printf(">done\n\n");
+    
+    printf( "clearing SRAM for input data\n" );
+    complex_32_t* dummy_samples = (complex_32_t*)malloc(512 * sizeof(complex_32_t));
+    sram_clear_block( dummy_samples );
+    
+    // 28 - 41 input left
+    // 42 - 55 input right
+    
+    for ( i = 28; i < 56; i++ )
     {
-        //~ printf("%i\n", fft_ref_r[i]);
-        //~ printf("%i\n", fft_r[i]);
-        
-        //~ print_1q15( (uint16_t)fft_ref_r[i] );
-        print_1q15( (uint16_t)fft_r[i] );
-        //~ print_1q15( (uint16_t)fft_i[i] );
-        
-        printf("-----------\n");
+        sram_write_block( dummy_samples, i );
     }
+    free( dummy_samples );
+    printf(">done\n\n");
+    
+    printf("loading input file\n");
+    //~ struct wav* input = wav_read("/input.wav");
+    struct wav* input = wav_read("/ir_cave.wav");
+    printf(">done\n\n");
+    
+    // =========================================================
+    // F I R
+    // =========================================================
+    
+    printf( "fir\n" );
+    
+    uint16_t* fir_h_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    uint16_t* fir_h_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    
+    uint16_t* fir_i_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    uint16_t* fir_i_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    
+    int32_t* fir_output_32_1 = (int32_t*)malloc( 2048 * sizeof(int32_t) );
+    int32_t* fir_output_32_2 = (int32_t*)malloc( 2048 * sizeof(int32_t) );
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        fir_h_1[i] = 0;
+        fir_h_2[i] = 0;
+    }
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        fir_i_1[i] = 0;
+        fir_i_2[i] = 0;
+    }
+    
+    // collect ir samples
+    
+    uint32_t sample_counter_fir = 0;
+    
+    for ( i = 0; i < 512; i++ )
+    {
+        l_buf = wav_get_uint16( ir, 2*sample_counter_fir );
+        r_buf = wav_get_uint16( ir, 2*sample_counter_fir+1 );
+        
+        fir_h_1[i] = l_buf;
+        fir_h_2[i] = r_buf;
+        
+        sample_counter_fir += 1;
+    }
+    
+    // collect input samples
+    
+    sample_counter_fir = 0;
+    
+    int32_t sample_result_1 = 0;
+    int32_t sample_result_2 = 0;
+    
+    //~ for ( i = 0; i < 512; i++ )
+    //~ {
+        //~ l_buf = wav_get_uint16( input, 2*sample_counter_fir );
+        //~ r_buf = wav_get_uint16( input, 2*sample_counter_fir+1 );
+        
+        //~ // samples_buffer_shift
+        
+        //~ for ( j = 1; j < 512; j++ )
+        //~ {
+            //~ fir_i_1[j-1] = fir_i_1[j];
+            //~ fir_i_2[j-1] = fir_i_2[j];
+        //~ }
+        
+        //~ fir_i_1[511] = l_buf;
+        //~ fir_i_2[511] = r_buf;
+        
+        //~ sample_result_1 = 0;
+        //~ sample_result_2 = 0;
+        
+        //~ fir_filter_sample
+        //~ (
+             //~ &sample_result_1
+            //~ ,&sample_result_2
+            //~ ,fir_i_1
+            //~ ,fir_i_2
+            //~ ,fir_h_1
+            //~ ,fir_h_2
+        //~ );
+        
+        //~ fir_output_32_1[i] = sample_result_1;
+        //~ fir_output_32_2[i] = sample_result_2;
+        
+        //~ sample_counter_fir += 1;
+    //~ }
+    
+    //~ float fir_output[2048];
+    
+    // malloc due to memory problems
+    
+    
+    
+    //~ for ( i = 0; i < 2048; i++ )
+    //~ {
+        //~ fir_output[i] = 0;
+        
+        //~ fir_output_32_1[i] = 0;
+        //~ fir_output_32_2[i] = 0;
+    //~ }
+    
+    
+    
+    
+    //~ printf( "fir output\n" );
+    
+    //~ for ( i = 2000; i < 2048; i++ )
+    //~ {
+        //~ float fuck_me;
+        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
+        //~ printf( "i: %i: %lf\n", i, fuck_me );
+    //~ }
+    
+    //~ printf( "------\n" );
+    
+    //~ for ( i = 2000; i < 2048; i++ )
+    //~ {
+        //~ float fuck_me;
+        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_2[i] );
+        //~ printf( "i: %i: %lf\n", i, fuck_me );
+    //~ }
+    
+    //~ free( fir_h_1 );
+    //~ free( fir_h_2 );
+    
+    //~ free( fir_i_1 );
+    //~ free( fir_i_2 );
+    
+    printf(">done\n\n");
+    
+    wav_free( ir );
+    
+    // =========================================================
+    // F F T
+    // =========================================================
+    
+    uint32_t samples_in_file = wav_sample_count(input);
+    
+    //~ printf("preparing output file\n");
+    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
+    //~ printf(">done\n\n");
+    
+    uint16_t output_buffer_header_1[2048];
+    uint16_t output_buffer_header_2[2048];
+    
+    for ( i = 0; i < 2048; i++ )
+    {
+        output_buffer_header_1[i] = 0;
+        output_buffer_header_2[i] = 0;
+    }
+    
+    //~ // fill output with output from fir
+    
+    //~ for ( i = 0; i < 512; i++ )
+    //~ {
+        //~ output_buffer_header_1[i] = (uint16_t)(fir_output_32_1[i]>>15);
+        //~ output_buffer_header_2[i] = (uint16_t)(fir_output_32_2[i]>>15);
+    //~ }
+    
+    // das sollte jetzt zwar ungenau, aber immer noch richtig abgespeichert geworden sein.
+    
+    printf( "das haben wir jetzt im output buffer\n" );
+    
+    //~ for ( i = 10; i < 20; i++ )
+    //~ {
+        //~ float fuck_me;
+        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
+        //~ printf( "%f bzw.: %f\n", fuck_me, convert_1q15(output_buffer_header_1[i]) );
+    //~ }
+    
+    //~ for ( i = 740; i < 760; i++ )
+    //~ {
+        //~ printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+    //~ }
+    
+    //~ printf( "%f\n", convert_1q15( output_buffer_header[240] ) );
+    
+    free( fir_output_32_1 );
+    free( fir_output_32_2 );
+    
+    uint32_t sample_counter = 0;
+    uint32_t sample_counter_local = 0;
+    
+    //~ kiss_fft_cpx i_in_1[512];
+    //~ kiss_fft_cpx i_in_2[512];
+    
+    // freed at the end of the endless loop
+    
+    kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    
+    // der input block wird dort gespeichert
+    
+    uint8_t i_pointer = 41;
+    uint8_t ibi = 41;
+    
+    uint32_t i_h = 0;
+    
+    uint8_t asdf = 0;
+    
+    // ---------------------------------------------------------
+    // R E A D I N G   I   S A M P L E S
+    // ---------------------------------------------------------
+    
+    //~ int32_t sample_result_1 = 0;
+    //~ int32_t sample_result_2 = 0;
+    
+    while (1)
+    {
+        l_buf = wav_get_uint16(input, 2*sample_counter);
+        r_buf = wav_get_uint16(input, 2*sample_counter+1);
+        
+        i_in_1[sample_counter_local].r = convert_1q15(l_buf);
+        i_in_1[sample_counter_local].i = 0;
+        
+        i_in_2[sample_counter_local].r = convert_1q15(r_buf);
+        i_in_2[sample_counter_local].i = 0;
+        
+        sample_counter_local += 1;
+        
+        // fir
+        
+        for ( j = 1; j < 512; j++ )
+        {
+            fir_i_1[j-1] = fir_i_1[j];
+            fir_i_2[j-1] = fir_i_2[j];
+        }
+        
+        fir_i_1[511] = l_buf;
+        fir_i_2[511] = r_buf;
+        
+        sample_result_1 = 0;
+        sample_result_2 = 0;
+        
+        fir_filter_sample
+        (
+             &sample_result_1
+            ,&sample_result_2
+            ,fir_i_1
+            ,fir_i_2
+            ,fir_h_1
+            ,fir_h_2
+        );
+        
+        //~ output_buffer_header_1[sample_counter] += (uint16_t)(sample_result_1>>15);
+        //~ output_buffer_header_2[sample_counter] += (uint16_t)(sample_result_2>>15);
+        
+        uint16_t sample_result_16_1 = (uint16_t)(sample_result_1>>15);
+        uint16_t sample_result_16_2 = (uint16_t)(sample_result_2>>15);
+        
+        output_buffer_header_1[sample_counter] = (int16_t)output_buffer_header_1[sample_counter] + (int16_t)sample_result_16_1;
+        output_buffer_header_2[sample_counter] = (int16_t)output_buffer_header_2[sample_counter] + (int16_t)sample_result_16_2;
+        
+        // wir haben einen ganzen block
+        
+        if (
+            ( ((sample_counter+1) % 256) == 0 ) &&
+            ( sample_counter > 0 )
+        )
+        {
+            // ---------------------------------------------------------
+            // P R O C E S S I N G   I   B L O C K
+            // ---------------------------------------------------------
+            
+            sample_counter_local = 0;
+            
+            printf( "full header I block collected\n" );
+            
+            // fft and save block
+            
+            process_header_block( i_in_1, i_in_2, i_pointer, 0 );
+            
+            // ---------------------------------------------------------
+            // F R E Q U E N C Y   M A C
+            // ---------------------------------------------------------
+            
+            // clear output buffer nachdem er angelegt wurde
+            // behebt dinge die eigentlich durch timig shit verursacht werden
+            
+            // freed in ifft_on_mac_buffer func
+            
+            complex_32_t* mac_buffer_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+            complex_32_t* mac_buffer_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+            
+            sram_clear_block( mac_buffer_1 );
+            sram_clear_block( mac_buffer_2 );
+            
+            // index der I bloecke.
+            // wir beginnen mit dem neusten, also nehmen wir die addr
+            // wo gerade der block gespeichert wurde.
+            
+            ibi = i_pointer;
+            
+            // wir gehen alle ir blocks durch
+            
+            printf( "performing mac\n" );
+            
+            for ( j = 0; j < 14; j++ )
+            {
+                freq_mac_blocks( mac_buffer_1, ibi, j );
+                freq_mac_blocks( mac_buffer_2, 14 + ibi, 14 + j );
+                
+                // der naechste i block der geholt wird.
+                // die i bloecke werden in einem ringbuffer abgespeichert
+                // den wir von der akteullen position nach hinten
+                // durchlaufen.
+                // wenn der neue I block auf 42 gespeichert wurde, dann
+                // ist der vorige auf addr 41 und der davor auf 28.
+                // anmerkung: wir speichern genau so viele I bloecke
+                // wie H bloecke.
+                
+                //~ print_c_block_9q23( output_buffer_2, 10, 20 );
+                //~ return;
+                
+                if ( ibi == 28 ) { ibi = 41; }
+                else             { ibi -= 1; }
+            }
+            
+            // ---------------------------------------------------------
+            // I F F T
+            // ---------------------------------------------------------
+            
+            // jetzt ist die ganze mac fertig und wir koennen einen ifft
+            // machen.
+            
+            printf( "performing ifft\n" );
+            
+            uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+            uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+            
+            ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+            
+            // beim vergleich mit actave sieht es bei den ersten samples so
+            // aus als waeren diese falsch. das stimmt nicht, in c werden sie
+            // einfach nur mehr als 0 wahrgenommen waehrend in octave noch
+            // ein wert angezeigt werden kann. z.b. groessenordnung e-09
+            
+            //~ printf( "%i - %i\n", 512 + (i_h*256), 512 + ((i_h+2)*256) );
+            
+            printf( "das habe wir noch im output buffer:\n" );
+            
+            printf("davor\n");
+            
+            for ( i = 740; i < 760; i++ )
+            {
+                printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+            }
+            
+            uint16_t ii = 0;
+            
+            //~ for ( i = (i_h*256); i < ((i_h+2)*256); i++ )
+            for ( i = 512 + (i_h*256); i < 512 + ((i_h+2)*256); i++ )
+            {
+                output_buffer_header_1[i] = (int16_t)output_buffer_header_1[i] + (int16_t)mac_buffer_16_1[ii];
+                output_buffer_header_2[i] = (int16_t)output_buffer_header_2[i] + (int16_t)mac_buffer_16_2[ii];
+                
+                ii += 1;
+            }
+            
+            printf("----------------\ndanach\n");
+            
+            for ( i = 740; i < 760; i++ )
+            {
+                printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+            }
+            
+            free( mac_buffer_16_1 );
+            free( mac_buffer_16_2 );
+            
+            i_h += 1;
+            
+            // das ist die block addr wo der naechste i block
+            // abgespeichert wird.
+            // die bloecke befinden sich in einem ringbuffer.
+            // daher wird die addr auf 28 gesetzt wenn man am ende (41)
+            // angekommen ist.
+            
+            if ( i_pointer == 41 ) { i_pointer = 28; }
+            else                   { i_pointer += 1; }
+            
+            asdf += 1;
+            
+            if ( asdf == 4 )
+            {
+                printf("======\n");
+                
+                for ( i = 740; i < 760; i++ )
+                {
+                    printf( "%f\n", convert_1q15( output_buffer_header_1[i] ) );
+                }
+                return;
+            }
+            
+            printf( ">done\n\n" );
+        }
+        
+        if ( sample_counter >= samples_in_file )
+        {
+            printf(">done done\n\n");
+            
+            break;
+        }
+        
+        sample_counter += 1;
+    }
+    
+    free( i_in_1 );
+    free( i_in_2 );
     
     return;
     
+    //~ uint32_t sample_counter = 0;
+    //~ uint32_t samples_in_file = wav_sample_count(input);
     
-    printf("loading input file\n");
-    struct wav* input = wav_read("/input.wav");
-    printf(">done\n\n");
+    //~ printf("preparing output file\n");
+    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
+    //~ printf(">done\n\n");
     
-    uint32_t sample_counter = 0;
-    uint32_t samples_in_file = wav_sample_count(input);
-    
-    printf("preparing output file\n");
-    struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
-    printf(">done\n\n");
-    
-    printf("processing starting\n");
+    //~ printf("processing starting\n");
     
     //~ while (1)
     //~ {
@@ -447,143 +1018,82 @@ void test()
         //~ }
     //~ }
     
-    printf("storing file\n");
-    wav_write("/recording.wav", output);
-    printf(">done\n\n");
+    //~ printf("storing file\n");
+    //~ wav_write("/recording.wav", output);
+    //~ printf(">done\n\n");
     
-    wav_free(output);
+    //~ wav_free(output);
     
-    printf("===\n");
-    printf("end\n");
-    printf("===\n");
+    //~ printf("===\n");
+    //~ printf("end\n");
+    //~ printf("===\n");
     
 }
 
-/*
- * zahlen von unterschiedlichen quellen
- * 
- *   matlab  | c %x | hexdump |  c printf_1q15
- *  ---------+------+---------+---------------
- *   0.00003 | 0001 | 0001    |  0.000031
- *   0.00000 | 0000 | 0000    |  0.000000
- *  -0.00015 | fffb | fffb    | -0.000153
- *   0.00015 | 0005 | 0005    |  0.000153
- *  -0.00003 | ffff | ffff    | -0.000031
- *   0.00015 | 0005 | 0005    |  0.000153
- *  -0.00018 | fffa | fffa    | -0.000183
- *   0.00009 | 0003 | 0003    |  0.000092
- *  -0.00003 | ffff | ffff    | -0.000031
- *  -0.00009 | fffd | fffd    | -0.000092
- *   0.00006 | 0002 | 0002    |  0.000061
- *  -0.00003 | ffff | ffff    | -0.000031
- *   0.00006 | 0002 | 0002    |  0.000061
- *  -0.00006 | fffe | fffe    | -0.000061
-**/
-
-void print_1q15( uint16_t num )
+void freq_mac_blocks( complex_32_t* output_buffer, uint32_t ibi, uint32_t j )
 {
-    uint8_t i = 0;
-    uint8_t shift_by = 0;
+    //~ printf("%i / 13 | ", j);
+    //~ printf( "in_block %i | ir_block %i\n", ibi, j );
     
-    float num_float = 0;
+    // get ir and in blocks from sram
     
-    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
-    // das += 1 ist weil es ein 2er kompliment ist
+    complex_32_t mul_temp;
+    //~ complex_32_t in_block[512];
+    //~ complex_32_t ir_block[512];
     
-    // wir printen auch gleich ein "-"
+    complex_32_t* in_block = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+    complex_32_t* ir_block = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
     
-    printf( "%x - ", num );
+    (void) sram_read_block( in_block, ibi );
+    (void) sram_read_block( ir_block,   j );
     
-    if ( 0 > (int16_t)num )
+    // perform mul for each sample
+    
+    //~ complex_32_t a;
+    //~ complex_32_t b;
+    
+    uint16_t k = 0;
+    
+    for ( k = 0; k < 512; k++ )
     {
-        num = ~num;
-        num += 1;
+        //~ a = sram_read_from_block( ibi, k );
+        //~ b = sram_read_from_block(   j, k );
         
-        printf( "-" );
-    }
-    else
-    {
-        printf( " " );
-    }
-    
-    num_float += ( num>>6 );
-    
-    // bei dem 1q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    //~ for ( i = 15; i > 0; i-- )
-    for ( i = 6; i > 0; i-- )
-    {
-        // wenn das lsb 1 ist ...
+        mul_temp = c_mul( in_block[k], ir_block[k] );
+        //~ mul_temp = c_mul( a, b );
         
-        if ( ( (num>>shift_by) & 1 ) == 1 )
-        {
-            // ... dann wird 2^-i dazu addiert
-            num_float += pow( 2, i*(-1) );
-        }
-        
-        // das naechste mal werden wir eins weiter shiften
-        
-        shift_by += 1;
+        output_buffer[k].r += mul_temp.r;
+        output_buffer[k].i += mul_temp.i;
     }
     
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    printf( "%f\n", num_float );
+    free( in_block );
+    free( ir_block );
 }
 
-void print_9q23( uint32_t num )
+void print_c_block_9q23( complex_32_t* samples, uint16_t start, uint16_t end )
 {
-    uint8_t i = 0;
-    uint8_t shift_by = 0;
+    uint16_t i = 0;
     
-    float num_float = 0;
-    
-    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
-    // das += 1 ist weil es ein 2er kompliment ist
-    
-    // wir printen auch gleich ein "-"
-    
-    //~ printf( "%x - ", num );
-    
-    if ( 0 > (int32_t)num )
+    for ( i = start; i < end+1; i++ )
     {
-        num = ~num;
-        num += 1;
+        float temp_r;
+        float temp_i;
         
-        printf( "-" );
+        convert_9q23_pointer( &temp_r, samples[i].r );
+        convert_9q23_pointer( &temp_i, samples[i].i );
+        
+        printf( "%f %f i\n", temp_r, temp_i );
     }
-    else
-    {
-        printf( " " );
-    }
-    
-    // die 9 hoechsten bits raus holen.
-    
-    printf( "%lx\n", num );
-    printf( "%lx>>23\n", num>>23 );
-    
-    num_float += num>>23;
-    
-    // bei dem 16q15 format muessen wir bei 15 anfangen.
-    // das kleinste was addiert werden kann ist dann 2^-15
-    
-    for ( i = 15; i > 0; i-- )
-    {
-        // wenn das lsb 1 ist ...
-        
-        if ( ( (num>>shift_by) & 1 ) == 1 )
-        {
-            // ... dann wird 2^-i dazu addiert
-            num_float += pow( 2, i*(-1) );
-        }
-        
-        // das naechste mal werden wir eins weiter shiften
-        
-        shift_by += 1;
-    }
-    
-    //~ printf( "%f\n", num_float );
-    //~ printf( "%.10e\n", num_float );
-    printf( "%f\n", num_float );
 }
+
+void zero_extend_256( kiss_fft_cpx* samples )
+{
+    uint16_t i = 0;
+    
+    for ( i = 256; i < 512; i++ )
+    {
+        samples[i].r = 0;
+        samples[i].i = 0;
+    }
+}
+

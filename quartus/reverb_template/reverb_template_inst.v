@@ -26,6 +26,13 @@
 		.sdram_ras_n                  (<connected-to-sdram_ras_n>),                  //                .ras_n
 		.sdram_we_n                   (<connected-to-sdram_we_n>),                   //                .we_n
 		.sdram_clk_clk                (<connected-to-sdram_clk_clk>),                //       sdram_clk.clk
+		.sram_DQ                      (<connected-to-sram_DQ>),                      //            sram.DQ
+		.sram_ADDR                    (<connected-to-sram_ADDR>),                    //                .ADDR
+		.sram_LB_N                    (<connected-to-sram_LB_N>),                    //                .LB_N
+		.sram_UB_N                    (<connected-to-sram_UB_N>),                    //                .UB_N
+		.sram_CE_N                    (<connected-to-sram_CE_N>),                    //                .CE_N
+		.sram_OE_N                    (<connected-to-sram_OE_N>),                    //                .OE_N
+		.sram_WE_N                    (<connected-to-sram_WE_N>),                    //                .WE_N
 		.textmode_b                   (<connected-to-textmode_b>),                   //        textmode.b
 		.textmode_den                 (<connected-to-textmode_den>),                 //                .den
 		.textmode_g                   (<connected-to-textmode_g>),                   //                .g
