@@ -41,14 +41,14 @@ void fft_cfp(complex_float_t *f, int16_t m, int16_t inverse)
         
         istep = l << 1;
         
-        printf("while\n");
+        //~ printf("while\n");
         
         for (m=0; m<l; ++m)
         {
             w.real = cos(2*PI*m/istep);
             w.imag = -sin(2*PI*m/istep); 
             
-            printf( "cos(%f) = %f\n", (2*PI*m/istep), w.real );
+            //~ printf( "cos(%f) = %f\n", (2*PI*m/istep), w.real );
             
             if (inverse)
             {
