@@ -815,18 +815,36 @@ void test()
             
             asdf += 1;
             
-            if ( asdf == 4 )
+            if ( asdf == 3 )
             {
                 printf( "======\n" );
-                printf( "fertig\n" )
+                printf( "fertig\n" );
                 printf( "======\n\n" );
                 
-                printf( "der erste wert sollte 0.388245 sein!\n" );
+                printf( "der 740. wert sollte 0.388245 sein!\n" );
                 
-                for ( i = 740; i < 760; i++ )
+                float test_value = convert_1q15( output_buffer_header_1[740] );
+                
+                float diff = test_value - 0.388245;
+                
+                if ( diff < 0 )
                 {
-                    printf( "%f\n", convert_1q15( output_buffer_header_1[i] ) );
+                    diff *= -1;
                 }
+                
+                if ( diff < 0.000001 )
+                {
+                    printf( "PASST\n" );
+                }
+                else
+                {
+                    printf( "PASST NICHT! der wert ist: %f\n", test_value );
+                }
+                
+                //~ for ( i = 740; i < 760; i++ )
+                //~ {
+                    //~ printf( "%f\n", convert_1q15( output_buffer_header_1[i] ) );
+                //~ }
                 return;
             }
             
