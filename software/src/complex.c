@@ -16,30 +16,30 @@
 
 // cmp mit hex
 
-//~ uint8_t cmp_complex( complex_32_t a, complex_32_t b )
-//~ {
-    //~ if (
-        //~ ( (int32_t)(a.r - b.r) > 10 ) ||
-        //~ ( (int32_t)(a.i - b.i) > 10 )
-    //~ )
-    //~ {
-        //~ printf("failed for\n");
-        //~ printf(">%lx %lx i\n", a.r, a.i);
-        //~ printf(">%lx %lx i\n", b.r, b.i);
+uint8_t c_cmp_hex( complex_32_t a, complex_32_t b )
+{
+    if (
+        ( (int32_t)(a.r - b.r) > 10 ) ||
+        ( (int32_t)(a.i - b.i) > 10 )
+    )
+    {
+        printf("failed for\n");
+        printf(">%lx %lx i\n", a.r, a.i);
+        printf(">%lx %lx i\n", b.r, b.i);
         
-        //~ printf(">%lx %lx i\n", (a.r - b.r), (a.i - b.i));
+        printf(">%lx %lx i\n", (a.r - b.r), (a.i - b.i));
         
-        //~ printf("---------------------\n");
+        printf("---------------------\n");
         
-        //~ return 1;
-    //~ }
+        return 1;
+    }
     
-    //~ return 0;
-//~ }
+    return 0;
+}
 
 // cmp mit float
 
-uint8_t cmp_complex( complex_32_t a, complex_32_t b )
+uint8_t c_cmp( complex_32_t a, complex_32_t b )
 {
     float a_r;
     float a_i;
@@ -70,7 +70,7 @@ uint8_t cmp_complex( complex_32_t a, complex_32_t b )
     return 0;
 }
 
-complex_32_t complex_from_float_9q23( float r, float i )
+complex_32_t c_from_float_9q23( float r, float i )
 {
     complex_32_t c;
     
@@ -107,11 +107,6 @@ complex_32_t c_mul( complex_32_t i, complex_32_t r )
 
 void c_print( complex_32_t c )
 {
-    printf("%lx %lx i\n", c.r, c.i);
-}
-
-void c_print_as_float( complex_32_t c )
-{
     float c_r;
     float c_i;
     
@@ -120,3 +115,6 @@ void c_print_as_float( complex_32_t c )
     
     printf("%f %f i\n", c_r, c_i);
 }
+
+// DEPRECATED
+void c_print_as_float( complex_32_t c ) { c_print( c ); }

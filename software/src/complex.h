@@ -20,13 +20,13 @@ typedef struct {
     
 } complex_32_t;
 
-uint8_t cmp_complex( complex_32_t, complex_32_t );
+uint8_t c_cmp_hex( complex_32_t, complex_32_t );
+uint8_t c_cmp( complex_32_t, complex_32_t );
 
-complex_32_t complex_from_float_9q23( float, float );
+complex_32_t c_from_float_9q23( float, float );
 
 complex_32_t c_mul( complex_32_t, complex_32_t );
 
 void c_print( complex_32_t );
-void c_print_as_float( complex_32_t );
 
 #endif

@@ -21,7 +21,7 @@ ELF_FILE=$(APPLICATION_BUILD_DIR)/$(PROJECT_NAME).elf
 
 #info: The application makefile automatically runs the bsp makefile
 SRC_DIR=./src
-NIOS2_APP_GEN_ARGS=--elf-name ${PROJECT_NAME}.elf --set APP_CFLAGS_OPTIMIZATION -Os --set OBJDUMP_INCLUDE_SOURCE 1 --src-rdir ${SRC_DIR}
+NIOS2_APP_GEN_ARGS=--elf-name ${PROJECT_NAME}.elf --set APP_CFLAGS_OPTIMIZATION -O2 --set OBJDUMP_INCLUDE_SOURCE 1 --src-rdir ${SRC_DIR}
 
 
 all: $(ELF_FILE) 

@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jan 3, 2019 7:04:17 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1546538657743</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jan 3, 2019 7:58:38 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1546541918008</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
-        <BspSettingsFile>./settings.bsp</BspSettingsFile>
+        <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios2</Cpu>
@@ -146,7 +146,7 @@
                 <SettingName>hal.linker.exception_stack_memory_region_name</SettingName>
                 <Identifier>none</Identifier>
                 <Type>UnquotedString</Type>
-                <Value>main_memory</Value>
+                <Value>sdram</Value>
                 <DefaultValue>none</DefaultValue>
                 <DestinationFile>none</DestinationFile>
                 <Description>Name of the existing memory region that will be divided up to create the 'exception_stack' memory region. The selected region name will be adjusted automatically when the BSP is generated to create the 'exception_stack' memory region.</Description>
@@ -182,7 +182,7 @@
                 <SettingName>hal.linker.interrupt_stack_memory_region_name</SettingName>
                 <Identifier>none</Identifier>
                 <Type>UnquotedString</Type>
-                <Value>main_memory</Value>
+                <Value>sdram</Value>
                 <DefaultValue>none</DefaultValue>
                 <DestinationFile>none</DestinationFile>
                 <Description>Name of the existing memory region that will be divided up to create the 'interrupt_stack' memory region. The selected region name will be adjusted automatically when the BSP is generated to create the 'interrupt_stack' memory region.</Description>
@@ -899,87 +899,87 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
+                <slaveDescriptor>sdram</slaveDescriptor>
+                <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>
+                <addressSpan>134217728</addressSpan>
+                <attributes>memory</attributes>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>sram_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x001FFFFF</addressRange>
+                <addressRange>0x10000000 - 0x101FFFFF</addressRange>
                 <addressSpan>2097152</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>main_memory</slaveDescriptor>
-                <addressRange>0x00300000 - 0x0036369F</addressRange>
-                <addressSpan>407200</addressSpan>
-                <attributes>memory</attributes>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>sdcard_interface</slaveDescriptor>
-                <addressRange>0x00401000 - 0x004013FF</addressRange>
+                <addressRange>0x10201000 - 0x102013FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>textmode_controller</slaveDescriptor>
-                <addressRange>0x00401400 - 0x0040143F</addressRange>
+                <addressRange>0x10201400 - 0x1020143F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>altpll_sram</slaveDescriptor>
-                <addressRange>0x00401440 - 0x0040144F</addressRange>
+                <addressRange>0x10201440 - 0x1020144F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>altpll</slaveDescriptor>
-                <addressRange>0x00401450 - 0x0040145F</addressRange>
+                <addressRange>0x10201450 - 0x1020145F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>touch_cntrl</slaveDescriptor>
-                <addressRange>0x00401460 - 0x0040146F</addressRange>
+                <addressRange>0x10201460 - 0x1020146F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>av_config</slaveDescriptor>
-                <addressRange>0x00401470 - 0x0040147F</addressRange>
+                <addressRange>0x10201470 - 0x1020147F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>audio</slaveDescriptor>
-                <addressRange>0x00401480 - 0x0040148F</addressRange>
+                <addressRange>0x10201480 - 0x1020148F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x00401490 - 0x00401497</addressRange>
+                <addressRange>0x10201490 - 0x10201497</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rodata</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rwdata</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.bss</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.heap</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.stack</sectionName>
-                <regionName>main_memory</regionName>
+                <regionName>sdram</regionName>
         </LinkerSection>
 </sch:Settings>
