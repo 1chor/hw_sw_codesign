@@ -42,21 +42,21 @@
 
 `timescale 1 ns / 1 ns
 
-module reverb_template_mm_interconnect_0_router_009_default_decode
+module reverb_template_mm_interconnect_0_router_013_default_decode
   #(
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
                DEFAULT_DESTID = 0 
    )
-  (output [79 - 75 : 0] default_destination_id,
+  (output [205 - 201 : 0] default_destination_id,
    output [19-1 : 0] default_wr_channel,
    output [19-1 : 0] default_rd_channel,
    output [19-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[79 - 75 : 0];
+    DEFAULT_DESTID[205 - 201 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
@@ -81,7 +81,7 @@ module reverb_template_mm_interconnect_0_router_009_default_decode
 endmodule
 
 
-module reverb_template_mm_interconnect_0_router_009
+module reverb_template_mm_interconnect_0_router_013
 (
     // -------------------
     // Clock & Reset
@@ -93,7 +93,7 @@ module reverb_template_mm_interconnect_0_router_009
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [93-1 : 0]    sink_data,
+    input  [219-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,7 +102,7 @@ module reverb_template_mm_interconnect_0_router_009
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [93-1    : 0] src_data,
+    output reg [219-1    : 0] src_data,
     output reg [19-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
@@ -112,18 +112,18 @@ module reverb_template_mm_interconnect_0_router_009
     // -------------------------------------------------------
     // Local parameters and variables
     // -------------------------------------------------------
-    localparam PKT_ADDR_H = 46;
-    localparam PKT_ADDR_L = 18;
-    localparam PKT_DEST_ID_H = 79;
-    localparam PKT_DEST_ID_L = 75;
-    localparam PKT_PROTECTION_H = 83;
-    localparam PKT_PROTECTION_L = 81;
-    localparam ST_DATA_W = 93;
+    localparam PKT_ADDR_H = 172;
+    localparam PKT_ADDR_L = 144;
+    localparam PKT_DEST_ID_H = 205;
+    localparam PKT_DEST_ID_L = 201;
+    localparam PKT_PROTECTION_H = 209;
+    localparam PKT_PROTECTION_L = 207;
+    localparam ST_DATA_W = 219;
     localparam ST_CHANNEL_W = 19;
     localparam DECODER_TYPE = 1;
 
-    localparam PKT_TRANS_WRITE = 49;
-    localparam PKT_TRANS_READ  = 50;
+    localparam PKT_TRANS_WRITE = 175;
+    localparam PKT_TRANS_READ  = 176;
 
     localparam PKT_ADDR_W = PKT_ADDR_H-PKT_ADDR_L + 1;
     localparam PKT_DEST_ID_W = PKT_DEST_ID_H-PKT_DEST_ID_L + 1;
@@ -165,7 +165,7 @@ module reverb_template_mm_interconnect_0_router_009
 
 
 
-    reverb_template_mm_interconnect_0_router_009_default_decode the_default_decode(
+    reverb_template_mm_interconnect_0_router_013_default_decode the_default_decode(
       .default_destination_id (),
       .default_wr_channel   (),
       .default_rd_channel   (),

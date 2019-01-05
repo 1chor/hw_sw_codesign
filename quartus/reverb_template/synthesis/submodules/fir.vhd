@@ -90,8 +90,8 @@ begin
 		wr      => mm_write -- The indicator signal for a writer of the dual port RAM (must be set high in order to be able to write).
 	);
 	
-	--~ --need to use mul_cnt_next because of one latency cycle inside the RAM
-	--~ coeff_rd_addr <= std_logic_vector(to_unsigned(mul_cnt_next + 1, ADDR_WIDTH));
+	--need to use mul_cnt_next because of one latency cycle inside the RAM
+	coeff_rd_addr <= std_logic_vector(to_unsigned(mul_cnt_next + 1, ADDR_WIDTH));
 	
 	--RAM block for data
 	ram_data: dp_ram_1c1r1w 
@@ -113,22 +113,9 @@ begin
 		wr      => data_write 
 	);
 	
-	--~ --need to use mul_cnt_next because of one latency cycle inside the RAM
-    --~ data_wr_addr <= std_logic_vector(to_unsigned(data_addr_oldest, ADDR_WIDTH));
-	--~ data_rd_addr <= std_logic_vector(to_unsigned(data_addr_oldest + mul_cnt_next + 1, ADDR_WIDTH));
-	
-	addr_proc: process (res_n, clk)
-	begin
-		if rising_edge(clk) then
-			--need to use mul_cnt_next because of one latency cycle inside the RAM
-			coeff_rd_addr <= std_logic_vector(to_unsigned(mul_cnt_next + 1, ADDR_WIDTH));
-			
-			--need to use mul_cnt_next because of one latency cycle inside the RAM
-			data_wr_addr <= std_logic_vector(to_unsigned(data_addr_oldest, ADDR_WIDTH));
-			data_rd_addr <= std_logic_vector(to_unsigned(data_addr_oldest + mul_cnt_next + 1, ADDR_WIDTH));
-		end if;
-		
-	end process addr_proc;
+	--need to use mul_cnt_next because of one latency cycle inside the RAM
+    data_wr_addr <= std_logic_vector(to_unsigned(data_addr_oldest, ADDR_WIDTH));
+	data_rd_addr <= std_logic_vector(to_unsigned(data_addr_oldest + mul_cnt_next + 1, ADDR_WIDTH));
 			
 	sync_state_proc: process (res_n, clk)
 	begin
@@ -190,7 +177,7 @@ begin
 			when STATE_OUTPUT =>
 				if stout_ready = '1' then
 					-- Set Output
-					stout_data <= std_logic_vector(temp(47 downto 16));
+					stout_data <= std_logic_vector(temp(62 downto 31)); -- 2Q30 Format
 					stout_valid <= '1';
 					
 					temp_next <= (others => '0');

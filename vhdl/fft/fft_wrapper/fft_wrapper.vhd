@@ -7,9 +7,7 @@ use ieee.STD_LOGIC_SIGNED.all;
 
 entity fft_wrapper is
 	generic (
-		FFT_LENGTH : natural := 512; -- 8192 for body
-		-- NUM_COEFFICIENTS : integer := 16; 
-		-- ADDR_WIDTH       : integer := 4 
+		FFT_LENGTH : natural := 512 -- 8192 for body
 	);
 	port (
 		clk   : in std_logic;
@@ -19,11 +17,21 @@ entity fft_wrapper is
 		stin_data  : in std_logic_vector(31 downto 0);
 		stin_valid : in std_logic;
 		stin_ready : out std_logic;
+		stin_sop   : in std_logic;
+		stin_eop   : in std_logic;
+		stin_empty : in std_logic_vector(1 downto 0); -- not used
+		stin_error : in std_logic_vector(1 downto 0);
 
 		-- streaming source (output)
 		stout_data  : out std_logic_vector(31 downto 0);
 		stout_valid : out std_logic;
-		stout_ready : in std_logic -- back pressure from FIFO
+		stout_ready : in std_logic; -- back pressure from FIFO
+		stout_sop   : out std_logic;
+		stout_eop   : out std_logic;
+		stout_empty : out std_logic_vector(1 downto 0); -- not used, set to 0
+		stout_error : out std_logic_vector(1 downto 0);
+		
+		inverse     : in std_logic_vector(0 downto 0)
 	);
 begin
 end entity;
@@ -33,24 +41,10 @@ architecture arch of fft_wrapper is
 	constant HEADER_LENGTH : natural := 512;
 	constant BODY_LENGTH   : natural := 8192;
 	
-	signal	sink_valid     : std_logic;
-	signal	sink_ready     : std_logic;
-	signal	sink_error     : std_logic_vector(1 downto 0);
-	signal	sink_sop       : std_logic;
-	--signal  s_sink_sop_next  : std_logic;
-	signal	sink_eop       : std_logic;
-	--signal	s_sink_eop_next  : std_logic;
-	signal	sink_real      : std_logic_vector(31 downto 0);
-	signal	sink_imag      : std_logic_vector(31 downto 0);
-	signal	inverse        : std_logic_vector(0 downto 0);
-	signal	source_valid   : std_logic;
-	signal	source_ready   : std_logic;
-	signal	source_error   : std_logic_vector(1 downto 0);
-	signal	source_sop     : std_logic;
-	signal	source_eop     : std_logic;
-	signal	source_real    : std_logic_vector(31 downto 0);
-	signal	source_imag    : std_logic_vector(31 downto 0);
-	signal	source_exp     : std_logic_vector(5 downto 0);
+	signal source_valid : std_logic;
+	signal source_real  : std_logic_vector(31 downto 0);
+	signal source_imag  : std_logic_vector(31 downto 0);
+	signal source_exp   : std_logic_vector(5 downto 0);
 	
 	-- Component for Header-FFT
 	component fft_header is
@@ -105,49 +99,49 @@ begin
 	-- Generate FFT Unit
 	FFT: if FFT_LENGTH = HEADER_LENGTH generate
 
-		FFT_HEADER : component fft_header
+		FFT_H : component fft_header
 		port map (
 			clk          => clk,          
 			reset_n      => reset_n,      
-			sink_valid   => sink_valid,   
-			sink_ready   => sink_ready,   
-			sink_error   => sink_error,   	-- Indicates an error has occured in an upstream module
-			sink_sop     => sink_sop,     	-- Indicates the start of the incoming FFT frame
-			sink_eop     => sink_eop,		-- Indicates the end of the incoming FFT frame  
-			sink_real    => sink_real,    	-- Real input data
-			sink_imag    => sink_imag,    	-- Imaginary input data
-			inverse      => inverse,      	-- Inverse FFT calculated if asserted
-			source_valid => source_valid, 
-			source_ready => source_ready, 
-			source_error => source_error, 	-- Indicates an error has occured either in an upstream module or within the FFT module
-			source_sop   => source_sop,  	-- Marks the start of the outgoing FFT frame
-			source_eop   => source_eop,  	-- Marks the end of the outgoing FFT frame
-			source_real  => source_real, 	-- Real output data
-			source_imag  => source_imag, 	-- Imaginary output data
+			sink_valid   => stin_valid,   
+			sink_ready   => stin_ready,   
+			sink_error   => stin_error,   	 -- Indicates an error has occured in an upstream module
+			sink_sop     => stin_sop,     	 -- Indicates the start of the incoming FFT frame
+			sink_eop     => stin_eop,		 -- Indicates the end of the incoming FFT frame  
+			sink_real    => stin_data,    	 -- Real input data
+			sink_imag    => (others => '0'), -- Imaginary input data
+			inverse      => inverse,      	 -- Inverse FFT calculated if asserted
+			source_valid => stout_valid, 
+			source_ready => stout_ready, 
+			source_error => stout_error, 	 -- Indicates an error has occured either in an upstream module or within the FFT module
+			source_sop   => stout_sop,  	 -- Marks the start of the outgoing FFT frame
+			source_eop   => stout_eop,  	 -- Marks the end of the outgoing FFT frame
+			source_real  => source_real, 	 -- Real output data
+			source_imag  => source_imag, 	 -- Imaginary output data
 			source_exp   => source_exp
 		);
 		
 	elsif FFT_LENGTH = BODY_LENGTH generate
 	
-		FFT_BODY: component fft_body
+		FFT_B: component fft_body
 		port map (
 			clk          => clk,          
 			reset_n      => reset_n,      
-			sink_valid   => sink_valid,   
-			sink_ready   => sink_ready,   
-			sink_error   => sink_error,   	-- Indicates an error has occured in an upstream module
-			sink_sop     => sink_sop,     	-- Indicates the start of the incoming FFT frame
-			sink_eop     => sink_eop,		-- Indicates the end of the incoming FFT frame  
-			sink_real    => sink_real,    	-- Real input data
-			sink_imag    => sink_imag,    	-- Imaginary input data
-			inverse      => inverse,      	-- Inverse FFT calculated if asserted
-			source_valid => source_valid, 
-			source_ready => source_ready, 
-			source_error => source_error, 	-- Indicates an error has occured either in an upstream module or within the FFT module
-			source_sop   => source_sop,  	-- Marks the start of the outgoing FFT frame
-			source_eop   => source_eop,  	-- Marks the end of the outgoing FFT frame
-			source_real  => source_real, 	-- Real output data
-			source_imag  => source_imag, 	-- Imaginary output data
+			sink_valid   => stin_valid,   
+			sink_ready   => stin_ready,   
+			sink_error   => stin_error,   	 -- Indicates an error has occured in an upstream module
+			sink_sop     => stin_sop,     	 -- Indicates the start of the incoming FFT frame
+			sink_eop     => stin_eop,		 -- Indicates the end of the incoming FFT frame  
+			sink_real    => stin_data,    	 -- Real input data
+			sink_imag    => (others => '0'), -- Imaginary input data
+			inverse      => inverse,      	 -- Inverse FFT calculated if asserted
+			source_valid => stout_valid, 
+			source_ready => stout_ready, 
+			source_error => stout_error, 	 -- Indicates an error has occured either in an upstream module or within the FFT module
+			source_sop   => stout_sop,  	 -- Marks the start of the outgoing FFT frame
+			source_eop   => stout_eop,  	 -- Marks the end of the outgoing FFT frame
+			source_real  => source_real, 	 -- Real output data
+			source_imag  => source_imag, 	 -- Imaginary output data
 			source_exp   => source_exp
 		);
 	
@@ -155,9 +149,32 @@ begin
 		-- Empty 
 	
 	end generate FFT;
-
-	sink_error <= (others => '0'); --"If this signal is not used in upstream modules, set to zero."
+	
+	output_proc : process(stout_ready, source_valid, source_exp, source_imag, source_real) is
+	variable exponent 	  : integer range -15 to 15 := 0;
+	variable exponent_abs : natural range   0 to 15 := 0;
+	begin
+		stout_data(15 downto 0) <= (others => '-');
+		stout_data(31 downto 16) <= (others => '-');
+		stout_valid <= '0';
 		
-
+		if (stout_ready = '1') then
+			stout_valid <= source_valid;
+			
+			-- Calculate exponent
+			exponent := - to_integer(signed(source_exp));
+			exponent_abs := to_integer(abs(to_signed(exponent,5))); -- nicht 6???
+			
+			if exponent < 0 then -- right shift		
+				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(source_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(source_real), exponent_abs));
+				
+			elsif exponent >= 0 then -- left shift
+				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(source_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(source_real), exponent_abs));
+			end if;
+		end if;
+		
+	end process output_proc;
 	
 end architecture;
