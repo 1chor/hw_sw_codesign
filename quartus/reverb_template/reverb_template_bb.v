@@ -45,7 +45,10 @@ module reverb_template (
 	touch_cntrl_ext_adc_dclk,
 	touch_cntrl_ext_adc_din,
 	touch_cntrl_ext_adc_dout,
-	touch_cntrl_ext_adc_penirq_n);	
+	touch_cntrl_ext_adc_penirq_n,
+	pio_0_external_connection_export,
+	fft_wrapper_header_0_external_connection_export,
+	fft_wrapper_body_0_external_connection_export);	
 
 	input		audio_ADCDAT;
 	input		audio_ADCLRCK;
@@ -93,4 +96,7 @@ module reverb_template (
 	output		touch_cntrl_ext_adc_din;
 	input		touch_cntrl_ext_adc_dout;
 	input		touch_cntrl_ext_adc_penirq_n;
+	output	[1:0]	pio_0_external_connection_export;
+	input	[1:0]	fft_wrapper_header_0_external_connection_export;
+	input	[1:0]	fft_wrapper_body_0_external_connection_export;
 endmodule

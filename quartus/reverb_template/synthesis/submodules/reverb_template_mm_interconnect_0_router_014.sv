@@ -42,7 +42,7 @@
 
 `timescale 1 ns / 1 ns
 
-module reverb_template_mm_interconnect_0_router_002_default_decode
+module reverb_template_mm_interconnect_0_router_014_default_decode
   #(
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
@@ -81,7 +81,7 @@ module reverb_template_mm_interconnect_0_router_002_default_decode
 endmodule
 
 
-module reverb_template_mm_interconnect_0_router_002
+module reverb_template_mm_interconnect_0_router_014
 (
     // -------------------
     // Clock & Reset
@@ -163,9 +163,14 @@ module reverb_template_mm_interconnect_0_router_002
 
 
 
+    // -------------------------------------------------------
+    // Write and read transaction signals
+    // -------------------------------------------------------
+    wire read_transaction;
+    assign read_transaction  = sink_data[PKT_TRANS_READ];
 
 
-    reverb_template_mm_interconnect_0_router_002_default_decode the_default_decode(
+    reverb_template_mm_interconnect_0_router_014_default_decode the_default_decode(
       .default_destination_id (),
       .default_wr_channel   (),
       .default_rd_channel   (),
@@ -185,7 +190,11 @@ module reverb_template_mm_interconnect_0_router_002
 
 
         if (destid == 0 ) begin
-            src_channel = 23'b1;
+            src_channel = 23'b01;
+        end
+
+        if (destid == 1  && read_transaction) begin
+            src_channel = 23'b10;
         end
 
 

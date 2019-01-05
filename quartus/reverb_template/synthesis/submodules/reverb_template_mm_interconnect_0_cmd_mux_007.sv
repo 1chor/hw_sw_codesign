@@ -38,34 +38,41 @@
 
 // ------------------------------------------
 // Generation parameters:
-//   output_name:         reverb_template_mm_interconnect_0_rsp_mux_001
-//   NUM_INPUTS:          2
-//   ARBITRATION_SHARES:  1 1
-//   ARBITRATION_SCHEME   "no-arb"
-//   PIPELINE_ARB:        0
+//   output_name:         reverb_template_mm_interconnect_0_cmd_mux_007
+//   NUM_INPUTS:          3
+//   ARBITRATION_SHARES:  1 1 1
+//   ARBITRATION_SCHEME   "round-robin"
+//   PIPELINE_ARB:        1
 //   PKT_TRANS_LOCK:      69 (arbitration locking enabled)
 //   ST_DATA_W:           111
-//   ST_CHANNEL_W:        23
+//   ST_CHANNEL_W:        19
 // ------------------------------------------
 
-module reverb_template_mm_interconnect_0_rsp_mux_001
+module reverb_template_mm_interconnect_0_cmd_mux_007
 (
     // ----------------------
     // Sinks
     // ----------------------
     input                       sink0_valid,
     input [111-1   : 0]  sink0_data,
-    input [23-1: 0]  sink0_channel,
+    input [19-1: 0]  sink0_channel,
     input                       sink0_startofpacket,
     input                       sink0_endofpacket,
     output                      sink0_ready,
 
     input                       sink1_valid,
     input [111-1   : 0]  sink1_data,
-    input [23-1: 0]  sink1_channel,
+    input [19-1: 0]  sink1_channel,
     input                       sink1_startofpacket,
     input                       sink1_endofpacket,
     output                      sink1_ready,
+
+    input                       sink2_valid,
+    input [111-1   : 0]  sink2_data,
+    input [19-1: 0]  sink2_channel,
+    input                       sink2_startofpacket,
+    input                       sink2_endofpacket,
+    output                      sink2_ready,
 
 
     // ----------------------
@@ -73,7 +80,7 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     // ----------------------
     output                      src_valid,
     output [111-1    : 0] src_data,
-    output [23-1 : 0] src_channel,
+    output [19-1 : 0] src_channel,
     output                      src_startofpacket,
     output                      src_endofpacket,
     input                       src_ready,
@@ -84,12 +91,12 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     input clk,
     input reset
 );
-    localparam PAYLOAD_W        = 111 + 23 + 2;
-    localparam NUM_INPUTS       = 2;
+    localparam PAYLOAD_W        = 111 + 19 + 2;
+    localparam NUM_INPUTS       = 3;
     localparam SHARE_COUNTER_W  = 1;
-    localparam PIPELINE_ARB     = 0;
+    localparam PIPELINE_ARB     = 1;
     localparam ST_DATA_W        = 111;
-    localparam ST_CHANNEL_W     = 23;
+    localparam ST_CHANNEL_W     = 19;
     localparam PKT_TRANS_LOCK   = 69;
 
     // ------------------------------------------
@@ -107,10 +114,16 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
 
     wire [PAYLOAD_W - 1 : 0] sink0_payload;
     wire [PAYLOAD_W - 1 : 0] sink1_payload;
+    wire [PAYLOAD_W - 1 : 0] sink2_payload;
 
     assign valid[0] = sink0_valid;
     assign valid[1] = sink1_valid;
+    assign valid[2] = sink2_valid;
 
+    wire [NUM_INPUTS - 1 : 0] eop;
+    assign eop[0] = sink0_endofpacket;
+    assign eop[1] = sink1_endofpacket;
+    assign eop[2] = sink2_endofpacket;
 
     // ------------------------------------------
     // ------------------------------------------
@@ -121,6 +134,16 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     always @* begin
       lock[0] = sink0_data[69];
       lock[1] = sink1_data[69];
+      lock[2] = sink2_data[69];
+    end
+    reg [NUM_INPUTS - 1 : 0] locked = '0;
+    always @(posedge clk or posedge reset) begin
+      if (reset) begin
+        locked <= '0;
+      end
+      else begin
+        locked <= next_grant & lock;
+      end
     end
 
     assign last_cycle = src_valid & src_ready & src_endofpacket & ~(|(lock & grant));
@@ -153,8 +176,10 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     // Input  |  arb shares  |  counter load value
     // 0      |      1       |  0
     // 1      |      1       |  0
+    // 2      |      1       |  0
      wire [SHARE_COUNTER_W - 1 : 0] share_0 = 1'd0;
      wire [SHARE_COUNTER_W - 1 : 0] share_1 = 1'd0;
+     wire [SHARE_COUNTER_W - 1 : 0] share_2 = 1'd0;
 
     // ------------------------------------------
     // Choose the share value corresponding to the grant.
@@ -163,28 +188,13 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     always @* begin
       next_grant_share =
     share_0 & { SHARE_COUNTER_W {next_grant[0]} } |
-    share_1 & { SHARE_COUNTER_W {next_grant[1]} };
+    share_1 & { SHARE_COUNTER_W {next_grant[1]} } |
+    share_2 & { SHARE_COUNTER_W {next_grant[2]} };
     end
 
     // ------------------------------------------
     // Flag to indicate first packet of an arb sequence.
     // ------------------------------------------
-    wire grant_changed = ~packet_in_progress && ~(|(saved_grant & valid));
-    reg first_packet_r;
-    wire first_packet = grant_changed | first_packet_r;
-    always @(posedge clk or posedge reset) begin
-      if (reset) begin
-        first_packet_r <= 1'b0;
-      end
-      else begin 
-        if (update_grant)
-          first_packet_r <= 1'b1;
-        else if (last_cycle)
-          first_packet_r <= 1'b0;
-        else if (grant_changed)
-          first_packet_r <= 1'b1;
-      end
-    end
 
     // ------------------------------------------
     // Compute the next share-count value.
@@ -194,13 +204,8 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     reg share_count_zero_flag;
 
     always @* begin
-      if (first_packet) begin
-        p1_share_count = next_grant_share;
-      end
-      else begin
-            // Update the counter, but don't decrement below 0.
-        p1_share_count = share_count_zero_flag ? '0 : share_count - 1'b1;
-      end
+        // Update the counter, but don't decrement below 0.
+      p1_share_count = share_count_zero_flag ? '0 : share_count - 1'b1;
      end
 
     // ------------------------------------------
@@ -212,46 +217,15 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
         share_count_zero_flag <= 1'b1;
       end
       else begin
-        if (last_cycle) begin
+        if (update_grant) begin
+          share_count <= next_grant_share;
+          share_count_zero_flag <= (next_grant_share == '0);
+        end
+        else if (last_cycle) begin
           share_count <= p1_share_count;
           share_count_zero_flag <= (p1_share_count == '0);
         end
       end
-    end
-
-    // ------------------------------------------
-    // For each input, maintain a final_packet signal which goes active for the
-    // last packet of a full-share packet sequence.  Example: if I have 4
-    // shares and I'm continuously requesting, final_packet is active in the
-    // 4th packet.
-    // ------------------------------------------
-    wire final_packet_0 = 1'b1;
-
-    wire final_packet_1 = 1'b1;
-
-
-    // ------------------------------------------
-    // Concatenate all final_packet signals (wire or reg) into a handy vector.
-    // ------------------------------------------
-    wire [NUM_INPUTS - 1 : 0] final_packet = {
-    final_packet_1,
-    final_packet_0
-    };
-
-    // ------------------------------------------
-    // ------------------------------------------
-    wire p1_done = |(final_packet & grant);
-
-    // ------------------------------------------
-    // Flag for the first cycle of packets within an 
-    // arb sequence
-    // ------------------------------------------
-    reg first_cycle;
-    always @(posedge clk, posedge reset) begin
-      if (reset)
-        first_cycle <= 0;
-      else
-        first_cycle <= last_cycle && ~p1_done;
     end
 
 
@@ -259,17 +233,25 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
       update_grant = 0;
 
         // ------------------------------------------
-        // No arbitration pipeline, update grant whenever
-        // the current arb winner has consumed all shares,
-        // or all requests are low
+        // The pipeline delays grant by one cycle, so
+        // we have to calculate the update_grant signal
+        // one cycle ahead of time.
+        //
+        // Possible optimization: omit the first clause
+        //    "if (!packet_in_progress & ~src_valid) ..."
+        //   cost: one idle cycle at the the beginning of each 
+        //     grant cycle.
+        //   benefit: save a small amount of logic.
         // ------------------------------------------
-  update_grant = (last_cycle && p1_done) || (first_cycle && ~(|valid));
-  update_grant = last_cycle;
+    if (!packet_in_progress & !src_valid)
+      update_grant = 1;
+    if (last_cycle && share_count_zero_flag)
+      update_grant = 1;
     end
 
     wire save_grant;
-    assign save_grant = 1;
-    assign grant = next_grant;
+    assign save_grant = update_grant;
+    assign grant = saved_grant;
 
     always @(posedge clk, posedge reset) begin
       if (reset)
@@ -291,15 +273,24 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     // The pipelined arbitration scheme does not require
     // request to be held high during the packet.
     // ------------------------------------------
-    assign request = valid;
+    reg [NUM_INPUTS - 1 : 0] prev_request;
+    always @(posedge clk, posedge reset) begin
+      if (reset)
+        prev_request <= '0;
+      else
+        prev_request <= request & ~(valid & eop);
+    end
+
+    assign request = (PIPELINE_ARB == 1) ? valid | locked :
+    prev_request | valid | locked;
 
     wire [NUM_INPUTS - 1 : 0] next_grant_from_arb;
                                
     altera_merlin_arbitrator
     #(
     .NUM_REQUESTERS(NUM_INPUTS),
-    .SCHEME ("no-arb"),
-    .PIPELINE (0)
+    .SCHEME ("round-robin"),
+    .PIPELINE (1)
     ) arb (
     .clk (clk),
     .reset (reset),
@@ -321,13 +312,15 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
 
     assign sink0_ready = src_ready && grant[0];
     assign sink1_ready = src_ready && grant[1];
+    assign sink2_ready = src_ready && grant[2];
 
     assign src_valid = |(grant & valid);
 
     always @* begin
       src_payload =
       sink0_payload & {PAYLOAD_W {grant[0]} } |
-      sink1_payload & {PAYLOAD_W {grant[1]} };
+      sink1_payload & {PAYLOAD_W {grant[1]} } |
+      sink2_payload & {PAYLOAD_W {grant[2]} };
     end
 
     // ------------------------------------------
@@ -338,6 +331,8 @@ module reverb_template_mm_interconnect_0_rsp_mux_001
     sink0_startofpacket,sink0_endofpacket};
     assign sink1_payload = {sink1_channel,sink1_data,
     sink1_startofpacket,sink1_endofpacket};
+    assign sink2_payload = {sink2_channel,sink2_data,
+    sink2_startofpacket,sink2_endofpacket};
 
     assign {src_channel,src_data,src_startofpacket,src_endofpacket} = src_payload;
 endmodule

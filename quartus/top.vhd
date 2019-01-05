@@ -65,6 +65,8 @@ end entity;
 architecture arch of top is
 	signal sys_clk, clk_125, clk_25, clk_2p5, tx_clk : std_logic;
 	signal res_n : std_logic;
+	-- Signal for FFT inverse signal
+	signal pio : std_logic_vector(1 downto 0);
 	
 	        component reverb_template is
         port (
@@ -80,7 +82,7 @@ architecture arch of top is
             clk_125_clk                  : out   std_logic;                                        -- clk
             clk_25_clk                   : out   std_logic;                                        -- clk
             clk_2p5_clk                  : out   std_logic;                                        -- clk
-            reset_reset_n                : in    std_logic                     := 'X';             -- reset_n
+			reset_reset_n                : in    std_logic                     := 'X';             -- reset_n
             sdcard_b_SD_cmd              : inout std_logic                     := 'X';             -- b_SD_cmd
             sdcard_b_SD_dat              : inout std_logic                     := 'X';             -- b_SD_dat
             sdcard_b_SD_dat3             : inout std_logic                     := 'X';             -- b_SD_dat3
@@ -115,7 +117,10 @@ architecture arch of top is
             touch_cntrl_ext_adc_dclk     : out   std_logic;                                        -- adc_dclk
             touch_cntrl_ext_adc_din      : out   std_logic;                                        -- adc_din
             touch_cntrl_ext_adc_dout     : in    std_logic                     := 'X';             -- adc_dout
-            touch_cntrl_ext_adc_penirq_n : in    std_logic                     := 'X'              -- adc_penirq_n
+            touch_cntrl_ext_adc_penirq_n : in    std_logic                     := 'X';              -- adc_penirq_n
+			pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);                     -- export
+			fft_wrapper_header_0_external_connection_export : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- export
+			fft_wrapper_body_0_external_connection_export   : in    std_logic_vector(1 downto 0)  := (others => 'X')  -- export
         );
     end component reverb_template;
 			
@@ -134,7 +139,7 @@ begin
 			data_in   => KEY(0),
 			data_out  => res_n
 		);
-		
+			
 	u0 : reverb_template
 		port map (
 			clk_clk                             => CLOCK_50,
@@ -191,7 +196,10 @@ begin
 			touch_cntrl_ext_adc_dclk     => ADC_DCLK,
 			touch_cntrl_ext_adc_din      => ADC_DIN,
 			touch_cntrl_ext_adc_dout     => ADC_DOUT,
-			touch_cntrl_ext_adc_penirq_n => ADC_PENIRQ_N
+			touch_cntrl_ext_adc_penirq_n => ADC_PENIRQ_N,
+			pio_0_external_connection_export => pio, -- export
+			fft_wrapper_header_0_external_connection_export => pio, -- export
+			fft_wrapper_body_0_external_connection_export => pio -- export
 		);
 		
 		LTM_CLK <= clk_25;
