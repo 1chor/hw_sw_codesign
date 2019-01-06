@@ -20,8 +20,8 @@ entity reverb_template is
 		clk_125_clk                                     : out   std_logic;                                        --                                  clk_125.clk
 		clk_25_clk                                      : out   std_logic;                                        --                                   clk_25.clk
 		clk_2p5_clk                                     : out   std_logic;                                        --                                  clk_2p5.clk
-		fft_wrapper_body_0_external_connection_export   : in    std_logic_vector(1 downto 0)  := (others => '0'); --   fft_wrapper_body_0_external_connection.export
-		fft_wrapper_header_0_external_connection_export : in    std_logic_vector(1 downto 0)  := (others => '0'); -- fft_wrapper_header_0_external_connection.export
+		fft_wrapper_body_0_external_connection_export   : in    std_logic                     := '0';             --   fft_wrapper_body_0_external_connection.export
+		fft_wrapper_header_0_external_connection_export : in    std_logic                     := '0';             -- fft_wrapper_header_0_external_connection.export
 		pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);                     --                pio_0_external_connection.export
 		reset_reset_n                                   : in    std_logic                     := '0';             --                                    reset.reset_n
 		sdcard_b_SD_cmd                                 : inout std_logic                     := '0';             --                                   sdcard.b_SD_cmd
@@ -176,7 +176,7 @@ architecture rtl of reverb_template is
 			stin_eop    : in  std_logic                     := 'X';             -- endofpacket
 			stin_empty  : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- empty
 			stin_error  : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- error
-			inverse     : in  std_logic_vector(1 downto 0)  := (others => 'X')  -- export
+			inverse     : in  std_logic                     := 'X'              -- export
 		);
 	end component fft_wrapper_body;
 
@@ -190,7 +190,7 @@ architecture rtl of reverb_template is
 			stout_data  : out std_logic_vector(31 downto 0);                    -- data
 			stout_ready : in  std_logic                     := 'X';             -- ready
 			stout_valid : out std_logic;                                        -- valid
-			inverse     : in  std_logic_vector(1 downto 0)  := (others => 'X')  -- export
+			inverse     : in  std_logic                     := 'X'              -- export
 		);
 	end component fft_wrapper_header;
 

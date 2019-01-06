@@ -28,7 +28,7 @@ entity fft_wrapper_body is
 		stout_empty : out std_logic_vector(1 downto 0); -- not used
 		stout_error : out std_logic_vector(1 downto 0);
 		
-		inverse     : in std_logic_vector(1 downto 0) -- inverse(1) is used for fft body
+		inverse     : in std_logic_vector(0 downto 0) -- pio(1) is used for fft body
 	);
 begin
 end entity;
@@ -81,7 +81,7 @@ begin
 		sink_eop     => stin_eop,		 -- Indicates the end of the incoming FFT frame  
 		sink_real    => stin_data,    	 -- Real input data
 		sink_imag    => (others => '0'), -- Imaginary input data
-		inverse      => inverse(1 downto 1),      	 -- Inverse FFT calculated if asserted
+		inverse      => inverse,      	 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => stout_ready, 
 		source_error => stout_error, 	 -- Indicates an error has occured either in an upstream module or within the FFT module
@@ -89,7 +89,7 @@ begin
 		source_eop   => stout_eop,  	 -- Marks the end of the outgoing FFT frame
 		source_real  => source_real, 	 -- Real output data
 		source_imag  => source_imag, 	 -- Imaginary output data
-		source_exp   => source_exp
+		source_exp   => source_exp		 -- Output exponent
 	);
 		
 	output_proc : process(stout_ready, src_valid, source_exp, source_imag, source_real) is

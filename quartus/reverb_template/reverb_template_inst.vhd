@@ -12,9 +12,6 @@
 			clk_125_clk                                     : out   std_logic;                                        -- clk
 			clk_25_clk                                      : out   std_logic;                                        -- clk
 			clk_2p5_clk                                     : out   std_logic;                                        -- clk
-			fft_wrapper_body_0_external_connection_export   : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- export
-			fft_wrapper_header_0_external_connection_export : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- export
-			pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);                     -- export
 			reset_reset_n                                   : in    std_logic                     := 'X';             -- reset_n
 			sdcard_b_SD_cmd                                 : inout std_logic                     := 'X';             -- b_SD_cmd
 			sdcard_b_SD_dat                                 : inout std_logic                     := 'X';             -- b_SD_dat
@@ -49,6 +46,9 @@
 			touch_cntrl_ext_adc_din                         : out   std_logic;                                        -- adc_din
 			touch_cntrl_ext_adc_dout                        : in    std_logic                     := 'X';             -- adc_dout
 			touch_cntrl_ext_adc_penirq_n                    : in    std_logic                     := 'X'              -- adc_penirq_n
+			fft_wrapper_body_0_external_connection_export   : in    std_logic_vector(0 downto 0)  := (others => 'X'); 								  -- export
+			fft_wrapper_header_0_external_connection_export : in    std_logic_vector(0 downto 0)  := (others => 'X'); 								  -- export
+			pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);                     -- export
 		);
 	end component reverb_template;
 
@@ -66,9 +66,6 @@
 			clk_125_clk                                     => CONNECTED_TO_clk_125_clk,                                     --                                  clk_125.clk
 			clk_25_clk                                      => CONNECTED_TO_clk_25_clk,                                      --                                   clk_25.clk
 			clk_2p5_clk                                     => CONNECTED_TO_clk_2p5_clk,                                     --                                  clk_2p5.clk
-			fft_wrapper_body_0_external_connection_export   => CONNECTED_TO_fft_wrapper_body_0_external_connection_export,   --   fft_wrapper_body_0_external_connection.export
-			fft_wrapper_header_0_external_connection_export => CONNECTED_TO_fft_wrapper_header_0_external_connection_export, -- fft_wrapper_header_0_external_connection.export
-			pio_0_external_connection_export                => CONNECTED_TO_pio_0_external_connection_export,                --                pio_0_external_connection.export
 			reset_reset_n                                   => CONNECTED_TO_reset_reset_n,                                   --                                    reset.reset_n
 			sdcard_b_SD_cmd                                 => CONNECTED_TO_sdcard_b_SD_cmd,                                 --                                   sdcard.b_SD_cmd
 			sdcard_b_SD_dat                                 => CONNECTED_TO_sdcard_b_SD_dat,                                 --                                         .b_SD_dat
@@ -103,5 +100,8 @@
 			touch_cntrl_ext_adc_din                         => CONNECTED_TO_touch_cntrl_ext_adc_din,                         --                                         .adc_din
 			touch_cntrl_ext_adc_dout                        => CONNECTED_TO_touch_cntrl_ext_adc_dout,                        --                                         .adc_dout
 			touch_cntrl_ext_adc_penirq_n                    => CONNECTED_TO_touch_cntrl_ext_adc_penirq_n                     --                                         .adc_penirq_n
+			fft_wrapper_body_0_external_connection_export   => CONNECTED_TO_fft_wrapper_body_0_external_connection_export,   --   fft_wrapper_body_0_external_connection.export
+			fft_wrapper_header_0_external_connection_export => CONNECTED_TO_fft_wrapper_header_0_external_connection_export, -- fft_wrapper_header_0_external_connection.export
+			pio_0_external_connection_export                => CONNECTED_TO_pio_0_external_connection_export,                --                pio_0_external_connection.export
 		);
 

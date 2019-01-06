@@ -35,8 +35,8 @@ end entity;
 
 architecture arch of fft_wrapper_body is
 
-	constant OUTPUT_FORMAT_UP   : natural := 24;
-	constant OUTPUT_FORMAT_DOWN : natural := 7;
+	constant OUTPUT_FORMAT_UP   : natural := 23;
+	constant OUTPUT_FORMAT_DOWN : natural := 8;
 
 	signal src_valid : std_logic;
 	signal source_real  : std_logic_vector(31 downto 0);

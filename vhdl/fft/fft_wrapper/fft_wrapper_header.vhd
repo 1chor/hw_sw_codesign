@@ -27,8 +27,8 @@ end entity;
 
 architecture arch of fft_wrapper_header is
 
-	constant OUTPUT_FORMAT_UP   : natural := 24;
-	constant OUTPUT_FORMAT_DOWN : natural := 7;
+	constant OUTPUT_FORMAT_UP   : natural := 23;
+	constant OUTPUT_FORMAT_DOWN : natural := 8;
 	constant FFT_LENGTH  : natural := 512;
 
 	signal	si_valid     : std_logic;
@@ -56,7 +56,7 @@ architecture arch of fft_wrapper_header is
 		LATENCY_FFT,
 		OUTPUT_DATA
 	);
-	signal state, state_next : state_type := STATE_IDLE;
+	signal state, state_next : state_type := TRANSFER_TO_FFT;
 	
 	type transfer_state_type is (
 		STATE_IDLE, 
@@ -141,16 +141,16 @@ begin
 		
 	end process fft_proc;
 	
-	sync_state_proc: process (res_n, clk)
+	sync_state_proc: process (reset_n, clk)
 	begin
-		if res_n = '0' then -- Reset signals
+		if reset_n = '0' then -- Reset signals
 			state <= TRANSFER_TO_FFT;
 			transfer_state <= STATE_IDLE;
 			
 			si_valid <= '0';
 			si_sop <= '0';
 			si_eop <= '0';
-			index <= '0';	
+			index <= 0;	
 					
 		elsif rising_edge(clk) then
 			state <= state_next;
@@ -165,7 +165,7 @@ begin
 				index <= index + 1;
 				si_valid <= '1';
 			elsif not (transfer_state_next = TRANSFER_DATA) then
-				index = 0; -- reset counter
+				index <= 0; -- reset counter
 			end if;
 		end if;
 			
@@ -199,7 +199,7 @@ begin
 						stin_ready <= '0';
 						si_eop_next <= '1';
 					end if;
-				end if
+				end if;
 				
 				if index = FFT_LENGTH then -- independent of valid signals
 					transfer_state_next <= STATE_IDLE;
@@ -220,7 +220,7 @@ begin
 		stout_data(31 downto 16) <= (others => '-');
 		stout_valid <= '0';
 		
-		if (stout_ready = '1') and ((next_state = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
+		if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
 			stout_valid <= src_valid;
 			
 			-- Calculate exponent
