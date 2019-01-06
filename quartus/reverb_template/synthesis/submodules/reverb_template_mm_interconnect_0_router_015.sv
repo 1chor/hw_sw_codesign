@@ -47,23 +47,23 @@ module reverb_template_mm_interconnect_0_router_015_default_decode
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
-               DEFAULT_DESTID = 0 
+               DEFAULT_DESTID = 1 
    )
-  (output [205 - 201 : 0] default_destination_id,
-   output [23-1 : 0] default_wr_channel,
-   output [23-1 : 0] default_rd_channel,
-   output [23-1 : 0] default_src_channel
+  (output [204 - 200 : 0] default_destination_id,
+   output [21-1 : 0] default_wr_channel,
+   output [21-1 : 0] default_rd_channel,
+   output [21-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[205 - 201 : 0];
+    DEFAULT_DESTID[204 - 200 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
       assign default_src_channel = '0;
     end
     else begin : default_channel_assignment
-      assign default_src_channel = 23'b1 << DEFAULT_CHANNEL;
+      assign default_src_channel = 21'b1 << DEFAULT_CHANNEL;
     end
   endgenerate
 
@@ -73,8 +73,8 @@ module reverb_template_mm_interconnect_0_router_015_default_decode
       assign default_rd_channel = '0;
     end
     else begin : default_rw_channel_assignment
-      assign default_wr_channel = 23'b1 << DEFAULT_WR_CHANNEL;
-      assign default_rd_channel = 23'b1 << DEFAULT_RD_CHANNEL;
+      assign default_wr_channel = 21'b1 << DEFAULT_WR_CHANNEL;
+      assign default_rd_channel = 21'b1 << DEFAULT_RD_CHANNEL;
     end
   endgenerate
 
@@ -93,7 +93,7 @@ module reverb_template_mm_interconnect_0_router_015
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [219-1 : 0]    sink_data,
+    input  [218-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,8 +102,8 @@ module reverb_template_mm_interconnect_0_router_015
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [219-1    : 0] src_data,
-    output reg [23-1 : 0] src_channel,
+    output reg [218-1    : 0] src_data,
+    output reg [21-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
     input                           src_ready
@@ -112,18 +112,18 @@ module reverb_template_mm_interconnect_0_router_015
     // -------------------------------------------------------
     // Local parameters and variables
     // -------------------------------------------------------
-    localparam PKT_ADDR_H = 172;
+    localparam PKT_ADDR_H = 171;
     localparam PKT_ADDR_L = 144;
-    localparam PKT_DEST_ID_H = 205;
-    localparam PKT_DEST_ID_L = 201;
-    localparam PKT_PROTECTION_H = 209;
-    localparam PKT_PROTECTION_L = 207;
-    localparam ST_DATA_W = 219;
-    localparam ST_CHANNEL_W = 23;
+    localparam PKT_DEST_ID_H = 204;
+    localparam PKT_DEST_ID_L = 200;
+    localparam PKT_PROTECTION_H = 208;
+    localparam PKT_PROTECTION_L = 206;
+    localparam ST_DATA_W = 218;
+    localparam ST_CHANNEL_W = 21;
     localparam DECODER_TYPE = 1;
 
-    localparam PKT_TRANS_WRITE = 175;
-    localparam PKT_TRANS_READ  = 176;
+    localparam PKT_TRANS_WRITE = 174;
+    localparam PKT_TRANS_READ  = 175;
 
     localparam PKT_ADDR_W = PKT_ADDR_H-PKT_ADDR_L + 1;
     localparam PKT_DEST_ID_W = PKT_DEST_ID_H-PKT_DEST_ID_L + 1;
@@ -158,7 +158,7 @@ module reverb_template_mm_interconnect_0_router_015
     assign src_valid         = sink_valid;
     assign src_startofpacket = sink_startofpacket;
     assign src_endofpacket   = sink_endofpacket;
-    wire [23-1 : 0] default_src_channel;
+    wire [21-1 : 0] default_src_channel;
 
 
 
@@ -184,8 +184,8 @@ module reverb_template_mm_interconnect_0_router_015
 
 
 
-        if (destid == 0 ) begin
-            src_channel = 23'b1;
+        if (destid == 1 ) begin
+            src_channel = 21'b1;
         end
 
 

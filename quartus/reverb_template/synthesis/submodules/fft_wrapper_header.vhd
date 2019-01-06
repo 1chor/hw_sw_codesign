@@ -16,7 +16,6 @@ entity fft_wrapper_header is
 		stin_ready : out std_logic;
 		stin_sop   : in std_logic;
 		stin_eop   : in std_logic;
-		stin_empty : in std_logic_vector(1 downto 0); -- not used
 		stin_error : in std_logic_vector(1 downto 0);
 
 		-- streaming source (output)
@@ -25,7 +24,6 @@ entity fft_wrapper_header is
 		stout_ready : in std_logic; -- back pressure from FIFO
 		stout_sop   : out std_logic;
 		stout_eop   : out std_logic;
-		stout_empty : out std_logic_vector(1 downto 0); -- not used
 		stout_error : out std_logic_vector(1 downto 0);
 		
 		inverse     : in std_logic_vector(1 downto 0) -- inverse(0) is used for fft header
@@ -34,6 +32,9 @@ begin
 end entity;
 
 architecture arch of fft_wrapper_header is
+
+	constant OUTPUT_FORMAT_UP   : natural := 24;
+	constant OUTPUT_FORMAT_DOWN : natural := 7;
 
 	signal src_valid : std_logic;
 	signal source_real  : std_logic_vector(31 downto 0);
@@ -104,14 +105,18 @@ begin
 			exponent := - to_integer(signed(source_exp));
 			exponent_abs := to_integer(abs(to_signed(exponent,5))); -- nicht 6???
 			
-			-- TODO: Ausgabe anpassen!!
+			-- Output-Format nach FFT ist 9Q23
+			-- TODO: Ausgabe überprüfen!!
+			
 			if exponent < 0 then -- right shift		
-				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(source_imag), exponent_abs))(15 downto 0);
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(source_real), exponent_abs))(31 downto 16);
+				-- Ausgabe-Format 2Q14
+				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(source_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(source_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 				
 			elsif exponent >= 0 then -- left shift
-				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(source_imag), exponent_abs))(15 downto 0);
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(source_real), exponent_abs)(31 downto 16));
+				-- Ausgabe-Format 2Q14
+				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(source_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(source_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 			end if;
 		end if;
 		

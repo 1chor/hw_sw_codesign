@@ -11,6 +11,9 @@
 		.clk_125_clk                                     (<connected-to-clk_125_clk>),                                     //                                  clk_125.clk
 		.clk_25_clk                                      (<connected-to-clk_25_clk>),                                      //                                   clk_25.clk
 		.clk_2p5_clk                                     (<connected-to-clk_2p5_clk>),                                     //                                  clk_2p5.clk
+		.fft_wrapper_body_0_external_connection_export   (<connected-to-fft_wrapper_body_0_external_connection_export>),   //   fft_wrapper_body_0_external_connection.export
+		.fft_wrapper_header_0_external_connection_export (<connected-to-fft_wrapper_header_0_external_connection_export>), // fft_wrapper_header_0_external_connection.export
+		.pio_0_external_connection_export                (<connected-to-pio_0_external_connection_export>),                //                pio_0_external_connection.export
 		.reset_reset_n                                   (<connected-to-reset_reset_n>),                                   //                                    reset.reset_n
 		.sdcard_b_SD_cmd                                 (<connected-to-sdcard_b_SD_cmd>),                                 //                                   sdcard.b_SD_cmd
 		.sdcard_b_SD_dat                                 (<connected-to-sdcard_b_SD_dat>),                                 //                                         .b_SD_dat
@@ -44,9 +47,6 @@
 		.touch_cntrl_ext_adc_dclk                        (<connected-to-touch_cntrl_ext_adc_dclk>),                        //                                         .adc_dclk
 		.touch_cntrl_ext_adc_din                         (<connected-to-touch_cntrl_ext_adc_din>),                         //                                         .adc_din
 		.touch_cntrl_ext_adc_dout                        (<connected-to-touch_cntrl_ext_adc_dout>),                        //                                         .adc_dout
-		.touch_cntrl_ext_adc_penirq_n                    (<connected-to-touch_cntrl_ext_adc_penirq_n>),                    //                                         .adc_penirq_n
-		.pio_0_external_connection_export                (<connected-to-pio_0_external_connection_export>),                //                pio_0_external_connection.export
-		.fft_wrapper_header_0_external_connection_export (<connected-to-fft_wrapper_header_0_external_connection_export>), // fft_wrapper_header_0_external_connection.export
-		.fft_wrapper_body_0_external_connection_export   (<connected-to-fft_wrapper_body_0_external_connection_export>)    //   fft_wrapper_body_0_external_connection.export
+		.touch_cntrl_ext_adc_penirq_n                    (<connected-to-touch_cntrl_ext_adc_penirq_n>)                     //                                         .adc_penirq_n
 	);
 

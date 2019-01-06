@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "270540032";
+         value = "136322192";
          type = "String";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum baseAddress
       {
-         value = "270540016";
+         value = "136322208";
          type = "String";
       }
    }
@@ -53,7 +53,7 @@
    {
       datum baseAddress
       {
-         value = "270540112";
+         value = "136322288";
          type = "String";
       }
    }
@@ -77,7 +77,7 @@
    {
       datum baseAddress
       {
-         value = "270540096";
+         value = "136322272";
          type = "String";
       }
    }
@@ -125,7 +125,7 @@
    {
       datum baseAddress
       {
-         value = "270536704";
+         value = "136318976";
          type = "String";
       }
    }
@@ -141,11 +141,32 @@
    {
       datum baseAddress
       {
-         value = "270540144";
+         value = "136322336";
          type = "String";
       }
    }
-   element m2s_fifo0
+   element m2s_fifo_ffth
+   {
+      datum _sortIndex
+      {
+         value = "26";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element m2s_fifo_ffth.in
+   {
+      datum baseAddress
+      {
+         value = "136322312";
+         type = "String";
+      }
+   }
+   element m2s_fifo_fir
    {
       datum _sortIndex
       {
@@ -153,11 +174,11 @@
          type = "int";
       }
    }
-   element m2s_fifo0.in
+   element m2s_fifo_fir.in
    {
       datum baseAddress
       {
-         value = "270540136";
+         value = "136322328";
          type = "String";
       }
    }
@@ -173,7 +194,7 @@
    {
       datum baseAddress
       {
-         value = "270539936";
+         value = "134225056";
          type = "String";
       }
    }
@@ -181,7 +202,7 @@
    {
       datum baseAddress
       {
-         value = "270540064";
+         value = "134225184";
          type = "String";
       }
    }
@@ -197,7 +218,7 @@
    {
       datum baseAddress
       {
-         value = "270539840";
+         value = "136322112";
          type = "String";
       }
    }
@@ -205,7 +226,7 @@
    {
       datum baseAddress
       {
-         value = "270539968";
+         value = "136322224";
          type = "String";
       }
    }
@@ -221,7 +242,7 @@
    {
       datum baseAddress
       {
-         value = "3145728";
+         value = "134742016";
          type = "String";
       }
    }
@@ -237,7 +258,7 @@
    {
       datum baseAddress
       {
-         value = "270534656";
+         value = "136316928";
          type = "String";
       }
    }
@@ -253,7 +274,7 @@
    {
       datum baseAddress
       {
-         value = "270540000";
+         value = "136322176";
          type = "String";
       }
    }
@@ -313,7 +334,52 @@
          type = "String";
       }
    }
-   element s2m_fifo0
+   element reverb_template
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone IV E";
+         type = "String";
+      }
+   }
+   element reverb_template
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone IV E";
+         type = "String";
+      }
+   }
+   element reverb_template
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone IV E";
+         type = "String";
+      }
+   }
+   element s2m_fifo_ffth
+   {
+      datum _sortIndex
+      {
+         value = "27";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element s2m_fifo_ffth.out
+   {
+      datum baseAddress
+      {
+         value = "136322304";
+         type = "String";
+      }
+   }
+   element s2m_fifo_fir
    {
       datum _sortIndex
       {
@@ -321,11 +387,11 @@
          type = "int";
       }
    }
-   element s2m_fifo0.out
+   element s2m_fifo_fir.out
    {
       datum baseAddress
       {
-         value = "270540128";
+         value = "136322320";
          type = "String";
       }
    }
@@ -341,7 +407,7 @@
    {
       datum baseAddress
       {
-         value = "270539904";
+         value = "134225024";
          type = "String";
       }
    }
@@ -349,7 +415,7 @@
    {
       datum baseAddress
       {
-         value = "270540048";
+         value = "134225168";
          type = "String";
       }
    }
@@ -365,7 +431,7 @@
    {
       datum baseAddress
       {
-         value = "270539872";
+         value = "136322144";
          type = "String";
       }
    }
@@ -373,7 +439,7 @@
    {
       datum baseAddress
       {
-         value = "270539984";
+         value = "136322240";
          type = "String";
       }
    }
@@ -389,7 +455,7 @@
    {
       datum baseAddress
       {
-         value = "270538752";
+         value = "136321024";
          type = "String";
       }
    }
@@ -405,7 +471,7 @@
    {
       datum baseAddress
       {
-         value = "134217728";
+         value = "0";
          type = "String";
       }
    }
@@ -421,7 +487,7 @@
    {
       datum baseAddress
       {
-         value = "268435456";
+         value = "134217728";
          type = "String";
       }
    }
@@ -445,7 +511,7 @@
    {
       datum baseAddress
       {
-         value = "270539776";
+         value = "136322048";
          type = "String";
       }
    }
@@ -461,7 +527,7 @@
    {
       datum baseAddress
       {
-         value = "270540080";
+         value = "136322256";
          type = "String";
       }
    }
@@ -1026,7 +1092,11 @@
   <parameter name="writeBufferDepth" value="64" />
   <parameter name="writeIRQThreshold" value="8" />
  </module>
- <module name="m2s_fifo0" kind="altera_avalon_fifo" version="18.1" enabled="1">
+ <module
+   name="m2s_fifo_ffth"
+   kind="altera_avalon_fifo"
+   version="18.1"
+   enabled="1">
   <parameter name="avalonMMAvalonMMDataWidth" value="32" />
   <parameter name="avalonMMAvalonSTDataWidth" value="32" />
   <parameter name="bitsPerSymbol" value="32" />
@@ -1047,7 +1117,32 @@
   <parameter name="useRegister" value="true" />
   <parameter name="useWriteControl" value="false" />
  </module>
- <module name="m2s_msgdma0" kind="altera_msgdma" version="18.1" enabled="1">
+ <module
+   name="m2s_fifo_fir"
+   kind="altera_avalon_fifo"
+   version="18.1"
+   enabled="1">
+  <parameter name="avalonMMAvalonMMDataWidth" value="32" />
+  <parameter name="avalonMMAvalonSTDataWidth" value="32" />
+  <parameter name="bitsPerSymbol" value="32" />
+  <parameter name="channelWidth" value="0" />
+  <parameter name="deviceFamilyString" value="Cyclone IV E" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="fifoDepth" value="32" />
+  <parameter name="fifoInputInterfaceOptions" value="AVALONMM_WRITE" />
+  <parameter name="fifoOutputInterfaceOptions" value="AVALONST_SOURCE" />
+  <parameter name="showHiddenFeatures" value="false" />
+  <parameter name="singleClockMode" value="true" />
+  <parameter name="singleResetMode" value="false" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useBackpressure" value="true" />
+  <parameter name="useIRQ" value="false" />
+  <parameter name="usePacket" value="false" />
+  <parameter name="useReadControl" value="false" />
+  <parameter name="useRegister" value="true" />
+  <parameter name="useWriteControl" value="false" />
+ </module>
+ <module name="m2s_msgdma0" kind="altera_msgdma" version="18.1" enabled="0">
   <parameter name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_MAP" value="" />
   <parameter
      name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_WIDTH"
@@ -1102,8 +1197,8 @@
   <parameter name="AUTO_DEVICE" value="EP4CE115F29C7" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
-  <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = -1" />
+  <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = 27" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = -1" />
   <parameter name="BURST_ENABLE" value="0" />
@@ -1182,10 +1277,10 @@
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="29" />
+  <parameter name="dataAddrWidth" value="28" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x10000000' end='0x10200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='nios2.debug_mem_slave' start='0x10200800' end='0x10201000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_0.avalon_slave_0' start='0x10201000' end='0x10201800' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x10201800' end='0x10201C00' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x10201C00' end='0x10201C40' type='textmode_controller.avalon_slave' /><slave name='m2s_msgdma1.csr' start='0x10201C40' end='0x10201C60' type='altera_msgdma.csr' /><slave name='s2m_msgdma1.csr' start='0x10201C60' end='0x10201C80' type='altera_msgdma.csr' /><slave name='s2m_msgdma0.csr' start='0x10201C80' end='0x10201CA0' type='altera_msgdma.csr' /><slave name='m2s_msgdma0.csr' start='0x10201CA0' end='0x10201CC0' type='altera_msgdma.csr' /><slave name='m2s_msgdma1.descriptor_slave' start='0x10201CC0' end='0x10201CD0' type='altera_msgdma.descriptor_slave' /><slave name='s2m_msgdma1.descriptor_slave' start='0x10201CD0' end='0x10201CE0' type='altera_msgdma.descriptor_slave' /><slave name='pio_0.s1' start='0x10201CE0' end='0x10201CF0' type='altera_avalon_pio.s1' /><slave name='altpll_sram.pll_slave' start='0x10201CF0' end='0x10201D00' type='altpll.pll_slave' /><slave name='altpll.pll_slave' start='0x10201D00' end='0x10201D10' type='altpll.pll_slave' /><slave name='s2m_msgdma0.descriptor_slave' start='0x10201D10' end='0x10201D20' type='altera_msgdma.descriptor_slave' /><slave name='m2s_msgdma0.descriptor_slave' start='0x10201D20' end='0x10201D30' type='altera_msgdma.descriptor_slave' /><slave name='touch_cntrl.avalon_slave' start='0x10201D30' end='0x10201D40' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x10201D40' end='0x10201D50' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x10201D50' end='0x10201D60' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='s2m_fifo0.out' start='0x10201D60' end='0x10201D68' type='altera_avalon_fifo.out' /><slave name='m2s_fifo0.in' start='0x10201D68' end='0x10201D70' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10201D70' end='0x10201D78' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x8000000' end='0x8200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='nios2.debug_mem_slave' start='0x8200800' end='0x8201000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_0.avalon_slave_0' start='0x8201000' end='0x8201800' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x8201800' end='0x8201C00' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x8201C00' end='0x8201C40' type='textmode_controller.avalon_slave' /><slave name='m2s_msgdma1.csr' start='0x8201C40' end='0x8201C60' type='altera_msgdma.csr' /><slave name='s2m_msgdma1.csr' start='0x8201C60' end='0x8201C80' type='altera_msgdma.csr' /><slave name='pio_0.s1' start='0x8201C80' end='0x8201C90' type='altera_avalon_pio.s1' /><slave name='altpll.pll_slave' start='0x8201C90' end='0x8201CA0' type='altpll.pll_slave' /><slave name='altpll_sram.pll_slave' start='0x8201CA0' end='0x8201CB0' type='altpll.pll_slave' /><slave name='m2s_msgdma1.descriptor_slave' start='0x8201CB0' end='0x8201CC0' type='altera_msgdma.descriptor_slave' /><slave name='s2m_msgdma1.descriptor_slave' start='0x8201CC0' end='0x8201CD0' type='altera_msgdma.descriptor_slave' /><slave name='touch_cntrl.avalon_slave' start='0x8201CD0' end='0x8201CE0' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x8201CE0' end='0x8201CF0' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x8201CF0' end='0x8201D00' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='s2m_fifo_ffth.out' start='0x8201D00' end='0x8201D08' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_ffth.in' start='0x8201D08' end='0x8201D10' type='altera_avalon_fifo.in' /><slave name='s2m_fifo_fir.out' start='0x8201D10' end='0x8201D18' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_fir.in' start='0x8201D18' end='0x8201D20' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8201D20' end='0x8201D28' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -1223,15 +1318,15 @@
   <parameter name="icache_size" value="2048" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
-  <parameter name="instAddrWidth" value="29" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x10200800' end='0x10201000' type='altera_nios2_gen2.debug_mem_slave' /></address-map>]]></parameter>
+  <parameter name="instAddrWidth" value="28" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='nios2.debug_mem_slave' start='0x8200800' end='0x8201000' type='altera_nios2_gen2.debug_mem_slave' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="255" />
+  <parameter name="internalIrqMaskSystemInfo" value="219" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -1357,7 +1452,11 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="2" />
  </module>
- <module name="s2m_fifo0" kind="altera_avalon_fifo" version="18.1" enabled="1">
+ <module
+   name="s2m_fifo_ffth"
+   kind="altera_avalon_fifo"
+   version="18.1"
+   enabled="1">
   <parameter name="avalonMMAvalonMMDataWidth" value="32" />
   <parameter name="avalonMMAvalonSTDataWidth" value="32" />
   <parameter name="bitsPerSymbol" value="32" />
@@ -1378,7 +1477,32 @@
   <parameter name="useRegister" value="true" />
   <parameter name="useWriteControl" value="false" />
  </module>
- <module name="s2m_msgdma0" kind="altera_msgdma" version="18.1" enabled="1">
+ <module
+   name="s2m_fifo_fir"
+   kind="altera_avalon_fifo"
+   version="18.1"
+   enabled="1">
+  <parameter name="avalonMMAvalonMMDataWidth" value="32" />
+  <parameter name="avalonMMAvalonSTDataWidth" value="32" />
+  <parameter name="bitsPerSymbol" value="32" />
+  <parameter name="channelWidth" value="0" />
+  <parameter name="deviceFamilyString" value="Cyclone IV E" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="fifoDepth" value="32" />
+  <parameter name="fifoInputInterfaceOptions" value="AVALONST_SINK" />
+  <parameter name="fifoOutputInterfaceOptions" value="AVALONMM_READ" />
+  <parameter name="showHiddenFeatures" value="false" />
+  <parameter name="singleClockMode" value="true" />
+  <parameter name="singleResetMode" value="false" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useBackpressure" value="true" />
+  <parameter name="useIRQ" value="false" />
+  <parameter name="usePacket" value="false" />
+  <parameter name="useReadControl" value="false" />
+  <parameter name="useRegister" value="true" />
+  <parameter name="useWriteControl" value="false" />
+ </module>
+ <module name="s2m_msgdma0" kind="altera_msgdma" version="18.1" enabled="0">
   <parameter name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_MAP" value="" />
   <parameter
      name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_WIDTH"
@@ -1435,8 +1559,8 @@
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = -1" />
-  <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = -1" />
+  <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = 27" />
   <parameter name="BURST_ENABLE" value="0" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1535,7 +1659,7 @@
    start="nios2.data_master"
    end="audio.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d50" />
+  <parameter name="baseAddress" value="0x08201cf0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1544,7 +1668,7 @@
    start="nios2.data_master"
    end="av_config.avalon_av_config_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d40" />
+  <parameter name="baseAddress" value="0x08201ce0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1553,7 +1677,7 @@
    start="nios2.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d70" />
+  <parameter name="baseAddress" value="0x08201d20" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1562,7 +1686,7 @@
    start="nios2.data_master"
    end="sdcard_interface.avalon_sdcard_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201800" />
+  <parameter name="baseAddress" value="0x08201800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1571,7 +1695,7 @@
    start="nios2.data_master"
    end="textmode_controller.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201c00" />
+  <parameter name="baseAddress" value="0x08201c00" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1580,7 +1704,7 @@
    start="nios2.data_master"
    end="touch_cntrl.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d30" />
+  <parameter name="baseAddress" value="0x08201cd0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1589,7 +1713,7 @@
    start="nios2.data_master"
    end="fir_0.avalon_slave_0">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201000" />
+  <parameter name="baseAddress" value="0x08201000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1598,7 +1722,7 @@
    start="nios2.data_master"
    end="sram_0.avalon_sram_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="baseAddress" value="0x08000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1607,7 +1731,7 @@
    start="nios2.data_master"
    end="m2s_msgdma0.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201ca0" />
+  <parameter name="baseAddress" value="0x08001ca0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1616,7 +1740,7 @@
    start="nios2.data_master"
    end="s2m_msgdma0.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201c80" />
+  <parameter name="baseAddress" value="0x08001c80" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1625,7 +1749,7 @@
    start="nios2.data_master"
    end="s2m_msgdma1.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201c60" />
+  <parameter name="baseAddress" value="0x08201c60" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1634,7 +1758,7 @@
    start="nios2.data_master"
    end="m2s_msgdma1.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201c40" />
+  <parameter name="baseAddress" value="0x08201c40" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1643,7 +1767,7 @@
    start="nios2.data_master"
    end="nios2.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10200800" />
+  <parameter name="baseAddress" value="0x08200800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1652,7 +1776,7 @@
    start="nios2.data_master"
    end="m2s_msgdma0.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d20" />
+  <parameter name="baseAddress" value="0x08001d20" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1661,7 +1785,7 @@
    start="nios2.data_master"
    end="s2m_msgdma0.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d10" />
+  <parameter name="baseAddress" value="0x08001d10" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1670,7 +1794,7 @@
    start="nios2.data_master"
    end="s2m_msgdma1.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201cd0" />
+  <parameter name="baseAddress" value="0x08201cc0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1679,34 +1803,43 @@
    start="nios2.data_master"
    end="m2s_msgdma1.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201cc0" />
+  <parameter name="baseAddress" value="0x08201cb0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="18.1"
    start="nios2.data_master"
-   end="m2s_fifo0.in">
+   end="m2s_fifo_fir.in">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d68" />
+  <parameter name="baseAddress" value="0x08201d18" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="18.1"
    start="nios2.data_master"
-   end="s2m_fifo0.out">
+   end="m2s_fifo_ffth.in">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d60" />
+  <parameter name="baseAddress" value="0x08201d08" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="18.1"
    start="nios2.data_master"
-   end="altpll.pll_slave">
+   end="s2m_fifo_fir.out">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201d00" />
+  <parameter name="baseAddress" value="0x08201d10" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="nios2.data_master"
+   end="s2m_fifo_ffth.out">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08201d00" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1715,7 +1848,16 @@
    start="nios2.data_master"
    end="altpll_sram.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201cf0" />
+  <parameter name="baseAddress" value="0x08201ca0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="nios2.data_master"
+   end="altpll.pll_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08201c90" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1724,17 +1866,17 @@
    start="nios2.data_master"
    end="main_memory.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00300000" />
+  <parameter name="baseAddress" value="0x08080000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="nios2.data_master" end="sdram.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08000000" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="nios2.data_master" end="pio_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10201ce0" />
+  <parameter name="baseAddress" value="0x08201c80" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1743,7 +1885,7 @@
    start="nios2.instruction_master"
    end="nios2.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10200800" />
+  <parameter name="baseAddress" value="0x08200800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1752,7 +1894,7 @@
    start="nios2.instruction_master"
    end="main_memory.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00300000" />
+  <parameter name="baseAddress" value="0x08080000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1761,19 +1903,55 @@
    start="nios2.instruction_master"
    end="sdram.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08000000" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="m2s_msgdma0.mm_read"
+   end="sram_0.avalon_sram_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="m2s_msgdma1.mm_read"
+   end="sdram.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="s2m_msgdma0.mm_write"
+   end="sram_0.avalon_sram_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="s2m_msgdma1.mm_write"
+   end="sdram.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon_streaming"
    version="18.1"
    start="fir_0.avalon_streaming_source"
-   end="s2m_fifo0.in" />
+   end="s2m_fifo_fir.in" />
  <connection
    kind="avalon_streaming"
    version="18.1"
    start="fft_wrapper_header_0.avalon_streaming_source"
-   end="s2m_msgdma0.st_sink" />
+   end="s2m_fifo_ffth.in" />
  <connection
    kind="avalon_streaming"
    version="18.1"
@@ -1782,12 +1960,12 @@
  <connection
    kind="avalon_streaming"
    version="18.1"
-   start="m2s_fifo0.out"
+   start="m2s_fifo_fir.out"
    end="fir_0.avalon_streaming_sink" />
  <connection
    kind="avalon_streaming"
    version="18.1"
-   start="m2s_msgdma0.st_source"
+   start="m2s_fifo_ffth.out"
    end="fft_wrapper_header_0.avalon_streaming_sink" />
  <connection
    kind="avalon_streaming"
@@ -1805,8 +1983,26 @@
  <connection kind="clock" version="18.1" start="altpll.c0" end="sdram.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="pio_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="main_memory.clk1" />
- <connection kind="clock" version="18.1" start="altpll.c0" end="s2m_fifo0.clk_in" />
- <connection kind="clock" version="18.1" start="altpll.c0" end="m2s_fifo0.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="altpll.c0"
+   end="s2m_fifo_fir.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="altpll.c0"
+   end="m2s_fifo_fir.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="altpll.c0"
+   end="m2s_fifo_ffth.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="altpll.c0"
+   end="s2m_fifo_ffth.clk_in" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="touch_cntrl.clock" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="fir_0.clock" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="m2s_msgdma0.clock" />
@@ -1986,12 +2182,27 @@
    kind="reset"
    version="18.1"
    start="sys_clk.clk_reset"
-   end="m2s_fifo0.reset_in" />
+   end="main_memory.reset1" />
  <connection
    kind="reset"
    version="18.1"
    start="sys_clk.clk_reset"
-   end="s2m_fifo0.reset_in" />
+   end="m2s_fifo_fir.reset_in" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="sys_clk.clk_reset"
+   end="s2m_fifo_fir.reset_in" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="sys_clk.clk_reset"
+   end="m2s_fifo_ffth.reset_in" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="sys_clk.clk_reset"
+   end="s2m_fifo_ffth.reset_in" />
  <connection
    kind="reset"
    version="18.1"
@@ -2037,11 +2248,6 @@
    version="18.1"
    start="nios2.debug_reset_request"
    end="nios2.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="nios2.debug_reset_request"
-   end="main_memory.reset1" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />

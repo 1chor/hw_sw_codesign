@@ -108,6 +108,7 @@ begin
 
 -- ## Control Part ##
 -- Control FSM
+-- Hier werden nur die Signale zwischen FFT/IFFT umgeroutet
 fsm_combinatoric: process ( s_index, source_sop_i, state, s_exponent_reg, source_exp_i, source_valid_i, source_eop_i ) is
 begin
 
@@ -174,6 +175,7 @@ next_exponent_FFT <= s_exponent_reg;
 end process; 
 
 -- ## Control Part MUX##
+-- Hier werden die Daten vom FIFO oder der FFT geroutet
 mux_FFT_input: process(s_fft_input_mux_select, source_imag_i, source_real_i, stin_valid, stin_data, source_valid_i) is
 begin
 	s_mux_sink_valid <= '0';
@@ -196,6 +198,7 @@ end process;
  
 --## Transfer Part ##  
 -- Send FSM
+-- Hier werden die Daten vom FIFO zur FFT geladen
 fsm_send_combinatoric: process (transfer_state, sink_ready_i,s_index, next_state, s_mux_sink_valid) is
 begin
 -- ## default assignements ##

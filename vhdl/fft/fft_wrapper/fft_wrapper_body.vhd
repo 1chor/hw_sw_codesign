@@ -28,12 +28,15 @@ entity fft_wrapper_body is
 		stout_empty : out std_logic_vector(1 downto 0); -- not used
 		stout_error : out std_logic_vector(1 downto 0);
 		
-		inverse     : in std_logic_vector(1 downto 0) -- inverse(1) is used for fft body
+		inverse     : in std_logic_vector(0 downto 0) -- pio(1) is used for fft body
 	);
 begin
 end entity;
 
 architecture arch of fft_wrapper_body is
+
+	constant OUTPUT_FORMAT_UP   : natural := 24;
+	constant OUTPUT_FORMAT_DOWN : natural := 7;
 
 	signal src_valid : std_logic;
 	signal source_real  : std_logic_vector(31 downto 0);
@@ -78,7 +81,7 @@ begin
 		sink_eop     => stin_eop,		 -- Indicates the end of the incoming FFT frame  
 		sink_real    => stin_data,    	 -- Real input data
 		sink_imag    => (others => '0'), -- Imaginary input data
-		inverse      => inverse(1 downto 1),      	 -- Inverse FFT calculated if asserted
+		inverse      => inverse,      	 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => stout_ready, 
 		source_error => stout_error, 	 -- Indicates an error has occured either in an upstream module or within the FFT module
@@ -86,7 +89,7 @@ begin
 		source_eop   => stout_eop,  	 -- Marks the end of the outgoing FFT frame
 		source_real  => source_real, 	 -- Real output data
 		source_imag  => source_imag, 	 -- Imaginary output data
-		source_exp   => source_exp
+		source_exp   => source_exp		 -- Output exponent
 	);
 		
 	output_proc : process(stout_ready, src_valid, source_exp, source_imag, source_real) is
@@ -104,14 +107,18 @@ begin
 			exponent := - to_integer(signed(source_exp));
 			exponent_abs := to_integer(abs(to_signed(exponent,5))); -- nicht 6???
 			
-			-- TODO: Ausgabe anpassen!!
+			-- Output-Format nach FFT ist 9Q23
+			-- TODO: Ausgabe überprüfen!!
+			
 			if exponent < 0 then -- right shift		
-				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(source_imag), exponent_abs))(15 downto 0);
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(source_real), exponent_abs))(31 downto 16);
+				-- Ausgabe-Format 2Q14
+				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(source_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(source_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 				
 			elsif exponent >= 0 then -- left shift
-				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(source_imag), exponent_abs))(15 downto 0);
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(source_real), exponent_abs))(31 downto 16);
+				-- Ausgabe-Format 2Q14
+				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(source_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(source_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 			end if;
 		end if;
 		

@@ -20,9 +20,9 @@
 // Altera IRQ Mapper
 //
 // Parameters
-//   NUM_RCVRS        : 8
+//   NUM_RCVRS        : 6
 //   SENDER_IRW_WIDTH : 32
-//   IRQ_MAP          : 0:2,1:5,2:6,3:7,4:3,5:4,6:0,7:1
+//   IRQ_MAP          : 0:6,1:7,2:3,3:4,4:0,5:1
 //
 // -------------------------------------------------------
 
@@ -45,8 +45,6 @@ module reverb_template_irq_mapper
     input                receiver3_irq,
     input                receiver4_irq,
     input                receiver5_irq,
-    input                receiver6_irq,
-    input                receiver7_irq,
 
     // -------------------
     // Command Source (Output)
@@ -58,14 +56,12 @@ module reverb_template_irq_mapper
     always @* begin
 	sender_irq = 0;
 
-        sender_irq[2] = receiver0_irq;
-        sender_irq[5] = receiver1_irq;
-        sender_irq[6] = receiver2_irq;
-        sender_irq[7] = receiver3_irq;
-        sender_irq[3] = receiver4_irq;
-        sender_irq[4] = receiver5_irq;
-        sender_irq[0] = receiver6_irq;
-        sender_irq[1] = receiver7_irq;
+        sender_irq[6] = receiver0_irq;
+        sender_irq[7] = receiver1_irq;
+        sender_irq[3] = receiver2_irq;
+        sender_irq[4] = receiver3_irq;
+        sender_irq[0] = receiver4_irq;
+        sender_irq[1] = receiver5_irq;
     end
 
 endmodule

@@ -12,6 +12,9 @@ module reverb_template (
 	clk_125_clk,
 	clk_25_clk,
 	clk_2p5_clk,
+	fft_wrapper_body_0_external_connection_export,
+	fft_wrapper_header_0_external_connection_export,
+	pio_0_external_connection_export,
 	reset_reset_n,
 	sdcard_b_SD_cmd,
 	sdcard_b_SD_dat,
@@ -45,10 +48,7 @@ module reverb_template (
 	touch_cntrl_ext_adc_dclk,
 	touch_cntrl_ext_adc_din,
 	touch_cntrl_ext_adc_dout,
-	touch_cntrl_ext_adc_penirq_n,
-	pio_0_external_connection_export,
-	fft_wrapper_header_0_external_connection_export,
-	fft_wrapper_body_0_external_connection_export);	
+	touch_cntrl_ext_adc_penirq_n);	
 
 	input		audio_ADCDAT;
 	input		audio_ADCLRCK;
@@ -62,6 +62,9 @@ module reverb_template (
 	output		clk_125_clk;
 	output		clk_25_clk;
 	output		clk_2p5_clk;
+	input	[1:0]	fft_wrapper_body_0_external_connection_export;
+	input	[1:0]	fft_wrapper_header_0_external_connection_export;
+	output	[1:0]	pio_0_external_connection_export;
 	input		reset_reset_n;
 	inout		sdcard_b_SD_cmd;
 	inout		sdcard_b_SD_dat;
@@ -96,7 +99,4 @@ module reverb_template (
 	output		touch_cntrl_ext_adc_din;
 	input		touch_cntrl_ext_adc_dout;
 	input		touch_cntrl_ext_adc_penirq_n;
-	output	[1:0]	pio_0_external_connection_export;
-	input	[1:0]	fft_wrapper_header_0_external_connection_export;
-	input	[1:0]	fft_wrapper_body_0_external_connection_export;
 endmodule
