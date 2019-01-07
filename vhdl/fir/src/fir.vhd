@@ -177,6 +177,7 @@ begin
 			when STATE_OUTPUT =>
 				if stout_ready = '1' then
 					-- Set Output
+					--stout_data <= std_logic_vector(temp(47 downto 16)); -- 16Q16 Format for Simulation
 					stout_data <= std_logic_vector(temp(62 downto 31)); -- 2Q30 Format
 					stout_valid <= '1';
 					

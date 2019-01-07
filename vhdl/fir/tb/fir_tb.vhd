@@ -173,7 +173,7 @@ begin
 		mm_address <= (others=>'0');
 		mm_writedata <= (others=>'0');
 		mm_write <= '0';
-		mm_read <= '0';
+		--mm_read <= '0';
 		--stout_ready <= '0';
 		stin_valid <= '0';
 		wait until rising_edge(clk);

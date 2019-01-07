@@ -17,7 +17,7 @@ TB_FILES = \
 
 #testbench file to "execute" and simulation time
 TB = fir_tb
-SIM_TIME = 3000ns
+SIM_TIME = 4700ns
 
 compile: 
 	rm -f log

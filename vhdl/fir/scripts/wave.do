@@ -13,7 +13,7 @@ add wave -noupdate /fir_tb/stout_ready
 add wave -noupdate -divider {Avalon MM}
 add wave -noupdate /fir_tb/mm_address
 add wave -noupdate /fir_tb/mm_write
-add wave -noupdate /fir_tb/mm_read
+#add wave -noupdate /fir_tb/mm_read
 add wave -noupdate /fir_tb/mm_writedata
 add wave -noupdate /fir_tb/mm_readdata
 add wave -noupdate -divider other
