@@ -1263,7 +1263,7 @@
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
   <parameter name="USE_FIX_ADDRESS_WIDTH" value="0" />
  </module>
- <module name="m2s_msgdma1" kind="altera_msgdma" version="18.1" enabled="1">
+ <module name="m2s_msgdma1" kind="altera_msgdma" version="18.1" enabled="0">
   <parameter name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_MAP" value="" />
   <parameter
      name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_WIDTH"
@@ -1358,7 +1358,7 @@
   <parameter name="dataAddrWidth" value="28" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x8000000' end='0x8200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='fir_r.avalon_slave_0' start='0x8200800' end='0x8201000' type='fir.avalon_slave_0' /><slave name='nios2.debug_mem_slave' start='0x8201000' end='0x8201800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_l.avalon_slave_0' start='0x8201800' end='0x8202000' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x8202000' end='0x8202400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x8202400' end='0x8202440' type='textmode_controller.avalon_slave' /><slave name='m2s_msgdma1.csr' start='0x8202440' end='0x8202460' type='altera_msgdma.csr' /><slave name='s2m_msgdma1.csr' start='0x8202460' end='0x8202480' type='altera_msgdma.csr' /><slave name='pio_0.s1' start='0x8202480' end='0x8202490' type='altera_avalon_pio.s1' /><slave name='altpll.pll_slave' start='0x8202490' end='0x82024A0' type='altpll.pll_slave' /><slave name='altpll_sram.pll_slave' start='0x82024A0' end='0x82024B0' type='altpll.pll_slave' /><slave name='m2s_msgdma1.descriptor_slave' start='0x82024B0' end='0x82024C0' type='altera_msgdma.descriptor_slave' /><slave name='s2m_msgdma1.descriptor_slave' start='0x82024C0' end='0x82024D0' type='altera_msgdma.descriptor_slave' /><slave name='touch_cntrl.avalon_slave' start='0x82024D0' end='0x82024E0' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x82024E0' end='0x82024F0' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x82024F0' end='0x8202500' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='m2s_fifo_fir_r.in' start='0x8202500' end='0x8202508' type='altera_avalon_fifo.in' /><slave name='s2m_fifo_fir_r.out' start='0x8202508' end='0x8202510' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_ffth.out' start='0x8202510' end='0x8202518' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_fir_l.out' start='0x8202518' end='0x8202520' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_ffth.in' start='0x8202520' end='0x8202528' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_fir_l.in' start='0x8202528' end='0x8202530' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8202530' end='0x8202538' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x8000000' end='0x8200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='fir_r.avalon_slave_0' start='0x8200800' end='0x8201000' type='fir.avalon_slave_0' /><slave name='nios2.debug_mem_slave' start='0x8201000' end='0x8201800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_l.avalon_slave_0' start='0x8201800' end='0x8202000' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x8202000' end='0x8202400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x8202400' end='0x8202440' type='textmode_controller.avalon_slave' /><slave name='pio_0.s1' start='0x8202480' end='0x8202490' type='altera_avalon_pio.s1' /><slave name='altpll.pll_slave' start='0x8202490' end='0x82024A0' type='altpll.pll_slave' /><slave name='altpll_sram.pll_slave' start='0x82024A0' end='0x82024B0' type='altpll.pll_slave' /><slave name='touch_cntrl.avalon_slave' start='0x82024D0' end='0x82024E0' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x82024E0' end='0x82024F0' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x82024F0' end='0x8202500' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='m2s_fifo_fir_r.in' start='0x8202500' end='0x8202508' type='altera_avalon_fifo.in' /><slave name='s2m_fifo_fir_r.out' start='0x8202508' end='0x8202510' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_ffth.out' start='0x8202510' end='0x8202518' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_fir_l.out' start='0x8202518' end='0x8202520' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_ffth.in' start='0x8202520' end='0x8202528' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_fir_l.in' start='0x8202528' end='0x8202530' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8202530' end='0x8202538' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -1648,7 +1648,7 @@
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
   <parameter name="USE_FIX_ADDRESS_WIDTH" value="0" />
  </module>
- <module name="s2m_msgdma1" kind="altera_msgdma" version="18.1" enabled="1">
+ <module name="s2m_msgdma1" kind="altera_msgdma" version="18.1" enabled="0">
   <parameter name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_MAP" value="" />
   <parameter
      name="AUTO_DESCRIPTOR_READ_MASTER_ADDRESS_WIDTH"
@@ -2215,6 +2215,20 @@
    start="nios2.irq"
    end="s2m_msgdma0.csr_irq">
   <parameter name="irqNumber" value="5" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="18.1"
+   start="nios2.irq"
+   end="s2m_msgdma1.csr_irq">
+  <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="18.1"
+   start="nios2.irq"
+   end="m2s_msgdma1.csr_irq">
+  <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"

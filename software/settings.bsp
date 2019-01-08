@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jan 8, 2019 11:58:26 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1546945106820</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jan 8, 2019 8:47:23 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1546976843375</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -935,18 +935,6 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>m2s_msgdma1_csr</slaveDescriptor>
-                <addressRange>0x08202440 - 0x0820245F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>s2m_msgdma1_csr</slaveDescriptor>
-                <addressRange>0x08202460 - 0x0820247F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>pio_0</slaveDescriptor>
                 <addressRange>0x08202480 - 0x0820248F</addressRange>
                 <addressSpan>16</addressSpan>
@@ -961,18 +949,6 @@
         <MemoryMap>
                 <slaveDescriptor>altpll_sram</slaveDescriptor>
                 <addressRange>0x082024A0 - 0x082024AF</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>m2s_msgdma1_descriptor_slave</slaveDescriptor>
-                <addressRange>0x082024B0 - 0x082024BF</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>s2m_msgdma1_descriptor_slave</slaveDescriptor>
-                <addressRange>0x082024C0 - 0x082024CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>

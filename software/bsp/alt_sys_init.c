@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Tue Jan 08 11:58:27 CET 2019
+ * Generated: Tue Jan 08 20:47:24 CET 2019
  */
 
 /*
@@ -62,7 +62,6 @@
 #include "Altera_UP_SD_Card_Avalon_Interface.h"
 #include "altera_avalon_fifo.h"
 #include "altera_avalon_jtag_uart.h"
-#include "altera_msgdma.h"
 #include "altera_up_avalon_audio.h"
 #include "altera_up_avalon_audio_and_video_config.h"
 
@@ -78,8 +77,6 @@ ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FFTH, s2m_fifo_ffth);
 ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FIR_L, s2m_fifo_fir_l);
 ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FIR_R, s2m_fifo_fir_r);
 ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART, jtag_uart);
-ALTERA_MSGDMA_CSR_DESCRIPTOR_SLAVE_INSTANCE ( M2S_MSGDMA1, M2S_MSGDMA1_CSR, M2S_MSGDMA1_DESCRIPTOR_SLAVE, m2s_msgdma1);
-ALTERA_MSGDMA_CSR_DESCRIPTOR_SLAVE_INSTANCE ( S2M_MSGDMA1, S2M_MSGDMA1_CSR, S2M_MSGDMA1_DESCRIPTOR_SLAVE, s2m_msgdma1);
 ALTERA_UP_AVALON_AUDIO_AND_VIDEO_CONFIG_INSTANCE ( AV_CONFIG, av_config);
 ALTERA_UP_AVALON_AUDIO_INSTANCE ( AUDIO, audio);
 ALTERA_UP_SD_CARD_AVALON_INTERFACE_INSTANCE ( SDCARD_INTERFACE, sdcard_interface);
@@ -112,8 +109,6 @@ void alt_sys_init( void )
     ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FIR_L, s2m_fifo_fir_l);
     ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FIR_R, s2m_fifo_fir_r);
     ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART, jtag_uart);
-    ALTERA_MSGDMA_INIT ( M2S_MSGDMA1, m2s_msgdma1);
-    ALTERA_MSGDMA_INIT ( S2M_MSGDMA1, s2m_msgdma1);
     ALTERA_UP_AVALON_AUDIO_AND_VIDEO_CONFIG_INIT ( AV_CONFIG, av_config);
     ALTERA_UP_AVALON_AUDIO_INIT ( AUDIO, audio);
     ALTERA_UP_SD_CARD_AVALON_INTERFACE_INIT ( SDCARD_INTERFACE, sdcard_interface);

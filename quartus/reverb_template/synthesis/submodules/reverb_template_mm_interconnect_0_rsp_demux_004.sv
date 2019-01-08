@@ -28,8 +28,8 @@
 // ------------------------------------------
 // Generation parameters:
 //   output_name:         reverb_template_mm_interconnect_0_rsp_demux_004
-//   ST_DATA_W:           110
-//   ST_CHANNEL_W:        24
+//   ST_DATA_W:           108
+//   ST_CHANNEL_W:        20
 //   NUM_OUTPUTS:         1
 //   VALID_WIDTH:         1
 // ------------------------------------------
@@ -46,8 +46,8 @@ module reverb_template_mm_interconnect_0_rsp_demux_004
     // Sink
     // -------------------
     input  [1-1      : 0]   sink_valid,
-    input  [110-1    : 0]   sink_data, // ST_DATA_W=110
-    input  [24-1 : 0]   sink_channel, // ST_CHANNEL_W=24
+    input  [108-1    : 0]   sink_data, // ST_DATA_W=108
+    input  [20-1 : 0]   sink_channel, // ST_CHANNEL_W=20
     input                         sink_startofpacket,
     input                         sink_endofpacket,
     output                        sink_ready,
@@ -56,8 +56,8 @@ module reverb_template_mm_interconnect_0_rsp_demux_004
     // Sources 
     // -------------------
     output reg                      src0_valid,
-    output reg [110-1    : 0] src0_data, // ST_DATA_W=110
-    output reg [24-1 : 0] src0_channel, // ST_CHANNEL_W=24
+    output reg [108-1    : 0] src0_data, // ST_DATA_W=108
+    output reg [20-1 : 0] src0_channel, // ST_CHANNEL_W=20
     output reg                      src0_startofpacket,
     output reg                      src0_endofpacket,
     input                           src0_ready,
@@ -94,7 +94,7 @@ module reverb_template_mm_interconnect_0_rsp_demux_004
     // -------------------
     assign ready_vector[0] = src0_ready;
 
-    assign sink_ready = |(sink_channel & {{23{1'b0}},{ready_vector[NUM_OUTPUTS - 1 : 0]}});
+    assign sink_ready = |(sink_channel & {{19{1'b0}},{ready_vector[NUM_OUTPUTS - 1 : 0]}});
 
 endmodule
 
