@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jan 4, 2019 5:48:47 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1546620527992</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jan 8, 2019 11:58:26 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1546945106820</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
-        <BspSettingsFile>/homes/h01325347/TILAB/maintask/software/settings.bsp</BspSettingsFile>
+        <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios2</Cpu>
@@ -900,79 +900,139 @@
         </Setting>
         <MemoryMap>
                 <slaveDescriptor>sdram</slaveDescriptor>
-                <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>
+                <addressRange>0x00000000 - 0x07FFFFFF</addressRange>
                 <addressSpan>134217728</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sram_0</slaveDescriptor>
-                <addressRange>0x10000000 - 0x101FFFFF</addressRange>
+                <addressRange>0x08000000 - 0x081FFFFF</addressRange>
                 <addressSpan>2097152</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>fir_0</slaveDescriptor>
-                <addressRange>0x10201000 - 0x102017FF</addressRange>
+                <slaveDescriptor>fir_r</slaveDescriptor>
+                <addressRange>0x08200800 - 0x08200FFF</addressRange>
+                <addressSpan>2048</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>fir_l</slaveDescriptor>
+                <addressRange>0x08201800 - 0x08201FFF</addressRange>
                 <addressSpan>2048</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sdcard_interface</slaveDescriptor>
-                <addressRange>0x10201800 - 0x10201BFF</addressRange>
+                <addressRange>0x08202000 - 0x082023FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>textmode_controller</slaveDescriptor>
-                <addressRange>0x10201C00 - 0x10201C3F</addressRange>
+                <addressRange>0x08202400 - 0x0820243F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>altpll_sram</slaveDescriptor>
-                <addressRange>0x10201C40 - 0x10201C4F</addressRange>
+                <slaveDescriptor>m2s_msgdma1_csr</slaveDescriptor>
+                <addressRange>0x08202440 - 0x0820245F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>s2m_msgdma1_csr</slaveDescriptor>
+                <addressRange>0x08202460 - 0x0820247F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>pio_0</slaveDescriptor>
+                <addressRange>0x08202480 - 0x0820248F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>altpll</slaveDescriptor>
-                <addressRange>0x10201C50 - 0x10201C5F</addressRange>
+                <addressRange>0x08202490 - 0x0820249F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>altpll_sram</slaveDescriptor>
+                <addressRange>0x082024A0 - 0x082024AF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>m2s_msgdma1_descriptor_slave</slaveDescriptor>
+                <addressRange>0x082024B0 - 0x082024BF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>s2m_msgdma1_descriptor_slave</slaveDescriptor>
+                <addressRange>0x082024C0 - 0x082024CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>touch_cntrl</slaveDescriptor>
-                <addressRange>0x10201C60 - 0x10201C6F</addressRange>
+                <addressRange>0x082024D0 - 0x082024DF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>av_config</slaveDescriptor>
-                <addressRange>0x10201C70 - 0x10201C7F</addressRange>
+                <addressRange>0x082024E0 - 0x082024EF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>audio</slaveDescriptor>
-                <addressRange>0x10201C80 - 0x10201C8F</addressRange>
+                <addressRange>0x082024F0 - 0x082024FF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>m2s_fifo0</slaveDescriptor>
-                <addressRange>0x10201C90 - 0x10201C97</addressRange>
+                <slaveDescriptor>m2s_fifo_fir_r</slaveDescriptor>
+                <addressRange>0x08202500 - 0x08202507</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>s2m_fifo0</slaveDescriptor>
-                <addressRange>0x10201C98 - 0x10201C9F</addressRange>
+                <slaveDescriptor>s2m_fifo_fir_r</slaveDescriptor>
+                <addressRange>0x08202508 - 0x0820250F</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>s2m_fifo_ffth</slaveDescriptor>
+                <addressRange>0x08202510 - 0x08202517</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>s2m_fifo_fir_l</slaveDescriptor>
+                <addressRange>0x08202518 - 0x0820251F</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>m2s_fifo_ffth</slaveDescriptor>
+                <addressRange>0x08202520 - 0x08202527</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>m2s_fifo_fir_l</slaveDescriptor>
+                <addressRange>0x08202528 - 0x0820252F</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x10201CA0 - 0x10201CA7</addressRange>
+                <addressRange>0x08202530 - 0x08202537</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>

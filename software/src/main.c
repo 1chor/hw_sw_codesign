@@ -24,7 +24,7 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (0)
+#define FIR_HW (1)
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -542,17 +542,26 @@ void test()
     
     printf( "fir\n" );
     
-    // wird fuer das setup benoetigt.
+    #if defined( FIR_HW ) // Hardware FIR
+		
+		fir_filter_setup_hw( ir, 0 ); // init FIR filter for left channel
+		fir_filter_setup_hw( ir, 1 ); // init FIR filter for right channel
     
-    uint16_t* fir_h_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-    uint16_t* fir_h_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+    #else // Software FIR
+		
+		// wird fuer das setup benoetigt.
+		
+		uint16_t* fir_h_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		uint16_t* fir_h_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		
+		// wird unten bei dem endless loop als shift reg verwendet.
+		
+		uint16_t* fir_i_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		uint16_t* fir_i_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		
+		fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
-    // wird unten bei dem endless loop als shift reg verwendet.
-    
-    uint16_t* fir_i_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-    uint16_t* fir_i_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-    
-    fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
+    #endif
     
     // wird auch bei dem endless loop verwendet.
     
@@ -645,46 +654,69 @@ void test()
         
         // fir
         
-        // wie ein shiftregister werden die samples weiter geschoben
-        // und das neue hinten dran gehaengt.
         
-        for ( j = 1; j < 512; j++ )
-        {
-            fir_i_1[j-1] = fir_i_1[j];
-            fir_i_2[j-1] = fir_i_2[j];
-        }
         
-        fir_i_1[511] = l_buf;
-        fir_i_2[511] = r_buf;
+        #if defined( FIR_HW ) // Hardware FIR
         
-        // zur sicherheit werden die sample results auf 0 gesetzt.
+			// zur sicherheit werden die sample results auf 0 gesetzt.
+			
+			sample_result_1 = 0;
+			sample_result_2 = 0;
+			
+			// die neuen results werden berechnet.
+			
+			fir_filter_sample_hw
+			(
+				 &sample_result_1
+				,&sample_result_2
+				,(uint32_t)l_buf
+				,(uint32_t)r_buf
+			);
         
-        sample_result_1 = 0;
-        sample_result_2 = 0;
+         #else // Software FIR
+			
+			// wie ein shiftregister werden die samples weiter geschoben
+			// und das neue hinten dran gehaengt.
         
-        // die neuen results werden berechnet.
-        // da es keinen bestimmten speicher fuer den fir gibt wird alles
-        // als pointer uebergeben.
+			for ( j = 1; j < 512; j++ )
+			{
+				fir_i_1[j-1] = fir_i_1[j];
+				fir_i_2[j-1] = fir_i_2[j];
+			}
+			
+			fir_i_1[511] = l_buf;
+			fir_i_2[511] = r_buf;
+			
+			// zur sicherheit werden die sample results auf 0 gesetzt.
+			
+			sample_result_1 = 0;
+			sample_result_2 = 0;
+			
+			// die neuen results werden berechnet.
+			// da es keinen bestimmten speicher fuer den fir gibt wird alles
+			// als pointer uebergeben.
+			
+			fir_filter_sample_sw
+			(
+				 &sample_result_1
+				,&sample_result_2
+				,fir_i_1
+				,fir_i_2
+				,fir_h_1
+				,fir_h_2
+			);
         
-        fir_filter_sample_sw
-        (
-             &sample_result_1
-            ,&sample_result_2
-            ,fir_i_1
-            ,fir_i_2
-            ,fir_h_1
-            ,fir_h_2
-        );
+        #endif
         
         // die neuen fir filter samples werden an den output addiert.
         // das ganze casten dient zur vermeidung von fehlern und ist
         // wahrscheinlich nicht noetig.
         
-        uint16_t sample_result_16_1 = (uint16_t)(sample_result_1>>15);
-        uint16_t sample_result_16_2 = (uint16_t)(sample_result_2>>15);
+        int16_t sample_result_16_1 = (int16_t)(sample_result_1>>15);
+        int16_t sample_result_16_2 = (int16_t)(sample_result_2>>15);
         
-        output_buffer_header_1[sample_counter] = (int16_t)output_buffer_header_1[sample_counter] + (int16_t)sample_result_16_1;
-        output_buffer_header_2[sample_counter] = (int16_t)output_buffer_header_2[sample_counter] + (int16_t)sample_result_16_2;
+        output_buffer_header_1[sample_counter] = (int16_t)output_buffer_header_1[sample_counter] + sample_result_16_1;
+        output_buffer_header_2[sample_counter] = (int16_t)output_buffer_header_2[sample_counter] + sample_result_16_2;
         
         // wir haben einen ganzen block
         

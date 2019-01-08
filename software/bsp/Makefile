@@ -101,7 +101,7 @@ ACDS_VERSION := 18.1
 # BUILD_NUMBER: 625
 
 SETTINGS_FILE := ../settings.bsp
-SOPC_FILE := /homes/h01325347/TILAB/maintask/quartus/reverb_template.sopcinfo
+SOPC_FILE := ../../quartus/reverb_template.sopcinfo
 
 #-------------------------------------------------------------------------------
 #                             TOOL & COMMAND DEFINITIONS
@@ -247,6 +247,17 @@ altera_avalon_jtag_uart_driver_C_LIB_SRCS := \
 	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_ioctl.c \
 	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_fd.c
 
+# altera_avalon_pio_driver sources root 
+altera_avalon_pio_driver_SRCS_ROOT := drivers
+
+# altera_avalon_pio_driver sources 
+# altera_msgdma_driver sources root 
+altera_msgdma_driver_SRCS_ROOT := drivers
+
+# altera_msgdma_driver sources 
+altera_msgdma_driver_C_LIB_SRCS := \
+	$(altera_msgdma_driver_SRCS_ROOT)/src/altera_msgdma.c
+
 # altera_nios2_gen2_hal_driver sources root 
 altera_nios2_gen2_hal_driver_SRCS_ROOT := HAL
 
@@ -351,6 +362,7 @@ COMPONENT_C_LIB_SRCS += \
 	$(Avalon_Audio_driver_C_LIB_SRCS) \
 	$(altera_avalon_fifo_driver_C_LIB_SRCS) \
 	$(altera_avalon_jtag_uart_driver_C_LIB_SRCS) \
+	$(altera_msgdma_driver_C_LIB_SRCS) \
 	$(altera_nios2_gen2_hal_driver_C_LIB_SRCS) \
 	$(hal_C_LIB_SRCS)
 

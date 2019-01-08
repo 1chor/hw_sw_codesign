@@ -1,9 +1,9 @@
 # memory.gdb - GDB memory region definitions
 #
 # Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
-# SOPC Builder design path: /homes/h01325347/TILAB/maintask/quartus/reverb_template.sopcinfo
+# SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
 #
-# Generated: Fri Jan 04 17:48:48 CET 2019
+# Generated: Tue Jan 08 11:58:27 CET 2019
 
 # DO NOT MODIFY THIS FILE
 #
@@ -47,4 +47,4 @@
 # by allowing GDB to cache memory contents on the host.
 
 # sdram
-memory 0x8000000 0x10000000 cache
+memory 0x0 0x8000000 cache

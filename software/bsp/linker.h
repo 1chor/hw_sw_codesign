@@ -2,9 +2,9 @@
  * linker.h - Linker script mapping information
  *
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
- * SOPC Builder design path: /homes/h01325347/TILAB/maintask/quartus/reverb_template.sopcinfo
+ * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Fri Jan 04 17:48:48 CET 2019
+ * Generated: Tue Jan 08 11:58:27 CET 2019
  */
 
 /*
@@ -65,9 +65,9 @@
  *
  */
 
-#define RESET_REGION_BASE 0x8000000
+#define RESET_REGION_BASE 0x0
 #define RESET_REGION_SPAN 32
-#define SDRAM_REGION_BASE 0x8000020
+#define SDRAM_REGION_BASE 0x20
 #define SDRAM_REGION_SPAN 134217696
 
 

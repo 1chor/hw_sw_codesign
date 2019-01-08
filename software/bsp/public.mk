@@ -86,7 +86,7 @@ ACDS_VERSION := 18.1
 
 # Qsys--generated SOPCINFO file. Required for resolving node instance ID's with 
 # design component names. 
-SOPCINFO_FILE := /homes/h01325347/TILAB/maintask/quartus/reverb_template.sopcinfo
+SOPCINFO_FILE := $(ABS_BSP_ROOT_DIR)/../../quartus/reverb_template.sopcinfo
 
 # Big-Endian operation. 
 # setting BIG_ENDIAN is false

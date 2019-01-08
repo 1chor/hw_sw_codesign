@@ -26,8 +26,8 @@ void fir_filter_sample_hw
 (
      int32_t* sample_result_1
     ,int32_t* sample_result_2
-    ,uint16_t* i_samples_1
-    ,uint16_t* i_samples_2
+    ,uint32_t new_sample_1
+    ,uint32_t new_sample_2
 );
 
 #endif

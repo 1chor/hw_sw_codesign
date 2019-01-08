@@ -2,9 +2,9 @@
  * linker.x - Linker script
  *
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
- * SOPC Builder design path: /homes/h01325347/TILAB/maintask/quartus/reverb_template.sopcinfo
+ * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Fri Jan 04 17:48:48 CET 2019
+ * Generated: Tue Jan 08 11:58:27 CET 2019
  */
 
 /*
@@ -50,12 +50,12 @@
 
 MEMORY
 {
-    reset : ORIGIN = 0x8000000, LENGTH = 32
-    sdram : ORIGIN = 0x8000020, LENGTH = 134217696
+    reset : ORIGIN = 0x0, LENGTH = 32
+    sdram : ORIGIN = 0x20, LENGTH = 134217696
 }
 
 /* Define symbols for each memory base-address */
-__alt_mem_sdram = 0x8000000;
+__alt_mem_sdram = 0x0;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
@@ -367,7 +367,7 @@ SECTIONS
 /*
  * Don't override this, override the __alt_stack_* symbols instead.
  */
-__alt_data_end = 0x10000000;
+__alt_data_end = 0x8000000;
 
 /*
  * The next two symbols define the location of the default stack.  You can
@@ -383,4 +383,4 @@ PROVIDE( __alt_stack_limit   = __alt_stack_base );
  * Override this symbol to put the heap in a different memory.
  */
 PROVIDE( __alt_heap_start    = end );
-PROVIDE( __alt_heap_limit    = 0x10000000 );
+PROVIDE( __alt_heap_limit    = 0x8000000 );
