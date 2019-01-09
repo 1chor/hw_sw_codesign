@@ -156,6 +156,7 @@ begin
 				stin_ready <= '1'; -- Ready for Input
 								
 				if stin_valid = '1' then
+					stin_ready <= '0'; --Activate for simulation
 					data_write <= '1';
 					
 					coeff_read <= '1';

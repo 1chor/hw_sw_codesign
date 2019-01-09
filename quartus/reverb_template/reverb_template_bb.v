@@ -12,9 +12,6 @@ module reverb_template (
 	clk_125_clk,
 	clk_25_clk,
 	clk_2p5_clk,
-	fft_wrapper_body_0_external_connection_export,
-	fft_wrapper_header_0_external_connection_export,
-	pio_0_external_connection_export,
 	reset_reset_n,
 	sdcard_b_SD_cmd,
 	sdcard_b_SD_dat,
@@ -62,9 +59,6 @@ module reverb_template (
 	output		clk_125_clk;
 	output		clk_25_clk;
 	output		clk_2p5_clk;
-	input		fft_wrapper_body_0_external_connection_export;
-	input		fft_wrapper_header_0_external_connection_export;
-	output	[1:0]	pio_0_external_connection_export;
 	input		reset_reset_n;
 	inout		sdcard_b_SD_cmd;
 	inout		sdcard_b_SD_dat;

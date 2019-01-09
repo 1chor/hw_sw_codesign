@@ -8,55 +8,52 @@ use IEEE.numeric_std.all;
 
 entity reverb_template is
 	port (
-		audio_ADCDAT                                    : in    std_logic                     := '0';             --                                    audio.ADCDAT
-		audio_ADCLRCK                                   : in    std_logic                     := '0';             --                                         .ADCLRCK
-		audio_BCLK                                      : in    std_logic                     := '0';             --                                         .BCLK
-		audio_DACDAT                                    : out   std_logic;                                        --                                         .DACDAT
-		audio_DACLRCK                                   : in    std_logic                     := '0';             --                                         .DACLRCK
-		audio_clk_clk                                   : out   std_logic;                                        --                                audio_clk.clk
-		audio_config_SDAT                               : inout std_logic                     := '0';             --                             audio_config.SDAT
-		audio_config_SCLK                               : out   std_logic;                                        --                                         .SCLK
-		clk_clk                                         : in    std_logic                     := '0';             --                                      clk.clk
-		clk_125_clk                                     : out   std_logic;                                        --                                  clk_125.clk
-		clk_25_clk                                      : out   std_logic;                                        --                                   clk_25.clk
-		clk_2p5_clk                                     : out   std_logic;                                        --                                  clk_2p5.clk
-		fft_wrapper_body_0_external_connection_export   : in    std_logic                     := '0';             --   fft_wrapper_body_0_external_connection.export
-		fft_wrapper_header_0_external_connection_export : in    std_logic                     := '0';             -- fft_wrapper_header_0_external_connection.export
-		pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);                     --                pio_0_external_connection.export
-		reset_reset_n                                   : in    std_logic                     := '0';             --                                    reset.reset_n
-		sdcard_b_SD_cmd                                 : inout std_logic                     := '0';             --                                   sdcard.b_SD_cmd
-		sdcard_b_SD_dat                                 : inout std_logic                     := '0';             --                                         .b_SD_dat
-		sdcard_b_SD_dat3                                : inout std_logic                     := '0';             --                                         .b_SD_dat3
-		sdcard_o_SD_clock                               : out   std_logic;                                        --                                         .o_SD_clock
-		sdram_addr                                      : out   std_logic_vector(12 downto 0);                    --                                    sdram.addr
-		sdram_ba                                        : out   std_logic_vector(1 downto 0);                     --                                         .ba
-		sdram_cas_n                                     : out   std_logic;                                        --                                         .cas_n
-		sdram_cke                                       : out   std_logic;                                        --                                         .cke
-		sdram_cs_n                                      : out   std_logic;                                        --                                         .cs_n
-		sdram_dq                                        : inout std_logic_vector(31 downto 0) := (others => '0'); --                                         .dq
-		sdram_dqm                                       : out   std_logic_vector(3 downto 0);                     --                                         .dqm
-		sdram_ras_n                                     : out   std_logic;                                        --                                         .ras_n
-		sdram_we_n                                      : out   std_logic;                                        --                                         .we_n
-		sdram_clk_clk                                   : out   std_logic;                                        --                                sdram_clk.clk
-		sram_DQ                                         : inout std_logic_vector(15 downto 0) := (others => '0'); --                                     sram.DQ
-		sram_ADDR                                       : out   std_logic_vector(19 downto 0);                    --                                         .ADDR
-		sram_LB_N                                       : out   std_logic;                                        --                                         .LB_N
-		sram_UB_N                                       : out   std_logic;                                        --                                         .UB_N
-		sram_CE_N                                       : out   std_logic;                                        --                                         .CE_N
-		sram_OE_N                                       : out   std_logic;                                        --                                         .OE_N
-		sram_WE_N                                       : out   std_logic;                                        --                                         .WE_N
-		textmode_b                                      : out   std_logic_vector(7 downto 0);                     --                                 textmode.b
-		textmode_den                                    : out   std_logic;                                        --                                         .den
-		textmode_g                                      : out   std_logic_vector(7 downto 0);                     --                                         .g
-		textmode_hd                                     : out   std_logic;                                        --                                         .hd
-		textmode_r                                      : out   std_logic_vector(7 downto 0);                     --                                         .r
-		textmode_vd                                     : out   std_logic;                                        --                                         .vd
-		textmode_grest                                  : out   std_logic;                                        --                                         .grest
-		touch_cntrl_ext_adc_cs                          : out   std_logic;                                        --                          touch_cntrl_ext.adc_cs
-		touch_cntrl_ext_adc_dclk                        : out   std_logic;                                        --                                         .adc_dclk
-		touch_cntrl_ext_adc_din                         : out   std_logic;                                        --                                         .adc_din
-		touch_cntrl_ext_adc_dout                        : in    std_logic                     := '0';             --                                         .adc_dout
-		touch_cntrl_ext_adc_penirq_n                    : in    std_logic                     := '0'              --                                         .adc_penirq_n
+		audio_ADCDAT                 : in    std_logic                     := '0';             --           audio.ADCDAT
+		audio_ADCLRCK                : in    std_logic                     := '0';             --                .ADCLRCK
+		audio_BCLK                   : in    std_logic                     := '0';             --                .BCLK
+		audio_DACDAT                 : out   std_logic;                                        --                .DACDAT
+		audio_DACLRCK                : in    std_logic                     := '0';             --                .DACLRCK
+		audio_clk_clk                : out   std_logic;                                        --       audio_clk.clk
+		audio_config_SDAT            : inout std_logic                     := '0';             --    audio_config.SDAT
+		audio_config_SCLK            : out   std_logic;                                        --                .SCLK
+		clk_clk                      : in    std_logic                     := '0';             --             clk.clk
+		clk_125_clk                  : out   std_logic;                                        --         clk_125.clk
+		clk_25_clk                   : out   std_logic;                                        --          clk_25.clk
+		clk_2p5_clk                  : out   std_logic;                                        --         clk_2p5.clk
+		reset_reset_n                : in    std_logic                     := '0';             --           reset.reset_n
+		sdcard_b_SD_cmd              : inout std_logic                     := '0';             --          sdcard.b_SD_cmd
+		sdcard_b_SD_dat              : inout std_logic                     := '0';             --                .b_SD_dat
+		sdcard_b_SD_dat3             : inout std_logic                     := '0';             --                .b_SD_dat3
+		sdcard_o_SD_clock            : out   std_logic;                                        --                .o_SD_clock
+		sdram_addr                   : out   std_logic_vector(12 downto 0);                    --           sdram.addr
+		sdram_ba                     : out   std_logic_vector(1 downto 0);                     --                .ba
+		sdram_cas_n                  : out   std_logic;                                        --                .cas_n
+		sdram_cke                    : out   std_logic;                                        --                .cke
+		sdram_cs_n                   : out   std_logic;                                        --                .cs_n
+		sdram_dq                     : inout std_logic_vector(31 downto 0) := (others => '0'); --                .dq
+		sdram_dqm                    : out   std_logic_vector(3 downto 0);                     --                .dqm
+		sdram_ras_n                  : out   std_logic;                                        --                .ras_n
+		sdram_we_n                   : out   std_logic;                                        --                .we_n
+		sdram_clk_clk                : out   std_logic;                                        --       sdram_clk.clk
+		sram_DQ                      : inout std_logic_vector(15 downto 0) := (others => '0'); --            sram.DQ
+		sram_ADDR                    : out   std_logic_vector(19 downto 0);                    --                .ADDR
+		sram_LB_N                    : out   std_logic;                                        --                .LB_N
+		sram_UB_N                    : out   std_logic;                                        --                .UB_N
+		sram_CE_N                    : out   std_logic;                                        --                .CE_N
+		sram_OE_N                    : out   std_logic;                                        --                .OE_N
+		sram_WE_N                    : out   std_logic;                                        --                .WE_N
+		textmode_b                   : out   std_logic_vector(7 downto 0);                     --        textmode.b
+		textmode_den                 : out   std_logic;                                        --                .den
+		textmode_g                   : out   std_logic_vector(7 downto 0);                     --                .g
+		textmode_hd                  : out   std_logic;                                        --                .hd
+		textmode_r                   : out   std_logic_vector(7 downto 0);                     --                .r
+		textmode_vd                  : out   std_logic;                                        --                .vd
+		textmode_grest               : out   std_logic;                                        --                .grest
+		touch_cntrl_ext_adc_cs       : out   std_logic;                                        -- touch_cntrl_ext.adc_cs
+		touch_cntrl_ext_adc_dclk     : out   std_logic;                                        --                .adc_dclk
+		touch_cntrl_ext_adc_din      : out   std_logic;                                        --                .adc_din
+		touch_cntrl_ext_adc_dout     : in    std_logic                     := '0';             --                .adc_dout
+		touch_cntrl_ext_adc_penirq_n : in    std_logic                     := '0'              --                .adc_penirq_n
 	);
 end entity reverb_template;
 
@@ -158,42 +155,6 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_av_config;
 
-	component fft_wrapper_body is
-		port (
-			clk         : in  std_logic                     := 'X';             -- clk
-			reset_n     : in  std_logic                     := 'X';             -- reset_n
-			stout_data  : out std_logic_vector(31 downto 0);                    -- data
-			stout_empty : out std_logic_vector(1 downto 0);                     -- empty
-			stout_eop   : out std_logic;                                        -- endofpacket
-			stout_error : out std_logic_vector(1 downto 0);                     -- error
-			stout_ready : in  std_logic                     := 'X';             -- ready
-			stout_sop   : out std_logic;                                        -- startofpacket
-			stout_valid : out std_logic;                                        -- valid
-			stin_data   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- data
-			stin_valid  : in  std_logic                     := 'X';             -- valid
-			stin_ready  : out std_logic;                                        -- ready
-			stin_sop    : in  std_logic                     := 'X';             -- startofpacket
-			stin_eop    : in  std_logic                     := 'X';             -- endofpacket
-			stin_empty  : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- empty
-			stin_error  : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- error
-			inverse     : in  std_logic                     := 'X'              -- export
-		);
-	end component fft_wrapper_body;
-
-	component fft_wrapper_header is
-		port (
-			clk         : in  std_logic                     := 'X';             -- clk
-			reset_n     : in  std_logic                     := 'X';             -- reset_n
-			stin_data   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- data
-			stin_valid  : in  std_logic                     := 'X';             -- valid
-			stin_ready  : out std_logic;                                        -- ready
-			stout_data  : out std_logic_vector(31 downto 0);                    -- data
-			stout_ready : in  std_logic                     := 'X';             -- ready
-			stout_valid : out std_logic;                                        -- valid
-			inverse     : in  std_logic                     := 'X'              -- export
-		);
-	end component fft_wrapper_header;
-
 	component fir is
 		generic (
 			NUM_COEFFICIENTS : positive := 512;
@@ -232,7 +193,7 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_jtag_uart;
 
-	component reverb_template_m2s_fifo_ffth is
+	component reverb_template_m2s_fifo_fir_l is
 		port (
 			wrclock                          : in  std_logic                     := 'X';             -- clk
 			reset_n                          : in  std_logic                     := 'X';             -- reset_n
@@ -244,7 +205,7 @@ architecture rtl of reverb_template is
 			avalonst_source_data             : out std_logic_vector(31 downto 0);                    -- data
 			avalonst_source_ready            : in  std_logic                     := 'X'              -- ready
 		);
-	end component reverb_template_m2s_fifo_ffth;
+	end component reverb_template_m2s_fifo_fir_l;
 
 	component reverb_template_nios2 is
 		port (
@@ -278,20 +239,7 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_nios2;
 
-	component reverb_template_pio_0 is
-		port (
-			clk        : in  std_logic                     := 'X';             -- clk
-			reset_n    : in  std_logic                     := 'X';             -- reset_n
-			address    : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- address
-			write_n    : in  std_logic                     := 'X';             -- write_n
-			writedata  : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			chipselect : in  std_logic                     := 'X';             -- chipselect
-			readdata   : out std_logic_vector(31 downto 0);                    -- readdata
-			out_port   : out std_logic_vector(1 downto 0)                      -- export
-		);
-	end component reverb_template_pio_0;
-
-	component reverb_template_s2m_fifo_ffth is
+	component reverb_template_s2m_fifo_fir_l is
 		port (
 			wrclock                         : in  std_logic                     := 'X';             -- clk
 			reset_n                         : in  std_logic                     := 'X';             -- reset_n
@@ -303,7 +251,7 @@ architecture rtl of reverb_template is
 			avalonmm_read_slave_address     : in  std_logic                     := 'X';             -- address
 			avalonmm_read_slave_waitrequest : out std_logic                                         -- waitrequest
 		);
-	end component reverb_template_s2m_fifo_ffth;
+	end component reverb_template_s2m_fifo_fir_l;
 
 	component Altera_UP_SD_Card_Avalon_Interface is
 		port (
@@ -481,10 +429,6 @@ architecture rtl of reverb_template is
 			jtag_uart_avalon_jtag_slave_writedata                    : out std_logic_vector(31 downto 0);                    -- writedata
 			jtag_uart_avalon_jtag_slave_waitrequest                  : in  std_logic                     := 'X';             -- waitrequest
 			jtag_uart_avalon_jtag_slave_chipselect                   : out std_logic;                                        -- chipselect
-			m2s_fifo_ffth_in_address                                 : out std_logic_vector(0 downto 0);                     -- address
-			m2s_fifo_ffth_in_write                                   : out std_logic;                                        -- write
-			m2s_fifo_ffth_in_writedata                               : out std_logic_vector(31 downto 0);                    -- writedata
-			m2s_fifo_ffth_in_waitrequest                             : in  std_logic                     := 'X';             -- waitrequest
 			m2s_fifo_fir_l_in_address                                : out std_logic_vector(0 downto 0);                     -- address
 			m2s_fifo_fir_l_in_write                                  : out std_logic;                                        -- write
 			m2s_fifo_fir_l_in_writedata                              : out std_logic_vector(31 downto 0);                    -- writedata
@@ -501,15 +445,6 @@ architecture rtl of reverb_template is
 			nios2_debug_mem_slave_byteenable                         : out std_logic_vector(3 downto 0);                     -- byteenable
 			nios2_debug_mem_slave_waitrequest                        : in  std_logic                     := 'X';             -- waitrequest
 			nios2_debug_mem_slave_debugaccess                        : out std_logic;                                        -- debugaccess
-			pio_0_s1_address                                         : out std_logic_vector(1 downto 0);                     -- address
-			pio_0_s1_write                                           : out std_logic;                                        -- write
-			pio_0_s1_readdata                                        : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			pio_0_s1_writedata                                       : out std_logic_vector(31 downto 0);                    -- writedata
-			pio_0_s1_chipselect                                      : out std_logic;                                        -- chipselect
-			s2m_fifo_ffth_out_address                                : out std_logic_vector(0 downto 0);                     -- address
-			s2m_fifo_ffth_out_read                                   : out std_logic;                                        -- read
-			s2m_fifo_ffth_out_readdata                               : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			s2m_fifo_ffth_out_waitrequest                            : in  std_logic                     := 'X';             -- waitrequest
 			s2m_fifo_fir_l_out_address                               : out std_logic_vector(0 downto 0);                     -- address
 			s2m_fifo_fir_l_out_read                                  : out std_logic;                                        -- read
 			s2m_fifo_fir_l_out_readdata                              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
@@ -611,7 +546,7 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_avalon_st_adapter;
 
-	component reverb_template_avalon_st_adapter_003 is
+	component reverb_template_avalon_st_adapter_002 is
 		generic (
 			inBitsPerSymbol : integer := 8;
 			inUsePackets    : integer := 0;
@@ -640,7 +575,7 @@ architecture rtl of reverb_template is
 			out_0_valid    : out std_logic;                                        -- valid
 			out_0_ready    : in  std_logic                     := 'X'              -- ready
 		);
-	end component reverb_template_avalon_st_adapter_003;
+	end component reverb_template_avalon_st_adapter_002;
 
 	component reverb_template_rst_controller is
 		generic (
@@ -774,7 +709,7 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_rst_controller_001;
 
-	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, avalon_st_adapter_004:in_clk_0_clk, avalon_st_adapter_005:in_clk_0_clk, fft_wrapper_body_0:clk, fft_wrapper_header_0:clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_ffth:wrclock, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, pio_0:clk, rst_controller_002:clk, rst_controller_003:clk, s2m_fifo_ffth:wrclock, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
+	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, rst_controller_002:clk, rst_controller_003:clk, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
 	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [mm_interconnect_0:altpll_sram_c0_clk, rst_controller_004:clk, sram_0:clk]
 	signal altpll_c2_clk                                                      : std_logic;                     -- altpll:c2 -> [clk_25_clk, irq_synchronizer_001:receiver_clk, mm_interconnect_0:altpll_c2_clk, rst_controller_005:clk, textmode_controller:clk]
 	signal nios2_data_master_readdata                                         : std_logic_vector(31 downto 0); -- mm_interconnect_0:nios2_data_master_readdata -> nios2:d_readdata
@@ -857,10 +792,6 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_m2s_fifo_fir_l_in_address                        : std_logic_vector(0 downto 0);  -- mm_interconnect_0:m2s_fifo_fir_l_in_address -> m2s_fifo_fir_l:avalonmm_write_slave_address
 	signal mm_interconnect_0_m2s_fifo_fir_l_in_write                          : std_logic;                     -- mm_interconnect_0:m2s_fifo_fir_l_in_write -> m2s_fifo_fir_l:avalonmm_write_slave_write
 	signal mm_interconnect_0_m2s_fifo_fir_l_in_writedata                      : std_logic_vector(31 downto 0); -- mm_interconnect_0:m2s_fifo_fir_l_in_writedata -> m2s_fifo_fir_l:avalonmm_write_slave_writedata
-	signal mm_interconnect_0_m2s_fifo_ffth_in_waitrequest                     : std_logic;                     -- m2s_fifo_ffth:avalonmm_write_slave_waitrequest -> mm_interconnect_0:m2s_fifo_ffth_in_waitrequest
-	signal mm_interconnect_0_m2s_fifo_ffth_in_address                         : std_logic_vector(0 downto 0);  -- mm_interconnect_0:m2s_fifo_ffth_in_address -> m2s_fifo_ffth:avalonmm_write_slave_address
-	signal mm_interconnect_0_m2s_fifo_ffth_in_write                           : std_logic;                     -- mm_interconnect_0:m2s_fifo_ffth_in_write -> m2s_fifo_ffth:avalonmm_write_slave_write
-	signal mm_interconnect_0_m2s_fifo_ffth_in_writedata                       : std_logic_vector(31 downto 0); -- mm_interconnect_0:m2s_fifo_ffth_in_writedata -> m2s_fifo_ffth:avalonmm_write_slave_writedata
 	signal mm_interconnect_0_m2s_fifo_fir_r_in_waitrequest                    : std_logic;                     -- m2s_fifo_fir_r:avalonmm_write_slave_waitrequest -> mm_interconnect_0:m2s_fifo_fir_r_in_waitrequest
 	signal mm_interconnect_0_m2s_fifo_fir_r_in_address                        : std_logic_vector(0 downto 0);  -- mm_interconnect_0:m2s_fifo_fir_r_in_address -> m2s_fifo_fir_r:avalonmm_write_slave_address
 	signal mm_interconnect_0_m2s_fifo_fir_r_in_write                          : std_logic;                     -- mm_interconnect_0:m2s_fifo_fir_r_in_write -> m2s_fifo_fir_r:avalonmm_write_slave_write
@@ -869,10 +800,6 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_s2m_fifo_fir_l_out_waitrequest                   : std_logic;                     -- s2m_fifo_fir_l:avalonmm_read_slave_waitrequest -> mm_interconnect_0:s2m_fifo_fir_l_out_waitrequest
 	signal mm_interconnect_0_s2m_fifo_fir_l_out_address                       : std_logic_vector(0 downto 0);  -- mm_interconnect_0:s2m_fifo_fir_l_out_address -> s2m_fifo_fir_l:avalonmm_read_slave_address
 	signal mm_interconnect_0_s2m_fifo_fir_l_out_read                          : std_logic;                     -- mm_interconnect_0:s2m_fifo_fir_l_out_read -> s2m_fifo_fir_l:avalonmm_read_slave_read
-	signal mm_interconnect_0_s2m_fifo_ffth_out_readdata                       : std_logic_vector(31 downto 0); -- s2m_fifo_ffth:avalonmm_read_slave_readdata -> mm_interconnect_0:s2m_fifo_ffth_out_readdata
-	signal mm_interconnect_0_s2m_fifo_ffth_out_waitrequest                    : std_logic;                     -- s2m_fifo_ffth:avalonmm_read_slave_waitrequest -> mm_interconnect_0:s2m_fifo_ffth_out_waitrequest
-	signal mm_interconnect_0_s2m_fifo_ffth_out_address                        : std_logic_vector(0 downto 0);  -- mm_interconnect_0:s2m_fifo_ffth_out_address -> s2m_fifo_ffth:avalonmm_read_slave_address
-	signal mm_interconnect_0_s2m_fifo_ffth_out_read                           : std_logic;                     -- mm_interconnect_0:s2m_fifo_ffth_out_read -> s2m_fifo_ffth:avalonmm_read_slave_read
 	signal mm_interconnect_0_s2m_fifo_fir_r_out_readdata                      : std_logic_vector(31 downto 0); -- s2m_fifo_fir_r:avalonmm_read_slave_readdata -> mm_interconnect_0:s2m_fifo_fir_r_out_readdata
 	signal mm_interconnect_0_s2m_fifo_fir_r_out_waitrequest                   : std_logic;                     -- s2m_fifo_fir_r:avalonmm_read_slave_waitrequest -> mm_interconnect_0:s2m_fifo_fir_r_out_waitrequest
 	signal mm_interconnect_0_s2m_fifo_fir_r_out_address                       : std_logic_vector(0 downto 0);  -- mm_interconnect_0:s2m_fifo_fir_r_out_address -> s2m_fifo_fir_r:avalonmm_read_slave_address
@@ -896,11 +823,6 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_sdram_s1_readdatavalid                           : std_logic;                     -- sdram:za_valid -> mm_interconnect_0:sdram_s1_readdatavalid
 	signal mm_interconnect_0_sdram_s1_write                                   : std_logic;                     -- mm_interconnect_0:sdram_s1_write -> mm_interconnect_0_sdram_s1_write:in
 	signal mm_interconnect_0_sdram_s1_writedata                               : std_logic_vector(31 downto 0); -- mm_interconnect_0:sdram_s1_writedata -> sdram:az_data
-	signal mm_interconnect_0_pio_0_s1_chipselect                              : std_logic;                     -- mm_interconnect_0:pio_0_s1_chipselect -> pio_0:chipselect
-	signal mm_interconnect_0_pio_0_s1_readdata                                : std_logic_vector(31 downto 0); -- pio_0:readdata -> mm_interconnect_0:pio_0_s1_readdata
-	signal mm_interconnect_0_pio_0_s1_address                                 : std_logic_vector(1 downto 0);  -- mm_interconnect_0:pio_0_s1_address -> pio_0:address
-	signal mm_interconnect_0_pio_0_s1_write                                   : std_logic;                     -- mm_interconnect_0:pio_0_s1_write -> mm_interconnect_0_pio_0_s1_write:in
-	signal mm_interconnect_0_pio_0_s1_writedata                               : std_logic_vector(31 downto 0); -- mm_interconnect_0:pio_0_s1_writedata -> pio_0:writedata
 	signal irq_mapper_receiver2_irq                                           : std_logic;                     -- jtag_uart:av_irq -> irq_mapper:receiver2_irq
 	signal irq_mapper_receiver3_irq                                           : std_logic;                     -- touch_cntrl:irq -> irq_mapper:receiver3_irq
 	signal nios2_irq_irq                                                      : std_logic_vector(31 downto 0); -- irq_mapper:sender_irq -> nios2:irq
@@ -914,40 +836,28 @@ architecture rtl of reverb_template is
 	signal avalon_st_adapter_out_0_valid                                      : std_logic;                     -- avalon_st_adapter:out_0_valid -> s2m_fifo_fir_l:avalonst_sink_valid
 	signal avalon_st_adapter_out_0_data                                       : std_logic_vector(31 downto 0); -- avalon_st_adapter:out_0_data -> s2m_fifo_fir_l:avalonst_sink_data
 	signal avalon_st_adapter_out_0_ready                                      : std_logic;                     -- s2m_fifo_fir_l:avalonst_sink_ready -> avalon_st_adapter:out_0_ready
-	signal fft_wrapper_header_0_avalon_streaming_source_valid                 : std_logic;                     -- fft_wrapper_header_0:stout_valid -> avalon_st_adapter_001:in_0_valid
-	signal fft_wrapper_header_0_avalon_streaming_source_data                  : std_logic_vector(31 downto 0); -- fft_wrapper_header_0:stout_data -> avalon_st_adapter_001:in_0_data
-	signal fft_wrapper_header_0_avalon_streaming_source_ready                 : std_logic;                     -- avalon_st_adapter_001:in_0_ready -> fft_wrapper_header_0:stout_ready
-	signal avalon_st_adapter_001_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_001:out_0_valid -> s2m_fifo_ffth:avalonst_sink_valid
-	signal avalon_st_adapter_001_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_001:out_0_data -> s2m_fifo_ffth:avalonst_sink_data
-	signal avalon_st_adapter_001_out_0_ready                                  : std_logic;                     -- s2m_fifo_ffth:avalonst_sink_ready -> avalon_st_adapter_001:out_0_ready
-	signal fir_r_avalon_streaming_source_valid                                : std_logic;                     -- fir_r:stout_valid -> avalon_st_adapter_002:in_0_valid
-	signal fir_r_avalon_streaming_source_data                                 : std_logic_vector(31 downto 0); -- fir_r:stout_data -> avalon_st_adapter_002:in_0_data
-	signal fir_r_avalon_streaming_source_ready                                : std_logic;                     -- avalon_st_adapter_002:in_0_ready -> fir_r:stout_ready
-	signal avalon_st_adapter_002_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_002:out_0_valid -> s2m_fifo_fir_r:avalonst_sink_valid
-	signal avalon_st_adapter_002_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_002:out_0_data -> s2m_fifo_fir_r:avalonst_sink_data
-	signal avalon_st_adapter_002_out_0_ready                                  : std_logic;                     -- s2m_fifo_fir_r:avalonst_sink_ready -> avalon_st_adapter_002:out_0_ready
-	signal m2s_fifo_fir_l_out_valid                                           : std_logic;                     -- m2s_fifo_fir_l:avalonst_source_valid -> avalon_st_adapter_003:in_0_valid
-	signal m2s_fifo_fir_l_out_data                                            : std_logic_vector(31 downto 0); -- m2s_fifo_fir_l:avalonst_source_data -> avalon_st_adapter_003:in_0_data
-	signal m2s_fifo_fir_l_out_ready                                           : std_logic;                     -- avalon_st_adapter_003:in_0_ready -> m2s_fifo_fir_l:avalonst_source_ready
-	signal avalon_st_adapter_003_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_003:out_0_valid -> fir_l:stin_valid
-	signal avalon_st_adapter_003_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_003:out_0_data -> fir_l:stin_data
-	signal avalon_st_adapter_003_out_0_ready                                  : std_logic;                     -- fir_l:stin_ready -> avalon_st_adapter_003:out_0_ready
-	signal m2s_fifo_ffth_out_valid                                            : std_logic;                     -- m2s_fifo_ffth:avalonst_source_valid -> avalon_st_adapter_004:in_0_valid
-	signal m2s_fifo_ffth_out_data                                             : std_logic_vector(31 downto 0); -- m2s_fifo_ffth:avalonst_source_data -> avalon_st_adapter_004:in_0_data
-	signal m2s_fifo_ffth_out_ready                                            : std_logic;                     -- avalon_st_adapter_004:in_0_ready -> m2s_fifo_ffth:avalonst_source_ready
-	signal avalon_st_adapter_004_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_004:out_0_valid -> fft_wrapper_header_0:stin_valid
-	signal avalon_st_adapter_004_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_004:out_0_data -> fft_wrapper_header_0:stin_data
-	signal avalon_st_adapter_004_out_0_ready                                  : std_logic;                     -- fft_wrapper_header_0:stin_ready -> avalon_st_adapter_004:out_0_ready
-	signal m2s_fifo_fir_r_out_valid                                           : std_logic;                     -- m2s_fifo_fir_r:avalonst_source_valid -> avalon_st_adapter_005:in_0_valid
-	signal m2s_fifo_fir_r_out_data                                            : std_logic_vector(31 downto 0); -- m2s_fifo_fir_r:avalonst_source_data -> avalon_st_adapter_005:in_0_data
-	signal m2s_fifo_fir_r_out_ready                                           : std_logic;                     -- avalon_st_adapter_005:in_0_ready -> m2s_fifo_fir_r:avalonst_source_ready
-	signal avalon_st_adapter_005_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_005:out_0_valid -> fir_r:stin_valid
-	signal avalon_st_adapter_005_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_005:out_0_data -> fir_r:stin_data
-	signal avalon_st_adapter_005_out_0_ready                                  : std_logic;                     -- fir_r:stin_ready -> avalon_st_adapter_005:out_0_ready
+	signal fir_r_avalon_streaming_source_valid                                : std_logic;                     -- fir_r:stout_valid -> avalon_st_adapter_001:in_0_valid
+	signal fir_r_avalon_streaming_source_data                                 : std_logic_vector(31 downto 0); -- fir_r:stout_data -> avalon_st_adapter_001:in_0_data
+	signal fir_r_avalon_streaming_source_ready                                : std_logic;                     -- avalon_st_adapter_001:in_0_ready -> fir_r:stout_ready
+	signal avalon_st_adapter_001_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_001:out_0_valid -> s2m_fifo_fir_r:avalonst_sink_valid
+	signal avalon_st_adapter_001_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_001:out_0_data -> s2m_fifo_fir_r:avalonst_sink_data
+	signal avalon_st_adapter_001_out_0_ready                                  : std_logic;                     -- s2m_fifo_fir_r:avalonst_sink_ready -> avalon_st_adapter_001:out_0_ready
+	signal m2s_fifo_fir_l_out_valid                                           : std_logic;                     -- m2s_fifo_fir_l:avalonst_source_valid -> avalon_st_adapter_002:in_0_valid
+	signal m2s_fifo_fir_l_out_data                                            : std_logic_vector(31 downto 0); -- m2s_fifo_fir_l:avalonst_source_data -> avalon_st_adapter_002:in_0_data
+	signal m2s_fifo_fir_l_out_ready                                           : std_logic;                     -- avalon_st_adapter_002:in_0_ready -> m2s_fifo_fir_l:avalonst_source_ready
+	signal avalon_st_adapter_002_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_002:out_0_valid -> fir_l:stin_valid
+	signal avalon_st_adapter_002_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_002:out_0_data -> fir_l:stin_data
+	signal avalon_st_adapter_002_out_0_ready                                  : std_logic;                     -- fir_l:stin_ready -> avalon_st_adapter_002:out_0_ready
+	signal m2s_fifo_fir_r_out_valid                                           : std_logic;                     -- m2s_fifo_fir_r:avalonst_source_valid -> avalon_st_adapter_003:in_0_valid
+	signal m2s_fifo_fir_r_out_data                                            : std_logic_vector(31 downto 0); -- m2s_fifo_fir_r:avalonst_source_data -> avalon_st_adapter_003:in_0_data
+	signal m2s_fifo_fir_r_out_ready                                           : std_logic;                     -- avalon_st_adapter_003:in_0_ready -> m2s_fifo_fir_r:avalonst_source_ready
+	signal avalon_st_adapter_003_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_003:out_0_valid -> fir_r:stin_valid
+	signal avalon_st_adapter_003_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_003:out_0_data -> fir_r:stin_data
+	signal avalon_st_adapter_003_out_0_ready                                  : std_logic;                     -- fir_r:stin_ready -> avalon_st_adapter_003:out_0_ready
 	signal rst_controller_reset_out_reset                                     : std_logic;                     -- rst_controller:reset_out -> [altpll:reset, altpll_sram:reset, mm_interconnect_0:altpll_inclk_interface_reset_reset_bridge_in_reset_reset]
 	signal nios2_debug_reset_request_reset                                    : std_logic;                     -- nios2:debug_reset_request -> [rst_controller:reset_in1, rst_controller_003:reset_in1]
 	signal rst_controller_001_reset_out_reset                                 : std_logic;                     -- rst_controller_001:reset_out -> [audio:reset, audio_pll:ref_reset_reset, av_config:reset, irq_synchronizer:receiver_reset, mm_interconnect_0:audio_reset_reset_bridge_in_reset_reset]
-	signal rst_controller_002_reset_out_reset                                 : std_logic;                     -- rst_controller_002:reset_out -> [avalon_st_adapter:in_rst_0_reset, avalon_st_adapter_001:in_rst_0_reset, avalon_st_adapter_002:in_rst_0_reset, avalon_st_adapter_003:in_rst_0_reset, avalon_st_adapter_004:in_rst_0_reset, avalon_st_adapter_005:in_rst_0_reset, mm_interconnect_0:sdcard_interface_reset_reset_bridge_in_reset_reset, rst_controller_002_reset_out_reset:in]
+	signal rst_controller_002_reset_out_reset                                 : std_logic;                     -- rst_controller_002:reset_out -> [avalon_st_adapter:in_rst_0_reset, avalon_st_adapter_001:in_rst_0_reset, avalon_st_adapter_002:in_rst_0_reset, avalon_st_adapter_003:in_rst_0_reset, mm_interconnect_0:sdcard_interface_reset_reset_bridge_in_reset_reset, rst_controller_002_reset_out_reset:in]
 	signal rst_controller_003_reset_out_reset                                 : std_logic;                     -- rst_controller_003:reset_out -> [irq_mapper:reset, irq_synchronizer:sender_reset, irq_synchronizer_001:sender_reset, mm_interconnect_0:nios2_reset_reset_bridge_in_reset_reset, rst_controller_003_reset_out_reset:in]
 	signal rst_controller_004_reset_out_reset                                 : std_logic;                     -- rst_controller_004:reset_out -> [mm_interconnect_0:sram_0_reset_reset_bridge_in_reset_reset, sram_0:reset]
 	signal rst_controller_005_reset_out_reset                                 : std_logic;                     -- rst_controller_005:reset_out -> [irq_synchronizer_001:receiver_reset, mm_interconnect_0:textmode_controller_reset_reset_bridge_in_reset_reset, rst_controller_005_reset_out_reset:in]
@@ -958,8 +868,7 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_sdram_s1_read_ports_inv                          : std_logic;                     -- mm_interconnect_0_sdram_s1_read:inv -> sdram:az_rd_n
 	signal mm_interconnect_0_sdram_s1_byteenable_ports_inv                    : std_logic_vector(3 downto 0);  -- mm_interconnect_0_sdram_s1_byteenable:inv -> sdram:az_be_n
 	signal mm_interconnect_0_sdram_s1_write_ports_inv                         : std_logic;                     -- mm_interconnect_0_sdram_s1_write:inv -> sdram:az_wr_n
-	signal mm_interconnect_0_pio_0_s1_write_ports_inv                         : std_logic;                     -- mm_interconnect_0_pio_0_s1_write:inv -> pio_0:write_n
-	signal rst_controller_002_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_002_reset_out_reset:inv -> [fft_wrapper_body_0:reset_n, fft_wrapper_header_0:reset_n, fir_l:res_n, fir_r:res_n, m2s_fifo_ffth:reset_n, m2s_fifo_fir_l:reset_n, m2s_fifo_fir_r:reset_n, pio_0:reset_n, s2m_fifo_ffth:reset_n, s2m_fifo_fir_l:reset_n, s2m_fifo_fir_r:reset_n, sdcard_interface:i_reset_n, sdram:reset_n, touch_cntrl:res_n]
+	signal rst_controller_002_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_002_reset_out_reset:inv -> [fir_l:res_n, fir_r:res_n, m2s_fifo_fir_l:reset_n, m2s_fifo_fir_r:reset_n, s2m_fifo_fir_l:reset_n, s2m_fifo_fir_r:reset_n, sdcard_interface:i_reset_n, sdram:reset_n, touch_cntrl:res_n]
 	signal rst_controller_003_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_003_reset_out_reset:inv -> [jtag_uart:rst_n, nios2:reset_n]
 	signal rst_controller_005_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_005_reset_out_reset:inv -> textmode_controller:reset_n
 
@@ -1057,40 +966,6 @@ begin
 			I2C_SCLK    => audio_config_SCLK                                               --                       .export
 		);
 
-	fft_wrapper_body_0 : component fft_wrapper_body
-		port map (
-			clk         => altpll_c0_clk,                                 --                   clock.clk
-			reset_n     => rst_controller_002_reset_out_reset_ports_inv,  --                   reset.reset_n
-			stout_data  => open,                                          -- avalon_streaming_source.data
-			stout_empty => open,                                          --                        .empty
-			stout_eop   => open,                                          --                        .endofpacket
-			stout_error => open,                                          --                        .error
-			stout_ready => open,                                          --                        .ready
-			stout_sop   => open,                                          --                        .startofpacket
-			stout_valid => open,                                          --                        .valid
-			stin_data   => open,                                          --   avalon_streaming_sink.data
-			stin_valid  => open,                                          --                        .valid
-			stin_ready  => open,                                          --                        .ready
-			stin_sop    => open,                                          --                        .startofpacket
-			stin_eop    => open,                                          --                        .endofpacket
-			stin_empty  => open,                                          --                        .empty
-			stin_error  => open,                                          --                        .error
-			inverse     => fft_wrapper_body_0_external_connection_export  --     external_connection.export
-		);
-
-	fft_wrapper_header_0 : component fft_wrapper_header
-		port map (
-			clk         => altpll_c0_clk,                                      --                   clock.clk
-			reset_n     => rst_controller_002_reset_out_reset_ports_inv,       --                   reset.reset_n
-			stin_data   => avalon_st_adapter_004_out_0_data,                   --   avalon_streaming_sink.data
-			stin_valid  => avalon_st_adapter_004_out_0_valid,                  --                        .valid
-			stin_ready  => avalon_st_adapter_004_out_0_ready,                  --                        .ready
-			stout_data  => fft_wrapper_header_0_avalon_streaming_source_data,  -- avalon_streaming_source.data
-			stout_ready => fft_wrapper_header_0_avalon_streaming_source_ready, --                        .ready
-			stout_valid => fft_wrapper_header_0_avalon_streaming_source_valid, --                        .valid
-			inverse     => fft_wrapper_header_0_external_connection_export     --     external_connection.export
-		);
-
 	fir_l : component fir
 		generic map (
 			NUM_COEFFICIENTS => 512,
@@ -1099,9 +974,9 @@ begin
 		)
 		port map (
 			clk          => altpll_c0_clk,                                    --                   clock.clk
-			stin_data    => avalon_st_adapter_003_out_0_data,                 --   avalon_streaming_sink.data
-			stin_valid   => avalon_st_adapter_003_out_0_valid,                --                        .valid
-			stin_ready   => avalon_st_adapter_003_out_0_ready,                --                        .ready
+			stin_data    => avalon_st_adapter_002_out_0_data,                 --   avalon_streaming_sink.data
+			stin_valid   => avalon_st_adapter_002_out_0_valid,                --                        .valid
+			stin_ready   => avalon_st_adapter_002_out_0_ready,                --                        .ready
 			res_n        => rst_controller_002_reset_out_reset_ports_inv,     --              reset_sink.reset_n
 			mm_address   => mm_interconnect_0_fir_l_avalon_slave_0_address,   --          avalon_slave_0.address
 			mm_write     => mm_interconnect_0_fir_l_avalon_slave_0_write,     --                        .write
@@ -1121,9 +996,9 @@ begin
 		)
 		port map (
 			clk          => altpll_c0_clk,                                    --                   clock.clk
-			stin_data    => avalon_st_adapter_005_out_0_data,                 --   avalon_streaming_sink.data
-			stin_valid   => avalon_st_adapter_005_out_0_valid,                --                        .valid
-			stin_ready   => avalon_st_adapter_005_out_0_ready,                --                        .ready
+			stin_data    => avalon_st_adapter_003_out_0_data,                 --   avalon_streaming_sink.data
+			stin_valid   => avalon_st_adapter_003_out_0_valid,                --                        .valid
+			stin_ready   => avalon_st_adapter_003_out_0_ready,                --                        .ready
 			res_n        => rst_controller_002_reset_out_reset_ports_inv,     --              reset_sink.reset_n
 			mm_address   => mm_interconnect_0_fir_r_avalon_slave_0_address,   --          avalon_slave_0.address
 			mm_write     => mm_interconnect_0_fir_r_avalon_slave_0_write,     --                        .write
@@ -1149,20 +1024,7 @@ begin
 			av_irq         => irq_mapper_receiver2_irq                                       --               irq.irq
 		);
 
-	m2s_fifo_ffth : component reverb_template_m2s_fifo_ffth
-		port map (
-			wrclock                          => altpll_c0_clk,                                  --   clk_in.clk
-			reset_n                          => rst_controller_002_reset_out_reset_ports_inv,   -- reset_in.reset_n
-			avalonmm_write_slave_writedata   => mm_interconnect_0_m2s_fifo_ffth_in_writedata,   --       in.writedata
-			avalonmm_write_slave_write       => mm_interconnect_0_m2s_fifo_ffth_in_write,       --         .write
-			avalonmm_write_slave_address     => mm_interconnect_0_m2s_fifo_ffth_in_address(0),  --         .address
-			avalonmm_write_slave_waitrequest => mm_interconnect_0_m2s_fifo_ffth_in_waitrequest, --         .waitrequest
-			avalonst_source_valid            => m2s_fifo_ffth_out_valid,                        --      out.valid
-			avalonst_source_data             => m2s_fifo_ffth_out_data,                         --         .data
-			avalonst_source_ready            => m2s_fifo_ffth_out_ready                         --         .ready
-		);
-
-	m2s_fifo_fir_l : component reverb_template_m2s_fifo_ffth
+	m2s_fifo_fir_l : component reverb_template_m2s_fifo_fir_l
 		port map (
 			wrclock                          => altpll_c0_clk,                                   --   clk_in.clk
 			reset_n                          => rst_controller_002_reset_out_reset_ports_inv,    -- reset_in.reset_n
@@ -1175,7 +1037,7 @@ begin
 			avalonst_source_ready            => m2s_fifo_fir_l_out_ready                         --         .ready
 		);
 
-	m2s_fifo_fir_r : component reverb_template_m2s_fifo_ffth
+	m2s_fifo_fir_r : component reverb_template_m2s_fifo_fir_l
 		port map (
 			wrclock                          => altpll_c0_clk,                                   --   clk_in.clk
 			reset_n                          => rst_controller_002_reset_out_reset_ports_inv,    -- reset_in.reset_n
@@ -1219,32 +1081,7 @@ begin
 			dummy_ci_port                       => open                                                 -- custom_instruction_master.readra
 		);
 
-	pio_0 : component reverb_template_pio_0
-		port map (
-			clk        => altpll_c0_clk,                                --                 clk.clk
-			reset_n    => rst_controller_002_reset_out_reset_ports_inv, --               reset.reset_n
-			address    => mm_interconnect_0_pio_0_s1_address,           --                  s1.address
-			write_n    => mm_interconnect_0_pio_0_s1_write_ports_inv,   --                    .write_n
-			writedata  => mm_interconnect_0_pio_0_s1_writedata,         --                    .writedata
-			chipselect => mm_interconnect_0_pio_0_s1_chipselect,        --                    .chipselect
-			readdata   => mm_interconnect_0_pio_0_s1_readdata,          --                    .readdata
-			out_port   => pio_0_external_connection_export              -- external_connection.export
-		);
-
-	s2m_fifo_ffth : component reverb_template_s2m_fifo_ffth
-		port map (
-			wrclock                         => altpll_c0_clk,                                   --   clk_in.clk
-			reset_n                         => rst_controller_002_reset_out_reset_ports_inv,    -- reset_in.reset_n
-			avalonst_sink_valid             => avalon_st_adapter_001_out_0_valid,               --       in.valid
-			avalonst_sink_data              => avalon_st_adapter_001_out_0_data,                --         .data
-			avalonst_sink_ready             => avalon_st_adapter_001_out_0_ready,               --         .ready
-			avalonmm_read_slave_readdata    => mm_interconnect_0_s2m_fifo_ffth_out_readdata,    --      out.readdata
-			avalonmm_read_slave_read        => mm_interconnect_0_s2m_fifo_ffth_out_read,        --         .read
-			avalonmm_read_slave_address     => mm_interconnect_0_s2m_fifo_ffth_out_address(0),  --         .address
-			avalonmm_read_slave_waitrequest => mm_interconnect_0_s2m_fifo_ffth_out_waitrequest  --         .waitrequest
-		);
-
-	s2m_fifo_fir_l : component reverb_template_s2m_fifo_ffth
+	s2m_fifo_fir_l : component reverb_template_s2m_fifo_fir_l
 		port map (
 			wrclock                         => altpll_c0_clk,                                    --   clk_in.clk
 			reset_n                         => rst_controller_002_reset_out_reset_ports_inv,     -- reset_in.reset_n
@@ -1257,13 +1094,13 @@ begin
 			avalonmm_read_slave_waitrequest => mm_interconnect_0_s2m_fifo_fir_l_out_waitrequest  --         .waitrequest
 		);
 
-	s2m_fifo_fir_r : component reverb_template_s2m_fifo_ffth
+	s2m_fifo_fir_r : component reverb_template_s2m_fifo_fir_l
 		port map (
 			wrclock                         => altpll_c0_clk,                                    --   clk_in.clk
 			reset_n                         => rst_controller_002_reset_out_reset_ports_inv,     -- reset_in.reset_n
-			avalonst_sink_valid             => avalon_st_adapter_002_out_0_valid,                --       in.valid
-			avalonst_sink_data              => avalon_st_adapter_002_out_0_data,                 --         .data
-			avalonst_sink_ready             => avalon_st_adapter_002_out_0_ready,                --         .ready
+			avalonst_sink_valid             => avalon_st_adapter_001_out_0_valid,                --       in.valid
+			avalonst_sink_data              => avalon_st_adapter_001_out_0_data,                 --         .data
+			avalonst_sink_ready             => avalon_st_adapter_001_out_0_ready,                --         .ready
 			avalonmm_read_slave_readdata    => mm_interconnect_0_s2m_fifo_fir_r_out_readdata,    --      out.readdata
 			avalonmm_read_slave_read        => mm_interconnect_0_s2m_fifo_fir_r_out_read,        --         .read
 			avalonmm_read_slave_address     => mm_interconnect_0_s2m_fifo_fir_r_out_address(0),  --         .address
@@ -1441,10 +1278,6 @@ begin
 			jtag_uart_avalon_jtag_slave_writedata                    => mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata,            --                                                   .writedata
 			jtag_uart_avalon_jtag_slave_waitrequest                  => mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest,          --                                                   .waitrequest
 			jtag_uart_avalon_jtag_slave_chipselect                   => mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect,           --                                                   .chipselect
-			m2s_fifo_ffth_in_address                                 => mm_interconnect_0_m2s_fifo_ffth_in_address,                         --                                   m2s_fifo_ffth_in.address
-			m2s_fifo_ffth_in_write                                   => mm_interconnect_0_m2s_fifo_ffth_in_write,                           --                                                   .write
-			m2s_fifo_ffth_in_writedata                               => mm_interconnect_0_m2s_fifo_ffth_in_writedata,                       --                                                   .writedata
-			m2s_fifo_ffth_in_waitrequest                             => mm_interconnect_0_m2s_fifo_ffth_in_waitrequest,                     --                                                   .waitrequest
 			m2s_fifo_fir_l_in_address                                => mm_interconnect_0_m2s_fifo_fir_l_in_address,                        --                                  m2s_fifo_fir_l_in.address
 			m2s_fifo_fir_l_in_write                                  => mm_interconnect_0_m2s_fifo_fir_l_in_write,                          --                                                   .write
 			m2s_fifo_fir_l_in_writedata                              => mm_interconnect_0_m2s_fifo_fir_l_in_writedata,                      --                                                   .writedata
@@ -1461,15 +1294,6 @@ begin
 			nios2_debug_mem_slave_byteenable                         => mm_interconnect_0_nios2_debug_mem_slave_byteenable,                 --                                                   .byteenable
 			nios2_debug_mem_slave_waitrequest                        => mm_interconnect_0_nios2_debug_mem_slave_waitrequest,                --                                                   .waitrequest
 			nios2_debug_mem_slave_debugaccess                        => mm_interconnect_0_nios2_debug_mem_slave_debugaccess,                --                                                   .debugaccess
-			pio_0_s1_address                                         => mm_interconnect_0_pio_0_s1_address,                                 --                                           pio_0_s1.address
-			pio_0_s1_write                                           => mm_interconnect_0_pio_0_s1_write,                                   --                                                   .write
-			pio_0_s1_readdata                                        => mm_interconnect_0_pio_0_s1_readdata,                                --                                                   .readdata
-			pio_0_s1_writedata                                       => mm_interconnect_0_pio_0_s1_writedata,                               --                                                   .writedata
-			pio_0_s1_chipselect                                      => mm_interconnect_0_pio_0_s1_chipselect,                              --                                                   .chipselect
-			s2m_fifo_ffth_out_address                                => mm_interconnect_0_s2m_fifo_ffth_out_address,                        --                                  s2m_fifo_ffth_out.address
-			s2m_fifo_ffth_out_read                                   => mm_interconnect_0_s2m_fifo_ffth_out_read,                           --                                                   .read
-			s2m_fifo_ffth_out_readdata                               => mm_interconnect_0_s2m_fifo_ffth_out_readdata,                       --                                                   .readdata
-			s2m_fifo_ffth_out_waitrequest                            => mm_interconnect_0_s2m_fifo_ffth_out_waitrequest,                    --                                                   .waitrequest
 			s2m_fifo_fir_l_out_address                               => mm_interconnect_0_s2m_fifo_fir_l_out_address,                       --                                 s2m_fifo_fir_l_out.address
 			s2m_fifo_fir_l_out_read                                  => mm_interconnect_0_s2m_fifo_fir_l_out_read,                          --                                                   .read
 			s2m_fifo_fir_l_out_readdata                              => mm_interconnect_0_s2m_fifo_fir_l_out_readdata,                      --                                                   .readdata
@@ -1600,47 +1424,17 @@ begin
 			outReadyLatency => 1
 		)
 		port map (
-			in_clk_0_clk   => altpll_c0_clk,                                      -- in_clk_0.clk
-			in_rst_0_reset => rst_controller_002_reset_out_reset,                 -- in_rst_0.reset
-			in_0_data      => fft_wrapper_header_0_avalon_streaming_source_data,  --     in_0.data
-			in_0_valid     => fft_wrapper_header_0_avalon_streaming_source_valid, --         .valid
-			in_0_ready     => fft_wrapper_header_0_avalon_streaming_source_ready, --         .ready
-			out_0_data     => avalon_st_adapter_001_out_0_data,                   --    out_0.data
-			out_0_valid    => avalon_st_adapter_001_out_0_valid,                  --         .valid
-			out_0_ready    => avalon_st_adapter_001_out_0_ready                   --         .ready
-		);
-
-	avalon_st_adapter_002 : component reverb_template_avalon_st_adapter
-		generic map (
-			inBitsPerSymbol => 32,
-			inUsePackets    => 0,
-			inDataWidth     => 32,
-			inChannelWidth  => 0,
-			inErrorWidth    => 0,
-			inUseEmptyPort  => 0,
-			inUseValid      => 1,
-			inUseReady      => 1,
-			inReadyLatency  => 0,
-			outDataWidth    => 32,
-			outChannelWidth => 0,
-			outErrorWidth   => 0,
-			outUseEmptyPort => 0,
-			outUseValid     => 1,
-			outUseReady     => 1,
-			outReadyLatency => 1
-		)
-		port map (
 			in_clk_0_clk   => altpll_c0_clk,                       -- in_clk_0.clk
 			in_rst_0_reset => rst_controller_002_reset_out_reset,  -- in_rst_0.reset
 			in_0_data      => fir_r_avalon_streaming_source_data,  --     in_0.data
 			in_0_valid     => fir_r_avalon_streaming_source_valid, --         .valid
 			in_0_ready     => fir_r_avalon_streaming_source_ready, --         .ready
-			out_0_data     => avalon_st_adapter_002_out_0_data,    --    out_0.data
-			out_0_valid    => avalon_st_adapter_002_out_0_valid,   --         .valid
-			out_0_ready    => avalon_st_adapter_002_out_0_ready    --         .ready
+			out_0_data     => avalon_st_adapter_001_out_0_data,    --    out_0.data
+			out_0_valid    => avalon_st_adapter_001_out_0_valid,   --         .valid
+			out_0_ready    => avalon_st_adapter_001_out_0_ready    --         .ready
 		);
 
-	avalon_st_adapter_003 : component reverb_template_avalon_st_adapter_003
+	avalon_st_adapter_002 : component reverb_template_avalon_st_adapter_002
 		generic map (
 			inBitsPerSymbol => 32,
 			inUsePackets    => 0,
@@ -1665,42 +1459,12 @@ begin
 			in_0_data      => m2s_fifo_fir_l_out_data,            --     in_0.data
 			in_0_valid     => m2s_fifo_fir_l_out_valid,           --         .valid
 			in_0_ready     => m2s_fifo_fir_l_out_ready,           --         .ready
-			out_0_data     => avalon_st_adapter_003_out_0_data,   --    out_0.data
-			out_0_valid    => avalon_st_adapter_003_out_0_valid,  --         .valid
-			out_0_ready    => avalon_st_adapter_003_out_0_ready   --         .ready
+			out_0_data     => avalon_st_adapter_002_out_0_data,   --    out_0.data
+			out_0_valid    => avalon_st_adapter_002_out_0_valid,  --         .valid
+			out_0_ready    => avalon_st_adapter_002_out_0_ready   --         .ready
 		);
 
-	avalon_st_adapter_004 : component reverb_template_avalon_st_adapter_003
-		generic map (
-			inBitsPerSymbol => 32,
-			inUsePackets    => 0,
-			inDataWidth     => 32,
-			inChannelWidth  => 0,
-			inErrorWidth    => 0,
-			inUseEmptyPort  => 0,
-			inUseValid      => 1,
-			inUseReady      => 1,
-			inReadyLatency  => 1,
-			outDataWidth    => 32,
-			outChannelWidth => 0,
-			outErrorWidth   => 0,
-			outUseEmptyPort => 0,
-			outUseValid     => 1,
-			outUseReady     => 1,
-			outReadyLatency => 0
-		)
-		port map (
-			in_clk_0_clk   => altpll_c0_clk,                      -- in_clk_0.clk
-			in_rst_0_reset => rst_controller_002_reset_out_reset, -- in_rst_0.reset
-			in_0_data      => m2s_fifo_ffth_out_data,             --     in_0.data
-			in_0_valid     => m2s_fifo_ffth_out_valid,            --         .valid
-			in_0_ready     => m2s_fifo_ffth_out_ready,            --         .ready
-			out_0_data     => avalon_st_adapter_004_out_0_data,   --    out_0.data
-			out_0_valid    => avalon_st_adapter_004_out_0_valid,  --         .valid
-			out_0_ready    => avalon_st_adapter_004_out_0_ready   --         .ready
-		);
-
-	avalon_st_adapter_005 : component reverb_template_avalon_st_adapter_003
+	avalon_st_adapter_003 : component reverb_template_avalon_st_adapter_002
 		generic map (
 			inBitsPerSymbol => 32,
 			inUsePackets    => 0,
@@ -1725,9 +1489,9 @@ begin
 			in_0_data      => m2s_fifo_fir_r_out_data,            --     in_0.data
 			in_0_valid     => m2s_fifo_fir_r_out_valid,           --         .valid
 			in_0_ready     => m2s_fifo_fir_r_out_ready,           --         .ready
-			out_0_data     => avalon_st_adapter_005_out_0_data,   --    out_0.data
-			out_0_valid    => avalon_st_adapter_005_out_0_valid,  --         .valid
-			out_0_ready    => avalon_st_adapter_005_out_0_ready   --         .ready
+			out_0_data     => avalon_st_adapter_003_out_0_data,   --    out_0.data
+			out_0_valid    => avalon_st_adapter_003_out_0_valid,  --         .valid
+			out_0_ready    => avalon_st_adapter_003_out_0_ready   --         .ready
 		);
 
 	rst_controller : component reverb_template_rst_controller
@@ -2133,8 +1897,6 @@ begin
 	mm_interconnect_0_sdram_s1_byteenable_ports_inv <= not mm_interconnect_0_sdram_s1_byteenable;
 
 	mm_interconnect_0_sdram_s1_write_ports_inv <= not mm_interconnect_0_sdram_s1_write;
-
-	mm_interconnect_0_pio_0_s1_write_ports_inv <= not mm_interconnect_0_pio_0_s1_write;
 
 	rst_controller_002_reset_out_reset_ports_inv <= not rst_controller_002_reset_out_reset;
 

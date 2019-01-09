@@ -24,9 +24,9 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (1) 	 -- If 1 then use FIR filter Hardware component
-#define FFT_H_HW (0) -- If 1 then use header FFT Hardware component
-#define FFT_B_HW (0) -- If 1 then use body FFT Hardware component
+#define FIR_HW (1) 	 // If 1 then use FIR filter Hardware component
+#define FFT_H_HW (0) // If 1 then use header FFT Hardware component
+#define FFT_B_HW (0) // If 1 then use body FFT Hardware component
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -544,7 +544,7 @@ void test()
     
     printf( "fir\n" );
     
-    #if defined( FIR_HW ) // Hardware FIR
+    #if ( FIR_HW ) // Hardware FIR
 		
 		fir_filter_setup_hw( ir, 0 ); // init FIR filter for left channel
 		fir_filter_setup_hw( ir, 1 ); // init FIR filter for right channel
@@ -658,7 +658,7 @@ void test()
         
         
         
-        #if defined( FIR_HW ) // Hardware FIR
+		#if ( FIR_HW ) // Hardware FIR
         
 			// zur sicherheit werden die sample results auf 0 gesetzt.
 			

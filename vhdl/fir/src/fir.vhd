@@ -156,6 +156,7 @@ begin
 				stin_ready <= '1'; -- Ready for Input
 								
 				if stin_valid = '1' then
+					--stin_ready <= '0'; --Activate for simulation
 					data_write <= '1';
 					
 					coeff_read <= '1';
@@ -164,6 +165,7 @@ begin
 				end if;
 						
 			when STATE_MULT =>
+				-- ToDo: MAC in zweiten state aufteilen
 				temp_next <= temp + signed(coeff_dout) * signed(data_dout);
 				
 				if mul_cnt = NUM_COEFFICIENTS-1 then -- catch overflow

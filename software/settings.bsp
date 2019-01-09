@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jan 8, 2019 8:47:23 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1546976843375</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jan 9, 2019 9:25:55 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1547065555372</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -935,12 +935,6 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>pio_0</slaveDescriptor>
-                <addressRange>0x08202480 - 0x0820248F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>altpll</slaveDescriptor>
                 <addressRange>0x08202490 - 0x0820249F</addressRange>
                 <addressSpan>16</addressSpan>
@@ -983,20 +977,8 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>s2m_fifo_ffth</slaveDescriptor>
-                <addressRange>0x08202510 - 0x08202517</addressRange>
-                <addressSpan>8</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>s2m_fifo_fir_l</slaveDescriptor>
                 <addressRange>0x08202518 - 0x0820251F</addressRange>
-                <addressSpan>8</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>m2s_fifo_ffth</slaveDescriptor>
-                <addressRange>0x08202520 - 0x08202527</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>

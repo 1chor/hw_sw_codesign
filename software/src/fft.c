@@ -14,6 +14,7 @@
 #include "wav.h"
 
 #include "fixed_point.h"
+#include "kiss_fft.h"
 
 // For FIFO commands
 #include "altera_avalon_fifo_util.h"
