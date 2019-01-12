@@ -8,6 +8,7 @@ VHDL_FILES = \
 	../math/src/math_pkg.vhd\
 	../ram/ram_pkg.vhd\
 	../ram/dp_ram_1c1r1w.vhd\
+	../mac/mac.vhd\
 	../fir/src/fir.vhd
 
 #list of source files needed for simulation
@@ -17,7 +18,7 @@ TB_FILES = \
 
 #testbench file to "execute" and simulation time
 TB = fir_tb
-SIM_TIME = 4700ns
+SIM_TIME = 8500ns
 
 compile: 
 	rm -f log
@@ -36,7 +37,7 @@ compile:
 
 #this target starts the simulation and the modelsim GUI
 sim:
-	vsim -do "vsim $(TB) -msgmode both; do scripts/wave.do;run $(SIM_TIME)" 
+	vsim -do "vsim $(TB) -msgmode both; do scripts/wave.do;run $(SIM_TIME); wave zoom full"
 
 #this target starts a simulation in text mode (i.e. no graphical output)
 sim_cl:
