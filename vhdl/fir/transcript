@@ -14,7 +14,7 @@
 # //
 # vsim fir_tb -msgmode both
 # vsim fir_tb -msgmode both 
-# Start time: 23:43:47 on Jan 12,2019
+# Start time: 01:02:42 on Jan 13,2019
 # ** Note: (vsim-3812) Design is being optimized...
 # Loading std.standard
 # Loading std.textio(body)
@@ -33,524 +33,56 @@
 # ----------------------------------
 # Writing coefficients to memory
 # Impulse response test
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 415 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 415 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 455 ns  Iteration: 1  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 475 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 495 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 515 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 655 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 675 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 695 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 715 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 735 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 755 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 755 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 775 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 815 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 835 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 855 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 875 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 975 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 995 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1015 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1035 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1055 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1075 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1335 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1355 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1375 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1395 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1415 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1655 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1675 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1695 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1715 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1735 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1755 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1775 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1775 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1975 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 1995 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2015 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2035 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2055 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2075 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2115 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2115 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2335 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2355 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2375 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2395 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2415 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2455 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2455 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2655 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2675 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2695 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2715 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2735 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2755 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2775 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2795 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 2795 ns  Iteration: 2  Instance: /fir_tb/uut
+# ** Error: Buffers don't match (index = 0, 00020000 vs. 002a0000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 1, 00030000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 2, 00040000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 3, 00050000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 4, 00060000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 5, 00070000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 6, 00080000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 7, 00090000 vs. 00000000
+#    Time: 2905 ns  Iteration: 0  Instance: /fir_tb
 # General filter test
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3075 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3115 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3135 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3155 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3455 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3475 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3495 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3515 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3795 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3815 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3835 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3855 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3875 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 3915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4155 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4515 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4875 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 4935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 5995 ns  Iteration: 1  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6015 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6035 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6055 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6075 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6115 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6135 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6155 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6355 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6375 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6395 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6415 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6455 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6475 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6495 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6515 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6715 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6735 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6755 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6775 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6795 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6815 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6835 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6855 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6875 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6975 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 6975 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7075 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7095 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7115 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7135 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7155 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7435 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7455 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7475 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7495 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7515 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7535 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7555 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7575 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7595 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7615 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7635 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7655 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7655 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7795 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7815 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7835 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7855 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7875 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7895 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7915 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7935 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7955 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7975 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7995 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 7995 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8155 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8175 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8195 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8215 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8235 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8255 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8275 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8295 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8315 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8335 ns  Iteration: 2  Instance: /fir_tb/uut
-# ** Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-#    Time: 8335 ns  Iteration: 2  Instance: /fir_tb/uut
+# ** Error: Buffers don't match (index = 1, 002a0000 vs. 00020000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 2, 00000000 vs. 00030000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 3, ffd60000 vs. 00020000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 4, 00000000 vs. 00020000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 5, 002a0000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 6, 00000000 vs. 00050000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 7, ffd60000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 8, 00020000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 9, 002a0000 vs. fffc0000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 10, 00000000 vs. fffc0000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 11, ffd60000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 12, 00000000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 13, 002a0000 vs. fffc0000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 14, 00000000 vs. fffc0000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
+# ** Error: Buffers don't match (index = 15, ffd60000 vs. 00040000
+#    Time: 8415 ns  Iteration: 0  Instance: /fir_tb
 # Done
 # ----------------------------------
 #  wave zoom full
 # {0 ns} {8925 ns}
-wave zoom in
-# {2231 ns} {6693 ns}
-wave zoom in
-# {3346 ns} {5578 ns}
- wave zoom full
-# {0 ns} {8925 ns}
-# End time: 23:45:01 on Jan 12,2019, Elapsed time: 0:01:14
-# Errors: 0, Warnings: 254
+# End time: 01:03:23 on Jan 13,2019, Elapsed time: 0:00:41
+# Errors: 23, Warnings: 0

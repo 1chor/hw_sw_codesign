@@ -1,24 +1,24 @@
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:22 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../math/src/math_pkg.vhd 
 -- Loading package STANDARD
 -- Compiling package math_pkg
 -- Compiling package body math_pkg
 -- Loading package math_pkg
-End time: 23:43:22 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:22 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../ram/ram_pkg.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package math_pkg
 -- Compiling package ram_pkg
-End time: 23:43:22 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:22 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../ram/dp_ram_1c1r1w.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -26,20 +26,20 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../ram/dp_ram_1c1r1w.vhd
 -- Loading package NUMERIC_STD
 -- Compiling entity dp_ram_1c1r1w
 -- Compiling architecture beh of dp_ram_1c1r1w
-End time: 23:43:22 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:22 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../mac/mac.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling entity mac
 -- Compiling architecture SYN of mac
-End time: 23:43:22 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:23 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/src/fir.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -50,10 +50,10 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/src/fir.vhd
 -- Compiling entity fir
 -- Compiling architecture arch of fir
 -- Loading entity mac
-End time: 23:43:23 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:23 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../tb/tb_util_pkg.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -62,10 +62,10 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../tb/tb_util_pkg.vhd
 -- Compiling package tb_util_pkg
 -- Compiling package body tb_util_pkg
 -- Loading package tb_util_pkg
-End time: 23:43:23 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 23:43:23 on Jan 12,2019
+Start time: 01:02:19 on Jan 13,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/tb/fir_tb.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -76,5 +76,5 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../fir/tb/fir_tb.vhd
 -- Loading package tb_util_pkg
 -- Compiling entity fir_tb
 -- Compiling architecture bench of fir_tb
-End time: 23:43:23 on Jan 12,2019, Elapsed time: 0:00:00
+End time: 01:02:19 on Jan 13,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0, Suppressed Warnings: 6

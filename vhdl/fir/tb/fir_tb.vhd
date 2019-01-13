@@ -140,9 +140,17 @@ begin
 		
 		procedure stream_write(value : std_logic_vector) is 
 		begin
-            stin_data <= value;
-            stin_valid <= '1';
-            wait until rising_edge(stin_ready);
+            -- stin_data <= value;
+            -- stin_valid <= '1';
+            -- wait until rising_edge(stin_ready);
+			if(stin_ready = '0') then
+				wait until stin_ready = '1';
+			end if;
+			stin_data <= value;
+			stin_valid <= '1';
+			wait until rising_edge(clk);
+			stin_valid <= '0';
+			wait for 0 ns;
 		end procedure;
 		
 		procedure compare_buffers(buffer_A, buffer_B : buffer_t; length : integer) is

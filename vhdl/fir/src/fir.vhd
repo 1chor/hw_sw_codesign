@@ -58,9 +58,6 @@ architecture arch of fir is
 	signal data_write	 : std_logic;
 	signal data_read	 : std_logic;
 	
-	--signal temp 		 : signed(2*DATA_WIDTH-1 downto 0);
-	--signal temp_next	 : signed(2*DATA_WIDTH-1 downto 0);
-	
 	signal coeff_rd_addr : std_logic_vector(ADDR_WIDTH-1 downto 0);
 	signal data_wr_addr  : std_logic_vector(ADDR_WIDTH-1 downto 0);
 	signal data_rd_addr  : std_logic_vector(ADDR_WIDTH-1 downto 0);
@@ -68,7 +65,7 @@ architecture arch of fir is
 	type state_type is (
 		STATE_IDLE,
 		STATE_LOAD,
-		STATE_MULT,
+		STATE_MAC,
 		STATE_OUTPUT
 	);
 	signal state, state_next : state_type := STATE_IDLE;
@@ -141,13 +138,11 @@ begin
 		if res_n = '0' then -- Reset signals
 			state <= STATE_IDLE;
 			mul_cnt <= 0;
-			--temp <= (others => '0');
 			data_addr_oldest <= 0;
 			
 		elsif rising_edge(clk) then
 			state <= state_next;	
 			mul_cnt <= mul_cnt_next;
-			--temp <= temp_next;
 			data_addr_oldest <= data_addr_oldest_next;
 		end if;
 			
@@ -161,10 +156,10 @@ begin
 		
 		data_addr_oldest_next <= data_addr_oldest;
 		mul_cnt_next <= mul_cnt;
+		
 		mac_load <= '0'; -- multiplier output is loaded into the accumulator
 		mac_dataa <= (others => '0');
 		mac_datab <= (others => '0');
-		--temp_next <= temp;
 		
 		stin_ready <= '0';		
 		stout_valid <= '0';
@@ -193,14 +188,9 @@ begin
 				-- Load inputs to mac
 				mac_dataa <= coeff_dout;
 				mac_datab <= data_dout;
-				state_next <= STATE_MULT;
+				state_next <= STATE_MAC;
 				
-			when STATE_MULT =>
-				-- ToDo: MAC in zweiten state aufteilen
-				--temp_next <= temp + signed(coeff_dout) * signed(data_dout);
-				-- mac_dataa <= coeff_dout;
-				-- mac_datab <= data_dout;
-				
+			when STATE_MAC =>
 				if mul_cnt = NUM_COEFFICIENTS-1 then -- catch overflow
 					mul_cnt_next <= 0;
 					state_next <= STATE_OUTPUT;
@@ -214,12 +204,11 @@ begin
 			when STATE_OUTPUT =>
 				if stout_ready = '1' then
 					-- Set Output
-					stout_data <= mac_result(47 downto 16); -- 16Q16 Format for Simulation
-					--stout_data <= std_logic_vector(temp(62 downto 31)); -- 2Q30 Format
+					--stout_data <= mac_result(47 downto 16); -- 16Q16 Format for Simulation
+					stout_data <= std_logic_vector(temp(62 downto 31)); -- 2Q30 Format
 					stout_valid <= '1';
 					
 					mac_load <= '1'; -- accumulator is set to zero
-					--temp_next <= (others => '0');
 					
 					if data_addr_oldest = 0 then
 						data_addr_oldest_next <= NUM_COEFFICIENTS - 1;
