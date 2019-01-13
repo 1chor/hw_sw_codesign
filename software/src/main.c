@@ -666,7 +666,7 @@ void test()
 			sample_result_2 = 0;
 			
 			// die neuen results werden berechnet.
-			
+
 			fir_filter_sample_hw
 			(
 				 &sample_result_1
@@ -674,7 +674,7 @@ void test()
 				,(uint32_t)l_buf
 				,(uint32_t)r_buf
 			);
-        
+			
          #else // Software FIR
 			
 			// wie ein shiftregister werden die samples weiter geschoben
@@ -707,7 +707,7 @@ void test()
 				,fir_h_1
 				,fir_h_2
 			);
-        
+			
         #endif
         
         // die neuen fir filter samples werden an den output addiert.
