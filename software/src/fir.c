@@ -50,17 +50,14 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 				IOWR( FIR_L_BASE, i, wav_get_uint16( ir, 2*i ) );
 			}
 			
-			for ( i = 0; i < 32; i++ )
+			for ( i = 0; i < 512; i++ )
 			{	
 				// init Input FIFOs 
 				IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, 0x00000000 );
-			}
-			
-			for ( i = 0; i < 32; i++ )
-			{
+				
 				// init Output FIFOs 
 				(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
-			}		
+			}
 			break;
 			
 		case 1: // right channel
@@ -70,17 +67,14 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 				IOWR( FIR_R_BASE, i, wav_get_uint16( ir, 2*i+1 ) );
 			}
 			
-			for ( i = 0; i < 32; i++ )
+			for ( i = 0; i < 512; i++ )
 			{	
 				// init Input FIFOs
 				IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, 0x00000000 );
-			}
-			
-			for ( i = 0; i < 32; i++ )
-			{
+				
 				// init Output FIFOs 
 				(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_R_BASE );
-			}		
+			}
 			break;
 			
 		default: printf("Channel Index error\n"); exit(1);
@@ -143,8 +137,8 @@ void fir_filter_sample_hw
 (
      int32_t* sample_result_1
     ,int32_t* sample_result_2
-    ,uint32_t new_sample_1
-    ,uint32_t new_sample_2
+    ,int32_t new_sample_1
+    ,int32_t new_sample_2
 )
 {     
 	// fixed point version

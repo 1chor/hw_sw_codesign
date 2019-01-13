@@ -204,7 +204,7 @@ begin
 				if stout_ready = '1' then
 					-- Set Output
 					--stout_data <= mac_result(47 downto 16); -- 16Q16 Format for Simulation
-					stout_data <= std_logic_vector(mac_result(62 downto 31)); -- 2Q30 Format
+					stout_data <= std_logic_vector(mac_result(31 downto 0)); -- 2Q30 Format
 					stout_valid <= '1';
 					
 					mac_load <= '1'; -- accumulator is set to zero

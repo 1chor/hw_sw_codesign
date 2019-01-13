@@ -553,13 +553,13 @@ void test()
 		
 		// wird fuer das setup benoetigt.
 		
-		uint16_t* fir_h_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-		uint16_t* fir_h_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		uint16_t* fir_h_1 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
+		uint16_t* fir_h_2 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
 		
 		// wird unten bei dem endless loop als shift reg verwendet.
 		
-		uint16_t* fir_i_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-		uint16_t* fir_i_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		uint16_t* fir_i_1 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
+		uint16_t* fir_i_2 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
 		
 		fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
@@ -671,8 +671,8 @@ void test()
 			(
 				 &sample_result_1
 				,&sample_result_2
-				,(uint32_t)l_buf
-				,(uint32_t)r_buf
+				,(int32_t)l_buf
+				,(int32_t)r_buf
 			);
 			
          #else // Software FIR
@@ -710,6 +710,22 @@ void test()
 			
         #endif
         
+        // Ausgabe linker Channel
+        // float f;
+        // convert_2q30_pointer( &f, sample_result_1);
+        // printf( "Sample %d: %f\n", sample_counter_local, f );
+        // printf( "l_buf[%d]: %lx\n", sample_counter_local, (int32_t)l_buf );
+        // printf( "Sample %d: %lx\n", sample_counter_local, sample_result_1 );
+        
+        //--------------------------------------------------------------
+        //
+        //	
+        //	Casts überprüfen, wenn uint16 auf int32 gecastet wird ist der Wert falsch!
+        //	Richtig (int32)((int16)(val_uint16))
+        //
+        //
+        //--------------------------------------------------------------
+                
         // die neuen fir filter samples werden an den output addiert.
         // das ganze casten dient zur vermeidung von fehlern und ist
         // wahrscheinlich nicht noetig.
