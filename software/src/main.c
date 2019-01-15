@@ -671,8 +671,8 @@ void test()
 			(
 				 &sample_result_1
 				,&sample_result_2
-				,(int32_t)l_buf
-				,(int32_t)r_buf
+				,l_buf
+				,r_buf
 			);
 			
          #else // Software FIR
@@ -711,11 +711,12 @@ void test()
         #endif
         
         // Ausgabe linker Channel
-        // float f;
-        // convert_2q30_pointer( &f, sample_result_1);
-        // printf( "Sample %d: %f\n", sample_counter_local, f );
-        // printf( "l_buf[%d]: %lx\n", sample_counter_local, (int32_t)l_buf );
-        // printf( "Sample %d: %lx\n", sample_counter_local, sample_result_1 );
+        //~ float f;
+        //~ convert_2q30_pointer( &f, sample_result_1);
+        //~ printf( "Sample %d: %f\n", sample_counter_local, f );
+        //~ printf( "l_buf[%d]: %lx\n", sample_counter_local, l_buf );
+        //~ printf( "l_buf_32[%d]: %lx\n", sample_counter_local, (uint32_t)l_buf );
+        //~ printf( "Sample %d: %lx\n", sample_counter_local, sample_result_1 );
         
         //--------------------------------------------------------------
         //
