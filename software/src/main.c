@@ -499,7 +499,16 @@ void test()
     uint32_t k = 0;
     
     printf( "pre-processing header blocks (H)\n" );
-    pre_process_h_header( ir );
+	
+	#if ( FFT_H_HW ) // Hardware Header-FFT 
+	
+		pre_process_h_header_hw( ir );
+	
+	#else // Software Header-FFT
+	
+		pre_process_h_header( ir );
+	
+	#endif
     
     //~ complex_32_t test_samples[512];
     //~ sram_read_block(test_samples, 2);
@@ -553,13 +562,13 @@ void test()
 		
 		// wird fuer das setup benoetigt.
 		
-		uint16_t* fir_h_1 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
-		uint16_t* fir_h_2 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
+		uint16_t* fir_h_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+		uint16_t* fir_h_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
 		
 		// wird unten bei dem endless loop als shift reg verwendet.
 		
-		uint16_t* fir_i_1 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
-		uint16_t* fir_i_2 = (uint16_t*)calloc( 512 , sizeof(uint16_t) );
+		uint16_t* fir_i_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+		uint16_t* fir_i_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
 		
 		fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
@@ -572,7 +581,7 @@ void test()
     
     printf(">done\n\n");
     
-    // wir brauchen die ir file ab hier nicht mehr.
+    // wir brauchen das ir file ab hier nicht mehr.
     
     wav_free( ir );
     
@@ -753,8 +762,16 @@ void test()
             printf( "full header I block collected\n" );
             
             // fft and save block
-            
-            process_header_block( i_in_1, i_in_2, i_pointer, 0 );
+			
+			#if ( FFT_H_HW ) // Hardware Header-FFT 
+			
+				process_header_block_hw( i_in_1, i_in_2, i_pointer, 0 );
+			
+			#else // Software Header-FFT
+	
+				process_header_block( i_in_1, i_in_2, i_pointer, 0 );
+			
+			#endif
             
             // ---------------------------------------------------------
             // F R E Q U E N C Y   M A C
@@ -816,7 +833,7 @@ void test()
             
             ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
             
-            // beim vergleich mit actave sieht es bei den ersten samples so
+            // beim vergleich mit octave sieht es bei den ersten samples so
             // aus als waeren diese falsch. das stimmt nicht, in c werden sie
             // einfach nur mehr als 0 wahrgenommen waehrend in octave noch
             // ein wert angezeigt werden kann. z.b. groessenordnung e-09

@@ -24,10 +24,10 @@ void fir_filter_sample_sw
 
 void fir_filter_sample_hw
 (
-     int32_t* sample_result_1
-    ,int32_t* sample_result_2
-    ,uint16_t new_sample_1
-    ,uint16_t new_sample_2
+     int32_t* 
+    ,int32_t* 
+    ,uint16_t 
+    ,uint16_t 
 );
 
 #endif

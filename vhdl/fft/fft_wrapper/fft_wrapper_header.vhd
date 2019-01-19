@@ -30,6 +30,7 @@ architecture arch of fft_wrapper_header is
 	constant OUTPUT_FORMAT_UP   : natural := 23;
 	constant OUTPUT_FORMAT_DOWN : natural := 8;
 	constant FFT_LENGTH  : natural := 512;
+	constant zero: std_logic_vector := "0000000000000000";
 
 	signal	si_valid     : std_logic;
 	signal	si_ready  	 : std_logic;
@@ -100,8 +101,8 @@ begin
 		sink_error   => si_error,   	 -- Indicates an error has occured in an upstream module
 		sink_sop     => si_sop,     	 -- Indicates the start of the incoming FFT frame
 		sink_eop     => si_eop,		 	 -- Indicates the end of the incoming FFT frame  
-		sink_real    => stin_data,    	 -- Real input data
-		sink_imag    => (others => '0'), -- Imaginary input data
+		sink_real    => (zero & stin_data(31 downto 16)), -- Real input data
+		sink_imag    => (zero & stin_data(15 downto  0)), -- Imaginary input data
 		inverse      => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => stout_ready, 

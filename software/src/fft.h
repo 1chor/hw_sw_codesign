@@ -5,23 +5,28 @@
 #include <stdint.h>
 #include "structs.h"
 
-void fft_h_setup_hw(  );
-void fft_b_setup_hw(  );
+void fft_h_setup_hw();
+void fft_b_setup_hw();
 
 // damit werden die FFTs ausgefuehrt
 
-void pre_process_h_header( struct wav* );
+void pre_process_h_header_hw( struct wav* );
 
-void fft_h_sample_hw
-(
-    
+void process_header_block_hw
+( 
+	 kiss_fft_cpx*
+	,kiss_fft_cpx*
+	,uint8_t
+	,uint8_t 
 );
 
-void fft_b_sample_hw
-(
-     
+void ifft_on_mac_buffer_hw
+( 
+	 uint16_t* 
+	,uint16_t* 
+	,complex_32_t* 
+	,complex_32_t*  
 );
-
 #endif
 
 
