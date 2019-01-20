@@ -25,7 +25,7 @@
 #include "complex.h"
 
 #define FIR_HW (0) 	 // If 1 then use FIR filter Hardware component
-#define FFT_H_HW (1) // If 1 then use header FFT Hardware component
+#define FFT_H_HW (0) // If 1 then use header FFT Hardware component
 #define FFT_B_HW (0) // If 1 then use body FFT Hardware component
 
 #define HAL_PLATFORM_RESET() \
@@ -357,6 +357,9 @@ void pre_process_h_header( struct wav* ir )
             
             // convert the binary value to float
             
+            //~ printf( "l_buf[%d]: %lx\n", 512+( header_blocks_h_i * 256 )+i, l_buf );
+            //~ printf( "r_buf[%d]: %lx\n", 512+( header_blocks_h_i * 256 )+i, r_buf );
+            
             cin_1[i].r = convert_1q15(l_buf);
             cin_1[i].i = 0;
             
@@ -403,10 +406,12 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
         samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
         samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
         
-        print_c_block_9q23( samples_1, i, i );
+        
+        //~ print_c_block_9q23( samples_1, i, i );
         
         samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
         samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );
+        printf( "%lx %lx i\n", samples_2[i].r, samples_2[i].i );
     }
     
     free( out_1 );
