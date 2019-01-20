@@ -122,7 +122,9 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
 	
 	// Clear Bit 0 from PIO, configures normal FFT operation
 	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0);
-        
+       
+    printf("Write sample to FIFO\n");
+    
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
@@ -132,16 +134,34 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)in_1[i].r)<<16) + (int32_t)in_2[i].r );
 	}
 	
+	printf("done\n");
+	printf("Read result from FIFO\n");
+	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
+		uint32_t temp; 
+		uint16_t t1, t2;
 		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		out_1[i].r = ( temp >> 16 ); // Upper bits are real data
-		out_2[i].r = temp; // Lower bits are imaginary data
+		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		//~ out_1[i].r = ( temp >> 16 ); // Upper bits are real data
+		//~ out_2[i].r = temp; // Lower bits are imaginary data
+		t1 = (uint16_t)( temp >> 16 ); // Upper bits are real data
+		t2 = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
+		
+		out_1[i].r = (float)t1;
+		out_2[i].r = (float)t2;
+		
+		//~ printf("Ausgelesen: %lx\n", temp);
+		//~ printf("Upper bits: %x\n", t1);
+		//~ printf("Upper bits: %d\n", t1);
+		//~ printf("Lower bits: %x\n", t2);
+		//~ printf("Lower bits: %d\n\n", t2);
 		//RICHTIG??
 	}
+    
+    printf("done\n");
+    printf("Get back both transformed channels\n");
     
 	// Get back both transformed channels
 	for ( i = 1; i < 512/2; i++ )
@@ -162,6 +182,8 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
 		out_2[i].r = ( out_2[i].r - out_2[512-i].r ) / 2;
 		out_2[512-i].r = - out_2[i].r;
 	}
+	
+	printf("done\n");
 		
     if ( free_input == 1 )
     {
@@ -176,6 +198,8 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
     {
         samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
         samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
+        
+        print_c_block_9q23( samples_1, i, i );
         
         samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
         samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jan 20, 2019 12:04:10 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1547939050983</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jan 20, 2019 3:07:36 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1547993256900</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -912,13 +912,13 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>fir_r</slaveDescriptor>
-                <addressRange>0x10201000 - 0x102017FF</addressRange>
+                <addressRange>0x10200800 - 0x10200FFF</addressRange>
                 <addressSpan>2048</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>fir_l</slaveDescriptor>
-                <addressRange>0x10201800 - 0x10201FFF</addressRange>
+                <addressRange>0x10201000 - 0x102017FF</addressRange>
                 <addressSpan>2048</addressSpan>
                 <attributes/>
         </MemoryMap>
@@ -971,13 +971,13 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>s2m_fifo_fir_r</slaveDescriptor>
+                <slaveDescriptor>m2s_fifo_fir_r</slaveDescriptor>
                 <addressRange>0x102024A0 - 0x102024A7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>s2m_fifo_ffth</slaveDescriptor>
+                <slaveDescriptor>s2m_fifo_fir_r</slaveDescriptor>
                 <addressRange>0x102024A8 - 0x102024AF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
@@ -989,19 +989,19 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>m2s_fifo_fir_r</slaveDescriptor>
+                <slaveDescriptor>m2s_fifo_fir_l</slaveDescriptor>
                 <addressRange>0x102024B8 - 0x102024BF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>m2s_fifo_ffth</slaveDescriptor>
+                <slaveDescriptor>s2m_fifo_ffth</slaveDescriptor>
                 <addressRange>0x102024C0 - 0x102024C7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>m2s_fifo_fir_l</slaveDescriptor>
+                <slaveDescriptor>m2s_fifo_ffth</slaveDescriptor>
                 <addressRange>0x102024C8 - 0x102024CF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>

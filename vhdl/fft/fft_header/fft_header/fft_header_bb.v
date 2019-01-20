@@ -26,15 +26,15 @@ module fft_header (
 	input	[1:0]	sink_error;
 	input		sink_sop;
 	input		sink_eop;
-	input	[31:0]	sink_real;
-	input	[31:0]	sink_imag;
+	input	[15:0]	sink_real;
+	input	[15:0]	sink_imag;
 	input	[0:0]	inverse;
 	output		source_valid;
 	input		source_ready;
 	output	[1:0]	source_error;
 	output		source_sop;
 	output		source_eop;
-	output	[31:0]	source_real;
-	output	[31:0]	source_imag;
+	output	[15:0]	source_real;
+	output	[15:0]	source_imag;
 	output	[5:0]	source_exp;
 endmodule

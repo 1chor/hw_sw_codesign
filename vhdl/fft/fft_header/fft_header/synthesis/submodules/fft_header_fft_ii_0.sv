@@ -19,8 +19,8 @@ module fft_header_fft_ii_0 (
 	input	sink_valid,
 	input	sink_sop,
 	input	sink_eop,
-	input	logic [31 : 0] sink_real,
-	input	logic [31 : 0] sink_imag,
+	input	logic [15 : 0] sink_real,
+	input	logic [15 : 0] sink_imag,
 	input	logic [1 : 0] sink_error,
 	input	source_ready,
    output [5 : 0] source_exp,
@@ -29,8 +29,8 @@ module fft_header_fft_ii_0 (
 	output source_sop,
 	output source_eop,
 	output source_valid,
-	output [31 : 0] source_real,
-	output [31 : 0] source_imag
+	output [15 : 0] source_real,
+	output [15 : 0] source_imag
 	);
 
 	asj_fft_sglstream #(
@@ -38,10 +38,10 @@ module fft_header_fft_ii_0 (
 		.nps(512),
 		.bfp(1),
 		.nume(1),
-		.mpr(32),
-		.twr(32),
-		.bpr(24),
-		.bpb(6),
+		.mpr(16),
+		.twr(16),
+		.bpr(16),
+		.bpb(4),
 		.fpr(4),
 		.mram(0),
 		.m512(0),

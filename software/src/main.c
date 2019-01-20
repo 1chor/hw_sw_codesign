@@ -24,8 +24,8 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (1) 	 // If 1 then use FIR filter Hardware component
-#define FFT_H_HW (0) // If 1 then use header FFT Hardware component
+#define FIR_HW (0) 	 // If 1 then use FIR filter Hardware component
+#define FFT_H_HW (1) // If 1 then use header FFT Hardware component
 #define FFT_B_HW (0) // If 1 then use body FFT Hardware component
 
 #define HAL_PLATFORM_RESET() \
@@ -340,8 +340,8 @@ void pre_process_h_header( struct wav* ir )
     {
         printf( "pre-processing block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
         
-        kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
-        kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+        kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
+        kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
         
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
@@ -378,8 +378,8 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
     
     kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
     
-    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
-    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
     
     zero_extend_256( in_1 );
     zero_extend_256( in_2 );
@@ -395,13 +395,15 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
     
     free( kiss_cfg );
     
-    complex_32_t* samples_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
-    complex_32_t* samples_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+    complex_32_t* samples_1 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
+    complex_32_t* samples_2 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
     
     for ( i = 0; i < 512; i++ )
     {
         samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
         samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
+        
+        print_c_block_9q23( samples_1, i, i );
         
         samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
         samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );

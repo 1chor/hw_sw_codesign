@@ -39,15 +39,15 @@ architecture arch of fft_wrapper_header is
 	signal  si_sop_next  : std_logic;
 	signal	si_eop		 : std_logic;
 	signal	si_eop_next	 : std_logic;
-	signal	si_real		 : std_logic_vector(31 downto 0);
-	signal	si_imag   	 : std_logic_vector(31 downto 0);
+	-- signal	si_real		 : std_logic_vector(15 downto 0);
+	-- signal	si_imag   	 : std_logic_vector(15 downto 0);
 	
 	signal	src_valid 	 : std_logic;
 	signal	src_error 	 : std_logic_vector(1 downto 0);
 	signal	src_sop   	 : std_logic;
 	signal	src_eop   	 : std_logic;
-	signal	src_real  	 : std_logic_vector(31 downto 0);
-	signal	src_imag  	 : std_logic_vector(31 downto 0);
+	signal	src_real  	 : std_logic_vector(15 downto 0);
+	signal	src_imag  	 : std_logic_vector(15 downto 0);
 	signal	src_exp   	 : std_logic_vector(5 downto 0);
 	
 	signal index 		 : natural range 0 to FFT_LENGTH := 0; -- one more than needed
@@ -75,16 +75,16 @@ architecture arch of fft_wrapper_header is
 			sink_error   : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- sink_error
 			sink_sop     : in  std_logic                     := 'X';             -- sink_sop
 			sink_eop     : in  std_logic                     := 'X';             -- sink_eop
-			sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_real
-			sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_imag
+			sink_real    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_real
+			sink_imag    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_imag
 			inverse      : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- inverse
 			source_valid : out std_logic;                                        -- source_valid
 			source_ready : in  std_logic                     := 'X';             -- source_ready
 			source_error : out std_logic_vector(1 downto 0);                     -- source_error
 			source_sop   : out std_logic;                                        -- source_sop
 			source_eop   : out std_logic;                                        -- source_eop
-			source_real  : out std_logic_vector(31 downto 0);                    -- source_real
-			source_imag  : out std_logic_vector(31 downto 0);                    -- source_imag
+			source_real  : out std_logic_vector(15 downto 0);                    -- source_real
+			source_imag  : out std_logic_vector(15 downto 0);                    -- source_imag
 			source_exp   : out std_logic_vector(5 downto 0)                      -- source_exp
 		);
 	end component fft_header;
@@ -101,8 +101,8 @@ begin
 		sink_error   => si_error,   	 -- Indicates an error has occured in an upstream module
 		sink_sop     => si_sop,     	 -- Indicates the start of the incoming FFT frame
 		sink_eop     => si_eop,		 	 -- Indicates the end of the incoming FFT frame  
-		sink_real    => (zero & stin_data(31 downto 16)), -- Real input data
-		sink_imag    => (zero & stin_data(15 downto  0)), -- Imaginary input data
+		sink_real    => stin_data(31 downto 16), -- Real input data
+		sink_imag    => stin_data(15 downto  0), -- Imaginary input data
 		inverse      => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => stout_ready, 
@@ -233,13 +233,13 @@ begin
 			
 			if exponent < 0 then -- right shift		
 				-- Ausgabe-Format 2Q14
-				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 				
 			elsif exponent >= 0 then -- left shift
 				-- Ausgabe-Format 2Q14
-				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs))(OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
 			end if;
 		end if;
 		

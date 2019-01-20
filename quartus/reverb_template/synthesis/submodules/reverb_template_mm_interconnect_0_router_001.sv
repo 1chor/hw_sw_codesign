@@ -135,13 +135,13 @@ module reverb_template_mm_interconnect_0_router_001
     // during address decoding
     // -------------------------------------------------------
     localparam PAD0 = log2ceil(64'h10000000 - 64'h8000000); 
-    localparam PAD1 = log2ceil(64'h10201000 - 64'h10200800); 
+    localparam PAD1 = log2ceil(64'h10202000 - 64'h10201800); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h10201000;
+    localparam ADDR_RANGE = 64'h10202000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -195,8 +195,8 @@ module reverb_template_mm_interconnect_0_router_001
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 16;
     end
 
-    // ( 0x10200800 .. 0x10201000 )
-    if ( {address[RG:PAD1],{PAD1{1'b0}}} == 29'h10200800   ) begin
+    // ( 0x10201800 .. 0x10202000 )
+    if ( {address[RG:PAD1],{PAD1{1'b0}}} == 29'h10201800   ) begin
             src_channel = 20'b01;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 10;
     end
