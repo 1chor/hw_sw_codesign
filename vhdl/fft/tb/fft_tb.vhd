@@ -33,6 +33,7 @@ architecture bench of fft_tb is
 	end component;
 
 	constant DATA_WIDTH : positive := 32;
+	constant FILE_LENGTH : positive := 256;
 	
 	signal clk : std_logic;
 	signal res_n : std_logic;
@@ -48,91 +49,119 @@ architecture bench of fft_tb is
 	constant stop_clock : boolean := false;
 	shared variable my_line : line;
 	
+	subtype in_word_t is std_logic_vector(15 downto 0);
+	type input_t is array(integer range 0 to FILE_LENGTH - 1) of in_word_t;
 	
-	type buffer_t is array(integer range<>) of std_logic_vector(DATA_WIDTH-1 downto 0);
+	subtype out_word_t is std_logic_vector(31 downto 0);
+	type output_t is array(integer range 0 to FILE_LENGTH - 1) of out_word_t;
 	
-	-- Use ocatve to obtain these values
-	-- filter([2,3,4,5,6,7,8,9], 1, [0,1,0,-1,0,1,0,-1,0,1,0,-1,0,1,0,-1])
-	-- alternatvly you can also use the "conv" function
-	shared variable ir_1 : buffer_t(0 to 7) := (
-		x"00020000", x"00030000", x"00040000", x"00050000",
-		x"00060000", x"00070000", x"00080000", x"00090000"
-	); 
+	shared variable ir_1 : input_t := (others => (others => '0'));
 	
-	shared variable ir_2 : buffer_t(0 to 7) := (
-		x"00020000", x"00030000", x"00040000", x"00050000",
-		x"00060000", x"00070000", x"00080000", x"00090000"
-	); 
+	shared variable ir_2 : input_t;
 	
-	shared variable test_input : buffer_t(0 to 15) := (
-		x"00000000", x"00010000", x"00000000", x"ffff0000",
-		x"00000000", x"00010000", x"00000000", x"ffff0000",
-		x"00000000", x"00010000", x"00000000", x"ffff0000",
-		x"00000000", x"00010000", x"00000000", x"ffff0000"
-	); 
+	shared variable output_ref_1_real : output_t; 
+	shared variable output_ref_1_imag : output_t; 
 	
-	shared variable test_output_ref : buffer_t(0 to 15) := (
-		x"00000000", x"00020000", x"00030000", x"00020000",
-		x"00020000", x"00040000", x"00050000", x"00040000",
-		x"00040000", x"FFFC0000", x"FFFC0000", x"00040000",
-		x"00040000", x"FFFC0000", x"FFFC0000", x"00040000"
-	); 
-	
-	shared variable output_buffer : buffer_t(0 to 63); 
+	shared variable output_ref_2_real : output_t;
+	shared variable output_ref_2_imag : output_t;
+		
+	shared variable output_buffer : output_t; 
 	shared variable output_buffer_idx : integer := 0; 
+	
+	shared variable line_v : line;
 begin
 
-	uut : fir
-		generic map (
-			NUM_COEFFICIENTS => NUM_COEFFICIENTS,
-			DATA_WIDTH => DATA_WIDTH,
-			ADDR_WIDTH => ADDR_WIDTH
-		)
+	uut : fft_wrapper_header
 		port map (
-			clk          => clk,
-			res_n        => res_n,
-			stin_data    => stin_data,
-			stin_valid   => stin_valid,
-			stin_ready   => stin_ready,
-			stout_data   => stout_data,
-			stout_valid  => stout_valid,
-			stout_ready  => stout_ready,
-			mm_address   => mm_address,
-			mm_write     => mm_write,
-			mm_read      => mm_read,
-			mm_writedata => mm_writedata,
-			mm_readdata  => mm_readdata
+			clk         => clk,
+			reset_n     => res_n,
+			stin_data   => stin_data,
+			stin_valid  => stin_valid,
+			stin_ready  => stin_ready,
+			stout_data  => stout_data,
+			stout_valid => stout_valid,
+			stout_ready => stout_ready,
+			inverse		=> inverse
 		);
 		
 	stout_ready <= '1'; -- is not checked
 
 	stimulus : process
-		procedure write_coefficient(index : integer; value : std_logic_vector) is
-		begin
-			mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
-			mm_writedata <= value;
-			mm_write <= '1';
-			wait until rising_edge(clk);
-			mm_write <= '0';
-		end procedure;
+		-- procedure write_coefficient(index : integer; value : std_logic_vector) is
+		-- begin
+			-- mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
+			-- mm_writedata <= value;
+			-- mm_write <= '1';
+			-- wait until rising_edge(clk);
+			-- mm_write <= '0';
+		-- end procedure;
 		
-		--~ procedure read_coefficient(index : integer; value : out std_logic_vector) is
-		--~ begin
-			--~ mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
-			--~ mm_read <= '1';
-			--~ wait until rising_edge(clk);
-			--~ mm_read <= '0';
-			--~ wait for CLK_PERIOD/4;
-			--~ value := mm_readdata;
-			--~ wait until rising_edge(clk);
-		--~ end procedure;
+		-- ~ procedure read_coefficient(index : integer; value : out std_logic_vector) is
+		-- ~ begin
+			-- ~ mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
+			-- ~ mm_read <= '1';
+			-- ~ wait until rising_edge(clk);
+			-- ~ mm_read <= '0';
+			-- ~ wait for CLK_PERIOD/4;
+			-- ~ value := mm_readdata;
+			-- ~ wait until rising_edge(clk);
+		-- ~ end procedure;
+		
+		impure function read_input_file(filename : string) return input_t is
+			file FileHandle      : text open read_mode is filename;
+			variable CurrentLine : line;
+			variable TempWord    : in_word_t;
+			variable Result      : input_t := (others => (others => '0'));
+
+		begin
+			for i in 0 to FILE_LENGTH - 1 loop
+				exit when endfile(FileHandle);
+
+				readline(FileHandle, CurrentLine);
+				hread(CurrentLine, TempWord);
+				--report "TempWord: " & to_hstring(TempWord);
+				Result(i) := TempWord;
+			end loop;
+
+			return Result;
+		end function;
+		
+		impure function read_output_file(filename : string) return output_t is
+			file FileHandle      : text open read_mode is filename;
+			variable CurrentLine : line;
+			variable TempWord    : out_word_t;
+			variable Result      : output_t := (others => (others => '0'));
+
+		begin
+			for i in 0 to FILE_LENGTH - 1 loop
+				exit when endfile(FileHandle);
+
+				readline(FileHandle, CurrentLine);
+				hread(CurrentLine, TempWord);
+				--report "TempWord: " & to_hstring(TempWord);
+				Result(i) := TempWord;
+			end loop;
+
+			return Result;
+		end function;
+		
+		-- procedure read_file_output(name : string; buf : output_t) is
+			-- variable i : integer := 0;
+			-- file read_file : text;
+		-- begin
+			
+			-- file_open(read_file, name, read_mode);
+			-- while not endfile(read_file) loop
+				-- readline(read_file, line_v);
+				-- hread(line_v, buf(i));
+				-- i := i + 1;				
+			-- end loop;
+			-- file_close(read_file);
+		-- end procedure;
 		
 		procedure stream_write(value : std_logic_vector) is 
 		begin
-            -- stin_data <= value;
-            -- stin_valid <= '1';
-            -- wait until rising_edge(stin_ready);
-			if(stin_ready = '0') then
+            if(stin_ready = '0') then
 				wait until stin_ready = '1';
 			end if;
 			stin_data <= value;
@@ -142,24 +171,24 @@ begin
 			wait for 0 ns;
 		end procedure;
 		
-		procedure compare_buffers(buffer_A, buffer_B : buffer_t; length : integer) is
-		begin
-			for i in 0 to length-1 loop
-				if (buffer_A(i) /= buffer_B(i) ) then
-					report ("Buffers don't match (index = " & integer'image(i) & ", " & slv_to_hex(buffer_A(i)) & " vs. " & slv_to_hex(buffer_B(i))) severity error;
-				end if;
-			end loop;
-		end procedure;
+		-- procedure compare_buffers(buffer_A, buffer_B : buffer_t; length : integer) is
+		-- begin
+			-- for i in 0 to length-1 loop
+				-- if (buffer_A(i) /= buffer_B(i) ) then
+					-- report ("Buffers don't match (index = " & integer'image(i) & ", " & slv_to_hex(buffer_A(i)) & " vs. " & slv_to_hex(buffer_B(i))) severity error;
+				-- end if;
+			-- end loop;
+		-- end procedure;
 		
-		procedure wait_for_output_buffer_fill_level(fill_level : integer) is
-		begin
-			loop
-				wait for 100 ns;
-				if(output_buffer_idx = fill_level) then
-					exit;
-				end if;
-			end loop;
-		end procedure;
+		-- procedure wait_for_output_buffer_fill_level(fill_level : integer) is
+		-- begin
+			-- loop
+				-- wait for 100 ns;
+				-- if(output_buffer_idx = fill_level) then
+					-- exit;
+				-- end if;
+			-- end loop;
+		-- end procedure;
 	begin
 	
 		write(my_line, string'("----------------------------------"));
@@ -167,10 +196,6 @@ begin
 	
 		res_n <= '0';
 		stin_data <= (others=>'0');
-		mm_address <= (others=>'0');
-		mm_writedata <= (others=>'0');
-		mm_write <= '0';
-		--mm_read <= '0';
 		--stout_ready <= '0';
 		stin_valid <= '0';
 		wait until rising_edge(clk);
@@ -179,44 +204,60 @@ begin
 		res_n <= '1';
 		wait until rising_edge(clk);
 				
-		write(my_line, string'("Writing coefficients to memory"));
+		write(my_line, string'("Load Input Buffers"));
 		writeline(output, my_line);
-		for i in 0 to 7 loop
-			write_coefficient(i, coefficients(i));
-		end loop; 
+		
+		ir_1 := read_input_file("tb/l_buf.txt");
+		ir_2 := read_input_file("tb/r_buf.txt");
+		
+		output_ref_1_real := read_output_file("tb/result_1_real.txt");
+		output_ref_1_imag := read_output_file("tb/result_1_imag.txt");
+	
+		output_ref_2_real := read_output_file("tb/result_2_real.txt");
+		output_ref_2_imag := read_output_file("tb/result_2_imag.txt");
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			-- stin_data <= (x"0000" & ir_2(i));
+			stin_data <= output_ref_1_imag(i);
+			wait until rising_edge(clk);
+		end loop;
+		
+		-- for i in 0 to 7 loop
+			-- write_coefficient(i, coefficients(i));
+		-- end loop; 
 
-		--~ write(my_line, string'("Coefficients read-back test"));
-		--~ writeline(output, my_line);
-		--~ for i in 0 to 7 loop
-			--~ read_coefficient(i, output_buffer(i));
-		--~ end loop; 
+		-- ~ write(my_line, string'("Coefficients read-back test"));
+		-- ~ writeline(output, my_line);
+		-- ~ for i in 0 to 7 loop
+			-- ~ read_coefficient(i, output_buffer(i));
+		-- ~ end loop; 
 
-		--~ wait until rising_edge(clk);
-		--~ compare_buffers(coefficients, output_buffer, 8);
+		-- ~ wait until rising_edge(clk);
+		-- ~ compare_buffers(coefficients, output_buffer, 8);
 		
 		-- the impulse response of an FIR filter must match it's coefficients
-		write(my_line, string'("Impulse response test"));
-		writeline(output, my_line);
-		stream_write(x"00010000");
-		for i in 1 to 7 loop
-			stream_write(x"00000000");
-		end loop; 
-		stin_valid <= '0';
+		-- write(my_line, string'("Impulse response test"));
+		-- writeline(output, my_line);
+		-- stream_write(x"00010000");
+		-- for i in 1 to 7 loop
+			-- stream_write(x"00000000");
+		-- end loop; 
+		-- stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level(8);
-		compare_buffers(coefficients, output_buffer, 8);
+		-- wait_for_output_buffer_fill_level(8);
+		-- compare_buffers(coefficients, output_buffer, 8);
 		
 
-		write(my_line, string'("General filter test"));
-		writeline(output, my_line);
-		output_buffer_idx := 0;
-		for i in 0 to 15 loop
-			stream_write(test_input(i));
-		end loop; 
-		stin_valid <= '0';
+		-- write(my_line, string'("General filter test"));
+		-- writeline(output, my_line);
+		-- output_buffer_idx := 0;
+		-- for i in 0 to 15 loop
+			-- stream_write(test_input(i));
+		-- end loop; 
+		-- stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level(16);
-		compare_buffers(output_buffer, test_output_ref, 16);
+		-- wait_for_output_buffer_fill_level(16);
+		-- compare_buffers(output_buffer, test_output_ref, 16);
 
 		write(my_line, string'("Done"));
 		writeline(output, my_line);

@@ -213,7 +213,7 @@ begin
 		
 	end process send_proc;
 			
-	output_proc : process(stout_ready, src_valid, src_exp, src_imag, src_real) is
+	output_proc : process(stout_ready, state_next, state, src_valid, src_exp, src_imag, src_real) is
 	variable exponent 	  : integer range -15 to 15 := 0;
 	variable exponent_abs : natural range   0 to 15 := 0;
 	begin
