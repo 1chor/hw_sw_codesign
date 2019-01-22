@@ -30,8 +30,7 @@ architecture arch of fft_wrapper_header is
 	constant OUTPUT_FORMAT_UP   : natural := 23;
 	constant OUTPUT_FORMAT_DOWN : natural := 8;
 	constant FFT_LENGTH  : natural := 512;
-	constant zero: std_logic_vector := "0000000000000000";
-
+	
 	signal	si_valid     : std_logic;
 	signal	si_ready  	 : std_logic;
 	signal	si_error  	 : std_logic_vector(1 downto 0);
@@ -190,6 +189,7 @@ begin
 		
 			when STATE_IDLE =>
 				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
+					stin_ready <= '0'; -- Activate for simulation
 					transfer_state_next <= TRANSFER_DATA;
 					si_sop_next <= '1';
 				end if;

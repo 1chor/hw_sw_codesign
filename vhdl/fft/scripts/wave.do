@@ -12,10 +12,6 @@ add wave -noupdate /fft_tb/stout_valid
 add wave -noupdate /fft_tb/stout_ready
 add wave -noupdate -divider {Inverse}
 add wave -noupdate /fft_tb/inverse
-add wave -noupdate -divider other
-add wave -noupdate /fft_tb/DATA_WIDTH
-add wave -noupdate /fft_tb/CLK_PERIOD
-add wave -noupdate /fft_tb/stop_clock
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {120612 ps} 0}
 quietly wave cursor active 1

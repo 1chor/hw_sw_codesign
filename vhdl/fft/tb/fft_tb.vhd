@@ -1,6 +1,8 @@
 library STD;
 use STD.textio.all;
 
+--library lib_fft_header;
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -68,11 +70,6 @@ architecture bench of fft_tb is
 		
 	shared variable output_buffer : output_t; 
 	shared variable output_buffer_idx : integer := 0; 
-	
-	variable output_1_real : output_t;
-	variable output_1_imag : output_t;
-	variable output_2_real : output_t;
-	variable output_2_imag : output_t;
 begin
 
 	uut : fft_wrapper_header
@@ -91,25 +88,11 @@ begin
 	stout_ready <= '1'; -- is not checked
 
 	stimulus : process
-		-- procedure write_coefficient(index : integer; value : std_logic_vector) is
-		-- begin
-			-- mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
-			-- mm_writedata <= value;
-			-- mm_write <= '1';
-			-- wait until rising_edge(clk);
-			-- mm_write <= '0';
-		-- end procedure;
-		
-		-- ~ procedure read_coefficient(index : integer; value : out std_logic_vector) is
-		-- ~ begin
-			-- ~ mm_address <= std_logic_vector(to_unsigned(index, mm_address'length));
-			-- ~ mm_read <= '1';
-			-- ~ wait until rising_edge(clk);
-			-- ~ mm_read <= '0';
-			-- ~ wait for CLK_PERIOD/4;
-			-- ~ value := mm_readdata;
-			-- ~ wait until rising_edge(clk);
-		-- ~ end procedure;
+	
+		variable output_1_real : output_t;
+		variable output_1_imag : output_t;
+		variable output_2_real : output_t;
+		variable output_2_imag : output_t;
 		
 		impure function read_input_file(filename : string) return input_t is
 			file FileHandle      : text open read_mode is filename;
@@ -218,29 +201,39 @@ begin
 		
 		wait_for_output_buffer_fill_level(FILE_LENGTH);
 		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output_1_real(i) := x"0000" & output_buffer(i)(31 downto 16);
+			output_2_real(i) := x"0000" & output_buffer(i)(15 downto 0);
+		end loop;
 		
 		-- Get back both transformed channels
-		for ( i = 1; i < 512/2; i++ )
-		{
-			// imaginary parts of X[f] and X[-f]
-			out_1[i].i = ( out_2[i].r - out_2[512-i].r ) / 2;
-			out_1[512-i].i = - out_1[i].i;
+		for i in 1 to FILE_LENGTH/2 loop
+			-- imaginary parts of X[f] and X[-f]
+			output_1_imag(i) := std_logic_vector( (signed(output_2_real(i)) - signed(output_2_real(512-i))) / 2 );
+			output_1_imag(512-i) := not output_1_imag(i);
 			
-			// imaginary parts of Y[f] and Y[-f]
-			out_2[i].i = - ( out_1[i].r - out_1[512-i].r ) / 2;
-			out_2[512-i].i = - out_2[i].i;
+			-- imaginary parts of Y[f] and Y[-f]
+			output_2_imag(i) := not std_logic_vector( (signed(output_1_real(i)) - signed(output_1_real(512-i))) / 2 );
+			output_2_imag(512-i) := not output_2_imag(i);
 			
-			// real parts of X[f] and X[-f]
-			out_1[i].r = ( out_1[i].r + out_1[512-i].r ) / 2;
-			out_1[512-i].r = out_1[i].r;
+			-- real parts of X[f] and X[-f]
+			output_1_real(i) := std_logic_vector( (signed(output_1_real(i)) + signed(output_1_real(512-i))) / 2 );
+			output_1_real(512-i) := output_1_real(i);
 			
-			// real parts of Y[f] and Y[-f]
-			out_2[i].r = ( out_2[i].r - out_2[512-i].r ) / 2;
-			out_2[512-i].r = - out_2[i].r;
-		}
+			-- real parts of Y[f] and Y[-f]
+			output_2_real(i) := std_logic_vector( (signed(output_2_real(i)) - signed(output_2_real(512-i))) / 2 );
+			output_2_real(512-i) := not output_2_real(i);
+		end loop;
 		
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
 		
-		compare_buffers(output_buffer, test_output_ref, 16);
+		-- Compare result
+		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
+		compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		
+		compare_buffers(output_2_real, output_ref_2_real, FILE_LENGTH);
+		compare_buffers(output_2_imag, output_ref_2_imag, FILE_LENGTH);
 
 		write(my_line, string'("Done"));
 		writeline(output, my_line);

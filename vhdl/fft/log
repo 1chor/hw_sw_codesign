@@ -1,5 +1,23 @@
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 01:23:26 on Jan 21,2019
+Start time: 17:08:43 on Jan 22,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/src/fft_header/fft_header/simulation/fft_header.sip 
+-- Loading package STANDARD
+** Error: ../fft/src/fft_header/fft_header/simulation/fft_header.sip(1): near "set_global_assignmen": syntax error
+End time: 17:08:43 on Jan 22,2019, Elapsed time: 0:00:00
+Errors: 1, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 17:08:43 on Jan 22,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/src/fft_header/fft_header/simulation/fft_header.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity fft_header
+-- Compiling architecture rtl of fft_header
+End time: 17:08:43 on Jan 22,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 17:08:43 on Jan 22,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/src/fft_wrapper/fft_wrapper_header.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -10,10 +28,10 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/src/fft_wrapper/fft
 -- Loading package STD_LOGIC_SIGNED
 -- Compiling entity fft_wrapper_header
 -- Compiling architecture arch of fft_wrapper_header
-End time: 01:23:26 on Jan 21,2019, Elapsed time: 0:00:00
+End time: 17:08:43 on Jan 22,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 01:23:26 on Jan 21,2019
+Start time: 17:08:43 on Jan 22,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../tb/tb_util_pkg.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -22,10 +40,10 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../tb/tb_util_pkg.vhd
 -- Compiling package tb_util_pkg
 -- Compiling package body tb_util_pkg
 -- Loading package tb_util_pkg
-End time: 01:23:26 on Jan 21,2019, Elapsed time: 0:00:00
+End time: 17:08:43 on Jan 22,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 01:23:26 on Jan 21,2019
+Start time: 17:08:43 on Jan 22,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/tb/fft_tb.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -35,5 +53,5 @@ vcom -check_synthesis -2008 -work work -suppress 1236 ../fft/tb/fft_tb.vhd
 -- Loading package tb_util_pkg
 -- Compiling entity fft_tb
 -- Compiling architecture bench of fft_tb
-End time: 01:23:26 on Jan 21,2019, Elapsed time: 0:00:00
+End time: 17:08:43 on Jan 22,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0, Suppressed Warnings: 10
