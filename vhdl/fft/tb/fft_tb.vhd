@@ -48,6 +48,7 @@ architecture bench of fft_tb is
 	constant CLK_PERIOD : time := 10 ns;
 	constant stop_clock : boolean := false;
 	shared variable my_line : line;
+	shared variable line_v : line;
 	
 	subtype in_word_t is std_logic_vector(15 downto 0);
 	type input_t is array(integer range 0 to FILE_LENGTH - 1) of in_word_t;
@@ -68,7 +69,10 @@ architecture bench of fft_tb is
 	shared variable output_buffer : output_t; 
 	shared variable output_buffer_idx : integer := 0; 
 	
-	shared variable line_v : line;
+	variable output_1_real : output_t;
+	variable output_1_imag : output_t;
+	variable output_2_real : output_t;
+	variable output_2_imag : output_t;
 begin
 
 	uut : fft_wrapper_header
@@ -112,7 +116,6 @@ begin
 			variable CurrentLine : line;
 			variable TempWord    : in_word_t;
 			variable Result      : input_t := (others => (others => '0'));
-
 		begin
 			for i in 0 to FILE_LENGTH - 1 loop
 				exit when endfile(FileHandle);
@@ -131,7 +134,6 @@ begin
 			variable CurrentLine : line;
 			variable TempWord    : out_word_t;
 			variable Result      : output_t := (others => (others => '0'));
-
 		begin
 			for i in 0 to FILE_LENGTH - 1 loop
 				exit when endfile(FileHandle);
@@ -144,21 +146,7 @@ begin
 
 			return Result;
 		end function;
-		
-		-- procedure read_file_output(name : string; buf : output_t) is
-			-- variable i : integer := 0;
-			-- file read_file : text;
-		-- begin
-			
-			-- file_open(read_file, name, read_mode);
-			-- while not endfile(read_file) loop
-				-- readline(read_file, line_v);
-				-- hread(line_v, buf(i));
-				-- i := i + 1;				
-			-- end loop;
-			-- file_close(read_file);
-		-- end procedure;
-		
+				
 		procedure stream_write(value : std_logic_vector) is 
 		begin
             if(stin_ready = '0') then
@@ -171,24 +159,24 @@ begin
 			wait for 0 ns;
 		end procedure;
 		
-		-- procedure compare_buffers(buffer_A, buffer_B : buffer_t; length : integer) is
-		-- begin
-			-- for i in 0 to length-1 loop
-				-- if (buffer_A(i) /= buffer_B(i) ) then
-					-- report ("Buffers don't match (index = " & integer'image(i) & ", " & slv_to_hex(buffer_A(i)) & " vs. " & slv_to_hex(buffer_B(i))) severity error;
-				-- end if;
-			-- end loop;
-		-- end procedure;
+		procedure compare_buffers(buffer_A, buffer_B : output_t; length : integer) is
+		begin
+			for i in 0 to length-1 loop
+				if (buffer_A(i) /= buffer_B(i) ) then
+					report ("Buffers don't match (index = " & integer'image(i) & ", " & slv_to_hex(buffer_A(i)) & " vs. " & slv_to_hex(buffer_B(i))) severity error;
+				end if;
+			end loop;
+		end procedure;
 		
-		-- procedure wait_for_output_buffer_fill_level(fill_level : integer) is
-		-- begin
-			-- loop
-				-- wait for 100 ns;
-				-- if(output_buffer_idx = fill_level) then
-					-- exit;
-				-- end if;
-			-- end loop;
-		-- end procedure;
+		procedure wait_for_output_buffer_fill_level(fill_level : integer) is
+		begin
+			loop
+				wait for 100 ns;
+				if(output_buffer_idx = fill_level) then
+					exit;
+				end if;
+			end loop;
+		end procedure;
 	begin
 	
 		write(my_line, string'("----------------------------------"));
@@ -210,54 +198,49 @@ begin
 		ir_1 := read_input_file("tb/l_buf.txt");
 		ir_2 := read_input_file("tb/r_buf.txt");
 		
+		write(my_line, string'("Load Reference Output Buffers"));
+		writeline(output, my_line);
+		
 		output_ref_1_real := read_output_file("tb/result_1_real.txt");
 		output_ref_1_imag := read_output_file("tb/result_1_imag.txt");
 	
 		output_ref_2_real := read_output_file("tb/result_2_real.txt");
 		output_ref_2_imag := read_output_file("tb/result_2_imag.txt");
 		
+		write(my_line, string'("General FFT test"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
 		for i in 0 to FILE_LENGTH - 1 loop
-			-- stin_data <= (x"0000" & ir_2(i));
-			stin_data <= output_ref_1_imag(i);
-			wait until rising_edge(clk);
-		end loop;
+			stream_write(ir_2(i) & ir_2(i)); -- Send both channels at same time
+		end loop; 
+		stin_valid <= '0';
 		
-		-- for i in 0 to 7 loop
-			-- write_coefficient(i, coefficients(i));
-		-- end loop; 
-
-		-- ~ write(my_line, string'("Coefficients read-back test"));
-		-- ~ writeline(output, my_line);
-		-- ~ for i in 0 to 7 loop
-			-- ~ read_coefficient(i, output_buffer(i));
-		-- ~ end loop; 
-
-		-- ~ wait until rising_edge(clk);
-		-- ~ compare_buffers(coefficients, output_buffer, 8);
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
 		
-		-- the impulse response of an FIR filter must match it's coefficients
-		-- write(my_line, string'("Impulse response test"));
-		-- writeline(output, my_line);
-		-- stream_write(x"00010000");
-		-- for i in 1 to 7 loop
-			-- stream_write(x"00000000");
-		-- end loop; 
-		-- stin_valid <= '0';
 		
-		-- wait_for_output_buffer_fill_level(8);
-		-- compare_buffers(coefficients, output_buffer, 8);
+		-- Get back both transformed channels
+		for ( i = 1; i < 512/2; i++ )
+		{
+			// imaginary parts of X[f] and X[-f]
+			out_1[i].i = ( out_2[i].r - out_2[512-i].r ) / 2;
+			out_1[512-i].i = - out_1[i].i;
+			
+			// imaginary parts of Y[f] and Y[-f]
+			out_2[i].i = - ( out_1[i].r - out_1[512-i].r ) / 2;
+			out_2[512-i].i = - out_2[i].i;
+			
+			// real parts of X[f] and X[-f]
+			out_1[i].r = ( out_1[i].r + out_1[512-i].r ) / 2;
+			out_1[512-i].r = out_1[i].r;
+			
+			// real parts of Y[f] and Y[-f]
+			out_2[i].r = ( out_2[i].r - out_2[512-i].r ) / 2;
+			out_2[512-i].r = - out_2[i].r;
+		}
 		
-
-		-- write(my_line, string'("General filter test"));
-		-- writeline(output, my_line);
-		-- output_buffer_idx := 0;
-		-- for i in 0 to 15 loop
-			-- stream_write(test_input(i));
-		-- end loop; 
-		-- stin_valid <= '0';
 		
-		-- wait_for_output_buffer_fill_level(16);
-		-- compare_buffers(output_buffer, test_output_ref, 16);
+		compare_buffers(output_buffer, test_output_ref, 16);
 
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
