@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element fft_header_inst
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+   element fft_header_inst_clk_bfm
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+   }
+   element fft_header_inst_rst_bfm
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element fft_header_inst_sink_bfm
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
+   element fft_header_inst_source_bfm
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="EP4CE115F29C7" />
+ <parameter name="deviceFamily" value="Cyclone IV E" />
+ <parameter name="deviceSpeedGrade" value="7" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="fft_header" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="true" />
+ <instanceScript></instanceScript>
+ <module name="fft_header_inst" kind="fft_header" version="1.0" enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="1" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="1" />
+  <parameter name="AUTO_DEVICE" value="EP4CE115F29C7" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
+  <parameter name="AUTO_GENERATION_ID" value="0" />
+  <parameter name="AUTO_UNIQUE_ID" value="fft_header" />
+ </module>
+ <module
+   name="fft_header_inst_clk_bfm"
+   kind="altera_avalon_clock_source"
+   version="18.1"
+   enabled="1">
+  <parameter name="CLOCK_RATE" value="50000000" />
+  <parameter name="CLOCK_UNIT" value="1" />
+ </module>
+ <module
+   name="fft_header_inst_rst_bfm"
+   kind="altera_avalon_reset_source"
+   version="18.1"
+   enabled="1">
+  <parameter name="ASSERT_HIGH_RESET" value="0" />
+  <parameter name="INITIAL_RESET_CYCLES" value="50" />
+ </module>
+ <module
+   name="fft_header_inst_sink_bfm"
+   kind="altera_conduit_bfm"
+   version="18.1"
+   enabled="1">
+  <parameter name="CLOCKED_SIGNAL" value="true" />
+  <parameter name="ENABLE_RESET" value="true" />
+  <parameter name="SIGNAL_DIRECTIONS">output,output,output,output,input,output,output,output</parameter>
+  <parameter name="SIGNAL_ROLES">inverse,sink_eop,sink_error,sink_imag,sink_ready,sink_real,sink_sop,sink_valid</parameter>
+  <parameter name="SIGNAL_WIDTHS" value="1,1,2,16,1,16,1,1" />
+ </module>
+ <module
+   name="fft_header_inst_source_bfm"
+   kind="altera_conduit_bfm"
+   version="18.1"
+   enabled="1">
+  <parameter name="CLOCKED_SIGNAL" value="true" />
+  <parameter name="ENABLE_RESET" value="true" />
+  <parameter name="SIGNAL_DIRECTIONS">input,input,input,input,output,input,input,input</parameter>
+  <parameter name="SIGNAL_ROLES">source_eop,source_error,source_exp,source_imag,source_ready,source_real,source_sop,source_valid</parameter>
+  <parameter name="SIGNAL_WIDTHS" value="1,2,6,16,1,16,1,1" />
+ </module>
+ <connection
+   kind="clock"
+   version="18.1"
+   start="fft_header_inst_clk_bfm.clk"
+   end="fft_header_inst.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="fft_header_inst_clk_bfm.clk"
+   end="fft_header_inst_rst_bfm.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="fft_header_inst_clk_bfm.clk"
+   end="fft_header_inst_sink_bfm.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="fft_header_inst_clk_bfm.clk"
+   end="fft_header_inst_source_bfm.clk" />
+ <connection
+   kind="conduit"
+   version="18.1"
+   start="fft_header_inst_sink_bfm.conduit"
+   end="fft_header_inst.sink">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="18.1"
+   start="fft_header_inst_source_bfm.conduit"
+   end="fft_header_inst.source">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="reset"
+   version="18.1"
+   start="fft_header_inst_rst_bfm.reset"
+   end="fft_header_inst_sink_bfm.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="fft_header_inst_rst_bfm.reset"
+   end="fft_header_inst_source_bfm.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="fft_header_inst_rst_bfm.reset"
+   end="fft_header_inst.rst" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>

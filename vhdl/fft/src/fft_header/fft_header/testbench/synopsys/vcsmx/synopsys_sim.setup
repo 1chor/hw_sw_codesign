@@ -1,0 +1,23 @@
+
+WORK > DEFAULT
+DEFAULT:                    ./libraries/work/                      
+work:                       ./libraries/work/                      
+fft_ii_0:                   ./libraries/fft_ii_0/                  
+fft_header_inst_source_bfm: ./libraries/fft_header_inst_source_bfm/
+fft_header_inst_sink_bfm:   ./libraries/fft_header_inst_sink_bfm/  
+fft_header_inst_rst_bfm:    ./libraries/fft_header_inst_rst_bfm/   
+fft_header_inst_clk_bfm:    ./libraries/fft_header_inst_clk_bfm/   
+fft_header_inst:            ./libraries/fft_header_inst/           
+altera_ver:                 ./libraries/altera_ver/                
+lpm_ver:                    ./libraries/lpm_ver/                   
+sgate_ver:                  ./libraries/sgate_ver/                 
+altera_mf_ver:              ./libraries/altera_mf_ver/             
+altera_lnsim_ver:           ./libraries/altera_lnsim_ver/          
+cycloneive_ver:             ./libraries/cycloneive_ver/            
+altera:                     ./libraries/altera/                    
+lpm:                        ./libraries/lpm/                       
+sgate:                      ./libraries/sgate/                     
+altera_mf:                  ./libraries/altera_mf/                 
+altera_lnsim:               ./libraries/altera_lnsim/              
+cycloneive:                 ./libraries/cycloneive/                
+LIBRARY_SCAN = TRUE

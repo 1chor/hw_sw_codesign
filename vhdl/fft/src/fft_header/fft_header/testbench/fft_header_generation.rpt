@@ -1,0 +1,321 @@
+Info: Starting: Create testbench Platform Designer system
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/fft_header.ipx
+Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header.qsys --testbench=STANDARD --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header --family="Cyclone IV E" --part=EP4CE115F29C7
+Progress: Loading fft_header/fft_header.qsys
+Progress: Reading input file
+Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
+Progress: Parameterizing module fft_ii_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: fft_header.fft_ii_0: Radix-2 digit reverse implied
+Info: qsys-generate succeeded.
+Info: Loading IP catalog for testbench.
+Progress: 
+Progress: 
+Progress: 
+Progress: (2) searching /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/root_components.ipx (ipx file)
+Info: Reading index /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/root_components.ipx
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/root_components.ipx: Loading now from components.ipx
+Info: Reading index /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/ip_component_categories.ipx
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/ip_component_categories.ipx described 0 plugins, 0 paths, in 0.01 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/ip_component_categories.ipx matched 1 files in 0.01 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ip/**/* matched 0 files in 0.01 seconds
+Info: Reading index /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/fft_header.ipx
+Progress: Loading fft_header/fft_header.qsys
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/* matched 5 files in 0.00 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/ip/**/* matched 0 files in 0.00 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/*/* matched 24 files in 0.01 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/fft_header.ipx described 0 plugins, 3 paths, in 0.01 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/* matched 4 files in 0.01 seconds
+Info: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/*/* matched 0 files in 0.00 seconds
+Info: /homes/h01325347/.altera.quartus/ip/18.1/**/* matched 0 files in 0.00 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/$$QUARTUS_IP_PROJECTDIR/* matched 0 files in 0.00 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/$$QUARTUS_IP_USERDIR/* matched 0 files in 0.00 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/$$QUARTUS_IP_GLOBALDIR/* matched 0 files in 0.00 seconds
+Info: Reading index /opt/quartus_18.1-18.1.0.625/ip/altera/altera_components.ipx
+Info: /opt/quartus_18.1-18.1.0.625/ip/altera/altera_components.ipx described 2035 plugins, 0 paths, in 0.13 seconds
+Info: /opt/quartus_18.1-18.1.0.625/ip/**/* matched 139 files in 0.13 seconds
+Info: /opt/ip/**/* matched 0 files in 0.00 seconds
+Info: Reading index /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/builtin.ipx
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/builtin.ipx described 83 plugins, 0 paths, in 0.00 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/**/* matched 9 files in 0.00 seconds
+Info: Reading index /opt/quartus_18.1-18.1.0.625/quartus/common/librarian/factories/index.ipx
+Info: /opt/quartus_18.1-18.1.0.625/quartus/common/librarian/factories/index.ipx described 151 plugins, 0 paths, in 0.01 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/common/librarian/factories/**/* matched 4 files in 0.01 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/$IP_IPX_PATH matched 1 files in 0.00 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/root_components.ipx described 0 plugins, 13 paths, in 0.17 seconds
+Info: /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/root_components.ipx matched 1 files in 0.17 seconds
+Progress: 
+Progress: 
+Progress: 
+Info: Running script /opt/quartus_18.1-18.1.0.625/quartus/sopc_builder/bin/tbgen.tcl
+Info: send_message Info TB_Gen: QSYS Testbench Generator Rev: $Revision: #1 $
+Info: TB_Gen: QSYS Testbench Generator Rev: $Revision: #1 $
+Info: get_module_property NAME
+Info: send_message Info TB_Gen: System design is: fft_header
+Info: TB_Gen: System design is: fft_header
+Info: get_interfaces 
+Info: get_connections 
+Info: get_interface_property clk EXPORT_OF
+Info: get_instance_property fft_ii_0 CLASS_NAME
+Info: get_instance_assignment fft_ii_0 testbench.partner.map.clk
+Info: get_interface_property rst EXPORT_OF
+Info: get_instance_property fft_ii_0 CLASS_NAME
+Info: get_instance_assignment fft_ii_0 testbench.partner.map.rst
+Info: get_interface_property sink EXPORT_OF
+Info: get_instance_property fft_ii_0 CLASS_NAME
+Info: get_instance_assignment fft_ii_0 testbench.partner.map.sink
+Info: get_interface_property source EXPORT_OF
+Info: get_instance_property fft_ii_0 CLASS_NAME
+Info: get_instance_assignment fft_ii_0 testbench.partner.map.source
+Info: send_message Info TB_Gen: Creating testbench system : fft_header_tb with all standard BFMs
+Info: TB_Gen: Creating testbench system : fft_header_tb with all standard BFMs
+Info: create_system fft_header_tb
+Info: add_instance fft_header_inst fft_header 
+Info: set_use_testbench_naming_pattern true fft_header
+Info: get_instance_interfaces fft_header_inst
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: get_instance_interface_property fft_header_inst sink CLASS_NAME
+Info: get_instance_interface_property fft_header_inst source CLASS_NAME
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: send_message Info TB_Gen: clock_sink found: clk
+Info: TB_Gen: clock_sink found: clk
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: add_instance fft_header_inst_clk_bfm altera_avalon_clock_source 
+Info: get_instance_property fft_header_inst_clk_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst clk clockRate
+Info: send_message Warning TB_Gen: clockRate is less than 1Hz; setting to 50MHz
+Warning: TB_Gen: clockRate is less than 1Hz; setting to 50MHz
+Info: set_instance_parameter_value fft_header_inst_clk_bfm CLOCK_RATE 50000000
+Info: set_instance_parameter_value fft_header_inst_clk_bfm CLOCK_UNIT 1
+Info: get_instance_property fft_header_inst_clk_bfm CLASS_NAME
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_clk_bfm
+Info: get_instance_interface_property fft_header_inst_clk_bfm clk CLASS_NAME
+Info: add_connection fft_header_inst_clk_bfm.clk fft_header_inst.clk
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: send_message Info TB_Gen: reset_sink found: rst
+Info: TB_Gen: reset_sink found: rst
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: add_instance fft_header_inst_rst_bfm altera_avalon_reset_source 
+Info: get_instance_property fft_header_inst_rst_bfm CLASS_NAME
+Info: get_instance_interface_ports fft_header_inst rst
+Info: get_instance_interface_port_property fft_header_inst rst reset_n ROLE
+Info: get_instance_interface_port_property fft_header_inst rst reset_n ROLE
+Info: set_instance_parameter_value fft_header_inst_rst_bfm ASSERT_HIGH_RESET 0
+Info: set_instance_parameter_value fft_header_inst_rst_bfm INITIAL_RESET_CYCLES 50
+Info: get_instance_property fft_header_inst_rst_bfm CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_rst_bfm
+Info: get_instance_interface_property fft_header_inst_rst_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_rst_bfm reset CLASS_NAME
+Info: get_instance_property fft_header_inst_rst_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst rst associatedClock
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_clk_bfm
+Info: get_instance_interface_property fft_header_inst_clk_bfm clk CLASS_NAME
+Info: add_connection fft_header_inst_clk_bfm.clk fft_header_inst_rst_bfm.clk
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_rst_bfm
+Info: get_instance_interface_property fft_header_inst_rst_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_rst_bfm reset CLASS_NAME
+Info: add_connection fft_header_inst_rst_bfm.reset fft_header_inst.rst
+Info: get_instance_interface_property fft_header_inst sink CLASS_NAME
+Info: send_message Info TB_Gen: conduit_end found: sink
+Info: TB_Gen: conduit_end found: sink
+Info: get_instance_interface_property fft_header_inst sink CLASS_NAME
+Info: add_instance fft_header_inst_sink_bfm altera_conduit_bfm 
+Info: get_instance_property fft_header_inst_sink_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst sink associatedClock
+Info: get_instance_interface_parameter_value fft_header_inst sink associatedReset
+Info: get_instance_interface_ports fft_header_inst sink
+Info: get_instance_interface_port_property fft_header_inst sink inverse ROLE
+Info: get_instance_interface_port_property fft_header_inst sink inverse WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink inverse DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_eop ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_eop WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_eop DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_error ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_error WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_error DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_imag ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_imag WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_imag DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_ready ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_ready WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_ready DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_real ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_real WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_real DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_sop ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_sop WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_sop DIRECTION
+Info: get_instance_interface_port_property fft_header_inst sink sink_valid ROLE
+Info: get_instance_interface_port_property fft_header_inst sink sink_valid WIDTH
+Info: get_instance_interface_port_property fft_header_inst sink sink_valid DIRECTION
+Info: set_instance_parameter_value fft_header_inst_sink_bfm CLOCKED_SIGNAL 1
+Info: set_instance_parameter_value fft_header_inst_sink_bfm ENABLE_RESET 1
+Info: set_instance_parameter_value fft_header_inst_sink_bfm SIGNAL_ROLES inverse sink_eop sink_error sink_imag sink_ready sink_real sink_sop sink_valid
+Info: set_instance_parameter_value fft_header_inst_sink_bfm SIGNAL_WIDTHS 1 1 2 16 1 16 1 1
+Info: set_instance_parameter_value fft_header_inst_sink_bfm SIGNAL_DIRECTIONS output output output output input output output output
+Info: get_instance_property fft_header_inst_sink_bfm CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_sink_bfm
+Info: get_instance_interface_property fft_header_inst_sink_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm reset CLASS_NAME
+Info: get_instance_property fft_header_inst_sink_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst sink associatedClock
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_clk_bfm
+Info: get_instance_interface_property fft_header_inst_clk_bfm clk CLASS_NAME
+Info: add_connection fft_header_inst_clk_bfm.clk fft_header_inst_sink_bfm.clk
+Info: get_instance_interfaces fft_header_inst_sink_bfm
+Info: get_instance_interface_property fft_header_inst_sink_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm reset CLASS_NAME
+Info: get_instance_property fft_header_inst_sink_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst sink associatedReset
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_rst_bfm
+Info: get_instance_interface_property fft_header_inst_rst_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_rst_bfm reset CLASS_NAME
+Info: add_connection fft_header_inst_rst_bfm.reset fft_header_inst_sink_bfm.reset
+Info: get_instance_interface_property fft_header_inst sink CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_sink_bfm
+Info: get_instance_interface_property fft_header_inst_sink_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_sink_bfm reset CLASS_NAME
+Info: add_connection fft_header_inst_sink_bfm.conduit fft_header_inst.sink
+Info: get_instance_interface_property fft_header_inst source CLASS_NAME
+Info: send_message Info TB_Gen: conduit_end found: source
+Info: TB_Gen: conduit_end found: source
+Info: get_instance_interface_property fft_header_inst source CLASS_NAME
+Info: add_instance fft_header_inst_source_bfm altera_conduit_bfm 
+Info: get_instance_property fft_header_inst_source_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst source associatedClock
+Info: get_instance_interface_parameter_value fft_header_inst source associatedReset
+Info: get_instance_interface_ports fft_header_inst source
+Info: get_instance_interface_port_property fft_header_inst source source_eop ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_eop WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_eop DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_error ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_error WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_error DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_exp ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_exp WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_exp DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_imag ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_imag WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_imag DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_ready ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_ready WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_ready DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_real ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_real WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_real DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_sop ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_sop WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_sop DIRECTION
+Info: get_instance_interface_port_property fft_header_inst source source_valid ROLE
+Info: get_instance_interface_port_property fft_header_inst source source_valid WIDTH
+Info: get_instance_interface_port_property fft_header_inst source source_valid DIRECTION
+Info: set_instance_parameter_value fft_header_inst_source_bfm CLOCKED_SIGNAL 1
+Info: set_instance_parameter_value fft_header_inst_source_bfm ENABLE_RESET 1
+Info: set_instance_parameter_value fft_header_inst_source_bfm SIGNAL_ROLES source_eop source_error source_exp source_imag source_ready source_real source_sop source_valid
+Info: set_instance_parameter_value fft_header_inst_source_bfm SIGNAL_WIDTHS 1 2 6 16 1 16 1 1
+Info: set_instance_parameter_value fft_header_inst_source_bfm SIGNAL_DIRECTIONS input input input input output input input input
+Info: get_instance_property fft_header_inst_source_bfm CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_source_bfm
+Info: get_instance_interface_property fft_header_inst_source_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm reset CLASS_NAME
+Info: get_instance_property fft_header_inst_source_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst source associatedClock
+Info: get_instance_interface_property fft_header_inst clk CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_clk_bfm
+Info: get_instance_interface_property fft_header_inst_clk_bfm clk CLASS_NAME
+Info: add_connection fft_header_inst_clk_bfm.clk fft_header_inst_source_bfm.clk
+Info: get_instance_interfaces fft_header_inst_source_bfm
+Info: get_instance_interface_property fft_header_inst_source_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm reset CLASS_NAME
+Info: get_instance_property fft_header_inst_source_bfm CLASS_NAME
+Info: get_instance_interface_parameter_value fft_header_inst source associatedReset
+Info: get_instance_interface_property fft_header_inst rst CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_rst_bfm
+Info: get_instance_interface_property fft_header_inst_rst_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_rst_bfm reset CLASS_NAME
+Info: add_connection fft_header_inst_rst_bfm.reset fft_header_inst_source_bfm.reset
+Info: get_instance_interface_property fft_header_inst source CLASS_NAME
+Info: get_instance_interfaces fft_header_inst_source_bfm
+Info: get_instance_interface_property fft_header_inst_source_bfm clk CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm conduit CLASS_NAME
+Info: get_instance_interface_property fft_header_inst_source_bfm reset CLASS_NAME
+Info: add_connection fft_header_inst_source_bfm.conduit fft_header_inst.source
+Info: send_message Info TB_Gen: Saving testbench system: fft_header_tb.qsys
+Info: TB_Gen: Saving testbench system: fft_header_tb.qsys
+Info: save_system fft_header_tb.qsys
+Info: send_message Info TB_Gen: TBGEN SUCCESSFUL
+Info: TB_Gen: TBGEN SUCCESSFUL
+Info: Testbench system: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/fft_header_tb.qsys
+Info: Done
+Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header.qsys --simulation=VHDL --allow-mixed-language-simulation --testbench=STANDARD --testbench-simulation=VHDL --allow-mixed-language-testbench-simulation --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/fft_header_tb/simulation --family="Cyclone IV E" --part=EP4CE115F29C7
+Progress: Loading testbench/fft_header_tb.qsys
+Progress: Reading input file
+Progress: Adding fft_header_inst [fft_header 1.0]
+Progress: Parameterizing module fft_header_inst
+Progress: Adding fft_header_inst_clk_bfm [altera_avalon_clock_source 18.1]
+Progress: Parameterizing module fft_header_inst_clk_bfm
+Progress: Adding fft_header_inst_rst_bfm [altera_avalon_reset_source 18.1]
+Progress: Parameterizing module fft_header_inst_rst_bfm
+Progress: Adding fft_header_inst_sink_bfm [altera_conduit_bfm 18.1]
+Progress: Parameterizing module fft_header_inst_sink_bfm
+Progress: Adding fft_header_inst_source_bfm [altera_conduit_bfm 18.1]
+Progress: Parameterizing module fft_header_inst_source_bfm
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: fft_header_tb.fft_header_inst.fft_ii_0: Radix-2 digit reverse implied
+Info: fft_header_tb.fft_header_inst_clk_bfm: Elaborate: altera_clock_source
+Info: fft_header_tb.fft_header_inst_clk_bfm:            $Revision: #1 $
+Info: fft_header_tb.fft_header_inst_clk_bfm:            $Date: 2018/07/18 $
+Info: fft_header_tb.fft_header_inst_rst_bfm: Elaborate: altera_reset_source
+Info: fft_header_tb.fft_header_inst_rst_bfm:            $Revision: #1 $
+Info: fft_header_tb.fft_header_inst_rst_bfm:            $Date: 2018/07/18 $
+Info: fft_header_tb.fft_header_inst_rst_bfm: Reset is negatively asserted.
+Info: fft_header_tb: Generating fft_header_tb "fft_header_tb" for SIM_VHDL
+Info: fft_header_inst: "fft_header_tb" instantiated fft_header "fft_header_inst"
+Info: fft_header_inst_clk_bfm: "fft_header_tb" instantiated altera_avalon_clock_source "fft_header_inst_clk_bfm"
+Info: fft_header_inst_rst_bfm: "fft_header_tb" instantiated altera_avalon_reset_source "fft_header_inst_rst_bfm"
+Info: fft_header_inst_sink_bfm: "fft_header_tb" instantiated altera_conduit_bfm "fft_header_inst_sink_bfm"
+Info: fft_header_inst_source_bfm: "fft_header_tb" instantiated altera_conduit_bfm "fft_header_inst_source_bfm"
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_3n512sin.hex
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_1n512cos.hex
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_1n512sin.hex
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_2n512cos.hex
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_2n512sin.hex
+Info: fft_ii_0: --- add file: fft_header_fft_ii_0_3n512cos.hex
+Info: fft_ii_0: "fft_header_inst" instantiated altera_fft_ii "fft_ii_0"
+Info: fft_header_tb: Done "fft_header_tb" with 7 modules, 417 files
+Info: qsys-generate succeeded.
+Info: sim-script-gen --spd=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header_tb.spd --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header_tb.spd --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ directory:
+Info: 	mentor/msim_setup.tcl
+Info: Skipping VCS script generation since VHDL file $QUARTUS_INSTALL_DIR/eda/sim_lib/altera_syn_attributes.vhd is required for simulation
+Info: Generating the following file(s) for VCSMX simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ directory:
+Info: 	synopsys/vcsmx/synopsys_sim.setup
+Info: 	synopsys/vcsmx/vcsmx_setup.sh
+Info: Generating the following file(s) for NCSIM simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ directory:
+Info: 	cadence/cds.lib
+Info: 	cadence/hdl.var
+Info: 	cadence/ncsim_setup.sh
+Info: 	6 .cds.lib files in cadence/cds_libs/ directory
+Info: Generating the following file(s) for RIVIERA simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/ directory:
+Info: 	aldec/rivierapro_setup.tcl
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/testbench/.
+Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
+Info: Finished: Create testbench Platform Designer system
