@@ -2,5 +2,4 @@ software/build
 pull.sh
 push.sh
 status.sh
-vhdl/fft/libraries
 

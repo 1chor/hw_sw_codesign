@@ -56,9 +56,10 @@ architecture bench of fft_tb is
 	subtype out_word_t is std_logic_vector(31 downto 0);
 	type output_t is array(integer range 0 to FILE_LENGTH - 1) of out_word_t;
 	
-	shared variable ir_1 : input_t := (others => (others => '0'));
-	
+	shared variable ir_1 : input_t;
 	shared variable ir_2 : input_t;
+	shared variable test_1 : input_t;
+	shared variable test_2 : input_t;
 	
 	shared variable output_ref_1_real : output_t; 
 	shared variable output_ref_1_imag : output_t; 
@@ -184,6 +185,9 @@ begin
 		ir_1 := read_input_file("tb/l_buf.txt");
 		ir_2 := read_input_file("tb/r_buf.txt");
 		
+		test_1 := read_input_file("tb/test_l_buf.txt");
+		test_2 := read_input_file("tb/test_r_buf.txt");
+		
 		write(my_line, string'("Load Reference Output Buffers"));
 		writeline(output, my_line);
 		
@@ -198,7 +202,7 @@ begin
 		
 		output_buffer_idx := 0;
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write(x"0001" & ir_1(i)); -- Send only left channel
+			stream_write(test_1(i) & test_2(i)); -- Send only left channel
 		end loop; 
 		stin_valid <= '0';
 		

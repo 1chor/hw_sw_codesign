@@ -37,8 +37,8 @@ architecture arch of fft_wrapper_header is
 	signal  si_sop_next  : std_logic;
 	signal	si_eop		 : std_logic;
 	signal	si_eop_next	 : std_logic;
-	-- signal	si_real		 : std_logic_vector(15 downto 0);
-	-- signal	si_imag   	 : std_logic_vector(15 downto 0);
+	signal	si_real		 : std_logic_vector(15 downto 0);
+	signal	si_imag   	 : std_logic_vector(15 downto 0);
 	
 	signal	src_valid 	 : std_logic;
 	signal	src_error 	 : std_logic_vector(1 downto 0);
@@ -62,6 +62,12 @@ architecture arch of fft_wrapper_header is
 		TRANSFER_DATA
 	);
 	signal transfer_state, transfer_state_next: transfer_state_type := STATE_IDLE;
+	
+	type input_state_type is (
+		STATE_IDLE, 
+		STATE_INPUT
+	);
+	signal input_state, input_state_next: input_state_type := STATE_IDLE;
 	
 	-- Component for Header-FFT
 	component fft_header is
@@ -99,8 +105,8 @@ begin
 		sink_error   => si_error,   	 -- Indicates an error has occured in an upstream module
 		sink_sop     => si_sop,     	 -- Indicates the start of the incoming FFT frame
 		sink_eop     => si_eop,		 	 -- Indicates the end of the incoming FFT frame  
-		sink_real    => stin_data(31 downto 16), -- Real input data
-		sink_imag    => stin_data(15 downto  0), -- Imaginary input data
+		sink_real    => si_real, 		 -- Real input data
+		sink_imag    => si_imag,		 -- Imaginary input data
 		inverse      => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => stout_ready, 
@@ -111,6 +117,35 @@ begin
 		source_imag  => src_imag, 	 	 -- Imaginary output data
 		source_exp   => src_exp			 -- Output exponent
 	);
+	
+	input_proc: process (input_state, si_sop_next, stin_data)
+	begin
+		-- default values to prevent latches
+		input_state_next <= input_state;
+		
+		si_real <= (others => '-');
+		si_imag <= (others => '-');
+		
+		case input_state is
+			
+			when STATE_IDLE =>
+				if si_sop_next = '1' then
+					input_state_next <= STATE_INPUT;
+				end if;
+			
+			when STATE_INPUT =>
+				si_real <= stin_data(31 downto 16); -- Real input data
+				si_imag <= stin_data(15 downto  0); -- Imaginary input data
+				
+				if si_eop = '1' then
+					input_state_next <= STATE_IDLE;	
+				end if;
+				
+			when others =>
+				input_state_next <= STATE_IDLE;				
+		end case;
+		
+	end process input_proc;
 	
 	fft_proc: process (state, index, src_sop, src_valid, src_eop)
 	begin
@@ -145,6 +180,7 @@ begin
 		if reset_n = '0' then -- Reset signals
 			state <= TRANSFER_TO_FFT;
 			transfer_state <= STATE_IDLE;
+			input_state <= STATE_IDLE;
 			
 			si_valid <= '0';
 			si_sop <= '0';
@@ -154,6 +190,7 @@ begin
 		elsif rising_edge(clk) then
 			state <= state_next;
 			transfer_state <= transfer_state_next;
+			input_state <= input_state_next;
 			
 			si_valid <= '0';
 			si_sop <= si_sop_next;

@@ -194,6 +194,10 @@ compile:
 sim:	
 	vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive $(TB) -do "vsim -msgmode both; do scripts/wave.do;run $(SIM_TIME); wave zoom full"
 
+#this target starts the simulation with all signals and the modelsim GUI
+sim_all:	
+	vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive $(TB) -do "vsim -msgmode both; do scripts/wave_all.do;run $(SIM_TIME); wave zoom full"
+
 #this target starts a simulation in text mode (i.e. no graphical output)
 sim_cl:
 	vsim -c -do "vsim $(TB); run $(SIM_TIME);quit"
