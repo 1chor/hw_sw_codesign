@@ -15,6 +15,13 @@
 
 typedef struct {
     
+    uint16_t r;
+    uint16_t i;
+    
+} complex_16_t;
+
+typedef struct {
+    
     uint32_t r;
     uint32_t i;
     

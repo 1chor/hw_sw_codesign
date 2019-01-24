@@ -33,7 +33,7 @@ architecture bench of fft_tb is
 	end component;
 
 	constant DATA_WIDTH : positive := 32;
-	constant FILE_LENGTH : positive := 256;
+	constant FILE_LENGTH : positive := 512;
 	
 	signal clk : std_logic;
 	signal res_n : std_logic;
@@ -43,7 +43,7 @@ architecture bench of fft_tb is
 	signal stout_data : std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal stout_valid : std_logic;
 	signal stout_ready : std_logic;
-	signal inverse : std_logic_vector(0 downto 0);
+	signal inverse : std_logic_vector(0 downto 0) := "0";
 	
 	constant CLK_PERIOD : time := 10 ns;
 	constant stop_clock : boolean := false;
@@ -99,12 +99,16 @@ begin
 			variable Result      : input_t := (others => (others => '0'));
 		begin
 			for i in 0 to FILE_LENGTH - 1 loop
-				exit when endfile(FileHandle);
+				if i < FILE_LENGTH/2 then
+					exit when endfile(FileHandle);
 
-				readline(FileHandle, CurrentLine);
-				hread(CurrentLine, TempWord);
-				--report "TempWord: " & to_hstring(TempWord);
-				Result(i) := TempWord;
+					readline(FileHandle, CurrentLine);
+					hread(CurrentLine, TempWord);
+					--report "TempWord: " & to_hstring(TempWord);
+					Result(i) := TempWord;
+				else
+					Result(i) := x"0000"; -- zero extend
+				end if;
 			end loop;
 
 			return Result;
@@ -167,6 +171,7 @@ begin
 		stin_data <= (others=>'0');
 		--stout_ready <= '0';
 		stin_valid <= '0';
+		inverse <= "0";
 		wait until rising_edge(clk);
         wait until rising_edge(clk);
         wait until rising_edge(clk);
@@ -188,7 +193,40 @@ begin
 		output_ref_2_real := read_output_file("tb/result_2_real.txt");
 		output_ref_2_imag := read_output_file("tb/result_2_imag.txt");
 		
+		write(my_line, string'("Left channel FFT test"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(x"0001" & ir_1(i)); -- Send only left channel
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output_1_real(i) := x"0000" & output_buffer(i)(31 downto 16);
+			output_1_imag(i) := x"0000" & output_buffer(i)(15 downto 0);
+		end loop;
+				
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
+		
+		-- Compare result
+		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
+		compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		
+		write(my_line, string'("Done"));
+		writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		
 		write(my_line, string'("General FFT test"));
+		writeline(output, my_line);
+		write(my_line, string'("Send both channels at same time"));
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;

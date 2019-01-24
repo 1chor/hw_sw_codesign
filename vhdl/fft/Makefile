@@ -1,7 +1,7 @@
 
 
 #supress the shared variable warning
-VCOM_ARGS=-check_synthesis -2008 -work work -suppress 1236
+VCOM_ARGS=-check_synthesis -2008 -work libraries/work -suppress 1236
 
 #additional source files can be added here (compilation order is important!)
 VHDL_FILES = \
@@ -14,7 +14,7 @@ TB_FILES = \
 
 #testbench file to "execute" and simulation time
 TB = fft_tb
-SIM_TIME = 15000ns
+SIM_TIME = 16100ns
 PATH_TO_QUARTUS = /opt/quartus_18.1-18.1.0.625/quartus
 QSYS_SIMDIR = /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation
 
@@ -193,7 +193,7 @@ compile:
 #this target starts the simulation and the modelsim GUI
 sim:	
 	vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive $(TB) -do "vsim -msgmode both; do scripts/wave.do;run $(SIM_TIME); wave zoom full"
-	
+
 #this target starts a simulation in text mode (i.e. no graphical output)
 sim_cl:
 	vsim -c -do "vsim $(TB); run $(SIM_TIME);quit"

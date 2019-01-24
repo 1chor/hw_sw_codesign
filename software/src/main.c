@@ -638,8 +638,17 @@ void test()
     
     // freed at the end of the endless loop
     
-    kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
-    kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+     #if ( FFT_H_HW ) // Hardware Header-FFT
+     
+		complex_16_t* i_in_1 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
+		complex_16_t* i_in_2 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
+    
+    #else // Software Header-FFT
+    
+		kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+		kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+    
+    #endif
     
     // der input block wird dort gespeichert
     
@@ -662,12 +671,24 @@ void test()
         l_buf = wav_get_uint16(input, 2*sample_counter);
         r_buf = wav_get_uint16(input, 2*sample_counter+1);
         
-        i_in_1[sample_counter_local].r = convert_1q15(l_buf);
-        i_in_1[sample_counter_local].i = 0;
-        
-        i_in_2[sample_counter_local].r = convert_1q15(r_buf);
-        i_in_2[sample_counter_local].i = 0;
-        
+        #if ( FFT_H_HW ) // Hardware Header-FFT 
+			
+			i_in_1[sample_counter_local].r = l_buf;
+			i_in_1[sample_counter_local].i = 0;
+			
+			i_in_2[sample_counter_local].r = r_buf;
+			i_in_2[sample_counter_local].i = 0;
+		
+		#else // Software Header-FFT
+
+			i_in_1[sample_counter_local].r = convert_1q15(l_buf);
+			i_in_1[sample_counter_local].i = 0;
+			
+			i_in_2[sample_counter_local].r = convert_1q15(r_buf);
+			i_in_2[sample_counter_local].i = 0;
+		
+		#endif
+                
         sample_counter_local += 1;
         
         // fir

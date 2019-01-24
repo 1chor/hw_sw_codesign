@@ -110,15 +110,15 @@ void pre_process_h_header_hw( struct wav* ir )
     }
 }
 
-void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block, uint8_t free_input )
+void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t block, uint8_t free_input )
 {
     uint16_t i = 0;
     
-    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
-    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
+    complex_16_t* out_1 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
+    complex_16_t* out_2 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
     
-    zero_extend_256( in_1 );
-    zero_extend_256( in_2 );
+    zero_extend_256_hw( in_1 );
+    zero_extend_256_hw( in_2 );
 	
 	// Clear Bit 0 from PIO, configures normal FFT operation
 	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0);
@@ -131,7 +131,7 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
 		// Both channels are calculated at the same time
 		// Upper bits are real data from left channel
 		// Lower bits are real data from right channel
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)in_1[i].r)<<16) + (int32_t)in_2[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
 	}
 	
 	printf("done\n");
@@ -146,17 +146,14 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
 		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		//~ out_1[i].r = ( temp >> 16 ); // Upper bits are real data
 		//~ out_2[i].r = temp; // Lower bits are imaginary data
-		t1 = (uint16_t)( temp >> 16 ); // Upper bits are real data
-		t2 = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
-		
-		out_1[i].r = (float)t1;
-		out_2[i].r = (float)t2;
-		
+		out_1[i].r = (uint16_t)( temp >> 16 ); // Upper bits are real data
+		out_2[i].r = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
+				
 		//~ printf("Ausgelesen: %lx\n", temp);
-		//~ printf("Upper bits: %x\n", t1);
-		//~ printf("Upper bits: %d\n", t1);
-		//~ printf("Lower bits: %x\n", t2);
-		//~ printf("Lower bits: %d\n\n", t2);
+		//~ printf("Upper bits: %x\n", out_1[i].r);
+		//~ printf("Upper bits: %d\n", out_1[i].r);
+		//~ printf("Lower bits: %x\n", out_2[i].r);
+		//~ printf("Lower bits: %d\n\n", out_2[i].r);
 		//RICHTIG??
 	}
     
@@ -196,13 +193,24 @@ void process_header_block_hw( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t bl
     
     for ( i = 0; i < 512; i++ )
     {
-        samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
-        samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
-        
-        print_c_block_9q23( samples_1, i, i );
-        
-        samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
-        samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );
+		if ( i < 256 )
+		{
+			samples_1[i].r = out_1[i].r;
+			samples_1[i].i = out_1[i].i;
+			
+			samples_2[i].r = out_2[i].r;
+			samples_2[i].i = out_2[i].i;
+        }
+        else
+        {
+			// Ergebnisse sind nur 16 bit lang
+			// zero extend
+			samples_1[i].r = 0;
+			samples_1[i].i = 0;
+			
+			samples_2[i].r = 0;
+			samples_2[i].i = 0;
+		}
     }
     
     free( out_1 );
@@ -275,4 +283,15 @@ void ifft_on_mac_buffer_hw( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2
     	
     free( mac_buffer_1 );
     free( mac_buffer_2 );
+}
+
+void zero_extend_256_hw( uint16_t* samples )
+{
+    uint16_t i = 0;
+    
+    for ( i = 256; i < 512; i++ )
+    {
+        samples[i].r = 0;
+        samples[i].i = 0;
+    }
 }
