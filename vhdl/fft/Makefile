@@ -5,12 +5,12 @@ VCOM_ARGS=-check_synthesis -2008 -work libraries/work -suppress 1236
 
 #additional source files can be added here (compilation order is important!)
 VHDL_FILES = \
-	../fft/src/fft_wrapper/fft_wrapper_header.vhd
+	./src/fft_wrapper/fft_wrapper_header.vhd
 
 #list of source files needed for simulation
 TB_FILES = \
 	../tb/tb_util_pkg.vhd\
-	../fft/tb/fft_tb.vhd
+	./tb/fft_tb.vhd
 
 #testbench file to "execute" and simulation time
 TB = fft_tb
@@ -20,6 +20,9 @@ QSYS_SIMDIR = /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header
 
 compile: 
 	rm -f log
+	
+	# Copy hex files
+	cp -f src/fft_header/fft_header/simulation/mentor/*.hex .
 		
 	# Create compilation libraries
 	vlib libraries/;

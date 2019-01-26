@@ -13,7 +13,7 @@
 # //  18 U.S.C. Section 1905.
 # //
 # vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive fft_tb -do "vsim -msgmode both; do scripts/wave_all.do;run 16100ns; wave zoom full" 
-# Start time: 17:55:02 on Jan 24,2019
+# Start time: 17:33:51 on Jan 26,2019
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/submodules/auk_dspip_avalon_streaming_sink.vhd(694): (vopt-8617) Possible component instance "/fft_tb/uut/FFT_H/fft_ii_0/asj_fft_sglstream_inst/auk_dsp_atlantic_sink_1/pfc_fifo/in_fifo_pfc : auk_dspip_fifo_pfc" is not bound.
 # Loading std.standard
@@ -7948,7 +7948,7 @@
 # ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
 #    Time: 270 ns  Iteration: 1  Protected: /fft_tb/uut/FFT_H/fft_ii_0/asj_fft_sglstream_inst/<protected>/<protected>/<protected>/<protected>/<protected>/<protected>/<protected>
 # Compare results
-# ** Error: Buffers don't match (index = 0, 00000000 vs. 024d7000
+# ** Error: Buffers don't match (index = 0, 00000480 vs. 024d7000
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 1, 00000000 vs. feb9a290
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8076,7 +8076,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 63, 00000000 vs. 0055222c
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 64, 00000000 vs. fec3af74
+# ** Error: Buffers don't match (index = 64, 00000080 vs. fec3af74
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 65, 00000000 vs. 00cf3d6b
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8204,7 +8204,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 127, 00000000 vs. ffe91cdc
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 128, 00000000 vs. 00103900
+# ** Error: Buffers don't match (index = 128, 00000080 vs. 00103900
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 129, 00000000 vs. 004154c7
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8332,7 +8332,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 191, 00000000 vs. 000e70cb
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 192, 00000000 vs. 0031388c
+# ** Error: Buffers don't match (index = 192, 00000080 vs. 0031388c
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 193, 00000000 vs. ffd574d1
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8460,7 +8460,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 255, 00000000 vs. 000309f4
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 256, 00000000 vs. fffd0600
+# ** Error: Buffers don't match (index = 256, 00000080 vs. fffd0600
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 257, 00000000 vs. 000309f4
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8588,7 +8588,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 319, 00000000 vs. ffd574d1
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 320, 00000000 vs. 0031388c
+# ** Error: Buffers don't match (index = 320, 00000080 vs. 0031388c
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 321, 00000000 vs. 000e70cb
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8716,7 +8716,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 383, 00000000 vs. 004154c7
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 384, 00000000 vs. 00103900
+# ** Error: Buffers don't match (index = 384, 00000080 vs. 00103900
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 385, 00000000 vs. ffe91cdc
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -8844,7 +8844,7 @@
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 447, 00000000 vs. 00cf3d6b
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
-# ** Error: Buffers don't match (index = 448, 00000000 vs. fec3af74
+# ** Error: Buffers don't match (index = 448, 00000080 vs. fec3af74
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: Buffers don't match (index = 449, 00000000 vs. 0055222c
 #    Time: 16055 ns  Iteration: 0  Instance: /fft_tb
@@ -9998,5 +9998,5 @@
 # Send both channels at same time
 #  wave zoom full
 # {0 ps} {16905 ns}
-# End time: 17:57:23 on Jan 24,2019, Elapsed time: 0:02:21
+# End time: 17:34:34 on Jan 26,2019, Elapsed time: 0:00:43
 # Errors: 1022, Warnings: 7895

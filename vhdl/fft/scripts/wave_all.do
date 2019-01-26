@@ -16,8 +16,11 @@ add wave -noupdate /fft_tb/uut/si_valid
 add wave -noupdate /fft_tb/uut/si_ready
 add wave -noupdate /fft_tb/uut/si_error
 add wave -noupdate /fft_tb/uut/si_sop
+add wave -noupdate /fft_tb/uut/si_sop_next
 add wave -noupdate /fft_tb/uut/si_eop
 add wave -noupdate /fft_tb/uut/si_eop_next
+add wave -noupdate /fft_tb/uut/si_real
+add wave -noupdate /fft_tb/uut/si_imag
 add wave -noupdate /fft_tb/uut/src_valid
 add wave -noupdate /fft_tb/uut/src_error
 add wave -noupdate /fft_tb/uut/src_sop
@@ -26,10 +29,13 @@ add wave -noupdate /fft_tb/uut/src_real
 add wave -noupdate /fft_tb/uut/src_imag
 add wave -noupdate /fft_tb/uut/src_exp
 add wave -noupdate /fft_tb/uut/index
+add wave -noupdate /fft_tb/uut/receive_index
 add wave -noupdate /fft_tb/uut/state
 add wave -noupdate /fft_tb/uut/state_next
 add wave -noupdate /fft_tb/uut/transfer_state
 add wave -noupdate /fft_tb/uut/transfer_state_next
+add wave -noupdate /fft_tb/uut/receive_state
+add wave -noupdate /fft_tb/uut/receive_state_next
 add wave -noupdate /fft_tb/uut/FFT_H/clk
 add wave -noupdate /fft_tb/uut/FFT_H/reset_n
 add wave -noupdate /fft_tb/uut/FFT_H/sink_valid
@@ -83,4 +89,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {166803 ps}
+WaveRestoreZoom {0 ps} {16905 ns}
