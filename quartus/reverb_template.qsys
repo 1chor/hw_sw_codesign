@@ -97,20 +97,17 @@
          type = "int";
       }
    }
-   element fft_wrapper_body_0
-   {
-      datum _sortIndex
-      {
-         value = "25";
-         type = "int";
-      }
-   }
    element fft_wrapper_header_0
    {
       datum _sortIndex
       {
          value = "22";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element fir_l
@@ -133,7 +130,7 @@
    {
       datum _sortIndex
       {
-         value = "28";
+         value = "27";
          type = "int";
       }
    }
@@ -165,7 +162,7 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "25";
          type = "int";
       }
       datum sopceditor_expanded
@@ -202,7 +199,7 @@
    {
       datum _sortIndex
       {
-         value = "29";
+         value = "28";
          type = "int";
       }
    }
@@ -394,7 +391,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "26";
          type = "int";
       }
       datum sopceditor_expanded
@@ -431,7 +428,7 @@
    {
       datum _sortIndex
       {
-         value = "30";
+         value = "29";
          type = "int";
       }
    }
@@ -672,13 +669,13 @@
    dir="start" />
  <interface name="clk_2p5" internal="altpll.c3" type="clock" dir="start" />
  <interface
-   name="fft_wrapper_body_0_external_connection"
-   internal="fft_wrapper_body_0.external_connection" />
- <interface
-   name="fft_wrapper_header_0_external_connection"
-   internal="fft_wrapper_header_0.external_connection"
+   name="fft_wrapper_header"
+   internal="fft_wrapper_header_0.inverse"
    type="conduit"
    dir="end" />
+ <interface
+   name="fft_wrapper_header_0_external_connection"
+   internal="fft_wrapper_header_0.external_connection" />
  <interface
    name="pio_0_external_connection"
    internal="pio_0.external_connection"
@@ -1104,11 +1101,6 @@
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
- <module
-   name="fft_wrapper_body_0"
-   kind="fft_wrapper_body"
-   version="1.0"
-   enabled="0" />
  <module
    name="fft_wrapper_header_0"
    kind="fft_wrapper_header"
@@ -2160,11 +2152,6 @@
    kind="clock"
    version="18.1"
    start="altpll.c0"
-   end="fft_wrapper_body_0.clock" />
- <connection
-   kind="clock"
-   version="18.1"
-   start="altpll.c0"
    end="fft_wrapper_header_0.clock" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="fir_l.clock" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="fir_r.clock" />
@@ -2312,11 +2299,6 @@
    version="18.1"
    start="sys_clk.clk_reset"
    end="sdram.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="sys_clk.clk_reset"
-   end="fft_wrapper_body_0.reset" />
  <connection
    kind="reset"
    version="18.1"

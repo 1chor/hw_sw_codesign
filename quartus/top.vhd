@@ -119,7 +119,7 @@ architecture arch of top is
             touch_cntrl_ext_adc_dout     : in    std_logic                     := 'X';             -- adc_dout
             touch_cntrl_ext_adc_penirq_n : in    std_logic                     := 'X';             -- adc_penirq_n
 			pio_0_external_connection_export                : out   std_logic_vector(1 downto 0);  -- export
-			fft_wrapper_header_0_external_connection_export : in    std_logic_vector(0 downto 0)  := (others => 'X') -- export
+			fft_wrapper_header_external_connection_export : in    std_logic_vector(0 downto 0)  := (others => 'X') -- export
 			--fft_wrapper_body_0_external_connection_export   : in    std_logic_vector(0 downto 0)  := (others => 'X')  -- export
         );
     end component reverb_template;
@@ -198,7 +198,7 @@ begin
 			touch_cntrl_ext_adc_dout     => ADC_DOUT,
 			touch_cntrl_ext_adc_penirq_n => ADC_PENIRQ_N,
 			pio_0_external_connection_export => pio, -- export
-			fft_wrapper_header_0_external_connection_export => pio(0 downto 0) -- export
+			fft_wrapper_header_external_connection_export => pio(0 downto 0) -- export
 			--fft_wrapper_body_0_external_connection_export => pio(1 downto 1) -- export
 		);
 		

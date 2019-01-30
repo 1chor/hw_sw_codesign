@@ -26,8 +26,6 @@ end entity;
 
 architecture arch of fft_wrapper_header is
 
-	constant OUTPUT_FORMAT_UP   : natural := 23;
-	constant OUTPUT_FORMAT_DOWN : natural := 8;
 	constant FFT_LENGTH  : natural := 512;
 	
 	signal	si_valid     : std_logic;
@@ -134,7 +132,7 @@ begin
 			receive_index <= receive_index +1; 
 		end if;
 		
-		if receive_index >= FFT_LENGTH THEN
+		if receive_index >= FFT_LENGTH-1 then
 			receive_index <= 0;
 		end if;
 			
@@ -142,12 +140,10 @@ begin
 	end process; 
 	
 	fsm_receive_combinatoric: process (receive_state, src_sop, src_eop, src_valid) is
-		variable temp: std_logic;
 	begin
 	-- ## default assignements ##
 	
 		receive_state_next <= receive_state;
-		temp := '0';
 	-- ## default assignements ##	
 		case receive_state is
 		
@@ -157,7 +153,6 @@ begin
 				end if;
 				
 			when RECEIVE_DATA =>
-				temp := '1';
 				if src_eop = '1' and src_valid = '1' then
 					receive_state_next <= STATE_IDLE;
 				end if;
@@ -238,8 +233,8 @@ begin
 			si_eop <= '0';
 			index <= 0;	
 			
-			si_real <= (others => '-');
-			si_imag <= (others => '-');
+			si_real <= (others => '0');
+			si_imag <= (others => '0');
 					
 		elsif rising_edge(clk) then
 			state <= state_next;
@@ -251,8 +246,8 @@ begin
 			si_sop <= si_sop_next;
 			si_eop <= si_eop_next;
 			
-			si_real <= (others => '-');
-			si_imag <= (others => '-');
+			si_real <= (others => '0');
+			si_imag <= (others => '0');
 			
 			if (si_ready = '1') and (stin_valid = '1') and (transfer_state_next = TRANSFER_DATA) then 
 				-- increase index and feed new input;
@@ -310,33 +305,28 @@ begin
 	end process send_proc;
 			
 	output_proc : process(stout_ready, state_next, state, src_valid, src_exp, src_imag, src_real) is
-	variable exponent 	  : integer range -14 to 14 := 0;
-	variable exponent_abs : natural range   0 to 14 := 0;
+		variable exponent 	  : natural range 0 to 13 := 0;
+		--~ variable exponent_abs : natural range  0 to 14;
 	begin
-		stout_data(15 downto 0) <= (others => '-');
-		stout_data(31 downto 16) <= (others => '-');
+		stout_data(15 downto 0) <= (others => '0');
+		stout_data(31 downto 16) <= (others => '0');
 		stout_valid <= '0';
 		
 		if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
 			stout_valid <= src_valid;
 			
 			-- Calculate exponent
-			exponent := - to_integer(signed(src_exp));
-			exponent_abs := to_integer(abs(to_signed(exponent,5))); -- nicht 6???
-			
-			-- Output-Format nach FFT ist 9Q23
-			-- TODO: Ausgabe überprüfen!!
-			
-			if exponent < 0 then -- right shift		
-				-- Ausgabe-Format 2Q14
-				stout_data(15 downto 0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
+			exponent := -to_integer(signed(src_exp));
+			--~ exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length))); -- nicht 6???
+						
+			--~ if exponent < 0 then -- right shift	
+				--~ stout_data(15 downto  0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs));
+				--~ stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
 				
-			elsif exponent >= 0 then -- left shift
-				-- Ausgabe-Format 2Q14
-				stout_data(15 downto 0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs)); -- (OUTPUT_FORMAT_UP downto OUTPUT_FORMAT_DOWN);
-			end if;
+			--~ elsif exponent >= 0 then -- left shift
+				stout_data(15 downto  0) <= std_logic_vector(shift_left(signed(src_imag), exponent));
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent));
+			--~ end if;
 		end if;
 		
 	end process output_proc;

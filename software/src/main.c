@@ -25,7 +25,7 @@
 #include "complex.h"
 
 #define FIR_HW (0) 	 // If 1 then use FIR filter Hardware component
-#define FFT_H_HW (0) // If 1 then use header FFT Hardware component
+#define FFT_H_HW (1) // If 1 then use header FFT Hardware component
 #define FFT_B_HW (0) // If 1 then use body FFT Hardware component
 
 #define HAL_PLATFORM_RESET() \

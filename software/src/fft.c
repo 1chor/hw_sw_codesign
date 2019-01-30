@@ -90,15 +90,12 @@ void pre_process_h_header_hw( struct wav* ir )
             l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
             r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
             
-			// Konvertierung notwendig??
-            // convert the binary value to float
-            
-            // cin_1[i].r = convert_1q15(l_buf);
-			cin_1[i].r = l_buf;
+			//~ cin_1[i].r = l_buf;
+			cin_1[i].r = (uint16_t)1;
             cin_1[i].i = 0;
             
-            // cin_2[i].r = convert_1q15(r_buf);
-			cin_2[i].r = r_buf;
+			//~ cin_2[i].r = r_buf;
+			cin_2[i].r = (uint16_t)0;
             cin_2[i].i = 0;
             
             sample_counter_ir += 1;
@@ -131,7 +128,8 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 		// Both channels are calculated at the same time
 		// Upper bits are real data from left channel
 		// Lower bits are real data from right channel
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
+		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, 0b11111111111111110000000000000000 );
 	}
 	
 	printf("done\n");
@@ -149,7 +147,7 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 		out_1[i].r = (uint16_t)( temp >> 16 ); // Upper bits are real data
 		out_2[i].r = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
 				
-		//~ printf("Ausgelesen: %lx\n", temp);
+		printf("Ausgelesen[%d]: %lx\n", i, temp);
 		//~ printf("Upper bits: %x\n", out_1[i].r);
 		//~ printf("Upper bits: %d\n", out_1[i].r);
 		//~ printf("Lower bits: %x\n", out_2[i].r);
@@ -176,8 +174,8 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 		out_1[512-i].r = out_1[i].r;
 		
 		// real parts of Y[f] and Y[-f]
-		out_2[i].r = ( out_2[i].r - out_2[512-i].r ) / 2;
-		out_2[512-i].r = - out_2[i].r;
+		out_2[i].r = ( out_2[i].r + out_2[512-i].r ) / 2;
+		out_2[512-i].r = out_2[i].r;
 	}
 	
 	printf("done\n");
@@ -285,7 +283,7 @@ void ifft_on_mac_buffer_hw( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2
     free( mac_buffer_2 );
 }
 
-void zero_extend_256_hw( uint16_t* samples )
+void zero_extend_256_hw( complex_16_t* samples )
 {
     uint16_t i = 0;
     

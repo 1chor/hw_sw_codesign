@@ -14,7 +14,7 @@ TB_FILES = \
 
 #testbench file to "execute" and simulation time
 TB = fft_tb
-SIM_TIME = 16100ns
+SIM_TIME = 33000ns
 PATH_TO_QUARTUS = /opt/quartus_18.1-18.1.0.625/quartus
 QSYS_SIMDIR = /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation
 

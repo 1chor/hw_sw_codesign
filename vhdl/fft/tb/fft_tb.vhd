@@ -60,12 +60,15 @@ architecture bench of fft_tb is
 	shared variable ir_2 : input_t;
 	shared variable test_1 : input_t;
 	shared variable test_2 : input_t;
-	
+		
 	shared variable output_ref_1_real : output_t; 
 	shared variable output_ref_1_imag : output_t; 
 	
 	shared variable output_ref_2_real : output_t;
 	shared variable output_ref_2_imag : output_t;
+	
+	shared variable test_ref_real : output_t;
+	shared variable test_ref_imag : output_t;
 		
 	shared variable output_buffer : output_t; 
 	shared variable output_buffer_idx : integer := 0; 
@@ -197,12 +200,16 @@ begin
 		output_ref_2_real := read_output_file("tb/result_2_real.txt");
 		output_ref_2_imag := read_output_file("tb/result_2_imag.txt");
 		
+		test_ref_real := read_output_file("tb/test_ref_real.txt");
+		test_ref_imag := read_output_file("tb/test_ref_imag.txt");
+				
 		write(my_line, string'("Left channel FFT test"));
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
+		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write(test_1(i) & test_2(i)); -- Send only left channel
+			stream_write(x"0001" & test_2(i)); -- Send only left channel
 		end loop; 
 		stin_valid <= '0';
 		
@@ -217,8 +224,8 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
-		compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		compare_buffers(output_1_real, test_ref_real, FILE_LENGTH);
+		compare_buffers(output_1_imag, test_ref_imag, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -235,7 +242,7 @@ begin
 		
 		output_buffer_idx := 0;
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write(ir_2(i) & ir_2(i)); -- Send both channels at same time
+			stream_write(ir_1(i) & ir_2(i)); -- Send both channels at same time
 		end loop; 
 		stin_valid <= '0';
 		
@@ -245,6 +252,8 @@ begin
 			output_1_real(i) := x"0000" & output_buffer(i)(31 downto 16);
 			output_2_real(i) := x"0000" & output_buffer(i)(15 downto 0);
 		end loop;
+		
+		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
 		
 		-- Get back both transformed channels
 		for i in 1 to FILE_LENGTH/2 loop
@@ -261,8 +270,8 @@ begin
 			output_1_real(512-i) := output_1_real(i);
 			
 			-- real parts of Y[f] and Y[-f]
-			output_2_real(i) := std_logic_vector( (signed(output_2_real(i)) - signed(output_2_real(512-i))) / 2 );
-			output_2_real(512-i) := not output_2_real(i);
+			output_2_real(i) := std_logic_vector( (signed(output_2_real(i)) + signed(output_2_real(512-i))) / 2 );
+			output_2_real(512-i) := output_2_real(i);
 		end loop;
 		
 		write(my_line, string'("Compare results"));
@@ -270,10 +279,10 @@ begin
 		
 		-- Compare result
 		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
-		compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		--~ compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
 		
-		compare_buffers(output_2_real, output_ref_2_real, FILE_LENGTH);
-		compare_buffers(output_2_imag, output_ref_2_imag, FILE_LENGTH);
+		--~ compare_buffers(output_2_real, output_ref_2_real, FILE_LENGTH);
+		--~ compare_buffers(output_2_imag, output_ref_2_imag, FILE_LENGTH);
 
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
