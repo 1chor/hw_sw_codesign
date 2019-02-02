@@ -60,6 +60,12 @@ architecture bench of fft_tb is
 	shared variable ir_2 : input_t;
 	shared variable test_1 : input_t;
 	shared variable test_2 : input_t;
+	
+	shared variable m_real_in : input_t;
+	shared variable m_imag_in : input_t;
+	
+	shared variable m_real_out : input_t;
+	shared variable m_imag_out : input_t;
 		
 	shared variable output_ref_1_real : output_t; 
 	shared variable output_ref_1_imag : output_t; 
@@ -91,27 +97,38 @@ begin
 
 	stimulus : process
 	
+		variable output16_real : input_t;
+		variable output16_imag : input_t;
 		variable output_1_real : output_t;
 		variable output_1_imag : output_t;
 		variable output_2_real : output_t;
 		variable output_2_imag : output_t;
 		
-		impure function read_input_file(filename : string) return input_t is
+		impure function read_input_file(filename : string; zero_extend : std_logic) return input_t is
 			file FileHandle      : text open read_mode is filename;
 			variable CurrentLine : line;
 			variable TempWord    : in_word_t;
 			variable Result      : input_t := (others => (others => '0'));
 		begin
 			for i in 0 to FILE_LENGTH - 1 loop
-				if i < FILE_LENGTH/2 then
+				if zero_extend = '1' then
+					if i < FILE_LENGTH/2 then
+						exit when endfile(FileHandle);
+
+						readline(FileHandle, CurrentLine);
+						hread(CurrentLine, TempWord);
+						--report "TempWord: " & to_hstring(TempWord);
+						Result(i) := TempWord;
+					else
+						Result(i) := x"0000"; -- zero extend
+					end if;
+				else
 					exit when endfile(FileHandle);
 
 					readline(FileHandle, CurrentLine);
 					hread(CurrentLine, TempWord);
 					--report "TempWord: " & to_hstring(TempWord);
 					Result(i) := TempWord;
-				else
-					Result(i) := x"0000"; -- zero extend
 				end if;
 			end loop;
 
@@ -148,7 +165,16 @@ begin
 			wait for 0 ns;
 		end procedure;
 		
-		procedure compare_buffers(buffer_A, buffer_B : output_t; length : integer) is
+		procedure compare_buffers16(buffer_A, buffer_B : input_t; length : integer) is
+		begin
+			for i in 0 to length-1 loop
+				if (buffer_A(i) /= buffer_B(i) ) then
+					report ("Buffers don't match (index = " & integer'image(i) & ", " & slv_to_hex(buffer_A(i)) & " vs. " & slv_to_hex(buffer_B(i))) severity error;
+				end if;
+			end loop;
+		end procedure;
+		
+		procedure compare_buffers32(buffer_A, buffer_B : output_t; length : integer) is
 		begin
 			for i in 0 to length-1 loop
 				if (buffer_A(i) /= buffer_B(i) ) then
@@ -185,11 +211,14 @@ begin
 		write(my_line, string'("Load Input Buffers"));
 		writeline(output, my_line);
 		
-		ir_1 := read_input_file("tb/l_buf.txt");
-		ir_2 := read_input_file("tb/r_buf.txt");
+		ir_1 := read_input_file("tb/l_buf.txt", '1');
+		ir_2 := read_input_file("tb/r_buf.txt", '1');
 		
-		test_1 := read_input_file("tb/test_l_buf.txt");
-		test_2 := read_input_file("tb/test_r_buf.txt");
+		test_1 := read_input_file("tb/test_l_buf.txt", '1');
+		test_2 := read_input_file("tb/test_r_buf.txt", '1');
+		
+		m_real_in := read_input_file("tb/matlab/real_input.txt", '0');
+		m_imag_in := read_input_file("tb/matlab/imag_input.txt", '0');
 		
 		write(my_line, string'("Load Reference Output Buffers"));
 		writeline(output, my_line);
@@ -202,7 +231,77 @@ begin
 		
 		test_ref_real := read_output_file("tb/test_ref_real.txt");
 		test_ref_imag := read_output_file("tb/test_ref_imag.txt");
+		
+		m_real_out := read_input_file("tb/matlab/real_output.txt", '0');
+		m_imag_out := read_input_file("tb/matlab/imag_output.txt", '0');
+		
+		----------------------------------------------------------------
+		
+		write(my_line, string'("Matlab FFT Test"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		inverse <= "0";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(m_real_in(i) & m_imag_in(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_real(i) := output_buffer(i)(31 downto 16);
+			output16_imag(i) := output_buffer(i)(15 downto 0);
+		end loop;
 				
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
+		
+		-- Compare result
+		--compare_buffers16(output16_real, m_real_out, FILE_LENGTH);
+		--compare_buffers16(output16_imag, m_imag_out, FILE_LENGTH);
+		
+		write(my_line, string'("Done"));
+		writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		
+		write(my_line, string'("Matlab Inverse-FFT Test"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		inverse <= "1";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(m_real_out(i) & m_imag_out(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_real(i) := output_buffer(i)(31 downto 16);
+			output16_imag(i) := output_buffer(i)(15 downto 0);
+		end loop;
+				
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
+		
+		-- Compare result
+		compare_buffers16(output16_real, m_real_in, FILE_LENGTH);
+		compare_buffers16(output16_imag, m_imag_in, FILE_LENGTH);
+		
+		write(my_line, string'("Done"));
+		writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		----------------------------------------------------------------
+		
 		write(my_line, string'("Left channel FFT test"));
 		writeline(output, my_line);
 		
@@ -224,8 +323,8 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers(output_1_real, test_ref_real, FILE_LENGTH);
-		compare_buffers(output_1_imag, test_ref_imag, FILE_LENGTH);
+		--compare_buffers32(output_1_real, test_ref_real, FILE_LENGTH);
+		--compare_buffers32(output_1_imag, test_ref_imag, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -233,6 +332,7 @@ begin
 		write(my_line, string'("----------------------------------"));
 		writeline(output, my_line);
 		
+		----------------------------------------------------------------
 		----------------------------------------------------------------
 		
 		write(my_line, string'("General FFT test"));
@@ -253,7 +353,7 @@ begin
 			output_2_real(i) := x"0000" & output_buffer(i)(15 downto 0);
 		end loop;
 		
-		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
+		--compare_buffers32(output_1_real, output_ref_1_real, FILE_LENGTH);
 		
 		-- Get back both transformed channels
 		for i in 1 to FILE_LENGTH/2 loop
@@ -278,11 +378,11 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers(output_1_real, output_ref_1_real, FILE_LENGTH);
-		--~ compare_buffers(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		compare_buffers32(output_1_real, output_ref_1_real, FILE_LENGTH);
+		--~ compare_buffers32(output_1_imag, output_ref_1_imag, FILE_LENGTH);
 		
-		--~ compare_buffers(output_2_real, output_ref_2_real, FILE_LENGTH);
-		--~ compare_buffers(output_2_imag, output_ref_2_imag, FILE_LENGTH);
+		--~ compare_buffers32(output_2_real, output_ref_2_real, FILE_LENGTH);
+		--~ compare_buffers32(output_2_imag, output_ref_2_imag, FILE_LENGTH);
 
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
