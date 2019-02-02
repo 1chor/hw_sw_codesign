@@ -128,8 +128,7 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 		// Both channels are calculated at the same time
 		// Upper bits are real data from left channel
 		// Lower bits are real data from right channel
-		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, 0b11111111111111110000000000000000 );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
 	}
 	
 	printf("done\n");
@@ -147,7 +146,7 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 		out_1[i].r = (uint16_t)( temp >> 16 ); // Upper bits are real data
 		out_2[i].r = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
 				
-		printf("Ausgelesen[%d]: %lx\n", i, temp);
+		//~ printf("Ausgelesen[%d]: %lx\n", i, temp);
 		//~ printf("Upper bits: %x\n", out_1[i].r);
 		//~ printf("Upper bits: %d\n", out_1[i].r);
 		//~ printf("Lower bits: %x\n", out_2[i].r);
@@ -242,19 +241,17 @@ void ifft_on_mac_buffer_hw( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2
 		// Write sample to FIFO
 		// Upper bits are real part
 		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)mac_buffer_1[i].r)<<16) + (int32_t)mac_buffer_1[i].i );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)mac_buffer_1[i].r)<<16) + (uint32_t)mac_buffer_1[i].i );
 	}
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
+		uint32_t temp;
 		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		
-		// convert to 16 bit fixed
-		mac_buffer_16_1[i] = convert_to_fixed_1q15( ( temp >> 16 ) ); // Upper bits are real data
-		//RICHTIG??
+		mac_buffer_16_1[i] = (uint16_t)( temp >> 16 ); // Upper bits are real data
 	}
 	
 	// right channel
@@ -264,19 +261,17 @@ void ifft_on_mac_buffer_hw( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2
 		// Write sample to FIFO
 		// Upper bits are real part
 		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)mac_buffer_2[i].r)<<16) + (int32_t)mac_buffer_2[i].i );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)mac_buffer_2[i].r)<<16) + (uint32_t)mac_buffer_2[i].i );
 	}
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
+		uint32_t temp;
 		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		
-		// convert to 16 bit fixed
-		mac_buffer_16_2[i] = convert_to_fixed_1q15( ( temp >> 16 ) ); // Upper bits are real data
-		//RICHTIG??
+		mac_buffer_16_2[i] = (uint16_t)( temp >> 16 ); // Upper bits are real data
 	}
     	
     free( mac_buffer_1 );

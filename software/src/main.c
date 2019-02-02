@@ -638,7 +638,7 @@ void test()
     
     // freed at the end of the endless loop
     
-     #if ( FFT_H_HW ) // Hardware Header-FFT
+    #if ( FFT_H_HW ) // Hardware Header-FFT
      
 		complex_16_t* i_in_1 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
 		complex_16_t* i_in_2 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
@@ -758,7 +758,7 @@ void test()
         //--------------------------------------------------------------
         //
         //	
-        //	Casts überprüfen, wenn uint16 auf int32 gecastet wird ist der Wert falsch!
+        //	Casts überprüfen, wenn uint16 auf int32 gecastet wird, ist der Wert falsch!
         //	Richtig (int32)((int16)(val_uint16))
         //
         //
@@ -859,7 +859,15 @@ void test()
             uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
             uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
             
-            ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+			#if ( FFT_H_HW ) // Hardware Header-FFT
+     
+				ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+			
+			#else // Software Header-FFT
+			
+				ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+			
+			#endif
             
             // beim vergleich mit octave sieht es bei den ersten samples so
             // aus als waeren diese falsch. das stimmt nicht, in c werden sie
