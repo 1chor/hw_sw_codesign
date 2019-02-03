@@ -13,7 +13,7 @@
 # //  18 U.S.C. Section 1905.
 # //
 # vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive fft_tb -do "vsim -msgmode both; do scripts/wave_all.do;run 33000ns; wave zoom full" 
-# Start time: 17:49:08 on Feb 02,2019
+# Start time: 19:30:37 on Feb 03,2019
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/submodules/auk_dspip_avalon_streaming_sink.vhd(694): (vopt-8617) Possible component instance "/fft_tb/uut/FFT_H/fft_ii_0/asj_fft_si_se_so_bb_inst/auk_dsp_atlantic_sink_1/pfc_fifo/in_fifo_pfc : auk_dspip_fifo_pfc" is not bound.
 # Loading std.standard
@@ -2338,7 +2338,7 @@
 #    Time: 35 ns  Iteration: 0  Instance: /fft_tb
 # ** Error: (vsim-3953) STD_LOGIC_1164.HREAD End of string encountered
 #    Time: 35 ns  Iteration: 0  Instance: /fft_tb
-# Matlab FFT Test
+# Matlab FFT Test1
 # ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
 #    Time: 35 ns  Iteration: 1  Protected: /fft_tb/uut/FFT_H/fft_ii_0/asj_fft_si_se_so_bb_inst/<protected>/<protected>/<protected>/<protected>/<protected>/<protected>/<protected>/<protected>
 # ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
@@ -4130,7 +4130,7 @@
 # Compare results
 # Done
 # ----------------------------------
-# Matlab Inverse-FFT Test
+# Matlab Inverse-FFT Test1
 # Compare results
 # ** Error: Buffers don't match (index = 3, 0006 vs. 0007
 #    Time: 32475 ns  Iteration: 0  Instance: /fft_tb
@@ -4746,8 +4746,1039 @@
 #    Time: 32475 ns  Iteration: 0  Instance: /fft_tb
 # Done
 # ----------------------------------
-# Left channel FFT test
+# Matlab FFT Test2
 #  wave zoom full
 # {0 ps} {34650 ns}
-# End time: 17:53:24 on Feb 02,2019, Elapsed time: 0:04:16
-# Errors: 818, Warnings: 3051
+run -all
+# Compare results
+# Done
+# ----------------------------------
+# Matlab Inverse-FFT Test2
+# Compare results
+# ** Error: Buffers don't match (index = 0, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 1, ff83 vs. 0001
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 2, ff84 vs. 0002
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 3, ff83 vs. 0003
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 4, ff84 vs. 0004
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 5, ff86 vs. 0005
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 6, ff89 vs. 0006
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 7, ff88 vs. 0007
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 8, ff87 vs. 0008
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 9, ff88 vs. 0009
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 10, ff8a vs. 000a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 11, ff8c vs. 000b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 12, ff8c vs. 000c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 13, ff8d vs. 000d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 14, ff91 vs. 000e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 15, ff90 vs. 000f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 16, ff8f vs. 0010
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 17, ff91 vs. 0011
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 18, ff93 vs. 0012
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 19, ff94 vs. 0013
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 20, ff93 vs. 0014
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 21, ff98 vs. 0015
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 22, ff98 vs. 0016
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 23, ff97 vs. 0017
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 24, ff97 vs. 0018
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 25, ff9a vs. 0019
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 26, ff9b vs. 001a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 27, ff9a vs. 001b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 28, ff9d vs. 001c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 29, ff9e vs. 001d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 30, ffa1 vs. 001e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 31, ff9e vs. 001f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 32, ffa0 vs. 0020
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 33, ffa1 vs. 0021
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 34, ffa4 vs. 0022
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 35, ffa6 vs. 0023
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 36, ffa3 vs. 0024
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 37, ffa4 vs. 0025
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 38, ffa6 vs. 0026
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 39, ffa8 vs. 0027
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 40, ffa9 vs. 0028
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 41, ffa8 vs. 0029
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 42, ffab vs. 002a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 43, ffac vs. 002b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 44, ffad vs. 002c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 45, ffad vs. 002d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 46, ffb0 vs. 002e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 47, ffae vs. 002f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 48, ffb0 vs. 0030
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 49, ffb2 vs. 0031
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 50, ffb2 vs. 0032
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 51, ffb4 vs. 0033
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 52, ffb5 vs. 0034
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 53, ffb7 vs. 0035
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 54, ffb6 vs. 0036
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 55, ffb5 vs. 0037
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 56, ffb7 vs. 0038
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 57, ffbb vs. 0039
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 58, ffbc vs. 003a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 59, ffbb vs. 003b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 60, ffbc vs. 003c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 61, ffbe vs. 003d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 62, ffbf vs. 003e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 63, ffc0 vs. 003f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 64, ffc1 vs. 0040
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 65, ffc1 vs. 0041
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 66, ffc3 vs. 0042
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 67, ffc2 vs. 0043
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 68, ffc4 vs. 0044
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 69, ffc5 vs. 0045
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 70, ffc6 vs. 0046
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 71, ffc7 vs. 0047
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 72, ffc6 vs. 0048
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 73, ffc9 vs. 0049
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 74, ffc9 vs. 004a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 75, ffcb vs. 004b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 76, ffcb vs. 004c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 77, ffce vs. 004d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 78, ffd1 vs. 004e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 79, ffd0 vs. 004f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 80, ffd0 vs. 0050
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 81, ffd3 vs. 0051
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 82, ffd4 vs. 0052
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 83, ffd4 vs. 0053
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 84, ffd4 vs. 0054
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 85, ffd4 vs. 0055
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 86, ffd8 vs. 0056
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 87, ffd9 vs. 0057
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 88, ffd8 vs. 0058
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 89, ffdb vs. 0059
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 90, ffdc vs. 005a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 91, ffd9 vs. 005b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 92, ffdc vs. 005c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 93, ffdf vs. 005d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 94, ffdd vs. 005e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 95, ffdf vs. 005f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 96, ffe2 vs. 0060
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 97, ffe3 vs. 0061
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 98, ffe3 vs. 0062
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 99, ffe6 vs. 0063
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 100, ffe3 vs. 0064
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 101, ffe4 vs. 0065
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 102, ffe6 vs. 0066
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 103, ffe8 vs. 0067
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 104, ffe8 vs. 0068
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 105, ffe9 vs. 0069
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 106, ffec vs. 006a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 107, ffed vs. 006b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 108, ffea vs. 006c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 109, ffed vs. 006d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 110, fff0 vs. 006e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 111, fff0 vs. 006f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 112, fff0 vs. 0070
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 113, fff0 vs. 0071
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 114, fff6 vs. 0072
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 115, fff4 vs. 0073
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 116, fff5 vs. 0074
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 117, fff5 vs. 0075
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 118, fff7 vs. 0076
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 119, fff6 vs. 0077
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 120, fff6 vs. 0078
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 121, fffb vs. 0079
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 122, fffb vs. 007a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 123, fff9 vs. 007b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 124, fffb vs. 007c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 125, ffff vs. 007d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 126, 0001 vs. 007e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 127, ffff vs. 007f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 128, 0000 vs. 0080
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 129, 0001 vs. 0081
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 130, 0004 vs. 0082
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 131, 0004 vs. 0083
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 132, 0004 vs. 0084
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 133, 0005 vs. 0085
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 134, 0007 vs. 0086
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 135, 0007 vs. 0087
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 136, 0008 vs. 0088
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 137, 000b vs. 0089
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 138, 000e vs. 008a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 139, 000a vs. 008b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 140, 000c vs. 008c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 141, 000e vs. 008d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 142, 0010 vs. 008e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 143, 000f vs. 008f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 144, 0011 vs. 0090
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 145, 0011 vs. 0091
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 146, 0013 vs. 0092
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 147, 0015 vs. 0093
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 148, 0015 vs. 0094
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 149, 0016 vs. 0095
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 150, 0018 vs. 0096
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 151, 0018 vs. 0097
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 152, 0018 vs. 0098
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 153, 0019 vs. 0099
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 154, 001c vs. 009a
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 155, 001e vs. 009b
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 156, 001c vs. 009c
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 157, 001c vs. 009d
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 158, 0020 vs. 009e
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 159, 0020 vs. 009f
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 160, 001f vs. 00a0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 161, 0022 vs. 00a1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 162, 0025 vs. 00a2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 163, 0023 vs. 00a3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 164, 0022 vs. 00a4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 165, 0026 vs. 00a5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 166, 002a vs. 00a6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 167, 0026 vs. 00a7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 168, 0026 vs. 00a8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 169, 002b vs. 00a9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 170, 002c vs. 00aa
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 171, 002a vs. 00ab
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 172, 002b vs. 00ac
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 173, 002d vs. 00ad
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 174, 0030 vs. 00ae
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 175, 0031 vs. 00af
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 176, 0030 vs. 00b0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 177, 0032 vs. 00b1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 178, 0033 vs. 00b2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 179, 0033 vs. 00b3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 180, 0033 vs. 00b4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 181, 0033 vs. 00b5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 182, 0038 vs. 00b6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 183, 0039 vs. 00b7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 184, 0038 vs. 00b8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 185, 0039 vs. 00b9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 186, 003d vs. 00ba
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 187, 003c vs. 00bb
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 188, 003a vs. 00bc
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 189, 003e vs. 00bd
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 190, 0040 vs. 00be
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 191, 003f vs. 00bf
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 192, 0040 vs. 00c0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 193, 0041 vs. 00c1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 194, 0044 vs. 00c2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 195, 0043 vs. 00c3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 196, 0044 vs. 00c4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 197, 0047 vs. 00c5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 198, 0048 vs. 00c6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 199, 0048 vs. 00c7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 200, 0048 vs. 00c8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 201, 004a vs. 00c9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 202, 004c vs. 00ca
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 203, 004c vs. 00cb
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 204, 004b vs. 00cc
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 205, 004e vs. 00cd
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 206, 004e vs. 00ce
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 207, 0051 vs. 00cf
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 208, 004f vs. 00d0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 209, 0051 vs. 00d1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 210, 0055 vs. 00d2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 211, 0052 vs. 00d3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 212, 0053 vs. 00d4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 213, 0057 vs. 00d5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 214, 0058 vs. 00d6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 215, 0058 vs. 00d7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 216, 0058 vs. 00d8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 217, 0059 vs. 00d9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 218, 005c vs. 00da
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 219, 005d vs. 00db
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 220, 005b vs. 00dc
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 221, 005c vs. 00dd
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 222, 0061 vs. 00de
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 223, 0060 vs. 00df
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 224, 005e vs. 00e0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 225, 0063 vs. 00e1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 226, 0064 vs. 00e2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 227, 0063 vs. 00e3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 228, 0063 vs. 00e4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 229, 0066 vs. 00e5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 230, 0067 vs. 00e6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 231, 0067 vs. 00e7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 232, 0067 vs. 00e8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 233, 006b vs. 00e9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 234, 006c vs. 00ea
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 235, 006c vs. 00eb
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 236, 006c vs. 00ec
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 237, 006e vs. 00ed
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 238, 006d vs. 00ee
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 239, 0070 vs. 00ef
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 240, 0071 vs. 00f0
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 241, 0072 vs. 00f1
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 242, 0074 vs. 00f2
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 243, 0074 vs. 00f3
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 244, 0074 vs. 00f4
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 245, 0075 vs. 00f5
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 246, 0078 vs. 00f6
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 247, 0078 vs. 00f7
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 248, 0078 vs. 00f8
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 249, 007b vs. 00f9
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 250, 007b vs. 00fa
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 251, 007b vs. 00fb
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 252, 007c vs. 00fc
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 253, 007e vs. 00fd
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 254, 0080 vs. 00fe
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 255, 0081 vs. 00ff
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 256, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 257, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 258, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 259, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 260, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 261, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 262, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 263, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 264, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 265, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 266, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 267, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 268, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 269, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 270, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 271, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 272, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 273, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 274, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 275, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 276, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 277, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 278, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 279, ff7d vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 280, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 281, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 282, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 283, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 284, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 285, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 286, ff7d vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 287, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 288, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 289, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 290, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 291, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 292, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 293, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 294, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 295, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 296, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 297, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 298, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 299, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 300, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 301, ff84 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 302, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 303, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 304, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 305, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 306, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 307, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 308, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 309, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 310, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 311, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 312, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 313, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 314, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 315, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 316, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 317, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 318, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 319, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 320, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 321, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 322, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 323, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 324, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 325, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 326, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 327, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 328, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 329, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 330, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 331, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 332, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 333, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 334, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 335, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 336, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 337, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 338, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 339, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 340, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 341, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 342, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 343, ff7c vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 344, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 345, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 346, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 347, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 348, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 349, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 350, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 351, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 352, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 353, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 354, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 355, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 356, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 357, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 358, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 359, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 360, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 361, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 362, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 363, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 364, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 365, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 366, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 367, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 368, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 369, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 370, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 371, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 372, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 373, ff84 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 374, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 375, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 376, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 377, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 378, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 379, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 380, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 381, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 382, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 383, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 384, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 385, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 386, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 387, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 388, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 389, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 390, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 391, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 392, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 393, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 394, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 395, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 396, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 397, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 398, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 399, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 400, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 401, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 402, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 403, ff7d vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 404, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 405, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 406, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 407, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 408, ff7d vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 409, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 410, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 411, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 412, ff7d vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 413, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 414, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 415, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 416, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 417, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 418, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 419, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 420, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 421, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 422, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 423, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 424, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 425, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 426, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 427, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 428, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 429, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 430, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 431, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 432, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 433, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 434, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 435, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 436, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 437, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 438, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 439, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 440, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 441, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 442, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 443, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 444, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 445, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 446, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 447, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 448, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 449, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 450, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 451, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 452, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 453, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 454, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 455, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 456, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 457, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 458, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 459, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 460, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 461, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 462, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 463, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 464, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 465, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 466, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 467, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 468, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 469, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 470, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 471, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 472, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 473, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 474, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 475, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 476, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 477, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 478, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 479, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 480, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 481, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 482, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 483, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 484, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 485, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 486, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 487, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 488, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 489, ff83 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 490, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 491, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 492, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 493, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 494, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 495, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 496, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 497, ff82 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 498, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 499, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 500, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 501, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 502, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 503, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 504, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 505, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 506, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 507, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 508, ff80 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 509, ff81 vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 510, ff7f vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# ** Error: Buffers don't match (index = 511, ff7e vs. 0000
+#    Time: 64915 ns  Iteration: 0  Instance: /fft_tb
+# Break in Process stimulus at ./tb/fft_tb.vhd line 423
+# End time: 19:43:49 on Feb 03,2019, Elapsed time: 0:13:12
+# Errors: 1330, Warnings: 3051
