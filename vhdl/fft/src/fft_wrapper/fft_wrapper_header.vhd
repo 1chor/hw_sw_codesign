@@ -193,7 +193,7 @@ begin
 		
 	-- end process input_proc;
 	
-	fft_proc: process (state, index, src_sop, src_valid, src_eop)
+	fft_proc: process (state, index, src_sop, src_valid, src_eop, stout_ready)
 	begin
 		-- default values to prevent latches
 		state_next <= state;
@@ -212,7 +212,9 @@ begin
 			
 			when OUTPUT_DATA =>
 				if (src_eop = '1') and (src_valid = '1') then
-					state_next <= TRANSFER_TO_FFT;
+					if stout_ready = '1' then
+						state_next <= TRANSFER_TO_FFT;
+					end if;
 				end if;	
 			
 			when others =>

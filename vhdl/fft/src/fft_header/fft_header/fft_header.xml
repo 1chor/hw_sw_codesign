@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy
- date="2019.01.30.14:32:51"
+ date="2019.02.05.09:30:39"
  outputDirectory="/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/">
  <perimeter>
   <parameter
@@ -89,13 +89,13 @@
  </perimeter>
  <entity
    path=""
-   parameterizationKey="fft_header:1.0:AUTO_CLK_CLOCK_DOMAIN=-1,AUTO_CLK_CLOCK_RATE=-1,AUTO_CLK_RESET_DOMAIN=-1,AUTO_DEVICE=EP4CE115F29C7,AUTO_DEVICE_FAMILY=Cyclone IV E,AUTO_DEVICE_SPEEDGRADE=7,AUTO_GENERATION_ID=1548855171,AUTO_UNIQUE_ID=(altera_fft_ii:18.1:CALC_LATENCY=651,THROUGHPUT_LATENCY=589,data_flow=Buffered Burst,data_rep=Block Floating Point,design_env=NATIVE,direction=Bi-directional,dsp_resource_opt=false,engine_arch=Quad Output,hard_fp=false,hyper_opt=false,in_order=Natural,in_width=16,in_width_derived=16,length=512,num_engines=1,num_engines_derived=1,out_order=Natural,out_width=29,out_width_derived=16,selected_device_family=Cyclone IV E,twid_width=16,twid_width_derived=16)"
+   parameterizationKey="fft_header:1.0:AUTO_CLK_CLOCK_DOMAIN=-1,AUTO_CLK_CLOCK_RATE=-1,AUTO_CLK_RESET_DOMAIN=-1,AUTO_DEVICE=EP4CE115F29C7,AUTO_DEVICE_FAMILY=Cyclone IV E,AUTO_DEVICE_SPEEDGRADE=7,AUTO_GENERATION_ID=1549355438,AUTO_UNIQUE_ID=(altera_fft_ii:18.1:CALC_LATENCY=512,THROUGHPUT_LATENCY=512,data_flow=Streaming,data_rep=Block Floating Point,design_env=NATIVE,direction=Bi-directional,dsp_resource_opt=false,engine_arch=Quad Output,hard_fp=false,hyper_opt=false,in_order=Natural,in_width=16,in_width_derived=16,length=512,num_engines=1,num_engines_derived=1,out_order=Natural,out_width=29,out_width_derived=16,selected_device_family=Cyclone IV E,twid_width=16,twid_width_derived=16)"
    instancePathKey="fft_header"
    kind="fft_header"
    version="1.0"
    name="fft_header">
   <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
-  <parameter name="AUTO_GENERATION_ID" value="1548855171" />
+  <parameter name="AUTO_GENERATION_ID" value="1549355438" />
   <parameter name="AUTO_DEVICE" value="EP4CE115F29C7" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
   <parameter name="AUTO_CLK_RESET_DOMAIN" value="-1" />
@@ -576,12 +576,12 @@
  </entity>
  <entity
    path="submodules/"
-   parameterizationKey="altera_fft_ii:18.1:CALC_LATENCY=651,THROUGHPUT_LATENCY=589,data_flow=Buffered Burst,data_rep=Block Floating Point,design_env=NATIVE,direction=Bi-directional,dsp_resource_opt=false,engine_arch=Quad Output,hard_fp=false,hyper_opt=false,in_order=Natural,in_width=16,in_width_derived=16,length=512,num_engines=1,num_engines_derived=1,out_order=Natural,out_width=29,out_width_derived=16,selected_device_family=Cyclone IV E,twid_width=16,twid_width_derived=16"
+   parameterizationKey="altera_fft_ii:18.1:CALC_LATENCY=512,THROUGHPUT_LATENCY=512,data_flow=Streaming,data_rep=Block Floating Point,design_env=NATIVE,direction=Bi-directional,dsp_resource_opt=false,engine_arch=Quad Output,hard_fp=false,hyper_opt=false,in_order=Natural,in_width=16,in_width_derived=16,length=512,num_engines=1,num_engines_derived=1,out_order=Natural,out_width=29,out_width_derived=16,selected_device_family=Cyclone IV E,twid_width=16,twid_width_derived=16"
    instancePathKey="fft_header:.:fft_ii_0"
    kind="altera_fft_ii"
    version="18.1"
    name="fft_header_fft_ii_0">
-  <parameter name="THROUGHPUT_LATENCY" value="589" />
+  <parameter name="THROUGHPUT_LATENCY" value="512" />
   <parameter name="in_width_derived" value="16" />
   <parameter name="in_order" value="Natural" />
   <parameter name="hyper_opt" value="false" />
@@ -591,12 +591,12 @@
   <parameter name="out_order" value="Natural" />
   <parameter name="selected_device_family" value="Cyclone IV E" />
   <parameter name="dsp_resource_opt" value="false" />
-  <parameter name="CALC_LATENCY" value="651" />
+  <parameter name="CALC_LATENCY" value="512" />
   <parameter name="design_env" value="NATIVE" />
   <parameter name="data_rep" value="Block Floating Point" />
   <parameter name="in_width" value="16" />
   <parameter name="engine_arch" value="Quad Output" />
-  <parameter name="data_flow" value="Buffered Burst" />
+  <parameter name="data_flow" value="Streaming" />
   <parameter name="out_width" value="29" />
   <parameter name="num_engines" value="1" />
   <parameter name="out_width_derived" value="16" />

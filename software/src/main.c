@@ -411,7 +411,7 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
         
         samples_2[i].r = convert_to_fixed_9q23( out_2[i].r );
         samples_2[i].i = convert_to_fixed_9q23( out_2[i].i );
-        printf( "%lx %lx i\n", samples_2[i].r, samples_2[i].i );
+        //printf( "%lx %lx i\n", samples_2[i].r, samples_2[i].i );
     }
     
     free( out_1 );
@@ -496,11 +496,7 @@ void test()
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
-    
-    // das 2. argument gibt an ob es eine inverse fft ist
-    
-    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
-    
+        
     uint32_t i = 0;
     uint32_t j = 0;
     uint32_t k = 0;
@@ -508,10 +504,16 @@ void test()
     printf( "pre-processing header blocks (H)\n" );
 	
 	#if ( FFT_H_HW ) // Hardware Header-FFT 
+		
+		fft_h_setup_hw(); // Init FFT
 	
 		pre_process_h_header_hw( ir );
 	
 	#else // Software Header-FFT
+	
+		// das 2. argument gibt an ob es eine inverse fft ist
+    
+		kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
 	
 		pre_process_h_header( ir );
 	

@@ -27,6 +27,7 @@ end entity;
 architecture arch of fft_wrapper_header is
 
 	constant FFT_LENGTH  : natural := 512;
+	constant DIV_N		 : integer := -9; -- 1/512 is equivalent to 2^-9 and 9 right shifts
 	
 	signal	si_valid     : std_logic;
 	signal	si_ready  	 : std_logic;
@@ -304,9 +305,9 @@ begin
 		
 	end process send_proc;
 			
-	output_proc : process(stout_ready, state_next, state, src_valid, src_exp, src_imag, src_real) is
-		variable exponent 	  : natural range 0 to 13 := 0;
-		--~ variable exponent_abs : natural range  0 to 14;
+	output_proc : process(stout_ready, state_next, state, src_valid, inverse, src_exp, src_imag, src_real) is
+		variable exponent 	  : integer range -13 to 13 := 0;
+		variable exponent_abs : natural range  0 to 13 := 0;
 	begin
 		stout_data(15 downto 0) <= (others => '0');
 		stout_data(31 downto 16) <= (others => '0');
@@ -316,17 +317,21 @@ begin
 			stout_valid <= src_valid;
 			
 			-- Calculate exponent
-			exponent := -to_integer(signed(src_exp)) - 1;
-			--~ exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length))); -- nicht 6???
+			if inverse = "1" then -- IFFT operation
+				exponent := -to_integer(signed(src_exp)) + DIV_N;
+			else -- FFT operation
+				exponent := -to_integer(signed(src_exp));
+			end if;
+			exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
 						
-			--~ if exponent < 0 then -- right shift	
-				--~ stout_data(15 downto  0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs));
-				--~ stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
+			if exponent < 0 then -- right shift	
+				stout_data(15 downto  0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
 				
-			--~ elsif exponent >= 0 then -- left shift
-				stout_data(15 downto  0) <= std_logic_vector(shift_left(signed(src_imag), exponent));
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent));
-			--~ end if;
+			elsif exponent >= 0 then -- left shift
+				stout_data(15 downto  0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs));
+			end if;
 		end if;
 		
 	end process output_proc;

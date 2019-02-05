@@ -30,6 +30,8 @@ void ifft_on_mac_buffer_hw
 
 void zero_extend_256_hw( complex_16_t* );
 
+void test_fft( complex_16_t*, complex_16_t* );
+
 #endif
 
 
