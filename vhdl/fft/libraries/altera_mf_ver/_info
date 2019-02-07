@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
 va_graycounter
-Z1 !s110 1549218581
+Z1 !s110 1549557390
 !i10b 1
 !s100 nH]fheH07VWg[3ZnbC2JG2
 ILaLmIj>4[HM6aW2E0XhBC3
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1549218581.000000
+Z7 !s108 1549557390.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_mf.v|
 Z8 !s90 -work|libraries/altera_mf_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_mf.v|
 !i113 0
@@ -177,7 +177,7 @@ R8
 R9
 R10
 valt_dfe
-Z12 !s110 1549218582
+R1
 !i10b 1
 !s100 mFYkgRFMULR:YGL_gjJGg2
 I3ZeinNNi?f>bdMg:HzWRo3
@@ -219,7 +219,7 @@ R8
 R9
 R10
 valt_fault_injection
-R12
+R1
 !i10b 1
 !s100 5jDE0X52`_zRAAaeAjV8_2
 IVgGk_Tc[GV]=cNAQZN9aI1
@@ -621,7 +621,7 @@ R8
 R9
 R10
 valtparallel_flash_loader
-R12
+R1
 !i10b 1
 !s100 [K1fC<ne6eD;S9gMObg;i2
 IcWY:z6OPKgIY[m2c6:Ad53
@@ -663,7 +663,7 @@ R8
 R9
 R10
 valtserial_flash_loader
-R12
+R1
 !i10b 1
 !s100 Aa;:PLi7H7<1MY:NJ29=f1
 I=@Q16GfVj>2l7N:Un4_CE2
@@ -705,7 +705,7 @@ R8
 R9
 R10
 valtsource_probe
-R12
+R1
 !i10b 1
 !s100 mVL;?YcH^fC<;=PkX4gW21
 IF8cdWSUXYMF^SiJ=V:Azo2
@@ -768,7 +768,7 @@ R8
 R9
 R10
 valtstratixii_oct
-R12
+R1
 !i10b 1
 !s100 MAlXiWAaDXY8B?OZ6QaXi1
 IU`_Yz]l2;9L?fV:DdMZ8D3
@@ -1146,7 +1146,7 @@ R8
 R9
 R10
 vdummy_hub
-R12
+R1
 !i10b 1
 !s100 kM`L8z;TG?ZdY`[i__J[M1
 I`M9W6gU>zSeHD9]:mNc@`3
@@ -1209,7 +1209,7 @@ R8
 R9
 R10
 vjtag_tap_controller
-R12
+R1
 !i10b 1
 !s100 _hM3Se4FGl;ITz00MPVXd0
 Iz4Webkn:O;HZVZ10f::2Q0
@@ -1512,7 +1512,7 @@ R8
 R9
 R10
 vsignal_gen
-R12
+R1
 !i10b 1
 !s100 1:`2ljV5HAn1J]FiEUXoK1
 I`GE=P2Ebfn=S^O`lK`c5J1
@@ -1533,7 +1533,7 @@ R8
 R9
 R10
 vsld_signaltap
-R12
+R1
 !i10b 1
 !s100 YHjWPna1dn?O>jMT6mc1J0
 IVhTBRGh:<0Wj:Z34mGdIS2
@@ -1554,7 +1554,7 @@ R8
 R9
 R10
 vsld_virtual_jtag
-R12
+R1
 !i10b 1
 !s100 55oioFBMKSzo=@n<oi7BX0
 I8klmg=fSL^`7V656d[]?O2
@@ -1575,7 +1575,7 @@ R8
 R9
 R10
 vsld_virtual_jtag_basic
-R12
+R1
 !i10b 1
 !s100 Sf6O06HbiHnU=Rk^?KQT52
 IAk=d3QHX:<CeJ4G[B]SCN3

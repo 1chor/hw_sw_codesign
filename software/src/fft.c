@@ -105,7 +105,8 @@ void pre_process_h_header_hw( struct wav* ir )
         
         // cin_X will be freed in func
         
-        test_fft( cin_1, cin_2 );
+        if (header_blocks_h_i == 0 )
+			test_fft( cin_1, cin_2 );
                 
         process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
     }
@@ -301,8 +302,8 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 		// Both channels are calculated at the same time
 		// Upper bits are real data from left channel
 		// Lower bits are real data from right channel
-		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)0x0000 );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)in_2[i].r );
+		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)in_1[i].r)<<16) + (uint32_t)0x0000 );
 	}
 	
 	printf("done\n");
@@ -316,6 +317,7 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		out_1[i].r = (uint16_t)( temp >> 16 ); // Upper bits are real data
 		out_2[i].r = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
+		//~ out_1[i].i = (uint16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
 				
 		//~ printf("Ausgelesen[%d]: %lx\n", i, temp);
 		//~ printf("Upper bits: %x\n", out_1[i].r);
@@ -323,6 +325,15 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 	}
     
     printf("done\n");
+    
+	//~ printf("Check FFT Results - Left Channel:\n");
+    //~ printf("i\t|\tREAL\t\t|\tIMAG\n");
+    //~ for ( i = 0; i < 512; i++ )
+	//~ { 
+		//~ printf("%d\t|\t%lx\t|\t%lx\n", i, out_1[i].r, out_1[i].i);
+		//~ printf("%d\t|\t%f\t|\t%f\n", i, convert_1q15(out_1[i].r), convert_1q15(out_1[i].i));
+    //~ }
+    
     printf("Get back both transformed channels\n");
     
 	// Get back both transformed channels
@@ -380,32 +391,32 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 	
 	printf("done\n");
 	
-	//~ // right channel
+	// right channel
 	
-	//~ printf("Write sample to FIFO\n");
+	printf("Write sample to FIFO\n");
 	
-	//~ for ( i = 0; i < 512; i++ )
-	//~ {
-		//~ // Write sample to FIFO
-		//~ // Upper bits are real part
-		//~ // Lower bits are imaginary part
-		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)out_2[i].r)<<16) + (uint32_t)out_2[i].i );
-	//~ }
+	for ( i = 0; i < 512; i++ )
+	{
+		// Write sample to FIFO
+		// Upper bits are real part
+		// Lower bits are imaginary part
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((uint32_t)out_2[i].r)<<16) + (uint32_t)out_2[i].i );
+	}
 	
-	//~ printf("done\n");
-	//~ printf("Read result from FIFO\n");
+	printf("done\n");
+	printf("Read result from FIFO\n");
 	
-	//~ for ( i = 0; i < 512; i++ )
-	//~ {
-		//~ uint32_t temp;
+	for ( i = 0; i < 512; i++ )
+	{
+		uint32_t temp;
 		
-		//~ // Read result from FIFO
-		//~ temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		// Read result from FIFO
+		temp = (uint32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		
-		//~ res2[i] = (uint16_t)( temp >> 16 ); // Upper bits are real data
-	//~ }
+		res2[i] = (uint16_t)( temp >> 16 ); // Upper bits are real data
+	}
         
-    //~ printf("done\n");
+    printf("done\n");
     
     free( out_1 );
     free( out_2 );
@@ -417,13 +428,13 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 		printf("%d\t|\t%lx\t|\t%lx\n", i, in_1[i].r, res1[i]);
     }
     
-    //~ printf("\n\n");
-    //~ printf("Check Results - Right Channel:\n");
-    //~ printf("i\t|\tSOLL\t|\tIST\n");
-    //~ for ( i = 0; i < 512; i++ )
-	//~ { 
-		//~ printf("%d\t|\t%lx\t|\t%lx\n", i, in_2[i].r, res2[i]);
-    //~ }
+    printf("\n\n");
+    printf("Check Results - Right Channel:\n");
+    printf("i\t|\tSOLL\t|\tIST\n");
+    for ( i = 0; i < 512; i++ )
+	{ 
+		printf("%d\t|\t%lx\t|\t%lx\n", i, in_2[i].r, res2[i]);
+    }
     printf("\n\n");
     
     free( res1 );

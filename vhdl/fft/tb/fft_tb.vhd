@@ -258,7 +258,7 @@ begin
 		m_imag_out2 := read_input_file("tb/matlab/Test2/imag_output2.txt", '0');
 		
 		----------------------------------------------------------------
-		
+		/*
 		write(my_line, string'("Matlab FFT Test1"));
 		writeline(output, my_line);
 		
@@ -274,6 +274,9 @@ begin
 		for i in 0 to FILE_LENGTH - 1 loop
 			output16_1_real(i) := output_buffer(i)(31 downto 16);
 			output16_1_imag(i) := output_buffer(i)(15 downto 0);
+			
+			--~ output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 1));
+			--~ output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 1));
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -306,6 +309,9 @@ begin
 		for i in 0 to FILE_LENGTH - 1 loop
 			output16_1_real(i) := output_buffer(i)(31 downto 16);
 			output16_1_imag(i) := output_buffer(i)(15 downto 0);
+			
+			--~ output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 4));
+			--~ output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 4));
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -313,7 +319,7 @@ begin
 		
 		-- Compare result
 		compare_buffers16(output16_1_real, m_real_in, FILE_LENGTH);
-		compare_buffers16(output16_1_imag, m_imag_in, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_imag, m_imag_in, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -364,11 +370,11 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers16(output16_1_real, m_real_out1, FILE_LENGTH);
-		compare_buffers16(output16_1_imag, m_imag_out1, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_real, m_real_out1, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_imag, m_imag_out1, FILE_LENGTH);
 		
-		compare_buffers16(output16_2_real, m_real_out2, FILE_LENGTH);
-		compare_buffers16(output16_2_imag, m_imag_out2, FILE_LENGTH);
+		--~ compare_buffers16(output16_2_real, m_real_out2, FILE_LENGTH);
+		--~ compare_buffers16(output16_2_imag, m_imag_out2, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -415,8 +421,8 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers16(output16_1_real, m_real_in1, FILE_LENGTH);
-		compare_buffers16(output16_2_real, m_real_in2, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_real, m_real_in1, FILE_LENGTH);
+		--~ compare_buffers16(output16_2_real, m_real_in2, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -427,45 +433,81 @@ begin
 		----------------------------------------------------------------
 		----------------------------------------------------------------
 		
-		write(my_line, string'("Left channel FFT test"));
+		write(my_line, string'("Left channel FFT Test"));
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
 		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write(x"0001" & test_2(i)); -- Send only left channel
+			stream_write(ir_1(i) & x"0000"); -- Send only left channel
 		end loop; 
 		stin_valid <= '0';
 		
 		wait_for_output_buffer_fill_level(FILE_LENGTH);
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := x"0000" & output_buffer(i)(31 downto 16);
-			output_1_imag(i) := x"0000" & output_buffer(i)(15 downto 0);
+			--~ output16_1_real(i) := output_buffer(i)(31 downto 16);
+			--~ output16_1_imag(i) := output_buffer(i)(15 downto 0);
+			
+			output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 5));
+			output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 5));
+		end loop;
+								
+		--~ write(my_line, string'("Compare results"));
+		--~ writeline(output, my_line);
+		
+		-- Compare result
+		--compare_buffers16(output16_1_real, m_real_out, FILE_LENGTH);
+		--compare_buffers16(output16_1_imag, m_imag_out, FILE_LENGTH);
+		
+		--~ write(my_line, string'("Done"));
+		--~ writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		
+		write(my_line, string'("Left channel Inverse-FFT Test"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		inverse <= "1";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(output16_1_real(i) & output16_1_imag(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			--~ output16_1_real(i) := output_buffer(i)(31 downto 16);
+			
+			output16_1_real(i) := std_logic_vector(shift_left(signed(output_buffer(i)(31 downto 16)), 5));
 		end loop;
 				
 		write(my_line, string'("Compare results"));
 		writeline(output, my_line);
 		
 		-- Compare result
-		--compare_buffers32(output_1_real, test_ref_real, FILE_LENGTH);
-		--compare_buffers32(output_1_imag, test_ref_imag, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_real, ir_1, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
 		
 		write(my_line, string'("----------------------------------"));
 		writeline(output, my_line);
-		
+				
 		----------------------------------------------------------------
 		----------------------------------------------------------------
-		
-		write(my_line, string'("General FFT test"));
+		*/
+		write(my_line, string'("General FFT Test"));
 		writeline(output, my_line);
 		write(my_line, string'("Send both channels at same time"));
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
+		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write(ir_1(i) & ir_2(i)); -- Send both channels at same time
 		end loop; 
@@ -474,41 +516,94 @@ begin
 		wait_for_output_buffer_fill_level(FILE_LENGTH);
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := x"0000" & output_buffer(i)(31 downto 16);
-			output_2_real(i) := x"0000" & output_buffer(i)(15 downto 0);
+			output16_1_real(i) := output_buffer(i)(31 downto 16);
+			output16_2_real(i) := output_buffer(i)(15 downto 0);
 		end loop;
-		
-		--compare_buffers32(output_1_real, output_ref_1_real, FILE_LENGTH);
 		
 		-- Get back both transformed channels
-		for i in 1 to FILE_LENGTH/2 loop
+		output16_1_imag(0) := (others => '0'); 
+		output16_2_imag(0) := (others => '0');
+		output16_1_imag(FILE_LENGTH/2) := (others => '0'); 
+		output16_2_imag(FILE_LENGTH/2) := (others => '0');
+		
+		for i in 1 to FILE_LENGTH/2 - 1 loop
 			-- imaginary parts of X[f] and X[-f]
-			output_1_imag(i) := std_logic_vector( (signed(output_2_real(i)) - signed(output_2_real(512-i))) / 2 );
-			output_1_imag(512-i) := not output_1_imag(i);
+			output16_1_imag(i) := std_logic_vector( shift_right( (signed(output16_2_real(i)) - signed(output16_2_real(512-i))), 1 ) );
+			output16_1_imag(512-i) := not output16_1_imag(i);
 			
 			-- imaginary parts of Y[f] and Y[-f]
-			output_2_imag(i) := not std_logic_vector( (signed(output_1_real(i)) - signed(output_1_real(512-i))) / 2 );
-			output_2_imag(512-i) := not output_2_imag(i);
+			output16_2_imag(i) := not std_logic_vector( shift_right( (signed(output16_1_real(i)) - signed(output16_1_real(512-i))), 1 ) );
+			output16_2_imag(512-i) := not output16_2_imag(i);
 			
 			-- real parts of X[f] and X[-f]
-			output_1_real(i) := std_logic_vector( (signed(output_1_real(i)) + signed(output_1_real(512-i))) / 2 );
-			output_1_real(512-i) := output_1_real(i);
+			output16_1_real(i) := std_logic_vector( shift_right( (signed(output16_1_real(i)) + signed(output16_1_real(512-i))), 1 ) );
+			output16_1_real(512-i) := output16_1_real(i);
 			
 			-- real parts of Y[f] and Y[-f]
-			output_2_real(i) := std_logic_vector( (signed(output_2_real(i)) + signed(output_2_real(512-i))) / 2 );
-			output_2_real(512-i) := output_2_real(i);
+			output16_2_real(i) := std_logic_vector( shift_right( (signed(output16_2_real(i)) + signed(output16_2_real(512-i))), 1 ) );
+			output16_2_real(512-i) := output16_2_real(i);
 		end loop;
 		
+		--~ write(my_line, string'("Compare results"));
+		--~ writeline(output, my_line);
+		
+		-- Compare result
+		--~ compare_buffers32(output16_1_real, output16_ref_1_real, FILE_LENGTH);
+		--~ compare_buffers32(output16_1_imag, output16_ref_1_imag, FILE_LENGTH);
+		
+		--~ compare_buffers32(output16_2_real, output16_ref_2_real, FILE_LENGTH);
+		--~ compare_buffers32(output16_2_imag, output16_ref_2_imag, FILE_LENGTH);
+
+		--~ write(my_line, string'("Done"));
+		--~ writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		
+		write(my_line, string'("General Inverse-FFT Test"));
+		writeline(output, my_line);
+		
+		-- First channel IFFT
+		output_buffer_idx := 0;
+		inverse <= "1";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(output16_1_real(i) & output16_1_imag(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_1_real(i) := output_buffer(i)(31 downto 16);
+			output16_1_imag(i) := output_buffer(i)(15 downto 0);
+		end loop;
+		
+		-- Second channel IFFT
+		output_buffer_idx := 0;
+		inverse <= "1";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(output16_2_real(i) & output16_2_imag(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_2_real(i) := output_buffer(i)(31 downto 16);
+			output16_2_imag(i) := output_buffer(i)(15 downto 0);
+		end loop;
+				
 		write(my_line, string'("Compare results"));
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers32(output_1_real, output_ref_1_real, FILE_LENGTH);
-		--~ compare_buffers32(output_1_imag, output_ref_1_imag, FILE_LENGTH);
+		compare_buffers16(output16_1_real, ir_1, FILE_LENGTH);
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		compare_buffers16(output16_2_real, ir_2, FILE_LENGTH);
 		
-		--~ compare_buffers32(output_2_real, output_ref_2_real, FILE_LENGTH);
-		--~ compare_buffers32(output_2_imag, output_ref_2_imag, FILE_LENGTH);
-
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
 		

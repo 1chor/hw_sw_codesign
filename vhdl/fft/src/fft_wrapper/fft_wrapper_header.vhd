@@ -327,12 +327,12 @@ begin
 			exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
 						
 			if exponent < 0 then -- right shift	
-				stout_data(15 downto  0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs));
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
+				stout_data(15 downto  0) <= std_logic_vector(shift_right(unsigned(src_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_right(unsigned(src_real), exponent_abs));
 				
 			elsif exponent >= 0 then -- left shift
-				stout_data(15 downto  0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs));
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs));
+				stout_data(15 downto  0) <= std_logic_vector(shift_left(unsigned(src_imag), exponent_abs));
+				stout_data(31 downto 16) <= std_logic_vector(shift_left(unsigned(src_real), exponent_abs));
 			end if;
 		end if;
 		
