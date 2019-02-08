@@ -15,8 +15,8 @@
 
 typedef struct {
     
-    uint16_t r;
-    uint16_t i;
+    int16_t r;
+    int16_t i;
     
 } complex_16_t;
 

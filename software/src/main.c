@@ -414,6 +414,17 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
         //printf( "%lx %lx i\n", samples_2[i].r, samples_2[i].i );
     }
     
+    //~ if ( block == 0 )
+    //~ {
+		//~ printf( "Left Channel - Real\n" );
+		 //~ for ( i = 0; i < 512; i++ )
+			//~ printf( "%f\n", out_1[i].r );
+			
+		//~ printf( "Left Channel - Imag\n" );
+		//~ for ( i = 0; i < 512; i++ )
+			//~ printf( "%f\n", out_1[i].i );
+	//~ }	
+	
     free( out_1 );
     free( out_2 );
     
@@ -489,10 +500,7 @@ void test()
     printf("test started\n");
     printf("=========================\n");
     printf("\n");
-    
-    uint16_t l_buf;
-    uint16_t r_buf;
-    
+        
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
@@ -505,11 +513,17 @@ void test()
 	
 	#if ( FFT_H_HW ) // Hardware Header-FFT 
 		
+		int16_t l_buf;
+		int16_t r_buf;
+		
 		fft_h_setup_hw(); // Init FFT
 	
 		pre_process_h_header_hw( ir );
 	
 	#else // Software Header-FFT
+	
+		uint16_t l_buf;
+		uint16_t r_buf;
 	
 		// das 2. argument gibt an ob es eine inverse fft ist
     
@@ -670,10 +684,10 @@ void test()
     
     while (1)
     {
-        l_buf = wav_get_uint16(input, 2*sample_counter);
-        r_buf = wav_get_uint16(input, 2*sample_counter+1);
+		#if ( FFT_H_HW ) // Hardware Header-FFT 
         
-        #if ( FFT_H_HW ) // Hardware Header-FFT 
+			l_buf = wav_get_int16(input, 2*sample_counter);
+			r_buf = wav_get_int16(input, 2*sample_counter+1);
 			
 			i_in_1[sample_counter_local].r = l_buf;
 			i_in_1[sample_counter_local].i = 0;
@@ -682,6 +696,9 @@ void test()
 			i_in_2[sample_counter_local].i = 0;
 		
 		#else // Software Header-FFT
+		
+			l_buf = wav_get_uint16(input, 2*sample_counter);
+			r_buf = wav_get_uint16(input, 2*sample_counter+1);
 
 			i_in_1[sample_counter_local].r = convert_1q15(l_buf);
 			i_in_1[sample_counter_local].i = 0;
@@ -696,6 +713,7 @@ void test()
         // fir
         
         
+// ---> ToDO FIR auf signed umstellen!!
         
 		#if ( FIR_HW ) // Hardware FIR
         
@@ -858,14 +876,17 @@ void test()
             
             printf( "performing ifft\n" );
             
-            uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-            uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-            
 			#if ( FFT_H_HW ) // Hardware Header-FFT
+			
+				int16_t* mac_buffer_16_1 = (int16_t*)malloc( 512 * sizeof(int16_t) );
+				int16_t* mac_buffer_16_2 = (int16_t*)malloc( 512 * sizeof(int16_t) );
      
 				ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 			
 			#else // Software Header-FFT
+			
+				uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+				uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
 			
 				ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 			

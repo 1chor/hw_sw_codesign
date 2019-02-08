@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
 vio_buf_opdrn
-Z1 !s110 1549557389
+Z1 !s110 1549638847
 !i10b 1
 !s100 =^<AH`I:TA`[9YUe=h1;_1
 Izm?D804FaeQaG0EiOFg>i1
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1549557389.000000
+Z7 !s108 1549638847.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.v|
 Z8 !s90 -work|libraries/sgate_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.v|
 !i113 0
