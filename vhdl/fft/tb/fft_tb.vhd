@@ -75,6 +75,11 @@ architecture bench of fft_tb is
 	
 	shared variable m_real_out2 : input_t;
 	shared variable m_imag_out2 : input_t;
+	
+	shared variable m_real_in3 : input_t;
+	
+	shared variable m_real_out3 : input_t;
+	shared variable m_imag_out3 : input_t;
 		
 	shared variable output_ref_1_real : output_t; 
 	shared variable output_ref_1_imag : output_t; 
@@ -236,8 +241,9 @@ begin
 		
 		m_real_in1 := read_input_file("tb/matlab/Test2/real_input1.txt", '0');
 		m_real_in2 := read_input_file("tb/matlab/Test2/real_input2.txt", '0');
-	
 		
+		m_real_in3 := read_input_file("tb/matlab/Test3/real_input.txt", '0');
+			
 		write(my_line, string'("Load Reference Output Buffers"));
 		writeline(output, my_line);
 		
@@ -259,6 +265,9 @@ begin
 		m_real_out2 := read_input_file("tb/matlab/Test2/real_output2.txt", '0');
 		m_imag_out2 := read_input_file("tb/matlab/Test2/imag_output2.txt", '0');
 		
+		m_real_out3 := read_input_file("tb/matlab/Test3/real_output.txt", '0');
+		m_imag_out3 := read_input_file("tb/matlab/Test3/imag_output.txt", '0');
+		
 		----------------------------------------------------------------
 		/*
 		write(my_line, string'("Matlab FFT Test1"));
@@ -276,9 +285,6 @@ begin
 		for i in 0 to FILE_LENGTH - 1 loop
 			output16_1_real(i) := output_buffer(i)(31 downto 16);
 			output16_1_imag(i) := output_buffer(i)(15 downto 0);
-			
-			--~ output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 1));
-			--~ output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 1));
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -311,9 +317,6 @@ begin
 		for i in 0 to FILE_LENGTH - 1 loop
 			output16_1_real(i) := output_buffer(i)(31 downto 16);
 			output16_1_imag(i) := output_buffer(i)(15 downto 0);
-			
-			--~ output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 4));
-			--~ output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 4));
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -378,7 +381,7 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		--~ compare_buffers16(output16_1_real, m_real_out1, FILE_LENGTH);
+		compare_buffers16(output16_1_real, m_real_out1, FILE_LENGTH);
 		--~ compare_buffers16(output16_1_imag, m_imag_out1, FILE_LENGTH);
 		
 		--~ compare_buffers16(output16_2_real, m_real_out2, FILE_LENGTH);
@@ -429,8 +432,71 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		--~ compare_buffers16(output16_1_real, m_real_in1, FILE_LENGTH);
+		compare_buffers16(output16_1_real, m_real_in1, FILE_LENGTH);
 		--~ compare_buffers16(output16_2_real, m_real_in2, FILE_LENGTH);
+		
+		write(my_line, string'("Done"));
+		writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		----------------------------------------------------------------
+		
+		write(my_line, string'("Matlab FFT Test3"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		inverse <= "0";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(m_real_in3(i) & x"0000");
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_1_real(i) := output_buffer(i)(31 downto 16);
+			output16_1_imag(i) := output_buffer(i)(15 downto 0);
+		end loop;
+				
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
+		
+		-- Compare result
+		--compare_buffers16(output16_1_real, m_real_out3, FILE_LENGTH);
+		--compare_buffers16(output16_1_imag, m_imag_out3, FILE_LENGTH);
+		
+		write(my_line, string'("Done"));
+		writeline(output, my_line);
+		
+		write(my_line, string'("----------------------------------"));
+		writeline(output, my_line);
+		
+		----------------------------------------------------------------
+		
+		write(my_line, string'("Matlab Inverse-FFT Test3"));
+		writeline(output, my_line);
+		
+		output_buffer_idx := 0;
+		inverse <= "1";
+		for i in 0 to FILE_LENGTH - 1 loop
+			stream_write(output16_1_real(i) & output16_1_imag(i));
+		end loop; 
+		stin_valid <= '0';
+		
+		wait_for_output_buffer_fill_level(FILE_LENGTH);
+		
+		for i in 0 to FILE_LENGTH - 1 loop
+			output16_1_real(i) := output_buffer(i)(31 downto 16);
+		end loop;
+				
+		write(my_line, string'("Compare results"));
+		writeline(output, my_line);
+		
+		-- Compare result
+		--~ compare_buffers16(output16_1_real, m_real_in3, FILE_LENGTH);
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -456,9 +522,6 @@ begin
 		for i in 0 to FILE_LENGTH - 1 loop
 			--~ output16_1_real(i) := output_buffer(i)(31 downto 16);
 			--~ output16_1_imag(i) := output_buffer(i)(15 downto 0);
-			
-			output16_1_real(i) := std_logic_vector(shift_right(signed(output_buffer(i)(31 downto 16)), 5));
-			output16_1_imag(i) := std_logic_vector(shift_right(signed(output_buffer(i)(15 downto 0)), 5));
 		end loop;
 								
 		--~ write(my_line, string'("Compare results"));
@@ -489,9 +552,7 @@ begin
 		wait_for_output_buffer_fill_level(FILE_LENGTH);
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			--~ output16_1_real(i) := output_buffer(i)(31 downto 16);
-			
-			output16_1_real(i) := std_logic_vector(shift_left(signed(output_buffer(i)(31 downto 16)), 5));
+			output16_1_real(i) := output_buffer(i)(31 downto 16);
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -608,7 +669,7 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers16(output16_1_real, ir_1, FILE_LENGTH);
+		--~ compare_buffers16(output16_1_real, ir_1, FILE_LENGTH);
 		write(my_line, string'("----------------------------------"));
 		writeline(output, my_line);
 		--~ compare_buffers16(output16_2_real, ir_2, FILE_LENGTH);
