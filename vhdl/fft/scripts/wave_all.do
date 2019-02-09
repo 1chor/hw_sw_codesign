@@ -28,6 +28,9 @@ add wave -noupdate /fft_tb/uut/src_eop
 add wave -noupdate /fft_tb/uut/src_real
 add wave -noupdate /fft_tb/uut/src_imag
 add wave -noupdate /fft_tb/uut/src_exp
+add wave -noupdate /fft_tb/uut/temp
+add wave -noupdate /fft_tb/uut/r_i
+add wave -noupdate /fft_tb/uut/r_i_next
 add wave -noupdate /fft_tb/uut/index
 add wave -noupdate /fft_tb/uut/receive_index
 add wave -noupdate /fft_tb/uut/state
@@ -36,6 +39,8 @@ add wave -noupdate /fft_tb/uut/transfer_state
 add wave -noupdate /fft_tb/uut/transfer_state_next
 add wave -noupdate /fft_tb/uut/receive_state
 add wave -noupdate /fft_tb/uut/receive_state_next
+add wave -noupdate /fft_tb/uut/input_state
+add wave -noupdate /fft_tb/uut/input_state_next
 add wave -noupdate /fft_tb/uut/FFT_H/clk
 add wave -noupdate /fft_tb/uut/FFT_H/reset_n
 add wave -noupdate /fft_tb/uut/FFT_H/sink_valid
@@ -73,8 +78,8 @@ add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/source_valid
 add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/source_real
 add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/source_imag
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {45000 ps} 0}
-quietly wave cursor active 0
+WaveRestoreCursors {{Cursor 1} {21629 ps} 0}
+quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 115
 configure wave -justifyvalue left
@@ -89,4 +94,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {16905 ns}
+WaveRestoreZoom {0 ps} {211849 ps}

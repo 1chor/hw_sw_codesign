@@ -24,9 +24,10 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (0) 	 // If 1 then use FIR filter Hardware component
-#define FFT_H_HW (1) // If 1 then use header FFT Hardware component
-#define FFT_B_HW (0) // If 1 then use body FFT Hardware component
+#define FIR_HW (1) 	 // If 1 then use FIR filter hardware component
+#define FFT_H_HW (1) // If 1 then use header FFT hardware component
+#define FFT_B_HW (0) // If 1 then use body FFT hardware component
+#define MAC_HW (0) 	 // If 1 then use MAC hardware component
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -496,10 +497,38 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
 
 void test()
 {
-    printf("=========================\n");
+	printf("=========================\n");
     printf("test started\n");
     printf("=========================\n");
-    printf("\n");
+    printf("\n\n");
+    
+    printf("=========================\n");
+    printf("Setup:\n");
+    #if ( FIR_HW )
+		printf("Hardware FIR\n");
+    #else
+		printf("Software FIR\n");
+    #endif
+    
+     #if ( FFT_H_HW )
+		printf("Hardware Header-FFT\n");
+    #else
+		printf("Software Header-FFT\n");
+    #endif
+    
+     #if ( FFT_B_HW )
+		printf("Hardware Body-FFT\n");
+    #else
+		printf("Software Body-FFT\n");
+    #endif
+    
+     #if ( MAC_HW )
+		printf("Hardware MAC\n");
+    #else
+		printf("Software MAC\n");
+    #endif
+    printf("=========================\n");
+    printf("\n\n");
         
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
@@ -942,7 +971,7 @@ void test()
             
             asdf += 1;
             
-            if ( asdf == 3 )
+            if ( asdf == 5 )
             {
                 printf( "======\n" );
                 printf( "fertig\n" );
@@ -972,7 +1001,8 @@ void test()
                 //~ {
                     //~ printf( "%f\n", convert_1q15( output_buffer_header_1[i] ) );
                 //~ }
-                return;
+                //~ return;
+                break;
             }
             
             printf( ">done\n\n" );
@@ -982,7 +1012,7 @@ void test()
         {
             printf(">done done\n\n");
             
-            break;
+            //~ break;
         }
         
         sample_counter += 1;
@@ -991,44 +1021,50 @@ void test()
     free( i_in_1 );
     free( i_in_2 );
     
-    return;
+    //~ return;
     
-    //~ uint32_t sample_counter = 0;
-    //~ uint32_t samples_in_file = wav_sample_count(input);
+    uint32_t sample_count = 0;
+    uint32_t samples_in_file_end = asdf*256;
+    //~ uint32_t samples_in_file_end = wav_sample_count(input); 
+    //~ uint32_t l_buf_test;
+    //~ uint32_t r_buf_test;
     
-    //~ printf("preparing output file\n");
-    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
-    //~ printf(">done\n\n");
+    printf("preparing output file\n");
+    struct wav* output = wav_new( samples_in_file_end, 2, input->header->sample_rate, input->header->bps);
+    printf(">done\n\n");
     
-    //~ printf("processing starting\n");
+    printf("processing starting\n");
     
-    //~ while (1)
-    //~ {
-        //~ l_buf = wav_get_uint16(input, 2*sample_counter)<<16;
-        //~ r_buf = wav_get_uint16(input, 2*sample_counter+1)<<16;
+    while (1)
+    {
+        //~ l_buf_test = wav_get_uint16(input, 2*sample_count)<<16;
+        //~ r_buf_test = wav_get_uint16(input, 2*sample_count+1)<<16;
         
-        //~ ((uint16_t*)output->samples)[2*sample_counter]   = (uint16_t)(l_buf>>16);
-        //~ ((uint16_t*)output->samples)[2*sample_counter+1] = (uint16_t)(r_buf>>16);
+        //~ ((uint16_t*)output->samples)[2*sample_count]   = (uint16_t)(l_buf_test>>16);
+        //~ ((uint16_t*)output->samples)[2*sample_count+1] = (uint16_t)(r_buf_test>>16);
         
-        //~ sample_counter += 1;
+        ((uint16_t*)output->samples)[2*sample_count]   = (uint16_t)(output_buffer_header_1);
+        ((uint16_t*)output->samples)[2*sample_count+1] = (uint16_t)(output_buffer_header_2);
         
-        //~ if ( sample_counter >= samples_in_file )
-        //~ {
-            //~ printf(">done\n\n");
+        sample_count += 1;
+        
+        if ( sample_count >= samples_in_file_end )
+        {
+            printf(">done\n\n");
             
-            //~ break;
-        //~ }
-    //~ }
+            break;
+        }
+    }
     
-    //~ printf("storing file\n");
-    //~ wav_write("/recording.wav", output);
-    //~ printf(">done\n\n");
+    printf("storing file\n");
+    wav_write("/recording.wav", output);
+    printf(">done\n\n");
     
-    //~ wav_free(output);
+    wav_free(output);
     
-    //~ printf("===\n");
-    //~ printf("end\n");
-    //~ printf("===\n");
+    printf("===\n");
+    printf("end\n");
+    printf("===\n");
     
 }
 

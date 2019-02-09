@@ -1,5 +1,5 @@
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:54:36 on Feb 08,2019
+Start time: 17:21:24 on Feb 09,2019
 vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ./src/fft_wrapper/fft_wrapper_header.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -10,10 +10,14 @@ vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ./src/fft_wrappe
 -- Loading package STD_LOGIC_SIGNED
 -- Compiling entity fft_wrapper_header
 -- Compiling architecture arch of fft_wrapper_header
-End time: 17:54:36 on Feb 08,2019, Elapsed time: 0:00:00
-Errors: 0, Warnings: 0
+** Warning: ./src/fft_wrapper/fft_wrapper_header.vhd(359): (vcom-1272) Length of expected is 16; length of actual is 32.
+** Warning: ./src/fft_wrapper/fft_wrapper_header.vhd(360): (vcom-1272) Length of expected is 16; length of actual is 32.
+** Warning: ./src/fft_wrapper/fft_wrapper_header.vhd(363): (vcom-1272) Length of expected is 16; length of actual is 32.
+** Warning: ./src/fft_wrapper/fft_wrapper_header.vhd(364): (vcom-1272) Length of expected is 16; length of actual is 32.
+End time: 17:21:24 on Feb 09,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 4
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:54:36 on Feb 08,2019
+Start time: 17:21:24 on Feb 09,2019
 vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ../tb/tb_util_pkg.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -22,10 +26,10 @@ vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ../tb/tb_util_pk
 -- Compiling package tb_util_pkg
 -- Compiling package body tb_util_pkg
 -- Loading package tb_util_pkg
-End time: 17:54:36 on Feb 08,2019, Elapsed time: 0:00:00
+End time: 17:21:24 on Feb 09,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:54:36 on Feb 08,2019
+Start time: 17:21:24 on Feb 09,2019
 vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ./tb/fft_tb.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -35,5 +39,5 @@ vcom -check_synthesis -2008 -work libraries/work -suppress 1236 ./tb/fft_tb.vhd
 -- Loading package tb_util_pkg
 -- Compiling entity fft_tb
 -- Compiling architecture bench of fft_tb
-End time: 17:54:36 on Feb 08,2019, Elapsed time: 0:00:00
+End time: 17:21:24 on Feb 09,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0, Suppressed Warnings: 27

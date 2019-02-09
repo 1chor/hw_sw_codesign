@@ -36,18 +36,23 @@ architecture arch of fft_wrapper_header is
 	signal  si_sop_next  : std_logic;
 	signal	si_eop		 : std_logic;
 	signal	si_eop_next	 : std_logic;
-	signal	si_real		 : std_logic_vector(15 downto 0);
-	signal	si_imag   	 : std_logic_vector(15 downto 0);
+	signal	si_real		 : std_logic_vector(31 downto 0);
+	signal	si_imag   	 : std_logic_vector(31 downto 0);
 	
 	signal	src_valid 	 : std_logic;
 	signal	src_error 	 : std_logic_vector(1 downto 0);
 	signal	src_sop   	 : std_logic;
 	signal	src_eop   	 : std_logic;
-	signal	src_real  	 : std_logic_vector(15 downto 0);
-	signal	src_imag  	 : std_logic_vector(15 downto 0);
+	signal	src_real  	 : std_logic_vector(31 downto 0);
+	signal	src_imag  	 : std_logic_vector(31 downto 0);
 	signal	src_exp   	 : std_logic_vector(5 downto 0);
 	
+	signal temp			 : std_logic_vector(31 downto 0) := (others => '0');
+	signal r_i		 	 : std_logic := '0';
+	signal r_i_next		 : std_logic := '0';
+	
 	signal index 		 : natural range 0 to FFT_LENGTH := 0; -- one more than needed
+	signal index_next	 : natural range 0 to FFT_LENGTH := 0; -- one more than needed
 	signal receive_index : natural range 0 to FFT_LENGTH := 0; -- one more than needed to avoid overflow
 	
 	type state_type is (
@@ -69,11 +74,12 @@ architecture arch of fft_wrapper_header is
 	);
 	signal	receive_state, receive_state_next: receive_state_type;
 
-	-- type input_state_type is (
-		-- STATE_IDLE, 
-		-- STATE_INPUT
-	-- );
-	-- signal input_state, input_state_next: input_state_type := STATE_IDLE;
+	 type input_state_type is (
+		 STATE_IDLE, 
+		 STATE_INPUT_REAL,
+		 STATE_INPUT_IMAG
+	 );
+	 signal input_state, input_state_next: input_state_type := STATE_IDLE;
 	
 	-- Component for Header-FFT
 	component fft_header is
@@ -85,16 +91,16 @@ architecture arch of fft_wrapper_header is
 			sink_error   : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- sink_error
 			sink_sop     : in  std_logic                     := 'X';             -- sink_sop
 			sink_eop     : in  std_logic                     := 'X';             -- sink_eop
-			sink_real    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_real
-			sink_imag    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_imag
+			sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_real
+			sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_imag
 			inverse      : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- inverse
 			source_valid : out std_logic;                                        -- source_valid
 			source_ready : in  std_logic                     := 'X';             -- source_ready
 			source_error : out std_logic_vector(1 downto 0);                     -- source_error
 			source_sop   : out std_logic;                                        -- source_sop
 			source_eop   : out std_logic;                                        -- source_eop
-			source_real  : out std_logic_vector(15 downto 0);                    -- source_real
-			source_imag  : out std_logic_vector(15 downto 0);                    -- source_imag
+			source_real  : out std_logic_vector(31 downto 0);                    -- source_real
+			source_imag  : out std_logic_vector(31 downto 0);                    -- source_imag
 			source_exp   : out std_logic_vector(5 downto 0)                      -- source_exp
 		);
 	end component fft_header;
@@ -140,12 +146,13 @@ begin
 	end if;
 	end process; 
 	
+	--------------------------------------------------------------------
+	
 	fsm_receive_combinatoric: process (receive_state, src_sop, src_eop, src_valid) is
 	begin
-	-- ## default assignements ##
-	
+		-- default values to prevent latches
 		receive_state_next <= receive_state;
-	-- ## default assignements ##	
+	
 		case receive_state is
 		
 			when STATE_IDLE =>
@@ -163,35 +170,57 @@ begin
 		end case;
 		
 	end process;	
-
-	-- input_proc: process (input_state, si_sop_next, stin_data)
-	-- begin
+	
+	--------------------------------------------------------------------
+	
+	input_proc: process (input_state, index, r_i, si_ready, stin_valid, state_next, transfer_state_next, stin_data, temp)
+	begin
 		-- default values to prevent latches
-		-- input_state_next <= input_state;
-		
-		-- si_real <= (others => '-');
-		-- si_imag <= (others => '-');
-		
-		-- case input_state is
+		input_state_next <= input_state;
+		index_next <= index;
+		r_i_next <= r_i;
+		si_valid <= '0';
 			
-			-- when STATE_IDLE =>
-				-- if (si_ready = '1') and (stin_valid = '1') and (transfer_state_next = TRANSFER_DATA) then
-					-- input_state_next <= STATE_INPUT;
-				-- end if;
-			
-			-- when STATE_INPUT =>
-				-- si_real <= stin_data(31 downto 16); -- Real input data
-				-- si_imag <= stin_data(15 downto  0); -- Imaginary input data
+		si_real <= (others => '0');
+		si_imag <= (others => '0');
+
+		case input_state is
+
+			when STATE_IDLE =>
+				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
+					if r_i = '0' then
+						input_state_next <= STATE_INPUT_REAL;
+					else
+						input_state_next <= STATE_INPUT_IMAG;
+					end if;
+				elsif not (transfer_state_next = TRANSFER_DATA) then
+					index_next <= 0; -- reset counter
+				end if;
+
+			when STATE_INPUT_REAL =>
+				temp <= stin_data; -- Real input data
 				
-				-- if si_eop = '1' then
-					-- input_state_next <= STATE_IDLE;	
-				-- end if;
+				input_state_next <= STATE_IDLE;
+				r_i_next <= '1';
+								
+			when STATE_INPUT_IMAG =>
+				si_real <= temp;	  -- Real input data
+				si_imag <= stin_data; -- Imaginary input data
 				
-			-- when others =>
-				-- input_state_next <= STATE_IDLE;				
-		-- end case;
-		
-	-- end process input_proc;
+				input_state_next <= STATE_IDLE;				
+				r_i_next <= '0';
+				
+				-- increase index and feed new input;
+				index_next <= index + 1;
+				si_valid <= '1';
+								
+			when others =>
+				input_state_next <= STATE_IDLE;				
+		end case;
+
+	end process input_proc;
+	
+	--------------------------------------------------------------------
 	
 	fft_proc: process (state, index, src_sop, src_valid, src_eop, stout_ready)
 	begin
@@ -223,47 +252,46 @@ begin
 		
 	end process fft_proc;
 	
+	--------------------------------------------------------------------
+	
 	sync_state_proc: process (reset_n, clk)
 	begin
 		if reset_n = '0' then -- Reset signals
 			state <= TRANSFER_TO_FFT;
 			transfer_state <= STATE_IDLE;
-			-- input_state <= STATE_IDLE;
+			input_state <= STATE_IDLE;
 			receive_state <= STATE_IDLE;
 			
-			si_valid <= '0';
+			--~ si_valid <= '0';
+			index  <= 0;
 			si_sop <= '0';
-			si_eop <= '0';
-			index <= 0;	
-			
-			si_real <= (others => '0');
-			si_imag <= (others => '0');
-					
+			si_eop <= '0';				
+			r_i    <= '0';
+								
 		elsif rising_edge(clk) then
 			state <= state_next;
 			transfer_state <= transfer_state_next;
-			-- input_state <= input_state_next;
+			input_state <= input_state_next;
 			receive_state <= receive_state_next;
 			
-			si_valid <= '0';
+			--~ si_valid <= '0';
 			si_sop <= si_sop_next;
 			si_eop <= si_eop_next;
+			r_i    <= r_i_next;
+			index  <= index_next;
 			
-			si_real <= (others => '0');
-			si_imag <= (others => '0');
-			
-			if (si_ready = '1') and (stin_valid = '1') and (transfer_state_next = TRANSFER_DATA) then 
-				-- increase index and feed new input;
-				si_real <= stin_data(31 downto 16); -- Real input data
-				si_imag <= stin_data(15 downto  0); -- Imaginary input data
-				index <= index + 1;
-				si_valid <= '1';
-			elsif not (transfer_state_next = TRANSFER_DATA) then
-				index <= 0; -- reset counter
-			end if;
+			--~ if (si_ready = '1') and (stin_valid = '1') and (transfer_state_next = TRANSFER_DATA) then 
+				--~ -- increase index and feed new input;
+				--~ index <= index + 1;
+				--~ si_valid <= '1';
+			--~ elsif not (transfer_state_next = TRANSFER_DATA) then
+				--~ index <= 0; -- reset counter
+			--~ end if;
 		end if;
 			
 	end process sync_state_proc;
+	
+	--------------------------------------------------------------------
 	
 	send_proc : process(transfer_state, state_next, si_ready, stin_valid, index)
 	begin
@@ -283,7 +311,6 @@ begin
 		
 			when STATE_IDLE =>
 				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
-					--stin_ready <= '0'; -- Activate for simulation
 					transfer_state_next <= TRANSFER_DATA;
 					si_sop_next <= '1';
 				end if;
@@ -306,6 +333,8 @@ begin
 		end case;				
 		
 	end process send_proc;
+	
+	--------------------------------------------------------------------
 			
 	output_proc : process(stout_ready, state_next, state, src_valid, inverse, src_exp, src_imag, src_real) is
 		variable exponent 	  : integer range -13 to 13 := 0;

@@ -79,7 +79,7 @@
   <parameter name="hard_fp" value="false" />
   <parameter name="hyper_opt" value="false" />
   <parameter name="in_order" value="Natural" />
-  <parameter name="in_width" value="16" />
+  <parameter name="in_width" value="32" />
   <parameter name="length" value="512" />
   <parameter name="num_engines" value="1" />
   <parameter name="out_order" value="Natural" />

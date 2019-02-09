@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
 vlpm_abs
-Z1 !s110 1549644854
+Z1 !s110 1549729261
 !i10b 1
 !s100 O9i<YS?ECZC8XU2m2T>HQ0
 I:GgJ7C>T>RaSLAmk]Q<]b3
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1549644854.000000
+Z7 !s108 1549729261.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/220model.v|
 Z8 !s90 -work|libraries/lpm_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/220model.v|
 !i113 0
@@ -72,7 +72,7 @@ R8
 R9
 R10
 vlpm_bipad
-R1
+Z12 !s110 1549729262
 !i10b 1
 !s100 2eZaafdWMNbm_oGJD`IS61
 IW`z=E`lhM6N=CQ8TFjJ]71
@@ -262,7 +262,7 @@ R8
 R9
 R10
 vlpm_ff
-R1
+R12
 !i10b 1
 !s100 WJALO?TCG1jof9J^zM@jz1
 I@U5FolkBVNnb:V<B251570
@@ -283,7 +283,7 @@ R8
 R9
 R10
 vlpm_fifo
-R1
+R12
 !i10b 1
 !s100 MkW5lD_hnT<agW5lDCMNJ2
 IlZL5<NIT1<al40cV:>BKJ1
@@ -304,7 +304,7 @@ R8
 R9
 R10
 vlpm_fifo_dc
-R1
+R12
 !i10b 1
 !s100 OX@8oU3SO:LJ;3_=8UL@^3
 IfT]:[0E?^bH65Q;NV8WTl2
@@ -325,7 +325,7 @@ R8
 R9
 R10
 vlpm_fifo_dc_async
-R1
+R12
 !i10b 1
 !s100 W7]nBZXG1HNLF0lVB9i:n0
 Ig>QP0L96JGHV3Szfd_G^21
@@ -346,7 +346,7 @@ R8
 R9
 R10
 vlpm_fifo_dc_dffpipe
-R1
+R12
 !i10b 1
 !s100 <2OGni`F^Mh0HMAddVi2B3
 IO7XN4mmT6cmR;AaNoVF^V1
@@ -367,7 +367,7 @@ R8
 R9
 R10
 vlpm_fifo_dc_fefifo
-R1
+R12
 !i10b 1
 !s100 RlCXejU>]z0ZLYIBZPn^`2
 I^3NeYgWLLRdS]IW@;5UWg2
@@ -410,7 +410,7 @@ R9
 R10
 n@l@p@m_@h@i@n@t_@e@v@a@l@u@a@t@i@o@n
 vlpm_inpad
-R1
+R12
 !i10b 1
 !s100 V5b_N<Y1MO:^NFkHi2nm:1
 I8aInn1c?CH[iG=GNB7`Ki2
@@ -452,7 +452,7 @@ R8
 R9
 R10
 vlpm_latch
-R1
+R12
 !i10b 1
 !s100 X=b4n[Gn]4E]9eP=?E?Ed2
 Icz8J>IKo=<zLazzLdC]a40
@@ -558,7 +558,7 @@ R8
 R9
 R10
 vlpm_outpad
-R1
+R12
 !i10b 1
 !s100 co;D>HcBWR;nkbnW:TU;e3
 I_Qog^6b^M_Tz=FNigOSIN3
@@ -579,7 +579,7 @@ R8
 R9
 R10
 vlpm_ram_dp
-R1
+R12
 !i10b 1
 !s100 @ZY2^og4WbO?9Xj=SKCDI2
 Ik_3:73k3oY[Kc7o>]K5Ve2
@@ -600,7 +600,7 @@ R8
 R9
 R10
 vlpm_ram_dq
-R1
+R12
 !i10b 1
 !s100 ZPNM`dJFE>ho=S95QY9V32
 IV5;fYkX>=8UWDRJo?ElzE2
@@ -621,7 +621,7 @@ R8
 R9
 R10
 vlpm_ram_io
-R1
+R12
 !i10b 1
 !s100 gJ2W7zgl`a;W2CY34?2YX0
 I4mBeQD@849MZ5CzcnbQBZ2
@@ -642,7 +642,7 @@ R8
 R9
 R10
 vlpm_rom
-R1
+R12
 !i10b 1
 !s100 nF2Ej@GG7CioJC5oY3^^e3
 I6G]4^D1FfAFdCiIiPUfLY2
@@ -663,7 +663,7 @@ R8
 R9
 R10
 vlpm_shiftreg
-R1
+R12
 !i10b 1
 !s100 OZ9lf>aZLR1GDH6;N3?RH3
 IVL3:P]ef?12nP=N^6h;K^0

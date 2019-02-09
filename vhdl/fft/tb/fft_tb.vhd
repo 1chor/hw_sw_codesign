@@ -341,7 +341,8 @@ begin
 		output_buffer_idx := 0;
 		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write(m_real_in1(i) & m_real_in2(i)); -- send two real signals
+			--~ stream_write(m_real_in1(i) & m_real_in2(i)); -- send two real signals
+			stream_write(m_real_in1(i) & x"0000");
 		end loop; 
 		stin_valid <= '0';
 		
@@ -349,33 +350,34 @@ begin
 		
 		for i in 0 to FILE_LENGTH - 1 loop
 			output16_1_real(i) := output_buffer(i)(31 downto 16);
-			output16_2_real(i) := output_buffer(i)(15 downto 0);
+			--~ output16_2_real(i) := output_buffer(i)(15 downto 0);
+			output16_1_imag(i) := output_buffer(i)(15 downto 0);
 		end loop;
 				
-		-- Get back both transformed channels
-		output16_1_imag(0) := (others => '0'); 
-		output16_2_imag(0) := (others => '0');
-		output16_1_imag(FILE_LENGTH/2) := (others => '0'); 
-		output16_2_imag(FILE_LENGTH/2) := (others => '0');
+		--~ -- Get back both transformed channels
+		--~ output16_1_imag(0) := (others => '0'); 
+		--~ output16_2_imag(0) := (others => '0');
+		--~ output16_1_imag(FILE_LENGTH/2) := (others => '0'); 
+		--~ output16_2_imag(FILE_LENGTH/2) := (others => '0');
 		
-		for i in 1 to FILE_LENGTH/2 -1 loop
-			-- imaginary parts of X[f] and X[-f]
-			output16_1_imag(i) := std_logic_vector( shift_right( signed( output16_2_real(i) ) - signed( output16_2_real(512-i) ), 1 ) );
-			output16_1_imag(512-i) := std_logic_vector( not ( signed( output16_1_imag(i) ) ) + to_signed( 1, in_word_t'length ) );
+		--~ for i in 1 to FILE_LENGTH/2 -1 loop
+			--~ -- imaginary parts of X[f] and X[-f]
+			--~ output16_1_imag(i) := std_logic_vector( shift_right( signed( output16_2_real(i) ) - signed( output16_2_real(512-i) ), 1 ) );
+			--~ output16_1_imag(512-i) := std_logic_vector( not ( signed( output16_1_imag(i) ) ) + to_signed( 1, in_word_t'length ) );
 			
-			-- imaginary parts of Y[f] and Y[-f]
-			temp := std_logic_vector( shift_right( signed( output16_1_real(i) ) - signed( output16_1_real(512-i) ), 1 ) );
-			output16_2_imag(i) := std_logic_vector( not ( signed( temp ) ) + to_signed( 1, in_word_t'length ) );
-			output16_2_imag(512-i) := std_logic_vector( not ( signed( output16_2_imag(i) ) ) + to_signed( 1, in_word_t'length ) );
+			--~ -- imaginary parts of Y[f] and Y[-f]
+			--~ temp := std_logic_vector( shift_right( signed( output16_1_real(i) ) - signed( output16_1_real(512-i) ), 1 ) );
+			--~ output16_2_imag(i) := std_logic_vector( not ( signed( temp ) ) + to_signed( 1, in_word_t'length ) );
+			--~ output16_2_imag(512-i) := std_logic_vector( not ( signed( output16_2_imag(i) ) ) + to_signed( 1, in_word_t'length ) );
 			
-			-- real parts of X[f] and X[-f]
-			output16_1_real(i) := std_logic_vector( shift_right( signed( output16_1_real(i) ) + signed( output16_1_real(512-i) ), 1 ) );
-			output16_1_real(512-i) := output16_1_real( i );
+			--~ -- real parts of X[f] and X[-f]
+			--~ output16_1_real(i) := std_logic_vector( shift_right( signed( output16_1_real(i) ) + signed( output16_1_real(512-i) ), 1 ) );
+			--~ output16_1_real(512-i) := output16_1_real( i );
 			
-			-- real parts of Y[f] and Y[-f]
-			output16_2_real(i) := std_logic_vector( shift_right( signed( output16_2_real(i) ) + signed( output16_2_real(512-i) ), 1 ) );
-			output16_2_real(512-i) := output16_2_real( i );
-		end loop;
+			--~ -- real parts of Y[f] and Y[-f]
+			--~ output16_2_real(i) := std_logic_vector( shift_right( signed( output16_2_real(i) ) + signed( output16_2_real(512-i) ), 1 ) );
+			--~ output16_2_real(512-i) := output16_2_real( i );
+		--~ end loop;
 		
 		write(my_line, string'("Compare results"));
 		writeline(output, my_line);

@@ -15,16 +15,16 @@ entity fft_header is
 		sink_error   : in  std_logic_vector(1 downto 0)  := (others => '0'); --       .sink_error
 		sink_sop     : in  std_logic                     := '0';             --       .sink_sop
 		sink_eop     : in  std_logic                     := '0';             --       .sink_eop
-		sink_real    : in  std_logic_vector(15 downto 0) := (others => '0'); --       .sink_real
-		sink_imag    : in  std_logic_vector(15 downto 0) := (others => '0'); --       .sink_imag
+		sink_real    : in  std_logic_vector(31 downto 0) := (others => '0'); --       .sink_real
+		sink_imag    : in  std_logic_vector(31 downto 0) := (others => '0'); --       .sink_imag
 		inverse      : in  std_logic_vector(0 downto 0)  := (others => '0'); --       .inverse
 		source_valid : out std_logic;                                        -- source.source_valid
 		source_ready : in  std_logic                     := '0';             --       .source_ready
 		source_error : out std_logic_vector(1 downto 0);                     --       .source_error
 		source_sop   : out std_logic;                                        --       .source_sop
 		source_eop   : out std_logic;                                        --       .source_eop
-		source_real  : out std_logic_vector(15 downto 0);                    --       .source_real
-		source_imag  : out std_logic_vector(15 downto 0);                    --       .source_imag
+		source_real  : out std_logic_vector(31 downto 0);                    --       .source_real
+		source_imag  : out std_logic_vector(31 downto 0);                    --       .source_imag
 		source_exp   : out std_logic_vector(5 downto 0)                      --       .source_exp
 	);
 end entity fft_header;
@@ -39,16 +39,16 @@ architecture rtl of fft_header is
 			sink_error   : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- sink_error
 			sink_sop     : in  std_logic                     := 'X';             -- sink_sop
 			sink_eop     : in  std_logic                     := 'X';             -- sink_eop
-			sink_real    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_real
-			sink_imag    : in  std_logic_vector(15 downto 0) := (others => 'X'); -- sink_imag
+			sink_real    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_real
+			sink_imag    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- sink_imag
 			inverse      : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- inverse
 			source_valid : out std_logic;                                        -- source_valid
 			source_ready : in  std_logic                     := 'X';             -- source_ready
 			source_error : out std_logic_vector(1 downto 0);                     -- source_error
 			source_sop   : out std_logic;                                        -- source_sop
 			source_eop   : out std_logic;                                        -- source_eop
-			source_real  : out std_logic_vector(15 downto 0);                    -- source_real
-			source_imag  : out std_logic_vector(15 downto 0);                    -- source_imag
+			source_real  : out std_logic_vector(31 downto 0);                    -- source_real
+			source_imag  : out std_logic_vector(31 downto 0);                    -- source_imag
 			source_exp   : out std_logic_vector(5 downto 0)                      -- source_exp
 		);
 	end component fft_header_fft_ii_0;
