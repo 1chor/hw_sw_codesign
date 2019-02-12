@@ -12,10 +12,10 @@ xrealh = fopen('real_input.txt','w');
 ximagh = fopen('imag_input.txt','w');
 yrealh = fopen('real_output.txt','w');                                  
 yimagh = fopen('imag_output.txt','w');
-fprintf(xrealh,'%04X\n',xreali);                                                 
-fprintf(ximagh,'%04X\n',ximagi);
-fprintf(yrealh,'%04X\n',typecast(int16(real(y)),'uint16'));                                                 
-fprintf(yimagh,'%04X\n',typecast(int16(imag(y)),'uint16'));
+fprintf(xrealh,'%08X\n',xreali);                                                 
+fprintf(ximagh,'%08X\n',ximagi);
+fprintf(yrealh,'%08X\n',typecast(int16(real(y)),'uint16'));                                                 
+fprintf(yimagh,'%08X\n',typecast(int16(imag(y)),'uint16'));
 
 fclose(xrealh);                                                                 
 fclose(ximagh);

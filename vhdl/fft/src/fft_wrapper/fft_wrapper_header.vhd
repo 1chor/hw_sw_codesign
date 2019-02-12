@@ -26,34 +26,37 @@ end entity;
 
 architecture arch of fft_wrapper_header is
 
-	constant FFT_LENGTH  : natural := 512;
-	constant DIV_N		 : integer := -9; -- 1/512 is equivalent to 2^-9 and 9 right shifts
+	constant FFT_LENGTH 	  : natural := 512;
+	constant DIV_N			  : integer := -9; -- 1/512 is equivalent to 2^-9 and 9 right shifts
 	
-	signal	si_valid     : std_logic;
-	signal	si_ready  	 : std_logic;
-	signal	si_error  	 : std_logic_vector(1 downto 0);
-	signal	si_sop     	 : std_logic;
-	signal  si_sop_next  : std_logic;
-	signal	si_eop		 : std_logic;
-	signal	si_eop_next	 : std_logic;
-	signal	si_real		 : std_logic_vector(31 downto 0);
-	signal	si_imag   	 : std_logic_vector(31 downto 0);
+	signal	si_valid    	  : std_logic;
+	signal	si_ready  	 	  : std_logic;
+	signal	si_error  		  : std_logic_vector(1 downto 0);
+	signal	si_sop     		  : std_logic;
+	signal  si_sop_next 	  : std_logic;
+	signal	si_eop			  : std_logic;
+	signal	si_eop_next		  : std_logic;
+	signal	si_real			  : std_logic_vector(31 downto 0);
+	signal	si_imag   		  : std_logic_vector(31 downto 0);
 	
-	signal	src_valid 	 : std_logic;
-	signal	src_error 	 : std_logic_vector(1 downto 0);
-	signal	src_sop   	 : std_logic;
-	signal	src_eop   	 : std_logic;
-	signal	src_real  	 : std_logic_vector(31 downto 0);
-	signal	src_imag  	 : std_logic_vector(31 downto 0);
-	signal	src_exp   	 : std_logic_vector(5 downto 0);
+	signal	src_valid 		  : std_logic;
+	signal	src_ready  	 	  : std_logic;
+	signal	src_error 		  : std_logic_vector(1 downto 0);
+	signal	src_sop   		  : std_logic;
+	signal	src_eop   		  : std_logic;
+	signal	src_real  		  : std_logic_vector(31 downto 0);
+	signal	src_imag  		  : std_logic_vector(31 downto 0);
+	signal	src_exp   	 	  : std_logic_vector(5 downto 0);
 	
-	signal temp			 : std_logic_vector(31 downto 0) := (others => '0');
-	signal r_i		 	 : std_logic := '0';
-	signal r_i_next		 : std_logic := '0';
+	signal temp_in		 	  : std_logic_vector(31 downto 0) := (others => '0');
+	signal temp_out		 	  : std_logic_vector(31 downto 0) := (others => '0');
+	signal temp_out_next	  : std_logic_vector(31 downto 0) := (others => '0');
 	
-	signal index 		 : natural range 0 to FFT_LENGTH := 0; -- one more than needed
-	signal index_next	 : natural range 0 to FFT_LENGTH := 0; -- one more than needed
-	signal receive_index : natural range 0 to FFT_LENGTH := 0; -- one more than needed to avoid overflow
+	signal index 		 	  : natural range 0 to FFT_LENGTH := 0; -- one more than needed
+	signal index_next	 	  : natural range 0 to FFT_LENGTH := 0; -- one more than needed
+	
+	signal receive_index 	  : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
+	signal receive_index_next : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
 	
 	type state_type is (
 		TRANSFER_TO_FFT,
@@ -61,25 +64,18 @@ architecture arch of fft_wrapper_header is
 		OUTPUT_DATA
 	);
 	signal state, state_next : state_type := TRANSFER_TO_FFT;
-	
-	type transfer_state_type is (
-		STATE_IDLE, 
-		TRANSFER_DATA
-	);
-	signal transfer_state, transfer_state_next: transfer_state_type := STATE_IDLE;
-	
-	type receive_state_type is (
-		STATE_IDLE, 
-		RECEIVE_DATA
-	);
-	signal	receive_state, receive_state_next: receive_state_type;
 
-	 type input_state_type is (
-		 STATE_IDLE, 
-		 STATE_INPUT_REAL,
-		 STATE_INPUT_IMAG
-	 );
-	 signal input_state, input_state_next: input_state_type := STATE_IDLE;
+	type input_state_type is (
+		STATE_INPUT_REAL,
+		STATE_INPUT_IMAG
+	);
+	signal input_state, input_state_next: input_state_type := STATE_INPUT_REAL;
+	
+	type output_state_type is (
+		STATE_OUTPUT_REAL,
+		STATE_OUTPUT_IMAG
+	);
+	signal output_state, output_state_next: output_state_type := STATE_OUTPUT_REAL;
 	
 	-- Component for Header-FFT
 	component fft_header is
@@ -121,7 +117,7 @@ begin
 		sink_imag    => si_imag,		 -- Imaginary input data
 		inverse      => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
-		source_ready => stout_ready, 
+		source_ready => src_ready, 
 		source_error => src_error, 	 	 -- Indicates an error has occured either in an upstream module or within the FFT module
 		source_sop   => src_sop, 	  	 -- Marks the start of the outgoing FFT frame
 		source_eop   => src_eop,  	 	 -- Marks the end of the outgoing FFT frame
@@ -129,100 +125,93 @@ begin
 		source_imag  => src_imag, 	 	 -- Imaginary output data
 		source_exp   => src_exp			 -- Output exponent
 	);
-	
-	input_reg : process(reset_n,clk)
-	begin
-	if reset_n = '0' then
-		receive_index <= 0;
-	elsif (rising_edge(clk)) then
-		if(src_valid = '1') and (stout_ready = '1')  then -- for debugging purpose
-			receive_index <= receive_index +1; 
-		end if;
 		
-		if receive_index >= FFT_LENGTH-1 then
+	--------------------------------------------------------------------
+	
+	sync_state_proc: process (reset_n, clk)
+	begin
+		if reset_n = '0' then -- Reset signals
+			state        <= TRANSFER_TO_FFT;
+			input_state  <= STATE_INPUT_REAL;
+			output_state <= STATE_OUTPUT_REAL;
+			
+			si_sop <= '0';
+			si_eop <= '0';	
+			index  <= 0;
 			receive_index <= 0;
+			temp_out <= (others => '0');
+								
+		elsif rising_edge(clk) then
+			state        <= state_next;
+			input_state  <= input_state_next;
+			output_state <= output_state_next;
+			
+			si_sop  	  <= si_sop_next;
+			si_eop  	  <= si_eop_next;
+			index  		  <= index_next;
+			receive_index <= receive_index_next;
+			temp_out	  <= temp_out_next;		
 		end if;
 			
-	end if;
-	end process; 
+	end process sync_state_proc;
 	
 	--------------------------------------------------------------------
 	
-	fsm_receive_combinatoric: process (receive_state, src_sop, src_eop, src_valid) is
-	begin
-		-- default values to prevent latches
-		receive_state_next <= receive_state;
-	
-		case receive_state is
-		
-			when STATE_IDLE =>
-				if src_sop = '1' and src_valid = '1' then
-					receive_state_next <= RECEIVE_DATA;
-				end if;
-				
-			when RECEIVE_DATA =>
-				if src_eop = '1' and src_valid = '1' then
-					receive_state_next <= STATE_IDLE;
-				end if;
-				
-			when others => 
-				receive_state_next <= STATE_IDLE;
-		end case;
-		
-	end process;	
-	
-	--------------------------------------------------------------------
-	
-	input_proc: process (input_state, index, r_i, si_ready, stin_valid, state_next, transfer_state_next, stin_data, temp)
+	input_proc: process (input_state, index, si_ready, stin_valid, state_next, stin_data, temp_in)
 	begin
 		-- default values to prevent latches
 		input_state_next <= input_state;
 		index_next <= index;
-		r_i_next <= r_i;
 		si_valid <= '0';
+		si_sop_next <= '0';
+		si_eop_next <= '0';
 			
 		si_real <= (others => '0');
 		si_imag <= (others => '0');
+		
+		if (state_next = TRANSFER_TO_FFT) and (si_ready = '1') then  -- forward back pressure
+			stin_ready <= '1';
+		else
+			stin_ready <= '0';
+		end if;
 
 		case input_state is
 
-			when STATE_IDLE =>
+			when STATE_INPUT_REAL =>
 				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
-					if r_i = '0' then
-						input_state_next <= STATE_INPUT_REAL;
-					else
-						input_state_next <= STATE_INPUT_IMAG;
+					temp_in <= stin_data; -- Real input data
+					
+					input_state_next <= STATE_INPUT_IMAG;
+					
+					if index = 0 then
+						si_sop_next <= '1'; -- set sop flag at next clock
+					elsif index = FFT_LENGTH-1 then
+						stin_ready <= '0';
+						si_eop_next <= '1'; -- set sop flag at next clock
 					end if;
-				elsif not (transfer_state_next = TRANSFER_DATA) then
+				elsif index = FFT_LENGTH then -- independent of valid signals
 					index_next <= 0; -- reset counter
 				end if;
-
-			when STATE_INPUT_REAL =>
-				temp <= stin_data; -- Real input data
-				
-				input_state_next <= STATE_IDLE;
-				r_i_next <= '1';
 								
 			when STATE_INPUT_IMAG =>
-				si_real <= temp;	  -- Real input data
+				si_real <= temp_in;	  -- Real input data
 				si_imag <= stin_data; -- Imaginary input data
 				
-				input_state_next <= STATE_IDLE;				
-				r_i_next <= '0';
+				input_state_next <= STATE_INPUT_REAL;	
 				
 				-- increase index and feed new input;
 				index_next <= index + 1;
 				si_valid <= '1';
 								
 			when others =>
-				input_state_next <= STATE_IDLE;				
+				input_state_next <= STATE_INPUT_REAL;				
 		end case;
 
 	end process input_proc;
 	
 	--------------------------------------------------------------------
 	
-	fft_proc: process (state, index, src_sop, src_valid, src_eop, stout_ready)
+	fft_proc: process (state, index, src_sop, src_valid, receive_index, output_state)
 	begin
 		-- default values to prevent latches
 		state_next <= state;
@@ -230,7 +219,7 @@ begin
 		case state is
 			
 			when TRANSFER_TO_FFT =>
-				if index = FFT_LENGTH then -- only FFT_LENGTH-1 was sent
+				if index = FFT_LENGTH then 
 					state_next <= LATENCY_FFT;
 				end if;
 			
@@ -240,133 +229,94 @@ begin
 			end if;
 			
 			when OUTPUT_DATA =>
-				if (src_eop = '1') and (src_valid = '1') then
-					if stout_ready = '1' then
-						state_next <= TRANSFER_TO_FFT;
-					end if;
-				end if;	
-			
+				if (receive_index = FFT_LENGTH) and (output_state = STATE_OUTPUT_REAL) then
+					state_next <= TRANSFER_TO_FFT;
+				end if;
+				
 			when others =>
 				state_next <= TRANSFER_TO_FFT;				
 		end case;
 		
 	end process fft_proc;
-	
-	--------------------------------------------------------------------
-	
-	sync_state_proc: process (reset_n, clk)
-	begin
-		if reset_n = '0' then -- Reset signals
-			state <= TRANSFER_TO_FFT;
-			transfer_state <= STATE_IDLE;
-			input_state <= STATE_IDLE;
-			receive_state <= STATE_IDLE;
-			
-			--~ si_valid <= '0';
-			index  <= 0;
-			si_sop <= '0';
-			si_eop <= '0';				
-			r_i    <= '0';
-								
-		elsif rising_edge(clk) then
-			state <= state_next;
-			transfer_state <= transfer_state_next;
-			input_state <= input_state_next;
-			receive_state <= receive_state_next;
-			
-			--~ si_valid <= '0';
-			si_sop <= si_sop_next;
-			si_eop <= si_eop_next;
-			r_i    <= r_i_next;
-			index  <= index_next;
-			
-			--~ if (si_ready = '1') and (stin_valid = '1') and (transfer_state_next = TRANSFER_DATA) then 
-				--~ -- increase index and feed new input;
-				--~ index <= index + 1;
-				--~ si_valid <= '1';
-			--~ elsif not (transfer_state_next = TRANSFER_DATA) then
-				--~ index <= 0; -- reset counter
-			--~ end if;
-		end if;
-			
-	end process sync_state_proc;
-	
-	--------------------------------------------------------------------
-	
-	send_proc : process(transfer_state, state_next, si_ready, stin_valid, index)
-	begin
-		-- default values to prevent latches
-		transfer_state_next <= transfer_state;
 		
-		si_sop_next <= '0';
-		si_eop_next <= '0';
-		
-		if (state_next = TRANSFER_TO_FFT) and (si_ready = '1') then  -- forward back pressure
-			stin_ready <= '1';
-		else
-			stin_ready <= '0'; -- signal to input FIFO
-		end if;
-		
-		case transfer_state is
-		
-			when STATE_IDLE =>
-				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
-					transfer_state_next <= TRANSFER_DATA;
-					si_sop_next <= '1';
-				end if;
-				
-			when TRANSFER_DATA =>
-				if (si_ready = '1') and (stin_valid = '1') then
-					if index = FFT_LENGTH-1 then
-						stin_ready <= '0';
-						si_eop_next <= '1';
-					end if;
-				end if;
-				
-				if index = FFT_LENGTH then -- independent of valid signals
-					transfer_state_next <= STATE_IDLE;
-					stin_ready <= '0';
-				end if;
-			
-			when others =>
-				transfer_state_next <= STATE_IDLE;				
-		end case;				
-		
-	end process send_proc;
-	
 	--------------------------------------------------------------------
 			
-	output_proc : process(stout_ready, state_next, state, src_valid, inverse, src_exp, src_imag, src_real) is
+	output_proc : process(output_state, receive_index, temp_out, stout_ready, state_next, state, inverse, src_exp, src_real, src_imag) is
 		variable exponent 	  : integer range -13 to 13 := 0;
 		variable exponent_abs : natural range  0 to 13 := 0;
 	begin
-		stout_data(15 downto 0) <= (others => '0');
-		stout_data(31 downto 16) <= (others => '0');
+		-- default values to prevent latches
+		output_state_next <= output_state;
+		stout_data <= (others => '0');
+		receive_index_next <= receive_index;
+		temp_out_next <= temp_out;
 		stout_valid <= '0';
+		src_ready <= stout_ready;
 		
-		if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
-			stout_valid <= src_valid;
+		case output_state is
+
+			when STATE_OUTPUT_REAL =>
+				if receive_index = FFT_LENGTH then -- independent of valid signals
+					receive_index_next <= 0; -- reset counter
+					temp_out_next <= (others => '0');
+				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+					stout_valid <= '1';
+					
+					-- Calculate exponent
+					if inverse = "1" then -- IFFT operation
+						exponent := -to_integer(signed(src_exp)) + DIV_N;
+					else -- FFT operation
+						exponent := -to_integer(signed(src_exp));
+						-- exponent := 0;
+					end if;
+					exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
+					
+					if receive_index = 0 then -- for first transmission
+						if exponent < 0 then -- right shift
+							stout_data <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
+						elsif exponent >= 0 then -- left shift
+							stout_data <= std_logic_vector(shift_left(signed(src_real), exponent_abs));
+						end if;
+					else
+						if exponent < 0 then -- right shift
+							stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
+						elsif exponent >= 0 then -- left shift
+							stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
+						end if;
+					end if;
+					
+					output_state_next <= STATE_OUTPUT_IMAG;
+					temp_out_next <= src_imag;
+				end if;
+								
+			when STATE_OUTPUT_IMAG =>
+				if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
+					stout_valid <= '1';
+					src_ready <= '0';
+					
+					if exponent < 0 then -- right shift
+						stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
+					elsif exponent >= 0 then -- left shift
+						stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
+					end if;
+					
+					output_state_next <= STATE_OUTPUT_REAL;
+					
+					if receive_index = FFT_LENGTH-1 then
+						temp_out_next <= (others => '0');
+					else
+						temp_out_next <= src_real;
+					end if;
+					
+					receive_index_next <= receive_index + 1;				
+				end if;
+											
+			when others =>
+				output_state_next <= STATE_OUTPUT_REAL;				
+		end case;
 			
-			-- Calculate exponent
-			if inverse = "1" then -- IFFT operation
-				exponent := -to_integer(signed(src_exp)) + DIV_N;
-			else -- FFT operation
-				exponent := -to_integer(signed(src_exp));
-			end if;
-			exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
-						
-			if exponent < 0 then -- right shift	
-				stout_data(15 downto  0) <= std_logic_vector(shift_right(signed(src_imag), exponent_abs));
-				stout_data(31 downto 16) <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
-				
-			elsif exponent >= 0 then -- left shift
-				stout_data(15 downto  0) <= std_logic_vector(shift_left(signed(src_imag), exponent_abs));
-				stout_data(31 downto 16) <= std_logic_vector(shift_left(signed(src_real), exponent_abs));
-			end if;
-		end if;
-		
 	end process output_proc;
-	
+				
 	si_error <= (others => '0'); -- "If this signal is not used in upstream modules, set to zero."
 	
 end architecture;

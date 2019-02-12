@@ -8,15 +8,15 @@ end
 
 % create input files
 xrealh = fopen('real_input.txt','w'); 
-fprintf(xrealh,'%04X\n',typecast(int16(xreal),'uint16'));  
+fprintf(xrealh,'%08X\n',typecast(int16(xreal),'uint16'));  
 
 [y] = fft(xreal); 
 
 % create output files
 yrealh = fopen('real_output.txt','w');                                  
 yimagh = fopen('imag_output.txt','w');
-fprintf(yrealh,'%04X\n',typecast(int16(real(y)),'uint16'));                                                 
-fprintf(yimagh,'%04X\n',typecast(int16(imag(y)),'uint16'));
+fprintf(yrealh,'%08X\n',typecast(int16(real(y)),'uint16'));                                                 
+fprintf(yimagh,'%08X\n',typecast(int16(imag(y)),'uint16'));
 
 fclose(xrealh);    
 fclose(yrealh);                                                                 

@@ -1,5 +1,6 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+add wave -noupdate -divider {Testbench}
 add wave -noupdate /fft_tb/clk
 add wave -noupdate /fft_tb/res_n
 add wave -noupdate /fft_tb/stin_data
@@ -9,6 +10,7 @@ add wave -noupdate /fft_tb/stout_data
 add wave -noupdate /fft_tb/stout_valid
 add wave -noupdate /fft_tb/stout_ready
 add wave -noupdate /fft_tb/inverse
+add wave -noupdate -divider {Wrapper}
 add wave -noupdate /fft_tb/uut/stin_data
 add wave -noupdate /fft_tb/uut/stout_data
 add wave -noupdate /fft_tb/uut/inverse
@@ -22,25 +24,26 @@ add wave -noupdate /fft_tb/uut/si_eop_next
 add wave -noupdate /fft_tb/uut/si_real
 add wave -noupdate /fft_tb/uut/si_imag
 add wave -noupdate /fft_tb/uut/src_valid
+add wave -noupdate /fft_tb/uut/src_ready
 add wave -noupdate /fft_tb/uut/src_error
 add wave -noupdate /fft_tb/uut/src_sop
 add wave -noupdate /fft_tb/uut/src_eop
 add wave -noupdate /fft_tb/uut/src_real
 add wave -noupdate /fft_tb/uut/src_imag
 add wave -noupdate /fft_tb/uut/src_exp
-add wave -noupdate /fft_tb/uut/temp
-add wave -noupdate /fft_tb/uut/r_i
-add wave -noupdate /fft_tb/uut/r_i_next
+add wave -noupdate /fft_tb/uut/temp_in
+add wave -noupdate /fft_tb/uut/temp_out
+add wave -noupdate /fft_tb/uut/temp_out_next
 add wave -noupdate /fft_tb/uut/index
 add wave -noupdate /fft_tb/uut/receive_index
+add wave -noupdate /fft_tb/uut/receive_index_next
 add wave -noupdate /fft_tb/uut/state
 add wave -noupdate /fft_tb/uut/state_next
-add wave -noupdate /fft_tb/uut/transfer_state
-add wave -noupdate /fft_tb/uut/transfer_state_next
-add wave -noupdate /fft_tb/uut/receive_state
-add wave -noupdate /fft_tb/uut/receive_state_next
 add wave -noupdate /fft_tb/uut/input_state
 add wave -noupdate /fft_tb/uut/input_state_next
+add wave -noupdate /fft_tb/uut/output_state
+add wave -noupdate /fft_tb/uut/output_state_next
+add wave -noupdate -divider {IP core}
 add wave -noupdate /fft_tb/uut/FFT_H/clk
 add wave -noupdate /fft_tb/uut/FFT_H/reset_n
 add wave -noupdate /fft_tb/uut/FFT_H/sink_valid
@@ -59,6 +62,7 @@ add wave -noupdate /fft_tb/uut/FFT_H/source_eop
 add wave -noupdate /fft_tb/uut/FFT_H/source_real
 add wave -noupdate /fft_tb/uut/FFT_H/source_imag
 add wave -noupdate /fft_tb/uut/FFT_H/source_exp
+add wave -noupdate -divider {IP core internal}
 add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/clk
 add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/reset_n
 add wave -noupdate /fft_tb/uut/FFT_H/fft_ii_0/inverse
