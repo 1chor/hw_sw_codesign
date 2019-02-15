@@ -27,6 +27,13 @@ typedef struct {
     
 } complex_32_t;
 
+typedef struct {
+    
+    int32_t r;
+    int32_t i;
+    
+} complex_i32_t;
+
 uint8_t c_cmp_hex( complex_32_t, complex_32_t );
 uint8_t c_cmp( complex_32_t, complex_32_t );
 

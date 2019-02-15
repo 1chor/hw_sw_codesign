@@ -73,7 +73,8 @@ architecture arch of fft_wrapper_header is
 	
 	type output_state_type is (
 		STATE_OUTPUT_REAL,
-		STATE_OUTPUT_IMAG
+		STATE_OUTPUT_IMAG,
+		STATE_OUTPUT_INVERSE
 	);
 	signal output_state, output_state_next: output_state_type := STATE_OUTPUT_REAL;
 	
@@ -229,7 +230,7 @@ begin
 			end if;
 			
 			when OUTPUT_DATA =>
-				if (receive_index = FFT_LENGTH) and (output_state = STATE_OUTPUT_REAL) then
+				if (receive_index = FFT_LENGTH) and ((output_state = STATE_OUTPUT_REAL) or (output_state = STATE_OUTPUT_INVERSE)) then
 					state_next <= TRANSFER_TO_FFT;
 				end if;
 				
@@ -253,6 +254,10 @@ begin
 		stout_valid <= '0';
 		src_ready <= stout_ready;
 		
+		if inverse = "1" then
+			output_state_next <= STATE_OUTPUT_INVERSE;
+		end if;
+		
 		case output_state is
 
 			when STATE_OUTPUT_REAL =>
@@ -262,13 +267,8 @@ begin
 				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
 					
-					-- Calculate exponent
-					if inverse = "1" then -- IFFT operation
-						exponent := -to_integer(signed(src_exp)) + DIV_N;
-					else -- FFT operation
-						exponent := -to_integer(signed(src_exp));
-						-- exponent := 0;
-					end if;
+					-- Calculate exponent, FFT operation
+					exponent := -to_integer(signed(src_exp));
 					exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
 					
 					if receive_index = 0 then -- for first transmission
@@ -310,7 +310,29 @@ begin
 					
 					receive_index_next <= receive_index + 1;				
 				end if;
-											
+				
+			when STATE_OUTPUT_INVERSE =>
+				if inverse = "0" then
+					output_state_next <= STATE_OUTPUT_REAL;
+				elsif receive_index = FFT_LENGTH then -- independent of valid signals
+					receive_index_next <= 0; -- reset counter
+					output_state_next <= STATE_OUTPUT_REAL;
+				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+					stout_valid <= '1';
+					
+					-- Calculate exponent, IFFT operation
+					exponent := -to_integer(signed(src_exp)) + DIV_N;
+					exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
+					
+					if exponent < 0 then -- right shift
+						stout_data <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
+					elsif exponent >= 0 then -- left shift
+						stout_data <= std_logic_vector(shift_left(signed(src_real), exponent_abs));
+					end if;		
+					
+					receive_index_next <= receive_index + 1;
+				end if;
+				
 			when others =>
 				output_state_next <= STATE_OUTPUT_REAL;				
 		end case;

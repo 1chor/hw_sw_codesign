@@ -542,8 +542,8 @@ void test()
 	
 	#if ( FFT_H_HW ) // Hardware Header-FFT 
 		
-		int16_t l_buf;
-		int16_t r_buf;
+		int32_t l_buf;
+		int32_t r_buf;
 		
 		fft_h_setup_hw(); // Init FFT
 	
@@ -685,8 +685,8 @@ void test()
     
     #if ( FFT_H_HW ) // Hardware Header-FFT
      
-		complex_16_t* i_in_1 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
-		complex_16_t* i_in_2 = (complex_16_t*)malloc( 512 * sizeof(complex_16_t) );
+		complex_i32_t* i_in_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+		complex_i32_t* i_in_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
     
     #else // Software Header-FFT
     
@@ -715,8 +715,8 @@ void test()
     {
 		#if ( FFT_H_HW ) // Hardware Header-FFT 
         
-			l_buf = wav_get_int16(input, 2*sample_counter);
-			r_buf = wav_get_int16(input, 2*sample_counter+1);
+			l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
+			r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
 			
 			i_in_1[sample_counter_local].r = l_buf;
 			i_in_1[sample_counter_local].i = 0;
@@ -726,13 +726,13 @@ void test()
 		
 		#else // Software Header-FFT
 		
-			l_buf = wav_get_uint16(input, 2*sample_counter);
-			r_buf = wav_get_uint16(input, 2*sample_counter+1);
+			l_buf = wav_get_uint16( input, 2*sample_counter   );
+			r_buf = wav_get_uint16( input, 2*sample_counter+1 );
 
-			i_in_1[sample_counter_local].r = convert_1q15(l_buf);
+			i_in_1[sample_counter_local].r = convert_1q15( l_buf );
 			i_in_1[sample_counter_local].i = 0;
 			
-			i_in_2[sample_counter_local].r = convert_1q15(r_buf);
+			i_in_2[sample_counter_local].r = convert_1q15( r_buf );
 			i_in_2[sample_counter_local].i = 0;
 		
 		#endif
@@ -907,8 +907,8 @@ void test()
             
 			#if ( FFT_H_HW ) // Hardware Header-FFT
 			
-				int16_t* mac_buffer_16_1 = (int16_t*)malloc( 512 * sizeof(int16_t) );
-				int16_t* mac_buffer_16_2 = (int16_t*)malloc( 512 * sizeof(int16_t) );
+				int32_t* mac_buffer_16_1 = (int32_t*)malloc( 512 * sizeof(int32_t) );
+				int32_t* mac_buffer_16_2 = (int32_t*)malloc( 512 * sizeof(int32_t) );
      
 				ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 			

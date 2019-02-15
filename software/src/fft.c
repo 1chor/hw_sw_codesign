@@ -13,8 +13,8 @@
 
 #include "wav.h"
 
-#include "kiss_fft.h"
-#include "fft_fp.h"
+// #include "kiss_fft.h"
+// #include "fft_fp.h"
 #include "fft.h"
 
 #include "fixed_point.h"
@@ -38,11 +38,13 @@ void fft_h_setup_hw()
 	{
 		// init Input FIFOs 
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)0 );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)0 );
 	}
 		
 	for ( i = 0; i < 512; i++ )
 	{
 		// init Output FIFOs 
+		(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 	}
 }
@@ -68,8 +70,8 @@ void fft_b_setup_hw()
 
 void pre_process_h_header_hw( struct wav* ir )
 {
-	int16_t l_buf;
-    int16_t r_buf;
+	int32_t l_buf;
+    int32_t r_buf;
     
     uint16_t i = 0;
     
@@ -79,8 +81,8 @@ void pre_process_h_header_hw( struct wav* ir )
     {
         printf( "pre-processing block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
         
-        complex_16_t* cin_1 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
-        complex_16_t* cin_2 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
+        complex_i32_t* cin_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+        complex_i32_t* cin_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
         
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
@@ -91,8 +93,8 @@ void pre_process_h_header_hw( struct wav* ir )
         
         for ( i = 0; i < 256; i++ )
         {
-            l_buf = wav_get_int16( ir, 2*sample_counter_ir );
-            r_buf = wav_get_int16( ir, 2*sample_counter_ir+1 );
+            l_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
+            r_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
             
 			cin_1[i].r = l_buf;
             
@@ -103,25 +105,25 @@ void pre_process_h_header_hw( struct wav* ir )
         
         // cin_X will be freed in func
         
-        //~ if (header_blocks_h_i == 0 )
+        //~ if ( header_blocks_h_i == 0 )
 			//~ test_fft( cin_1, cin_2 );
                 
         process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
     }
 }
 
-void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t block, uint8_t free_input )
+void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t block, uint8_t free_input )
 {
     uint16_t i = 0;
     
-    complex_16_t* out_1 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
-    complex_16_t* out_2 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
+    complex_i32_t* out_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+    complex_i32_t* out_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
     
     zero_extend_256_hw( in_1 );
     zero_extend_256_hw( in_2 );
 	
 	// Clear Bit 0 from PIO, configures normal FFT operation
-	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0);
+	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0 );
        
     //~ printf("Write sample to FIFO\n");
     
@@ -129,31 +131,29 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
 	{
 		// Write sample to FIFO
 		// Both channels are calculated at the same time
-		// Upper bits are real data from left channel
-		// Lower bits are real data from right channel
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)in_1[i].r)<<16) + (int32_t)in_2[i].r );
+		// First transmission is real data from left channel
+		// Second transmission is real data from right channel
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i].r );
 	}
 	
-	//~ printf("done\n");
-	//~ printf("Read result from FIFO\n");
+	//~ printf( "done\n" );
+	//~ printf( "Read result from FIFO\n" );
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp; 
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		// First transmission is transformed real data from left channel
+		// Second transmission is transformed imaginary data from right channel
+		out_1[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		out_2[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		
-		out_1[i].r = (int16_t)( temp >> 16 ); // Upper bits are real data
-		out_2[i].r = (int16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
-		
-		//~ printf("Ausgelesen[%d]: %lx\n", i, temp);
-		//~ printf("Upper bits: %x\n", out_1[i].r);
-		//~ printf("Lower bits: %x\n", out_2[i].r);
+		//~ printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
+		//~ printf( "Imaginary data[%d]: %lx\n", i, out_2[i].r );
 	}
     
-    //~ printf("done\n");
-    //~ printf("Get back both transformed channels\n");
+    //~ printf( "done\n" );
+    //~ printf( "Get back both transformed channels\n" );
     
 	// Get back both transformed channels
 	for ( i = 1; i < 512/2; i++ )
@@ -183,6 +183,8 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
         free( in_2 );
     }
         
+	// ToDo: Alloc für samples kann man löschen
+	// Cast direkt im sram.c
     complex_32_t* samples_1 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
     complex_32_t* samples_2 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
     
@@ -212,31 +214,29 @@ void process_header_block_hw( complex_16_t* in_1, complex_16_t* in_2, uint8_t bl
     free( samples_2 );
 }
 
-void ifft_on_mac_buffer_hw( int16_t* mac_buffer_16_1, int16_t* mac_buffer_16_2, complex_32_t* mac_buffer_1, complex_32_t* mac_buffer_2 )
+void ifft_on_mac_buffer_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_32_t* mac_buffer_1, complex_32_t* mac_buffer_2 )
 {
     uint16_t i = 0;
     
 	// Set Bit 0 from PIO, configures inverse FFT operation
-	IOWR_ALTERA_AVALON_PIO_SET_BITS( PIO_0_BASE, 0);
+	IOWR_ALTERA_AVALON_PIO_SET_BITS( PIO_0_BASE, 0 );
         
 	// left channel
 	
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
-		// Upper bits are real part
-		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)mac_buffer_1[i].r)<<16) + (int32_t)mac_buffer_1[i].i );
+		// First transmission is real data 
+		// Second transmission is imaginary data
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)mac_buffer_1[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)mac_buffer_1[i].i );
 	}
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		
-		mac_buffer_16_1[i] = (int16_t)( temp >> 16 ); // Upper bits are real data
+		// Transmission is real data 
+		mac_buffer_16_1[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 	}
 	
 	// right channel
@@ -244,26 +244,24 @@ void ifft_on_mac_buffer_hw( int16_t* mac_buffer_16_1, int16_t* mac_buffer_16_2, 
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
-		// Upper bits are real part
-		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)mac_buffer_2[i].r)<<16) + (int32_t)mac_buffer_2[i].i );
+		// First transmission is real data 
+		// Second transmission is imaginary data
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)mac_buffer_2[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)mac_buffer_2[i].i );
 	}
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		
-		mac_buffer_16_2[i] = (int16_t)( temp >> 16 ); // Upper bits are real data
+		// Transmission is real data 
+		mac_buffer_16_2[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 	}
     	
     free( mac_buffer_1 );
     free( mac_buffer_2 );
 }
 
-void zero_extend_256_hw( complex_16_t* samples )
+void zero_extend_256_hw( complex_i32_t* samples )
 {
     uint16_t i = 0;
     
@@ -274,57 +272,54 @@ void zero_extend_256_hw( complex_16_t* samples )
     }
 }
 
-void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
+void test_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
 {
 	uint16_t i = 0;
-	int16_t* res1 = (int16_t*)calloc( 512, sizeof(int16_t) );
-	int16_t* res2 = (int16_t*)calloc( 512, sizeof(int16_t) );
+	int32_t* res1 = (int32_t*)calloc( 512, sizeof(int32_t) );
+	int32_t* res2 = (int32_t*)calloc( 512, sizeof(int32_t) );
 	
 	// FFT-Operation
-	printf("FFT-Operation\n");
+	printf( "FFT-Operation\n" );
     
-    complex_16_t* out_1 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
-    complex_16_t* out_2 = (complex_16_t*)calloc( 512, sizeof(complex_16_t) );
+    complex_i32_t* out_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+    complex_i32_t* out_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
     
     zero_extend_256_hw( in_1 );
     zero_extend_256_hw( in_2 );
 	
 	// Clear Bit 0 from PIO, configures normal FFT operation
-	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0);
+	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0 );
        
-    printf("Write sample to FIFO\n");
+    printf( "Write sample to FIFO\n" );
     
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
 		// Both channels are calculated at the same time
-		// Upper bits are real data from left channel
-		// Lower bits are real data from right channel
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)in_1[i].r)<<16) + (int32_t)in_2[i].r );
-		//~ IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)in_1[i].r)<<16) + (int32_t)0x0000 );
+		// First transmission is real data from left channel
+		// Second transmission is real data from right channel
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i].r );
 	}
 	
-	printf("done\n");
-	printf("Read result from FIFO\n");
+	printf( "done\n" );
+	printf( "Read result from FIFO\n" );
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp; 
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		out_1[i].r = (int16_t)( temp >> 16 ); // Upper bits are real data
-		out_2[i].r = (int16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
-		//~ out_1[i].i = (int16_t)( temp & 0x0000FFFF ); // Lower bits are imaginary data
-				
-		//~ printf("Ausgelesen[%d]: %lx\n", i, temp);
-		//~ printf("Upper bits: %x\n", out_1[i].r);
-		//~ printf("Lower bits: %x\n", out_2[i].r);
+		// First transmission is transformed real data from left channel
+		// Second transmission is transformed imaginary data from right channel
+		out_1[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		out_2[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
+		
+		//~ printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
+		//~ printf( "Imaginary data[%d]: %lx\n", i, out_2[i].r );
 	}
     
-    printf("done\n");
+    printf( "done\n" );
     
-    printf("Get back both transformed channels\n");
+    printf( "Get back both transformed channels\n" );
     out_1[0].i = 0;
     out_1[512/2].i = 0;
     out_2[0].i = 0;
@@ -350,21 +345,21 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 		out_2[512-i].r = out_2[i].r;
 	}
 	
-	printf("done\n");
+	printf( "done\n" );
 	
-	//~ printf("Check FFT Results - Left Channel:\n");
-    //~ printf("i\t|\tREAL\t\t|\tIMAG\n");
+	//~ printf( "Check FFT Results - Left Channel:\n" );
+    //~ printf( "i\t|\tREAL\t\t|\tIMAG\n" );
     //~ for ( i = 0; i < 512; i++ )
 	//~ { 
-		//~ printf("%d\t|\t%lx\t|\t%lx\n", i, out_1[i].r, out_1[i].i);
-		//~ printf("%d\t|\t%f\t|\t%f\n", i, convert_1q15(out_1[i].r), convert_1q15(out_1[i].i));
+		//~ printf( "%d\t|\t%lx\t|\t%lx\n", i, out_1[i].r, out_1[i].i );
+		//~ printf( "%d\t|\t%f\t|\t%f\n", i, convert_1q15(out_1[i].r), convert_1q15(out_1[i].i) );
     //~ }
 		
 	// IFFT-Operation
-	printf("IFFT-Operation\n");
+	printf( "IFFT-Operation\n" );
         
 	// Set Bit 0 from PIO, configures inverse FFT operation
-	IOWR_ALTERA_AVALON_PIO_SET_BITS( PIO_0_BASE, 0);
+	IOWR_ALTERA_AVALON_PIO_SET_BITS( PIO_0_BASE, 0 );
         
 	// left channel
 	
@@ -373,25 +368,23 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
-		// Upper bits are real part
-		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)out_1[i].r)<<16) + (int32_t)out_1[i].i );
+		// First transmission is real data 
+		// Second transmission is imaginary data
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_1[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_1[i].i );
 	}
 	
-	printf("done\n");
-	printf("Read result from FIFO\n");
+	printf( "done\n" );
+	printf( "Read result from FIFO\n" );
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		
-		res1[i] = (int16_t)( temp >> 16 ); // Upper bits are real data
+		// Transmission is real data 
+		res1[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 	}
 	
-	printf("done\n");
+	printf( "done\n" );
 	
 	// right channel
 	
@@ -400,9 +393,10 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 	for ( i = 0; i < 512; i++ )
 	{
 		// Write sample to FIFO
-		// Upper bits are real part
-		// Lower bits are imaginary part
-		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (((int32_t)out_2[i].r)<<16) + (int32_t)out_2[i].i );
+		// First transmission is real data 
+		// Second transmission is imaginary data
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_2[i].r );
+		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_2[i].i );
 	}
 	
 	printf("done\n");
@@ -410,34 +404,31 @@ void test_fft( complex_16_t* in_1, complex_16_t* in_2 )
 	
 	for ( i = 0; i < 512; i++ )
 	{
-		int32_t temp;
-		
 		// Read result from FIFO
-		temp = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
-		
-		res2[i] = (int16_t)( temp >> 16 ); // Upper bits are real data
+		// Transmission is real data 
+		res2[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 	}
         
-    printf("done\n");
+    printf( "done\n" );
     
     free( out_1 );
     free( out_2 );
     
-    printf("Check Results - Left Channel:\n");
-    printf("i\t|\tSOLL\t|\tIST\n");
+    printf( "Check Results - Left Channel:\n" );
+    printf( "i\t|\tSOLL\t|\tIST\n" );
     for ( i = 0; i < 512; i++ )
 	{ 
-		printf("%d\t|\t%x\t|\t%x\n", i, in_1[i].r, res1[i]);
+		printf( "%d\t|\t%lx\t|\t%lx\n", i, in_1[i].r, res1[i] );
     }
     
-    printf("\n\n");
-    printf("Check Results - Right Channel:\n");
-    printf("i\t|\tSOLL\t|\tIST\n");
+    printf( "\n\n" );
+    printf( "Check Results - Right Channel:\n" );
+    printf( "i\t|\tSOLL\t|\tIST\n" );
     for ( i = 0; i < 512; i++ )
 	{ 
-		printf("%d\t|\t%x\t|\t%x\n", i, in_2[i].r, res2[i]);
+		printf( "%d\t|\t%lx\t|\t%lx\n", i, in_2[i].r, res2[i] );
     }
-    printf("\n\n");
+    printf( "\n\n" );
     
     free( res1 );
     free( res2 );

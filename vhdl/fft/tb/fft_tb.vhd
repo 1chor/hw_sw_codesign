@@ -238,7 +238,7 @@ begin
 		
 		-- Compare result
 		compare_buffers( output_1_real, m_real_out, FILE_LENGTH );
-		compare_buffers( output_1_imag, m_imag_out, FILE_LENGTH );
+		-- compare_buffers( output_1_imag, m_imag_out, FILE_LENGTH );
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -259,11 +259,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := output_buffer( 2*i   );
-			output_1_imag(i) := output_buffer( 2*i+1 );
+			output_1_real(i) := output_buffer( i );
 		end loop;
 						
 		write(my_line, string'("Compare results"));
@@ -271,7 +270,7 @@ begin
 		
 		-- Compare result
 		compare_buffers( output_1_real, m_real_in, FILE_LENGTH );
-		compare_buffers( output_1_imag, m_imag_in, FILE_LENGTH );
+		-- compare_buffers( output_1_imag, m_imag_in, FILE_LENGTH );
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -355,11 +354,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := output_buffer( 2*i   );
-			output_1_imag(i) := output_buffer( 2*i+1 );
+			output_1_real(i) := output_buffer( i );
 		end loop;
 				
 		-- Second channel IFFT
@@ -371,19 +369,18 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_2_real(i) := output_buffer( 2*i   );
-			output_2_imag(i) := output_buffer( 2*i+1 );
+			output_2_real(i) := output_buffer( i );
 		end loop;
 				
 		write(my_line, string'("Compare results"));
 		writeline(output, my_line);
 		
 		-- Compare result
-		--~ compare_buffers( output_1_real, m_real_in1, FILE_LENGTH );
-		--~ compare_buffers( output_2_real, m_real_in2, FILE_LENGTH );
+		-- compare_buffers( output_1_real, m_real_in1, FILE_LENGTH );
+		-- compare_buffers( output_2_real, m_real_in2, FILE_LENGTH );
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -401,7 +398,7 @@ begin
 		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( m_real_in3(i) );
-			stream_write( x"00000000"       );
+			stream_write( x"00000000"   );
 		end loop; 
 		stin_valid <= '0';
 		
@@ -416,8 +413,8 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		--compare_buffers( output_1_real, m_real_out3, FILE_LENGTH );
-		--compare_buffers( output_1_imag, m_imag_out3, FILE_LENGTH );
+		-- compare_buffers( output_1_real, m_real_out3, FILE_LENGTH );
+		-- compare_buffers( output_1_imag, m_imag_out3, FILE_LENGTH );
 		
 		write(my_line, string'("Done"));
 		writeline(output, my_line);
@@ -438,10 +435,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := output_buffer( 2*i );
+			output_1_real(i) := output_buffer( i );
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -465,7 +462,7 @@ begin
 		output_buffer_idx := 0;
 		inverse <= "0";
 		for i in 0 to FILE_LENGTH - 1 loop
-			stream_write( ir_1(i) );
+			stream_write( ir_1(i)     );
 			stream_write( x"00000000" ); -- Send only left channel
 		end loop; 
 		stin_valid <= '0';
@@ -503,10 +500,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := output_buffer( 2*i );
+			output_1_real(i) := output_buffer( i );
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -587,11 +584,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_1_real(i) := output_buffer( 2*i   );
-			output_1_imag(i) := output_buffer( 2*i+1 );
+			output_1_real(i) := output_buffer( i );
 		end loop;
 		
 		-- Second channel IFFT
@@ -603,11 +599,10 @@ begin
 		end loop; 
 		stin_valid <= '0';
 		
-		wait_for_output_buffer_fill_level( 2*FILE_LENGTH );
+		wait_for_output_buffer_fill_level( FILE_LENGTH );
 		
 		for i in 0 to FILE_LENGTH - 1 loop
-			output_2_real(i) := output_buffer( 2*i   );
-			output_2_imag(i) := output_buffer( 2*i+1 );
+			output_2_real(i) := output_buffer( i );
 		end loop;
 				
 		write(my_line, string'("Compare results"));
@@ -632,15 +627,8 @@ begin
 	begin
 		if (rising_edge(clk)) then
 			if (stout_valid = '1') then
-				-- if r_i = '0' then
-					-- output_buffer(output_buffer_idx) := stout_data;
-					-- output_buffer_idx := output_buffer_idx + 1;
-					-- r_i := '1';
-				-- else
-					output_buffer(output_buffer_idx) := stout_data;
-					output_buffer_idx := output_buffer_idx + 1;
-					-- r_i := '0';
-				-- end if;
+				output_buffer(output_buffer_idx) := stout_data;
+				output_buffer_idx := output_buffer_idx + 1;
 			end if;
 		end if;
 	end process; 
