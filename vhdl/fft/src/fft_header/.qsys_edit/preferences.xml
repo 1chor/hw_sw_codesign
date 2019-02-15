@@ -8,7 +8,7 @@
   </columns>
  </systemtable>
  <library expandedCategories="Project,Library" />
- <window width="1920" height="1032" x="0" y="24" />
+ <window width="1920" height="1007" x="0" y="24" />
  <generation synthesis="VHDL" simulation="VHDL" testbench_simulation="VHDL" />
  <hdlexample language="VHDL" />
 </preferences>

@@ -85,7 +85,7 @@
   <parameter name="out_order" value="Natural" />
   <parameter name="out_width" value="29" />
   <parameter name="selected_device_family" value="Cyclone IV E" />
-  <parameter name="twid_width" value="16" />
+  <parameter name="twid_width" value="24" />
  </module>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />

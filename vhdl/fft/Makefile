@@ -22,7 +22,7 @@ compile:
 	rm -f log
 	
 	# Copy hex files
-	cp -f src/fft_header/fft_header/simulation/mentor/*.hex .
+	cp -f src/fft_header/fft_header/simulation/submodules/*.hex .
 		
 	# Create compilation libraries
 	vlib libraries/;
@@ -211,3 +211,4 @@ clean:
 	rm -f vsim.wlf
 	rm -f log
 	rm -fr work
+	rm -f *.hex

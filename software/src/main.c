@@ -24,10 +24,11 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (1) 	 // If 1 then use FIR filter hardware component
+#define FIR_HW (0) 	 // If 1 then use FIR filter hardware component
 #define FFT_H_HW (1) // If 1 then use header FFT hardware component
 #define FFT_B_HW (0) // If 1 then use body FFT hardware component
-#define MAC_HW (0) 	 // If 1 then use MAC hardware component
+#define MAC_H_HW (0) // If 1 then use MAC hardware component
+#define MAC_B_HW (0) // If 1 then use MAC hardware component
 
 #define HAL_PLATFORM_RESET() \
   NIOS2_WRITE_STATUS(0); \
@@ -522,10 +523,16 @@ void test()
 		printf("Software Body-FFT\n");
     #endif
     
-     #if ( MAC_HW )
-		printf("Hardware MAC\n");
+     #if ( MAC_H_HW )
+		printf("Hardware Header-MAC\n");
     #else
-		printf("Software MAC\n");
+		printf("Software Header-MAC\n");
+    #endif
+    
+    #if ( MAC_B_HW )
+		printf("Hardware Body-MAC\n");
+    #else
+		printf("Software Body-MAC\n");
     #endif
     printf("=========================\n");
     printf("\n\n");

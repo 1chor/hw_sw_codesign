@@ -30,17 +30,17 @@
 void fft_h_setup_hw()
 {
 	uint16_t i = 0;
-		
+	
 	// Clear Bit 0 from PIO, configures normal FFT operation
-	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0);
-         
+	IOWR_ALTERA_AVALON_PIO_CLEAR_BITS( PIO_0_BASE, 0 );
+	
 	for ( i = 0; i < 512; i++ )
 	{
 		// init Input FIFOs 
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)0 );
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)0 );
 	}
-		
+	
 	for ( i = 0; i < 512; i++ )
 	{
 		// init Output FIFOs 

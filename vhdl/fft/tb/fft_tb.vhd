@@ -237,7 +237,7 @@ begin
 		writeline(output, my_line);
 		
 		-- Compare result
-		compare_buffers( output_1_real, m_real_out, FILE_LENGTH );
+		-- compare_buffers( output_1_real, m_real_out, FILE_LENGTH );
 		-- compare_buffers( output_1_imag, m_imag_out, FILE_LENGTH );
 		
 		write(my_line, string'("Done"));

@@ -39,7 +39,7 @@ module fft_header_fft_ii_0 (
 		.bfp(1),
 		.nume(1),
 		.mpr(32),
-		.twr(16),
+		.twr(24),
 		.bpr(24),
 		.bpb(6),
 		.fpr(4),
