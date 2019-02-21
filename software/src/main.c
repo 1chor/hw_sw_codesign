@@ -552,7 +552,7 @@ void test()
 		int32_t l_buf;
 		int32_t r_buf;
 		
-		fft_h_setup_hw(); // Init FFT
+		//~ fft_h_setup_hw(); // Init FFT
 	
 		pre_process_h_header_hw( ir );
 	

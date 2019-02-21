@@ -13,7 +13,7 @@
 # //  18 U.S.C. Section 1905.
 # //
 # vsim -t ps -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive fft_tb -do "vsim -msgmode both; do scripts/wave_all.do;run 160235ns; wave zoom full" 
-# Start time: 18:12:53 on Feb 15,2019
+# Start time: 15:13:45 on Feb 21,2019
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/submodules/auk_dspip_avalon_streaming_sink.vhd(694): (vopt-8617) Possible component instance "/fft_tb/uut/FFT_H/fft_ii_0/asj_fft_sglstream_inst/auk_dsp_atlantic_sink_1/pfc_fifo/in_fifo_pfc : auk_dspip_fifo_pfc" is not bound.
 # Loading std.standard
@@ -11703,5 +11703,5 @@
 # Matlab Inverse-FFT Test3
 #  wave zoom full
 # {0 ps} {168246750 ps}
-# End time: 18:13:27 on Feb 15,2019, Elapsed time: 0:00:34
+# End time: 15:22:49 on Feb 21,2019, Elapsed time: 0:09:04
 # Errors: 354, Warnings: 10917

@@ -105,8 +105,8 @@ void pre_process_h_header_hw( struct wav* ir )
         
         // cin_X will be freed in func
         
-        //~ if ( header_blocks_h_i == 0 )
-			//~ test_fft( cin_1, cin_2 );
+        if ( header_blocks_h_i == 0 )
+			test_fft( cin_1, cin_2 );
                 
         process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
     }

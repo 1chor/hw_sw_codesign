@@ -195,14 +195,16 @@ begin
 				end if;
 								
 			when STATE_INPUT_IMAG =>
-				si_real <= temp_in;	  -- Real input data
-				si_imag <= stin_data; -- Imaginary input data
-				
-				input_state_next <= STATE_INPUT_REAL;	
-				
-				-- increase index and feed new input;
-				index_next <= index + 1;
-				si_valid <= '1';
+				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
+					si_real <= temp_in;	  -- Real input data
+					si_imag <= stin_data; -- Imaginary input data
+					
+					input_state_next <= STATE_INPUT_REAL;	
+					
+					-- increase index and feed new input;
+					index_next <= index + 1;
+					si_valid <= '1';
+				end if;
 								
 			when others =>
 				input_state_next <= STATE_INPUT_REAL;				
