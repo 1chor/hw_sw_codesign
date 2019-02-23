@@ -205,7 +205,7 @@ begin
 					index_next <= index + 1;
 					si_valid <= '1';
 				end if;
-								
+							
 			when others =>
 				input_state_next <= STATE_INPUT_REAL;				
 		end case;
@@ -223,7 +223,8 @@ begin
 			
 			when TRANSFER_TO_FFT =>
 				if index = FFT_LENGTH then 
-					state_next <= LATENCY_FFT;
+					--~ state_next <= LATENCY_FFT;
+					state_next <= OUTPUT_DATA;
 				end if;
 			
 			when LATENCY_FFT =>
@@ -244,7 +245,7 @@ begin
 		
 	--------------------------------------------------------------------
 			
-	output_proc : process(output_state, receive_index, temp_out, stout_ready, state_next, state, inverse, src_exp, src_real, src_imag) is
+	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, src_exp, src_real, src_imag) is
 		variable exponent 	  : integer range -13 to 13 := 0;
 		variable exponent_abs : natural range  0 to 13 := 0;
 	begin
@@ -266,7 +267,7 @@ begin
 				if receive_index = FFT_LENGTH then -- independent of valid signals
 					receive_index_next <= 0; -- reset counter
 					temp_out_next <= (others => '0');
-				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
 					
 					-- Calculate exponent, FFT operation
@@ -292,7 +293,7 @@ begin
 				end if;
 								
 			when STATE_OUTPUT_IMAG =>
-				if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
+				if (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
 					stout_valid <= '1';
 					src_ready <= '0';
 					
@@ -304,12 +305,25 @@ begin
 					
 					output_state_next <= STATE_OUTPUT_REAL;
 					
-					if receive_index = FFT_LENGTH-1 then
-						temp_out_next <= (others => '0');
-					else
-						temp_out_next <= src_real;
+					--~ if receive_index = FFT_LENGTH-1 then
+						--~ temp_out_next <= (others => '0');
+					--~ else
+						--~ temp_out_next <= src_real;
+					--~ end if;
+					
+					receive_index_next <= receive_index + 1;	
+				elsif receive_index = FFT_LENGTH-1 then -- for last imaginary value
+					stout_valid <= '1';
+					src_ready <= '0';
+					
+					if exponent < 0 then -- right shift
+						stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
+					elsif exponent >= 0 then -- left shift
+						stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
 					end if;
 					
+					output_state_next <= STATE_OUTPUT_REAL;
+					temp_out_next <= (others => '0');	
 					receive_index_next <= receive_index + 1;				
 				end if;
 				
@@ -319,7 +333,7 @@ begin
 				elsif receive_index = FFT_LENGTH then -- independent of valid signals
 					receive_index_next <= 0; -- reset counter
 					output_state_next <= STATE_OUTPUT_REAL;
-				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
 					
 					-- Calculate exponent, IFFT operation
