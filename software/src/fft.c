@@ -102,14 +102,14 @@ void pre_process_h_header_hw( struct wav* ir )
             
             sample_counter_ir += 1;
             
-            printf( "l_buf[%d]: %lx\n", i, l_buf );
-            printf( "r_buf[%d]: %lx\n", i, r_buf );
+            //printf( "l_buf[%d]: %lx\n", i, l_buf );
+            //printf( "r_buf[%d]: %lx\n", i, r_buf );
         }
         
         // cin_X will be freed in func
         
-        if ( header_blocks_h_i == 0 )
-			test_fft( cin_1, cin_2 );
+        //if ( header_blocks_h_i == 0 )
+	//		test_fft( cin_1, cin_2 );
                 
         process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
     }
@@ -140,10 +140,10 @@ void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t 
 		//~ printf( "l_buf[%d]: %lx\n", i, in_1[i].r  );
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i].r );
 		
-		//~ printf( "r_buf[%d]: %lx\n", i, in_2[i].r  );
+		printf( "r_buf[%d]: %lx\n", i, in_2[i].r  );
 	}
 	
-	//~ printf( "done\n" );
+	printf( "done\n" );
 	//~ printf( "Read result from FIFO\n" );
 	
 	for ( i = 0; i < 512; i++ )
@@ -151,11 +151,11 @@ void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t 
 		// Read result from FIFO
 		// First transmission is transformed real data from left channel
 		// Second transmission is transformed imaginary data from right channel
-		printf( "%d\n", i );
+		//printf( "%d\n", i );
 		out_1[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		out_2[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
 		
-		//~ printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
+		printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
 		//~ printf( "Imaginary data[%d]: %lx\n", i, out_2[i].r );
 	}
     

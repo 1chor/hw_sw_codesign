@@ -16,7 +16,7 @@ TB_FILES = \
 TB = fft_tb
 SIM_TIME = 160235ns
 PATH_TO_QUARTUS = /opt/quartus_18.1-18.1.0.625/quartus
-QSYS_SIMDIR = /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation
+QSYS_SIMDIR = ./src/fft_header/fft_header/simulation
 
 compile: 
 	rm -f log

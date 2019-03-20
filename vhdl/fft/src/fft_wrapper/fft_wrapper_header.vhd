@@ -179,7 +179,9 @@ begin
 		case input_state is
 
 			when STATE_INPUT_REAL =>
-				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
+				if index = FFT_LENGTH then -- independent of valid signals
+					index_next <= 0; -- reset counter
+				elsif (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
 					temp_in <= stin_data; -- Real input data
 					
 					input_state_next <= STATE_INPUT_IMAG;
@@ -190,8 +192,6 @@ begin
 						stin_ready <= '0';
 						si_eop_next <= '1'; -- set sop flag at next clock
 					end if;
-				elsif index = FFT_LENGTH then -- independent of valid signals
-					index_next <= 0; -- reset counter
 				end if;
 								
 			when STATE_INPUT_IMAG =>
@@ -293,7 +293,20 @@ begin
 				end if;
 								
 			when STATE_OUTPUT_IMAG =>
-				if (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
+				if receive_index = FFT_LENGTH-1 then -- for last imaginary value
+					stout_valid <= '1';
+					src_ready <= '0';
+					
+					if exponent < 0 then -- right shift
+						stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
+					elsif exponent >= 0 then -- left shift
+						stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
+					end if;
+					
+					output_state_next <= STATE_OUTPUT_REAL;
+					temp_out_next <= (others => '0');	
+					receive_index_next <= receive_index + 1;				
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
 					stout_valid <= '1';
 					src_ready <= '0';
 					
@@ -308,23 +321,10 @@ begin
 					--~ if receive_index = FFT_LENGTH-1 then
 						--~ temp_out_next <= (others => '0');
 					--~ else
-						--~ temp_out_next <= src_real;
+				        temp_out_next <= src_real;
 					--~ end if;
 					
-					receive_index_next <= receive_index + 1;	
-				elsif receive_index = FFT_LENGTH-1 then -- for last imaginary value
-					stout_valid <= '1';
-					src_ready <= '0';
-					
-					if exponent < 0 then -- right shift
-						stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
-					elsif exponent >= 0 then -- left shift
-						stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
-					end if;
-					
-					output_state_next <= STATE_OUTPUT_REAL;
-					temp_out_next <= (others => '0');	
-					receive_index_next <= receive_index + 1;				
+					receive_index_next <= receive_index + 1;
 				end if;
 				
 			when STATE_OUTPUT_INVERSE =>
