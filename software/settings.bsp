@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 8, 2019 2:48:25 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1557319705452</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 8, 2019 3:56:19 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1557323779644</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>

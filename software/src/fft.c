@@ -118,6 +118,8 @@ void pre_process_h_header_hw( struct wav* ir )
 
 void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t block, uint8_t free_input )
 {
+    // Nach der FFT haben die Werte ein 17Q15 Format!!
+  
     uint16_t i = 0;
     
     complex_i32_t* out_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );

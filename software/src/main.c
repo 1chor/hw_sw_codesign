@@ -663,30 +663,10 @@ void test()
         output_buffer_header_2[i] = 0;
     }
     
-    // das sollte jetzt zwar ungenau, aber immer noch richtig abgespeichert geworden sein.
-    
     printf( "das haben wir jetzt im output buffer\n" );
-    
-    // for ( i = 10; i < 20; i++ )
-    // {
-        // float fuck_me;
-        // convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
-        // printf( "%f bzw.: %f\n", fuck_me, convert_1q15(output_buffer_header_1[i]) );
-    // }
-    
-    // for ( i = 740; i < 760; i++ )
-    // {
-        // printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
-    // }
-    
-    // printf( "%f\n", convert_1q15( output_buffer_header[240] ) );
-    
     
     uint32_t sample_counter = 0;
     uint32_t sample_counter_local = 0;
-    
-    // kiss_fft_cpx i_in_1[512];
-    // kiss_fft_cpx i_in_2[512];
     
     // freed at the end of the endless loop
     
@@ -715,8 +695,8 @@ void test()
     // R E A D I N G   I   S A M P L E S
     // ---------------------------------------------------------
     
-    //~ int32_t sample_result_1 = 0;
-    //~ int32_t sample_result_2 = 0;
+    // int32_t sample_result_1 = 0;
+    // int32_t sample_result_2 = 0;
     
     while (1)
     {
@@ -745,9 +725,7 @@ void test()
 	#endif
                 
         sample_counter_local += 1;
-        
-// ---> ToDO FIR auf signed umstellen!!
-        
+                
 	#if ( FIR_HW ) // Hardware FIR
 
 	    // zur sicherheit werden die sample results auf 0 gesetzt.
@@ -759,10 +737,10 @@ void test()
 
 	    fir_filter_sample_hw
 	    (
-		    &sample_result_1
-		    ,&sample_result_2
-		    ,l_buf
-		    ,r_buf
+		&sample_result_1
+		,&sample_result_2
+		,l_buf
+		,r_buf
 	    );
 			
          #else // Software FIR
@@ -799,14 +777,6 @@ void test()
 	    );
 			
         #endif
-        
-        // Ausgabe linker Channel
-        //~ float f;
-        //~ convert_2q30_pointer( &f, sample_result_1);
-        //~ printf( "Sample %d: %f\n", sample_counter_local, f );
-        //~ printf( "l_buf[%d]: %lx\n", sample_counter_local, l_buf );
-        //~ printf( "l_buf_32[%d]: %lx\n", sample_counter_local, (uint32_t)l_buf );
-        //~ printf( "Sample %d: %lx\n", sample_counter_local, sample_result_1 );
         
         //--------------------------------------------------------------
         //
@@ -924,16 +894,7 @@ void test()
 		    ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 		
 		#endif
-            
-	    if (asdf == 0 ) 
-	    {
-		printf( "IFFT:\n" );
-		for ( i = 0; i <= 511; i++ )
-		    printf( "%i: %lx\n", (i+1), mac_buffer_16_1[i] );
-		
-		printf( "\n\n" );
-	    }
-	    
+            	    
             // beim vergleich mit octave sieht es bei den ersten samples so
             // aus als waeren diese falsch. das stimmt nicht, in c werden sie
             // einfach nur mehr als 0 wahrgenommen waehrend in octave noch
@@ -941,14 +902,14 @@ void test()
             
             //~ printf( "%i - %i\n", 512 + (i_h*256), 512 + ((i_h+2)*256) );
             
-            printf( "das habe wir im output buffer:\n\n" );
-            
-            printf( "bevor die neuen fft werte addiert werden\n" );
-            
-            for ( i = 740; i < 760; i++ )
-            {
-                printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
-            }
+//             printf( "das habe wir im output buffer:\n\n" );
+//             
+//             printf( "bevor die neuen fft werte addiert werden\n" );
+//             
+//             for ( i = 740; i < 760; i++ )
+//             {
+//                 printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+//             }
             
             uint16_t ii = 0;
             
@@ -961,12 +922,12 @@ void test()
                 ii += 1;
             }
             
-            printf("----------------\nnachdem die neuen fft werte addiert wurden.\n");
-            
-            for ( i = 740; i < 760; i++ )
-            {
-                printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
-            }
+//             printf("----------------\nnachdem die neuen fft werte addiert wurden.\n");
+//             
+//             for ( i = 740; i < 760; i++ )
+//             {
+//                 printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+//             }
             
             free( mac_buffer_16_1 );
             free( mac_buffer_16_2 );
@@ -1010,11 +971,6 @@ void test()
                     printf( "PASST NICHT! der wert ist: %f\n", test_value );
                 }
                 
-                //~ for ( i = 740; i < 760; i++ )
-                //~ {
-                    //~ printf( "%f\n", convert_1q15( output_buffer_header_1[i] ) );
-                //~ }
-                //~ return;
                 break;
             }
             
@@ -1024,8 +980,6 @@ void test()
         if ( sample_counter >= samples_in_file )
         {
             printf(">done done\n\n");
-            
-            //~ break;
         }
         
         sample_counter += 1;
@@ -1033,9 +987,7 @@ void test()
     
     free( i_in_1 );
     free( i_in_2 );
-    
-    //~ return;
-    
+        
     uint32_t sample_count = 0;
     uint32_t samples_in_file_end = asdf*256;
     //~ uint32_t samples_in_file_end = wav_sample_count(input); 
