@@ -44,11 +44,6 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 	switch ( channel )
 	{
 		case 0: // left channel
-			//~ for ( i = 0; i < 10; i++ )
-			//~ {
-				//~ printf( "ir[%d]: %lx\n", i, wav_get_uint16( ir, 2*i ) );
-			//~ }
-			
 			for ( i = 0; i < 512; i++ )
 			{
 				// Set Coefficients
@@ -146,23 +141,23 @@ void fir_filter_sample_hw
     ,uint16_t new_sample_2
 )
 {     
-	int16_t sample_1 = (int16_t)new_sample_1;
-	int16_t sample_2 = (int16_t)new_sample_2;
-	
-	// left channel
-	
-	// Write sample to FIFO
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, (int32_t)sample_1 );
-	
-	// Read result from FIFO
-	*sample_result_1 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
-	//~ *sample_result_1 = IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
-	
-	// right channel
-	
-	// Write sample to FIFO
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, (int32_t)sample_2 );
-	
-	// Read result from FIFO
-	*sample_result_2 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_R_BASE );
+    int16_t sample_1 = (int16_t)new_sample_1;
+    int16_t sample_2 = (int16_t)new_sample_2;
+    
+    // left channel
+    
+    // Write sample to FIFO
+    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, (int32_t)sample_1 );
+    
+    // Read result from FIFO
+    *sample_result_1 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
+    //~ *sample_result_1 = IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
+    
+    // right channel
+    
+    // Write sample to FIFO
+    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, (int32_t)sample_2 );
+    
+    // Read result from FIFO
+    *sample_result_2 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_R_BASE );
 }

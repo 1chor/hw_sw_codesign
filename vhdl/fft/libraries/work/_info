@@ -7,35 +7,35 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
 T_opt
-!s110 1550758426
-V7T7gWaaXm50H;4?7[jM4H3
+!s110 1553612811
+VTJ0e8eb07CGzN]o9M`M2P1
 04 6 5 work fft_tb bench 1
-=1-000ae431a4f1-5c6eb219-9cca6-5720
+=1-000ae431a4f1-5c9a400b-1576e-5827
 o-quiet -auto_acc_if_foreign -work work -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive
 tCvgOpt 0
 n@_opt
 OE;O;10.6c_1;65
 Efft_header
-Z1 w1550250617
+Z1 w1553611222
 Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
 R0
-Z5 8/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/fft_header.vhd
-Z6 F/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/fft_header.vhd
+Z5 8./src/fft_header/fft_header/simulation/fft_header.vhd
+Z6 F./src/fft_header/fft_header/simulation/fft_header.vhd
 l0
 L9
 Va5iO=8X=18XIbd^F1WdGb1
 !s100 TE46mZBM3OY?BX3fZkIJA3
 Z7 OE;C;10.6c_1;65
 32
-Z8 !s110 1550758422
+Z8 !s110 1553612807
 !i10b 1
-Z9 !s108 1550758422.000000
-Z10 !s90 /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/fft_header.vhd|
-Z11 !s107 /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/fft_header.vhd|
+Z9 !s108 1553612807.000000
+Z10 !s90 ./src/fft_header/fft_header/simulation/fft_header.vhd|
+Z11 !s107 ./src/fft_header/fft_header/simulation/fft_header.vhd|
 !i113 0
 Z12 tExplicit 1 CvgOpt 0
 Artl
@@ -57,7 +57,7 @@ R11
 !i113 0
 R12
 Efft_tb
-Z13 w1550250533
+Z13 w1553087390
 Z14 DPx4 work 11 tb_util_pkg 0 22 L;P<Zif46:1Zh_3_en;kJ3
 Z15 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
 R2
@@ -72,9 +72,9 @@ VK=h<kGoLianG6FoFhRP8?1
 !s100 WYN3LTB`K`4dM_fQl^Cgm0
 R7
 33
-Z18 !s110 1550758423
+Z18 !s110 1553612808
 !i10b 1
-Z19 !s108 1550758423.000000
+Z19 !s108 1553612808.000000
 Z20 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|./tb/fft_tb.vhd|
 Z21 !s107 ./tb/fft_tb.vhd|
 !i113 0
@@ -102,7 +102,7 @@ R21
 R22
 R12
 Efft_wrapper_header
-Z23 w1550231907
+Z23 w1553608646
 Z24 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
 Z25 DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
 Z26 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
@@ -134,10 +134,10 @@ R2
 R3
 R4
 DEx4 work 18 fft_wrapper_header 0 22 0BB7WFHVZdLS8kzZ=l4U`2
-l105
+l107
 L27
-VTldcF4Q2h^0RAN?HMf45=3
-!s100 DBD3N2hUCZcH1W;[<KmX;1
+VcXPVTV3fI8a0FB_V@mPOf2
+!s100 XjbTPKnPFN<>5jW::C1mR3
 R7
 33
 R8
@@ -152,10 +152,10 @@ Ptb_util_pkg
 R2
 R3
 R4
-Z31 w1539007091
+R13
 R0
-Z32 8../tb/tb_util_pkg.vhd
-Z33 F../tb/tb_util_pkg.vhd
+Z31 8../tb/tb_util_pkg.vhd
+Z32 F../tb/tb_util_pkg.vhd
 l0
 L5
 VL;P<Zif46:1Zh_3_en;kJ3
@@ -163,11 +163,11 @@ VL;P<Zif46:1Zh_3_en;kJ3
 R7
 33
 b1
-R8
+R18
 !i10b 1
 R9
-Z34 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|../tb/tb_util_pkg.vhd|
-Z35 !s107 ../tb/tb_util_pkg.vhd|
+Z33 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|../tb/tb_util_pkg.vhd|
+Z34 !s107 ../tb/tb_util_pkg.vhd|
 !i113 0
 R22
 R12
@@ -182,11 +182,11 @@ VMB<o5eAB1Bd6BAIJdW?k>2
 !s100 U[<oNK?bCWJz1Q10YTWLf0
 R7
 33
-R8
+R18
 !i10b 1
 R9
+R33
 R34
-R35
 !i113 0
 R22
 R12

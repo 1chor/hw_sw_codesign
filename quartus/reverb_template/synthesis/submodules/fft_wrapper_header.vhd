@@ -19,7 +19,7 @@ entity fft_wrapper_header is
 		stout_valid : out std_logic;
 		stout_ready : in std_logic; -- back pressure from FIFO
 				
-		inverse     : in std_logic_vector(0 downto 0) -- pio(0) is used for fft header
+		inverse     : in std_logic -- pio(0) is used for fft header
 	);
 begin
 end entity;
@@ -49,6 +49,7 @@ architecture arch of fft_wrapper_header is
 	signal	src_exp   	 	  : std_logic_vector(5 downto 0);
 	
 	signal temp_in		 	  : std_logic_vector(31 downto 0) := (others => '0');
+	signal temp_in_next	 	  : std_logic_vector(31 downto 0) := (others => '0');
 	signal temp_out		 	  : std_logic_vector(31 downto 0) := (others => '0');
 	signal temp_out_next	  : std_logic_vector(31 downto 0) := (others => '0');
 	
@@ -116,7 +117,7 @@ begin
 		sink_eop     => si_eop,		 	 -- Indicates the end of the incoming FFT frame  
 		sink_real    => si_real, 		 -- Real input data
 		sink_imag    => si_imag,		 -- Imaginary input data
-		inverse      => inverse, 		 -- Inverse FFT calculated if asserted
+		inverse(0)      => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => src_ready, 
 		source_error => src_error, 	 	 -- Indicates an error has occured either in an upstream module or within the FFT module
@@ -136,10 +137,11 @@ begin
 			input_state  <= STATE_INPUT_REAL;
 			output_state <= STATE_OUTPUT_REAL;
 			
-			si_sop <= '0';
-			si_eop <= '0';	
+			--si_sop <= '0';
+			--si_eop <= '0';	
 			index  <= 0;
 			receive_index <= 0;
+			temp_in <= (others => '0');
 			temp_out <= (others => '0');
 								
 		elsif rising_edge(clk) then
@@ -147,10 +149,11 @@ begin
 			input_state  <= input_state_next;
 			output_state <= output_state_next;
 			
-			si_sop  	  <= si_sop_next;
-			si_eop  	  <= si_eop_next;
+			--si_sop  	  <= si_sop_next;
+			--si_eop  	  <= si_eop_next;
 			index  		  <= index_next;
 			receive_index <= receive_index_next;
+			temp_in		  <= temp_in_next;
 			temp_out	  <= temp_out_next;		
 		end if;
 			
@@ -158,19 +161,20 @@ begin
 	
 	--------------------------------------------------------------------
 	
-	input_proc: process (input_state, index, si_ready, stin_valid, state_next, stin_data, temp_in)
+	input_proc: process (input_state, index, si_ready, stin_valid, state, stin_data, temp_in)
 	begin
 		-- default values to prevent latches
 		input_state_next <= input_state;
 		index_next <= index;
 		si_valid <= '0';
-		si_sop_next <= '0';
-		si_eop_next <= '0';
+		si_sop <= '0';
+		si_eop <= '0';
+		temp_in_next <= temp_in;
 			
 		si_real <= (others => '0');
 		si_imag <= (others => '0');
 		
-		if (state_next = TRANSFER_TO_FFT) and (si_ready = '1') then  -- forward back pressure
+		if (state = TRANSFER_TO_FFT) and (si_ready = '1') then  -- forward back pressure
 			stin_ready <= '1';
 		else
 			stin_ready <= '0';
@@ -179,31 +183,40 @@ begin
 		case input_state is
 
 			when STATE_INPUT_REAL =>
-				if (si_ready = '1') and (stin_valid = '1') and (state_next = TRANSFER_TO_FFT) then
-					temp_in <= stin_data; -- Real input data
+				if index = FFT_LENGTH then -- independent of valid signals
+					index_next <= 0; -- reset counter
+				elsif (si_ready = '1') and (stin_valid = '1') and (state = TRANSFER_TO_FFT) then
+					temp_in_next <= stin_data; -- Real input data
 					
 					input_state_next <= STATE_INPUT_IMAG;
 					
-					if index = 0 then
-						si_sop_next <= '1'; -- set sop flag at next clock
-					elsif index = FFT_LENGTH-1 then
-						stin_ready <= '0';
-						si_eop_next <= '1'; -- set sop flag at next clock
-					end if;
-				elsif index = FFT_LENGTH then -- independent of valid signals
-					index_next <= 0; -- reset counter
+					--if index = 0 then
+						--si_sop_next <= '1'; -- set sop flag at next clock
+					--elsif index = FFT_LENGTH-1 then
+						--stin_ready <= '0';
+						--si_eop_next <= '1'; -- set eop flag at next clock
+					--end if;
 				end if;
 								
 			when STATE_INPUT_IMAG =>
-				si_real <= temp_in;	  -- Real input data
-				si_imag <= stin_data; -- Imaginary input data
-				
-				input_state_next <= STATE_INPUT_REAL;	
-				
-				-- increase index and feed new input;
-				index_next <= index + 1;
-				si_valid <= '1';
-								
+				if (si_ready = '1') and (stin_valid = '1') and (state = TRANSFER_TO_FFT) then
+					si_real <= temp_in;	  -- Real input data
+					si_imag <= stin_data; -- Imaginary input data
+					
+					input_state_next <= STATE_INPUT_REAL;	
+
+					if index = 0 then
+						si_sop <= '1'; -- set sop flag
+					elsif index = FFT_LENGTH-1 then
+						--stin_ready <= '0';
+						si_eop <= '1'; -- set eop flag
+					end if;
+					
+					-- increase index and feed new input;
+					index_next <= index + 1;
+					si_valid <= '1';
+				end if;
+							
 			when others =>
 				input_state_next <= STATE_INPUT_REAL;				
 		end case;
@@ -221,7 +234,8 @@ begin
 			
 			when TRANSFER_TO_FFT =>
 				if index = FFT_LENGTH then 
-					state_next <= LATENCY_FFT;
+					--~ state_next <= LATENCY_FFT;
+					state_next <= OUTPUT_DATA;
 				end if;
 			
 			when LATENCY_FFT =>
@@ -242,7 +256,7 @@ begin
 		
 	--------------------------------------------------------------------
 			
-	output_proc : process(output_state, receive_index, temp_out, stout_ready, state_next, state, inverse, src_exp, src_real, src_imag) is
+	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, src_exp, src_real, src_imag) is
 		variable exponent 	  : integer range -13 to 13 := 0;
 		variable exponent_abs : natural range  0 to 13 := 0;
 	begin
@@ -254,7 +268,7 @@ begin
 		stout_valid <= '0';
 		src_ready <= stout_ready;
 		
-		if inverse = "1" then
+		if inverse = '1' then
 			output_state_next <= STATE_OUTPUT_INVERSE;
 		end if;
 		
@@ -264,7 +278,7 @@ begin
 				if receive_index = FFT_LENGTH then -- independent of valid signals
 					receive_index_next <= 0; -- reset counter
 					temp_out_next <= (others => '0');
-				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
 					
 					-- Calculate exponent, FFT operation
@@ -290,7 +304,20 @@ begin
 				end if;
 								
 			when STATE_OUTPUT_IMAG =>
-				if (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
+				if receive_index = FFT_LENGTH-1 then -- for last imaginary value
+					stout_valid <= '1';
+					src_ready <= '0';
+					
+					if exponent < 0 then -- right shift
+						stout_data <= std_logic_vector(shift_right(signed(temp_out), exponent_abs));
+					elsif exponent >= 0 then -- left shift
+						stout_data <= std_logic_vector(shift_left(signed(temp_out), exponent_abs));
+					end if;
+					
+					output_state_next <= STATE_OUTPUT_REAL;
+					temp_out_next <= (others => '0');	
+					receive_index_next <= receive_index + 1;				
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) then
 					stout_valid <= '1';
 					src_ready <= '0';
 					
@@ -302,22 +329,22 @@ begin
 					
 					output_state_next <= STATE_OUTPUT_REAL;
 					
-					if receive_index = FFT_LENGTH-1 then
-						temp_out_next <= (others => '0');
-					else
-						temp_out_next <= src_real;
-					end if;
+					--~ if receive_index = FFT_LENGTH-1 then
+						--~ temp_out_next <= (others => '0');
+					--~ else
+				        temp_out_next <= src_real;
+					--~ end if;
 					
-					receive_index_next <= receive_index + 1;				
+					receive_index_next <= receive_index + 1;
 				end if;
 				
 			when STATE_OUTPUT_INVERSE =>
-				if inverse = "0" then
+				if inverse = '0' then
 					output_state_next <= STATE_OUTPUT_REAL;
 				elsif receive_index = FFT_LENGTH then -- independent of valid signals
 					receive_index_next <= 0; -- reset counter
 					output_state_next <= STATE_OUTPUT_REAL;
-				elsif (stout_ready = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
+				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
 					
 					-- Calculate exponent, IFFT operation

@@ -8,54 +8,52 @@ use IEEE.numeric_std.all;
 
 entity reverb_template is
 	port (
-		audio_ADCDAT                                  : in    std_logic                     := '0';             --                     audio.ADCDAT
-		audio_ADCLRCK                                 : in    std_logic                     := '0';             --                          .ADCLRCK
-		audio_BCLK                                    : in    std_logic                     := '0';             --                          .BCLK
-		audio_DACDAT                                  : out   std_logic;                                        --                          .DACDAT
-		audio_DACLRCK                                 : in    std_logic                     := '0';             --                          .DACLRCK
-		audio_clk_clk                                 : out   std_logic;                                        --                 audio_clk.clk
-		audio_config_SDAT                             : inout std_logic                     := '0';             --              audio_config.SDAT
-		audio_config_SCLK                             : out   std_logic;                                        --                          .SCLK
-		clk_clk                                       : in    std_logic                     := '0';             --                       clk.clk
-		clk_125_clk                                   : out   std_logic;                                        --                   clk_125.clk
-		clk_25_clk                                    : out   std_logic;                                        --                    clk_25.clk
-		clk_2p5_clk                                   : out   std_logic;                                        --                   clk_2p5.clk
-		fft_wrapper_header_external_connection_export : in    std_logic                     := '0';             --        fft_wrapper_header.external_connection_export
-		pio_0_external_connection_export              : out   std_logic_vector(1 downto 0);                     -- pio_0_external_connection.export
-		reset_reset_n                                 : in    std_logic                     := '0';             --                     reset.reset_n
-		sdcard_b_SD_cmd                               : inout std_logic                     := '0';             --                    sdcard.b_SD_cmd
-		sdcard_b_SD_dat                               : inout std_logic                     := '0';             --                          .b_SD_dat
-		sdcard_b_SD_dat3                              : inout std_logic                     := '0';             --                          .b_SD_dat3
-		sdcard_o_SD_clock                             : out   std_logic;                                        --                          .o_SD_clock
-		sdram_addr                                    : out   std_logic_vector(12 downto 0);                    --                     sdram.addr
-		sdram_ba                                      : out   std_logic_vector(1 downto 0);                     --                          .ba
-		sdram_cas_n                                   : out   std_logic;                                        --                          .cas_n
-		sdram_cke                                     : out   std_logic;                                        --                          .cke
-		sdram_cs_n                                    : out   std_logic;                                        --                          .cs_n
-		sdram_dq                                      : inout std_logic_vector(31 downto 0) := (others => '0'); --                          .dq
-		sdram_dqm                                     : out   std_logic_vector(3 downto 0);                     --                          .dqm
-		sdram_ras_n                                   : out   std_logic;                                        --                          .ras_n
-		sdram_we_n                                    : out   std_logic;                                        --                          .we_n
-		sdram_clk_clk                                 : out   std_logic;                                        --                 sdram_clk.clk
-		sram_DQ                                       : inout std_logic_vector(15 downto 0) := (others => '0'); --                      sram.DQ
-		sram_ADDR                                     : out   std_logic_vector(19 downto 0);                    --                          .ADDR
-		sram_LB_N                                     : out   std_logic;                                        --                          .LB_N
-		sram_UB_N                                     : out   std_logic;                                        --                          .UB_N
-		sram_CE_N                                     : out   std_logic;                                        --                          .CE_N
-		sram_OE_N                                     : out   std_logic;                                        --                          .OE_N
-		sram_WE_N                                     : out   std_logic;                                        --                          .WE_N
-		textmode_b                                    : out   std_logic_vector(7 downto 0);                     --                  textmode.b
-		textmode_den                                  : out   std_logic;                                        --                          .den
-		textmode_g                                    : out   std_logic_vector(7 downto 0);                     --                          .g
-		textmode_hd                                   : out   std_logic;                                        --                          .hd
-		textmode_r                                    : out   std_logic_vector(7 downto 0);                     --                          .r
-		textmode_vd                                   : out   std_logic;                                        --                          .vd
-		textmode_grest                                : out   std_logic;                                        --                          .grest
-		touch_cntrl_ext_adc_cs                        : out   std_logic;                                        --           touch_cntrl_ext.adc_cs
-		touch_cntrl_ext_adc_dclk                      : out   std_logic;                                        --                          .adc_dclk
-		touch_cntrl_ext_adc_din                       : out   std_logic;                                        --                          .adc_din
-		touch_cntrl_ext_adc_dout                      : in    std_logic                     := '0';             --                          .adc_dout
-		touch_cntrl_ext_adc_penirq_n                  : in    std_logic                     := '0'              --                          .adc_penirq_n
+		audio_ADCDAT                 : in    std_logic                     := '0';             --           audio.ADCDAT
+		audio_ADCLRCK                : in    std_logic                     := '0';             --                .ADCLRCK
+		audio_BCLK                   : in    std_logic                     := '0';             --                .BCLK
+		audio_DACDAT                 : out   std_logic;                                        --                .DACDAT
+		audio_DACLRCK                : in    std_logic                     := '0';             --                .DACLRCK
+		audio_clk_clk                : out   std_logic;                                        --       audio_clk.clk
+		audio_config_SDAT            : inout std_logic                     := '0';             --    audio_config.SDAT
+		audio_config_SCLK            : out   std_logic;                                        --                .SCLK
+		clk_clk                      : in    std_logic                     := '0';             --             clk.clk
+		clk_125_clk                  : out   std_logic;                                        --         clk_125.clk
+		clk_25_clk                   : out   std_logic;                                        --          clk_25.clk
+		clk_2p5_clk                  : out   std_logic;                                        --         clk_2p5.clk
+		reset_reset_n                : in    std_logic                     := '0';             --           reset.reset_n
+		sdcard_b_SD_cmd              : inout std_logic                     := '0';             --          sdcard.b_SD_cmd
+		sdcard_b_SD_dat              : inout std_logic                     := '0';             --                .b_SD_dat
+		sdcard_b_SD_dat3             : inout std_logic                     := '0';             --                .b_SD_dat3
+		sdcard_o_SD_clock            : out   std_logic;                                        --                .o_SD_clock
+		sdram_addr                   : out   std_logic_vector(12 downto 0);                    --           sdram.addr
+		sdram_ba                     : out   std_logic_vector(1 downto 0);                     --                .ba
+		sdram_cas_n                  : out   std_logic;                                        --                .cas_n
+		sdram_cke                    : out   std_logic;                                        --                .cke
+		sdram_cs_n                   : out   std_logic;                                        --                .cs_n
+		sdram_dq                     : inout std_logic_vector(31 downto 0) := (others => '0'); --                .dq
+		sdram_dqm                    : out   std_logic_vector(3 downto 0);                     --                .dqm
+		sdram_ras_n                  : out   std_logic;                                        --                .ras_n
+		sdram_we_n                   : out   std_logic;                                        --                .we_n
+		sdram_clk_clk                : out   std_logic;                                        --       sdram_clk.clk
+		sram_DQ                      : inout std_logic_vector(15 downto 0) := (others => '0'); --            sram.DQ
+		sram_ADDR                    : out   std_logic_vector(19 downto 0);                    --                .ADDR
+		sram_LB_N                    : out   std_logic;                                        --                .LB_N
+		sram_UB_N                    : out   std_logic;                                        --                .UB_N
+		sram_CE_N                    : out   std_logic;                                        --                .CE_N
+		sram_OE_N                    : out   std_logic;                                        --                .OE_N
+		sram_WE_N                    : out   std_logic;                                        --                .WE_N
+		textmode_b                   : out   std_logic_vector(7 downto 0);                     --        textmode.b
+		textmode_den                 : out   std_logic;                                        --                .den
+		textmode_g                   : out   std_logic_vector(7 downto 0);                     --                .g
+		textmode_hd                  : out   std_logic;                                        --                .hd
+		textmode_r                   : out   std_logic_vector(7 downto 0);                     --                .r
+		textmode_vd                  : out   std_logic;                                        --                .vd
+		textmode_grest               : out   std_logic;                                        --                .grest
+		touch_cntrl_ext_adc_cs       : out   std_logic;                                        -- touch_cntrl_ext.adc_cs
+		touch_cntrl_ext_adc_dclk     : out   std_logic;                                        --                .adc_dclk
+		touch_cntrl_ext_adc_din      : out   std_logic;                                        --                .adc_din
+		touch_cntrl_ext_adc_dout     : in    std_logic                     := '0';             --                .adc_dout
+		touch_cntrl_ext_adc_penirq_n : in    std_logic                     := '0'              --                .adc_penirq_n
 	);
 end entity reverb_template;
 
@@ -167,7 +165,7 @@ architecture rtl of reverb_template is
 			stout_data  : out std_logic_vector(31 downto 0);                    -- data
 			stout_ready : in  std_logic                     := 'X';             -- ready
 			stout_valid : out std_logic;                                        -- valid
-			inverse     : in  std_logic                     := 'X'              -- external_connection_export
+			inverse     : in  std_logic                     := 'X'              -- export
 		);
 	end component fft_wrapper_header;
 
@@ -223,6 +221,20 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_m2s_fifo_ffth;
 
+	component reverb_template_m2s_fifo_fir_l is
+		port (
+			wrclock                          : in  std_logic                     := 'X';             -- clk
+			reset_n                          : in  std_logic                     := 'X';             -- reset_n
+			avalonmm_write_slave_writedata   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avalonmm_write_slave_write       : in  std_logic                     := 'X';             -- write
+			avalonmm_write_slave_address     : in  std_logic                     := 'X';             -- address
+			avalonmm_write_slave_waitrequest : out std_logic;                                        -- waitrequest
+			avalonst_source_valid            : out std_logic;                                        -- valid
+			avalonst_source_data             : out std_logic_vector(31 downto 0);                    -- data
+			avalonst_source_ready            : in  std_logic                     := 'X'              -- ready
+		);
+	end component reverb_template_m2s_fifo_fir_l;
+
 	component reverb_template_nios2 is
 		port (
 			clk                                 : in  std_logic                     := 'X';             -- clk
@@ -264,7 +276,7 @@ architecture rtl of reverb_template is
 			writedata  : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
 			chipselect : in  std_logic                     := 'X';             -- chipselect
 			readdata   : out std_logic_vector(31 downto 0);                    -- readdata
-			out_port   : out std_logic_vector(1 downto 0)                      -- export
+			out_port   : out std_logic                                         -- export
 		);
 	end component reverb_template_pio_0;
 
@@ -281,6 +293,20 @@ architecture rtl of reverb_template is
 			avalonmm_read_slave_waitrequest : out std_logic                                         -- waitrequest
 		);
 	end component reverb_template_s2m_fifo_ffth;
+
+	component reverb_template_s2m_fifo_fir_l is
+		port (
+			wrclock                         : in  std_logic                     := 'X';             -- clk
+			reset_n                         : in  std_logic                     := 'X';             -- reset_n
+			avalonst_sink_valid             : in  std_logic                     := 'X';             -- valid
+			avalonst_sink_data              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- data
+			avalonst_sink_ready             : out std_logic;                                        -- ready
+			avalonmm_read_slave_readdata    : out std_logic_vector(31 downto 0);                    -- readdata
+			avalonmm_read_slave_read        : in  std_logic                     := 'X';             -- read
+			avalonmm_read_slave_address     : in  std_logic                     := 'X';             -- address
+			avalonmm_read_slave_waitrequest : out std_logic                                         -- waitrequest
+		);
+	end component reverb_template_s2m_fifo_fir_l;
 
 	component Altera_UP_SD_Card_Avalon_Interface is
 		port (
@@ -754,6 +780,7 @@ architecture rtl of reverb_template is
 	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, avalon_st_adapter_004:in_clk_0_clk, avalon_st_adapter_005:in_clk_0_clk, fft_wrapper_header_0:clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_ffth:wrclock, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, pio_0:clk, rst_controller_002:clk, rst_controller_003:clk, s2m_fifo_ffth:wrclock, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
 	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [mm_interconnect_0:altpll_sram_c0_clk, rst_controller_004:clk, sram_0:clk]
 	signal altpll_c2_clk                                                      : std_logic;                     -- altpll:c2 -> [clk_25_clk, irq_synchronizer_001:receiver_clk, mm_interconnect_0:altpll_c2_clk, rst_controller_005:clk, textmode_controller:clk]
+	signal pio_0_external_connection_export                                   : std_logic;                     -- pio_0:out_port -> fft_wrapper_header_0:inverse
 	signal nios2_data_master_readdata                                         : std_logic_vector(31 downto 0); -- mm_interconnect_0:nios2_data_master_readdata -> nios2:d_readdata
 	signal nios2_data_master_waitrequest                                      : std_logic;                     -- mm_interconnect_0:nios2_data_master_waitrequest -> nios2:d_waitrequest
 	signal nios2_data_master_debugaccess                                      : std_logic;                     -- nios2:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:nios2_data_master_debugaccess
@@ -1044,7 +1071,7 @@ begin
 			stout_data  => fft_wrapper_header_0_avalon_streaming_source_data,  -- avalon_streaming_source.data
 			stout_ready => fft_wrapper_header_0_avalon_streaming_source_ready, --                        .ready
 			stout_valid => fft_wrapper_header_0_avalon_streaming_source_valid, --                        .valid
-			inverse     => fft_wrapper_header_external_connection_export       --                 inverse.external_connection_export
+			inverse     => pio_0_external_connection_export                    --                 inverse.export
 		);
 
 	fir_l : component fir
@@ -1118,7 +1145,7 @@ begin
 			avalonst_source_ready            => m2s_fifo_ffth_out_ready                         --         .ready
 		);
 
-	m2s_fifo_fir_l : component reverb_template_m2s_fifo_ffth
+	m2s_fifo_fir_l : component reverb_template_m2s_fifo_fir_l
 		port map (
 			wrclock                          => altpll_c0_clk,                                   --   clk_in.clk
 			reset_n                          => rst_controller_002_reset_out_reset_ports_inv,    -- reset_in.reset_n
@@ -1131,7 +1158,7 @@ begin
 			avalonst_source_ready            => m2s_fifo_fir_l_out_ready                         --         .ready
 		);
 
-	m2s_fifo_fir_r : component reverb_template_m2s_fifo_ffth
+	m2s_fifo_fir_r : component reverb_template_m2s_fifo_fir_l
 		port map (
 			wrclock                          => altpll_c0_clk,                                   --   clk_in.clk
 			reset_n                          => rst_controller_002_reset_out_reset_ports_inv,    -- reset_in.reset_n
@@ -1200,7 +1227,7 @@ begin
 			avalonmm_read_slave_waitrequest => mm_interconnect_0_s2m_fifo_ffth_out_waitrequest  --         .waitrequest
 		);
 
-	s2m_fifo_fir_l : component reverb_template_s2m_fifo_ffth
+	s2m_fifo_fir_l : component reverb_template_s2m_fifo_fir_l
 		port map (
 			wrclock                         => altpll_c0_clk,                                    --   clk_in.clk
 			reset_n                         => rst_controller_002_reset_out_reset_ports_inv,     -- reset_in.reset_n
@@ -1213,7 +1240,7 @@ begin
 			avalonmm_read_slave_waitrequest => mm_interconnect_0_s2m_fifo_fir_l_out_waitrequest  --         .waitrequest
 		);
 
-	s2m_fifo_fir_r : component reverb_template_s2m_fifo_ffth
+	s2m_fifo_fir_r : component reverb_template_s2m_fifo_fir_l
 		port map (
 			wrclock                         => altpll_c0_clk,                                    --   clk_in.clk
 			reset_n                         => rst_controller_002_reset_out_reset_ports_inv,     -- reset_in.reset_n

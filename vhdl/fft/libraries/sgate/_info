@@ -7,7 +7,7 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
 Eio_buf_opdrn
 Z1 w1536814712
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
@@ -21,9 +21,9 @@ VTZj@;BBCeZQm1@cjP37CS3
 !s100 njPVSiD>SzTM=a3Zkc`AR0
 Z6 OE;C;10.6c_1;65
 32
-Z7 !s110 1550758407
+Z7 !s110 1553612795
 !i10b 1
-Z8 !s108 1550758407.000000
+Z8 !s108 1553612795.000000
 Z9 !s90 -work|libraries/sgate|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.vhd|
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.vhd|
 !i113 0

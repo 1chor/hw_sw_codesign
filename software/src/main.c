@@ -24,16 +24,16 @@
 #include "sram.h"
 #include "complex.h"
 
-#define FIR_HW (0) 	 // If 1 then use FIR filter hardware component
-#define FFT_H_HW (1) // If 1 then use header FFT hardware component
-#define FFT_B_HW (0) // If 1 then use body FFT hardware component
-#define MAC_H_HW (0) // If 1 then use MAC hardware component
-#define MAC_B_HW (0) // If 1 then use MAC hardware component
+#define FIR_HW (1) 	// If 1 then use FIR filter hardware component
+#define FFT_H_HW (1) 	// If 1 then use header FFT hardware component
+#define FFT_B_HW (0) 	// If 1 then use body FFT hardware component
+#define MAC_H_HW (0) 	// If 1 then use MAC hardware component
+#define MAC_B_HW (0) 	// If 1 then use MAC hardware component
 
 #define HAL_PLATFORM_RESET() \
-  NIOS2_WRITE_STATUS(0); \
-  NIOS2_WRITE_IENABLE(0); \
-  ((void (*) (void)) NIOS2_RESET_ADDR) ()
+NIOS2_WRITE_STATUS(0); \
+NIOS2_WRITE_IENABLE(0); \
+((void (*) (void)) NIOS2_RESET_ADDR) ()
 
 #define FAT_OFFSET 0
 
@@ -494,46 +494,46 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
     free( f_2 );
 }
 
-
-
 void test()
 {
-	printf("=========================\n");
+    printf("=========================\n");
     printf("test started\n");
     printf("=========================\n");
     printf("\n\n");
     
     printf("=========================\n");
     printf("Setup:\n");
+    
     #if ( FIR_HW )
-		printf("Hardware FIR\n");
+	printf("Hardware FIR\n");
     #else
-		printf("Software FIR\n");
+	printf("Software FIR\n");
     #endif
     
-     #if ( FFT_H_HW )
-		printf("Hardware Header-FFT\n");
+    #if ( FFT_H_HW )
+	printf("Hardware Header-FFT\n");
     #else
-		printf("Software Header-FFT\n");
+	printf("Software Header-FFT\n");
     #endif
     
-     #if ( FFT_B_HW )
-		printf("Hardware Body-FFT\n");
+    #if ( FFT_B_HW )
+	printf("Hardware Body-FFT\n");
     #else
-		printf("Software Body-FFT\n");
+	printf("Software Body-FFT\n");
     #endif
     
-     #if ( MAC_H_HW )
-		printf("Hardware Header-MAC\n");
+    #if ( MAC_H_HW )
+	printf("Hardware Header-MAC\n");
     #else
-		printf("Software Header-MAC\n");
+	printf("Software Header-MAC\n");
     #endif
     
     #if ( MAC_B_HW )
-		printf("Hardware Body-MAC\n");
+	printf("Hardware Body-MAC\n");
     #else
-		printf("Software Body-MAC\n");
+	printf("Software Body-MAC\n");
     #endif
+	
     printf("=========================\n");
     printf("\n\n");
         
@@ -547,27 +547,27 @@ void test()
     
     printf( "pre-processing header blocks (H)\n" );
 	
-	#if ( FFT_H_HW ) // Hardware Header-FFT 
-		
-		int32_t l_buf;
-		int32_t r_buf;
-		
-		//~ fft_h_setup_hw(); // Init FFT
+    #if ( FFT_H_HW ) // Hardware Header-FFT 
+	    
+	int32_t l_buf;
+	int32_t r_buf;
 	
-		pre_process_h_header_hw( ir );
-	
-	#else // Software Header-FFT
-	
-		uint16_t l_buf;
-		uint16_t r_buf;
-	
-		// das 2. argument gibt an ob es eine inverse fft ist
+	fft_h_setup_hw(); // Init FFT
+
+	pre_process_h_header_hw( ir );
     
-		kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
-	
-		pre_process_h_header( ir );
-	
-	#endif
+    #else // Software Header-FFT
+    
+	uint16_t l_buf;
+	uint16_t r_buf;
+
+	// das 2. argument gibt an ob es eine inverse fft ist
+
+	kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
+
+	pre_process_h_header( ir );
+    
+    #endif
     
     //~ complex_32_t test_samples[512];
     //~ sram_read_block(test_samples, 2);
@@ -614,22 +614,22 @@ void test()
     
     #if ( FIR_HW ) // Hardware FIR
 		
-		fir_filter_setup_hw( ir, 0 ); // init FIR filter for left channel
-		fir_filter_setup_hw( ir, 1 ); // init FIR filter for right channel
+	fir_filter_setup_hw( ir, 0 ); // init FIR filter for left channel
+	fir_filter_setup_hw( ir, 1 ); // init FIR filter for right channel
     
     #else // Software FIR
 		
-		// wird fuer das setup benoetigt.
-		
-		uint16_t* fir_h_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		uint16_t* fir_h_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		
-		// wird unten bei dem endless loop als shift reg verwendet.
-		
-		uint16_t* fir_i_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		uint16_t* fir_i_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		
-		fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
+	// wird fuer das setup benoetigt.
+	
+	uint16_t* fir_h_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+	uint16_t* fir_h_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+	
+	// wird unten bei dem endless loop als shift reg verwendet.
+	
+	uint16_t* fir_i_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+	uint16_t* fir_i_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+	
+	fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
     #endif
     
@@ -650,9 +650,9 @@ void test()
     
     uint32_t samples_in_file = wav_sample_count(input);
     
-    //~ printf("preparing output file\n");
-    //~ struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
-    //~ printf(">done\n\n");
+    // printf("preparing output file\n");
+    // struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
+    // printf(">done\n\n");
     
     uint16_t output_buffer_header_1[2048];
     uint16_t output_buffer_header_2[2048];
@@ -667,38 +667,38 @@ void test()
     
     printf( "das haben wir jetzt im output buffer\n" );
     
-    //~ for ( i = 10; i < 20; i++ )
-    //~ {
-        //~ float fuck_me;
-        //~ convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
-        //~ printf( "%f bzw.: %f\n", fuck_me, convert_1q15(output_buffer_header_1[i]) );
-    //~ }
+    // for ( i = 10; i < 20; i++ )
+    // {
+        // float fuck_me;
+        // convert_2q30_pointer( &fuck_me, (uint32_t)fir_output_32_1[i] );
+        // printf( "%f bzw.: %f\n", fuck_me, convert_1q15(output_buffer_header_1[i]) );
+    // }
     
-    //~ for ( i = 740; i < 760; i++ )
-    //~ {
-        //~ printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
-    //~ }
+    // for ( i = 740; i < 760; i++ )
+    // {
+        // printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+    // }
     
-    //~ printf( "%f\n", convert_1q15( output_buffer_header[240] ) );
+    // printf( "%f\n", convert_1q15( output_buffer_header[240] ) );
     
     
     uint32_t sample_counter = 0;
     uint32_t sample_counter_local = 0;
     
-    //~ kiss_fft_cpx i_in_1[512];
-    //~ kiss_fft_cpx i_in_2[512];
+    // kiss_fft_cpx i_in_1[512];
+    // kiss_fft_cpx i_in_2[512];
     
     // freed at the end of the endless loop
     
     #if ( FFT_H_HW ) // Hardware Header-FFT
      
-		complex_i32_t* i_in_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
-		complex_i32_t* i_in_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	complex_i32_t* i_in_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	complex_i32_t* i_in_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
     
     #else // Software Header-FFT
     
-		kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
-		kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+	kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+	kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
     
     #endif
     
@@ -720,86 +720,83 @@ void test()
     
     while (1)
     {
-		#if ( FFT_H_HW ) // Hardware Header-FFT 
-        
-			l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
-			r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
-			
-			i_in_1[sample_counter_local].r = l_buf;
-			i_in_1[sample_counter_local].i = 0;
-			
-			i_in_2[sample_counter_local].r = r_buf;
-			i_in_2[sample_counter_local].i = 0;
-		
-		#else // Software Header-FFT
-		
-			l_buf = wav_get_uint16( input, 2*sample_counter   );
-			r_buf = wav_get_uint16( input, 2*sample_counter+1 );
+	#if ( FFT_H_HW ) // Hardware Header-FFT 
 
-			i_in_1[sample_counter_local].r = convert_1q15( l_buf );
-			i_in_1[sample_counter_local].i = 0;
-			
-			i_in_2[sample_counter_local].r = convert_1q15( r_buf );
-			i_in_2[sample_counter_local].i = 0;
-		
-		#endif
+	    l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
+	    r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
+	    
+	    i_in_1[sample_counter_local].r = l_buf;
+	    i_in_1[sample_counter_local].i = 0;
+	    
+	    i_in_2[sample_counter_local].r = r_buf;
+	    i_in_2[sample_counter_local].i = 0;
+	
+	#else // Software Header-FFT
+	
+	    l_buf = wav_get_uint16( input, 2*sample_counter   );
+	    r_buf = wav_get_uint16( input, 2*sample_counter+1 );
+
+	    i_in_1[sample_counter_local].r = convert_1q15( l_buf );
+	    i_in_1[sample_counter_local].i = 0;
+	    
+	    i_in_2[sample_counter_local].r = convert_1q15( r_buf );
+	    i_in_2[sample_counter_local].i = 0;
+	
+	#endif
                 
         sample_counter_local += 1;
         
-        // fir
-        
-        
 // ---> ToDO FIR auf signed umstellen!!
         
-		#if ( FIR_HW ) // Hardware FIR
-        
-			// zur sicherheit werden die sample results auf 0 gesetzt.
-			
-			sample_result_1 = 0;
-			sample_result_2 = 0;
-			
-			// die neuen results werden berechnet.
+	#if ( FIR_HW ) // Hardware FIR
 
-			fir_filter_sample_hw
-			(
-				 &sample_result_1
-				,&sample_result_2
-				,l_buf
-				,r_buf
-			);
+	    // zur sicherheit werden die sample results auf 0 gesetzt.
+	    
+	    sample_result_1 = 0;
+	    sample_result_2 = 0;
+	    
+	    // die neuen results werden berechnet.
+
+	    fir_filter_sample_hw
+	    (
+		    &sample_result_1
+		    ,&sample_result_2
+		    ,l_buf
+		    ,r_buf
+	    );
 			
          #else // Software FIR
 			
-			// wie ein shiftregister werden die samples weiter geschoben
-			// und das neue hinten dran gehaengt.
-        
-			for ( j = 1; j < 512; j++ )
-			{
-				fir_i_1[j-1] = fir_i_1[j];
-				fir_i_2[j-1] = fir_i_2[j];
-			}
-			
-			fir_i_1[511] = l_buf;
-			fir_i_2[511] = r_buf;
-			
-			// zur sicherheit werden die sample results auf 0 gesetzt.
-			
-			sample_result_1 = 0;
-			sample_result_2 = 0;
-			
-			// die neuen results werden berechnet.
-			// da es keinen bestimmten speicher fuer den fir gibt wird alles
-			// als pointer uebergeben.
-			
-			fir_filter_sample_sw
-			(
-				 &sample_result_1
-				,&sample_result_2
-				,fir_i_1
-				,fir_i_2
-				,fir_h_1
-				,fir_h_2
-			);
+	    // wie ein shiftregister werden die samples weiter geschoben
+	    // und das neue hinten dran gehaengt.
+
+	    for ( j = 1; j < 512; j++ )
+	    {
+		fir_i_1[j-1] = fir_i_1[j];
+		fir_i_2[j-1] = fir_i_2[j];
+	    }
+	    
+	    fir_i_1[511] = l_buf;
+	    fir_i_2[511] = r_buf;
+	    
+	    // zur sicherheit werden die sample results auf 0 gesetzt.
+	    
+	    sample_result_1 = 0;
+	    sample_result_2 = 0;
+	    
+	    // die neuen results werden berechnet.
+	    // da es keinen bestimmten speicher fuer den fir gibt wird alles
+	    // als pointer uebergeben.
+	    
+	    fir_filter_sample_sw
+	    (
+		&sample_result_1
+		,&sample_result_2
+		,fir_i_1
+		,fir_i_2
+		,fir_h_1
+		,fir_h_2
+	    );
 			
         #endif
         
@@ -847,15 +844,15 @@ void test()
             
             // fft and save block
 			
-			#if ( FFT_H_HW ) // Hardware Header-FFT 
-			
-				process_header_block_hw( i_in_1, i_in_2, i_pointer, 0 );
-			
-			#else // Software Header-FFT
-	
-				process_header_block( i_in_1, i_in_2, i_pointer, 0 );
-			
-			#endif
+	    #if ( FFT_H_HW ) // Hardware Header-FFT 
+	    
+		process_header_block_hw( i_in_1, i_in_2, i_pointer, 0 );
+	    
+	    #else // Software Header-FFT
+
+		process_header_block( i_in_1, i_in_2, i_pointer, 0 );
+	    
+	    #endif
             
             // ---------------------------------------------------------
             // F R E Q U E N C Y   M A C
@@ -912,22 +909,31 @@ void test()
             
             printf( "performing ifft\n" );
             
-			#if ( FFT_H_HW ) // Hardware Header-FFT
-			
-				int32_t* mac_buffer_16_1 = (int32_t*)malloc( 512 * sizeof(int32_t) );
-				int32_t* mac_buffer_16_2 = (int32_t*)malloc( 512 * sizeof(int32_t) );
-     
-				ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
-			
-			#else // Software Header-FFT
-			
-				uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-				uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-			
-				ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
-			
-			#endif
+		#if ( FFT_H_HW ) // Hardware Header-FFT
+		
+		    int32_t* mac_buffer_16_1 = (int32_t*)malloc( 512 * sizeof(int32_t) );
+		    int32_t* mac_buffer_16_2 = (int32_t*)malloc( 512 * sizeof(int32_t) );
+
+		    ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+		
+		#else // Software Header-FFT
+		
+		    uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		    uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+	    
+		    ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+		
+		#endif
             
+	    if (asdf == 0 ) 
+	    {
+		printf( "IFFT:\n" );
+		for ( i = 0; i <= 511; i++ )
+		    printf( "%i: %lx\n", (i+1), mac_buffer_16_1[i] );
+		
+		printf( "\n\n" );
+	    }
+	    
             // beim vergleich mit octave sieht es bei den ersten samples so
             // aus als waeren diese falsch. das stimmt nicht, in c werden sie
             // einfach nur mehr als 0 wahrgenommen waehrend in octave noch

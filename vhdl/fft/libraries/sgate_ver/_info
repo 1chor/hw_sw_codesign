@@ -7,9 +7,9 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
 vio_buf_opdrn
-Z1 !s110 1550758399
+Z1 !s110 1553612789
 !i10b 1
 !s100 =^<AH`I:TA`[9YUe=h1;_1
 Izm?D804FaeQaG0EiOFg>i1
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1550758399.000000
+Z7 !s108 1553612788.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.v|
 Z8 !s90 -work|libraries/sgate_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/sgate.v|
 !i113 0
@@ -114,7 +114,7 @@ R8
 R9
 R10
 voper_bus_mux
-Z12 !s110 1550758400
+R1
 !i10b 1
 !s100 83iY7?J9JgD`=KN3I^];33
 I6T;EIMh0e<V=f6]_>FhH^2
@@ -135,7 +135,7 @@ R8
 R9
 R10
 voper_decoder
-R12
+R1
 !i10b 1
 !s100 BhU]JWh4CAH3f[ALIgD?91
 IHC<bhm6nnzUH677:@kHK11
@@ -177,7 +177,7 @@ R8
 R9
 R10
 voper_latch
-R12
+R1
 !i10b 1
 !s100 6TkzBj8lWoX[Wk_Oek;zG0
 IHUj:nVZZEAiMccQE22dli0
@@ -219,7 +219,7 @@ R8
 R9
 R10
 voper_less_than
-R12
+R1
 !i10b 1
 !s100 mkW0GJN@;6C<2gM?VlHk40
 Il63`TU[XK>4U`@3MFGTFK3
@@ -282,7 +282,7 @@ R8
 R9
 R10
 voper_mux
-R12
+R1
 !i10b 1
 !s100 1BV^<NLG6]@XcIB4ATlBY2
 I4I;BV4[JCM_DYfjB8CV_41
@@ -303,7 +303,7 @@ R8
 R9
 R10
 voper_right_shift
-R12
+R1
 !i10b 1
 !s100 0GY5J>n8g<mQmG_1Ph1<l2
 IM3ZdkWhAR^<CWXIYnolE_2
@@ -324,7 +324,7 @@ R8
 R9
 R10
 voper_rotate_left
-R12
+R1
 !i10b 1
 !s100 <LHW[F_:n>zBeU4k;`Kfc0
 Igi]=HT[8jUz3?`m=NI57;0
@@ -345,7 +345,7 @@ R8
 R9
 R10
 voper_rotate_right
-R12
+R1
 !i10b 1
 !s100 0odf;mlW;hE0G1:GS066I2
 Ih=bOT1`EGGdm13_@if6^72
@@ -366,7 +366,7 @@ R8
 R9
 R10
 voper_selector
-R12
+R1
 !i10b 1
 !s100 W1R9=N?MT:3kj1R0<;l[F0
 IzE[SeoR1BfVVQo<h=49lA3

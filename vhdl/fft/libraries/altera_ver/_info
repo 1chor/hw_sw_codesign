@@ -7,9 +7,9 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
 valt_bidir_buf
-Z1 !s110 1550758399
+Z1 !s110 1553612788
 !i10b 1
 !s100 ;V>1ae:dINfZl1hgG^CJK2
 I2Hj`hakTRRJ[GZb@Hm?4Y2
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1550758399.000000
+Z7 !s108 1553612788.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.v|
 Z8 !s90 -work|libraries/altera_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.v|
 !i113 0

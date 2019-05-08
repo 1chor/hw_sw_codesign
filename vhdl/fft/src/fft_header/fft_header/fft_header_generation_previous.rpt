@@ -1,5 +1,5 @@
 Info: Starting: Create simulation model
-Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header.qsys --simulation=VHDL --allow-mixed-language-simulation --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation --family="Cyclone IV E" --part=EP4CE115F29C7
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header.qsys --simulation=VHDL --allow-mixed-language-simulation --output-directory=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation --family="Cyclone IV E" --part=EP4CE115F29C7
 Progress: Loading fft_header/fft_header.qsys
 Progress: Reading input file
 Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
@@ -21,26 +21,26 @@ Info: fft_header: Done "fft_header" with 2 modules, 410 files
 Info: qsys-generate succeeded.
 Info: Finished: Create simulation model
 Info: Starting: Create Modelsim Project.
-Info: sim-script-gen --spd=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/fft_header.spd --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ --use-relative-paths=true
-Info: Doing: ip-make-simscript --spd=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/fft_header.spd --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ --use-relative-paths=true
-Info: Generating the following file(s) for MODELSIM simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
+Info: sim-script-gen --spd=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/fft_header.spd --output-directory=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/fft_header.spd --output-directory=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
 Info: 	mentor/msim_setup.tcl
 Info: Skipping VCS script generation since VHDL file $QUARTUS_INSTALL_DIR/eda/sim_lib/altera_syn_attributes.vhd is required for simulation
-Info: Generating the following file(s) for VCSMX simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
+Info: Generating the following file(s) for VCSMX simulator in /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
 Info: 	synopsys/vcsmx/synopsys_sim.setup
 Info: 	synopsys/vcsmx/vcsmx_setup.sh
-Info: Generating the following file(s) for NCSIM simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
+Info: Generating the following file(s) for NCSIM simulator in /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
 Info: 	cadence/cds.lib
 Info: 	cadence/hdl.var
 Info: 	cadence/ncsim_setup.sh
 Info: 	1 .cds.lib files in cadence/cds_libs/ directory
-Info: Generating the following file(s) for RIVIERA simulator in /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
+Info: Generating the following file(s) for RIVIERA simulator in /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/ directory:
 Info: 	aldec/rivierapro_setup.tcl
-Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/simulation/.
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/simulation/.
 Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
 Info: Finished: Create Modelsim Project.
 Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header.qsys --block-symbol-file --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header --family="Cyclone IV E" --part=EP4CE115F29C7
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header.qsys --block-symbol-file --output-directory=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header --family="Cyclone IV E" --part=EP4CE115F29C7
 Progress: Loading fft_header/fft_header.qsys
 Progress: Reading input file
 Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
@@ -54,7 +54,7 @@ Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header.qsys --synthesis=VHDL --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/src/fft_header/fft_header/synthesis --family="Cyclone IV E" --part=EP4CE115F29C7
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header.qsys --synthesis=VHDL --output-directory=/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft/src/fft_header/fft_header/synthesis --family="Cyclone IV E" --part=EP4CE115F29C7
 Progress: Loading fft_header/fft_header.qsys
 Progress: Reading input file
 Progress: Adding fft_ii_0 [altera_fft_ii 18.1]

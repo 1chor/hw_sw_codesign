@@ -37,7 +37,7 @@ module reverb_template_s2m_fifo_ffth_single_clock_fifo (
   output           empty;
   output           full;
   output  [ 31: 0] q;
-  output  [  4: 0] usedw;
+  output  [  5: 0] usedw;
   input            aclr;
   input            clock;
   input   [ 31: 0] data;
@@ -48,7 +48,7 @@ module reverb_template_s2m_fifo_ffth_single_clock_fifo (
 wire             empty;
 wire             full;
 wire    [ 31: 0] q;
-wire    [  4: 0] usedw;
+wire    [  5: 0] usedw;
   scfifo single_clock_fifo
     (
       .aclr (aclr),
@@ -64,11 +64,11 @@ wire    [  4: 0] usedw;
 
   defparam single_clock_fifo.add_ram_output_register = "OFF",
            single_clock_fifo.intended_device_family = "CYCLONEIVE",
-           single_clock_fifo.lpm_numwords = 32,
+           single_clock_fifo.lpm_numwords = 64,
            single_clock_fifo.lpm_showahead = "OFF",
            single_clock_fifo.lpm_type = "scfifo",
            single_clock_fifo.lpm_width = 32,
-           single_clock_fifo.lpm_widthu = 5,
+           single_clock_fifo.lpm_widthu = 6,
            single_clock_fifo.overflow_checking = "ON",
            single_clock_fifo.underflow_checking = "ON",
            single_clock_fifo.use_eab = "OFF";
@@ -103,7 +103,7 @@ module reverb_template_s2m_fifo_ffth_scfifo_with_controls (
 
   output           empty;
   output           full;
-  output  [  5: 0] level;
+  output  [  6: 0] level;
   output  [ 31: 0] q;
   input            clock;
   input   [ 31: 0] data;
@@ -114,9 +114,9 @@ module reverb_template_s2m_fifo_ffth_scfifo_with_controls (
 
 wire             empty;
 wire             full;
-wire    [  5: 0] level;
+wire    [  6: 0] level;
 wire    [ 31: 0] q;
-wire    [  4: 0] usedw;
+wire    [  5: 0] usedw;
 wire             wrreq_valid;
   //the_scfifo, which is an e_instance
   reverb_template_s2m_fifo_ffth_single_clock_fifo the_scfifo
@@ -212,7 +212,7 @@ wire    [ 31: 0] data;
 wire             deassert_waitrequest;
 wire             empty;
 wire             full;
-wire    [  5: 0] level;
+wire    [  6: 0] level;
 wire             no_stop_write;
 reg              no_stop_write_d1;
 wire    [ 31: 0] q;
@@ -253,7 +253,7 @@ wire             wrreq;
   assign wrreq = avalonst_sink_valid & no_stop_write_d1;
   assign no_stop_write = ready_selector & ready_1;
   assign ready_1 = !full;
-  assign ready_selector = level < 31;
+  assign ready_selector = level < 63;
   always @(posedge clock or negedge reset_n)
     begin
       if (reset_n == 0)

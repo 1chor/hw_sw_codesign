@@ -70,7 +70,7 @@
    version="18.1"
    enabled="1"
    autoexport="1">
-  <parameter name="data_flow" value="Streaming" />
+  <parameter name="data_flow" value="Buffered Burst" />
   <parameter name="data_rep">Block Floating Point</parameter>
   <parameter name="design_env" value="NATIVE" />
   <parameter name="direction" value="Bi-directional" />
@@ -85,7 +85,7 @@
   <parameter name="out_order" value="Natural" />
   <parameter name="out_width" value="29" />
   <parameter name="selected_device_family" value="Cyclone IV E" />
-  <parameter name="twid_width" value="24" />
+  <parameter name="twid_width" value="32" />
  </module>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />

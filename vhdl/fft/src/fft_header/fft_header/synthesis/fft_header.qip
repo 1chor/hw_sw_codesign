@@ -2,7 +2,7 @@ set_global_assignment -entity "fft_header" -library "fft_header" -name IP_TOOL_N
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_TOOL_VERSION "18.1"
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "fft_header" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../fft_header.sopcinfo"]
-set_global_assignment -entity "fft_header" -library "fft_header" -name SLD_INFO "QSYS_NAME fft_header HAS_SOPCINFO 1 GENERATION_ID 1550250620"
+set_global_assignment -entity "fft_header" -library "fft_header" -name SLD_INFO "QSYS_NAME fft_header HAS_SOPCINFO 1 GENERATION_ID 1554197481"
 set_global_assignment -library "fft_header" -name MISC_FILE [file join $::quartus(qip_path) "../fft_header.cmp"]
 set_global_assignment -library "fft_header" -name SLD_FILE [file join $::quartus(qip_path) "fft_header.debuginfo"]
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_TARGETED_DEVICE_FAMILY "Cyclone IV E"
@@ -15,7 +15,7 @@ set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPON
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_REPORT_HIERARCHY "On"
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_INTERNAL "Off"
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_VERSION "MS4w"
-set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTU1MDI1MDYyMA==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTU1NDE5NzQ4MQ==::QXV0byBHRU5FUkFUSU9OX0lE"
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBJViBF::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::RVA0Q0UxMTVGMjlDNw==::QXV0byBERVZJQ0U="
 set_global_assignment -entity "fft_header" -library "fft_header" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::Nw==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
@@ -32,15 +32,15 @@ set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name 
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_DESCRIPTION "QWx0ZXJhIEZhc3QgRm91cmllciBUcmFuc2Zvcm0gSUk="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZGVzaWduX2Vudg==::TkFUSVZF::ZGVzaWduX2Vudg=="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "bGVuZ3Ro::NTEy::TGVuZ3Ro"
-set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZGF0YV9mbG93::U3RyZWFtaW5n::RGF0YSBGbG93"
+set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZGF0YV9mbG93::QnVmZmVyZWQgQnVyc3Q=::RGF0YSBGbG93"
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZGlyZWN0aW9u::QmktZGlyZWN0aW9uYWw=::RGlyZWN0aW9u"
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZGF0YV9yZXA=::QmxvY2sgRmxvYXRpbmcgUG9pbnQ=::UmVwcmVzZW50YXRpb24="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "aW5fd2lkdGg=::MzI=::RGF0YSBJbnB1dCBXaWR0aA=="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "aW5fd2lkdGhfZGVyaXZlZA==::MzI=::RGF0YSBJbnB1dCBXaWR0aA=="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "b3V0X3dpZHRo::Mjk=::RGF0YSBPdXRwdXQgV2lkdGg="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "b3V0X3dpZHRoX2Rlcml2ZWQ=::MzI=::RGF0YSBPdXRwdXQgV2lkdGg="
-set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "dHdpZF93aWR0aA==::MjQ=::VHdpZGRsZSBXaWR0aA=="
-set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "dHdpZF93aWR0aF9kZXJpdmVk::MjQ=::VHdpZGRsZSBXaWR0aA=="
+set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "dHdpZF93aWR0aA==::MzI=::VHdpZGRsZSBXaWR0aA=="
+set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "dHdpZF93aWR0aF9kZXJpdmVk::MzI=::VHdpZGRsZSBXaWR0aA=="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "aW5fb3JkZXI=::TmF0dXJhbA==::SW5wdXQgT3JkZXI="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "b3V0X29yZGVy::TmF0dXJhbA==::T3V0cHV0IE9yZGVy"
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZW5naW5lX2FyY2g=::UXVhZCBPdXRwdXQ=::QXJjaGl0ZWN0dXJl"
@@ -49,8 +49,8 @@ set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name 
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "ZHNwX3Jlc291cmNlX29wdA==::ZmFsc2U=::RFNQIEJsb2NrIFJlc291cmNlIE9wdGltaXphdGlvbg=="
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "aGFyZF9mcA==::ZmFsc2U=::RW5hYmxlIEhhcmQgRmxvYXRpbmcgUG9pbnQgQmxvY2tz"
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "aHlwZXJfb3B0::ZmFsc2U=::SHlwZXIgT3B0aW1pemF0aW9u"
-set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "Q0FMQ19MQVRFTkNZ::NTEy::Q2FsY3VsYXRpb24gTGF0ZW5jeQ=="
-set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "VEhST1VHSFBVVF9MQVRFTkNZ::NTEy::VGhyb3VnaHB1dCBMYXRlbmN5"
+set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "Q0FMQ19MQVRFTkNZ::NjUx::Q2FsY3VsYXRpb24gTGF0ZW5jeQ=="
+set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "VEhST1VHSFBVVF9MQVRFTkNZ::NTg5::VGhyb3VnaHB1dCBMYXRlbmN5"
 set_global_assignment -entity "fft_header_fft_ii_0" -library "fft_header" -name IP_COMPONENT_PARAMETER "c2VsZWN0ZWRfZGV2aWNlX2ZhbWlseQ==::Q3ljbG9uZSBJViBF::c2VsZWN0ZWRfZGV2aWNlX2ZhbWlseQ=="
 
 set_global_assignment -library "fft_header" -name VHDL_FILE [file join $::quartus(qip_path) "fft_header.vhd"]

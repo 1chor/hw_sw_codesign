@@ -60,11 +60,11 @@ wire    [ 31: 0] q;
 
   defparam single_clock_fifo.add_ram_output_register = "OFF",
            single_clock_fifo.intended_device_family = "CYCLONEIVE",
-           single_clock_fifo.lpm_numwords = 32,
+           single_clock_fifo.lpm_numwords = 64,
            single_clock_fifo.lpm_showahead = "OFF",
            single_clock_fifo.lpm_type = "scfifo",
            single_clock_fifo.lpm_width = 32,
-           single_clock_fifo.lpm_widthu = 5,
+           single_clock_fifo.lpm_widthu = 6,
            single_clock_fifo.overflow_checking = "ON",
            single_clock_fifo.underflow_checking = "ON",
            single_clock_fifo.use_eab = "OFF";

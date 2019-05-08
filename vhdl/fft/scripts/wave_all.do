@@ -15,6 +15,7 @@ add wave -noupdate /fft_tb/uut/stin_data
 add wave -noupdate /fft_tb/uut/stout_data
 add wave -noupdate /fft_tb/uut/inverse
 add wave -noupdate /fft_tb/uut/si_valid
+add wave -noupdate /fft_tb/uut/si_valid_next
 add wave -noupdate /fft_tb/uut/si_ready
 add wave -noupdate /fft_tb/uut/si_error
 add wave -noupdate /fft_tb/uut/si_sop
@@ -32,6 +33,7 @@ add wave -noupdate /fft_tb/uut/src_real
 add wave -noupdate /fft_tb/uut/src_imag
 add wave -noupdate /fft_tb/uut/src_exp
 add wave -noupdate /fft_tb/uut/temp_in
+add wave -noupdate /fft_tb/uut/temp_in_next
 add wave -noupdate /fft_tb/uut/temp_out
 add wave -noupdate /fft_tb/uut/temp_out_next
 add wave -noupdate /fft_tb/uut/index

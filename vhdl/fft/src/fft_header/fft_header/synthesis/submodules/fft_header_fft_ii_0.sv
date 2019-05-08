@@ -33,13 +33,13 @@ module fft_header_fft_ii_0 (
 	output [31 : 0] source_imag
 	);
 
-	asj_fft_sglstream #(
+	asj_fft_si_se_so_bb #(
 		.device_family("Cyclone IV E"),
 		.nps(512),
 		.bfp(1),
 		.nume(1),
 		.mpr(32),
-		.twr(24),
+		.twr(32),
 		.bpr(24),
 		.bpb(6),
 		.fpr(4),
@@ -56,7 +56,7 @@ module fft_header_fft_ii_0 (
 		.rfc2("fft_header_fft_ii_0_2n512cos.hex"),
 		.rfc3("fft_header_fft_ii_0_3n512cos.hex")
 	)
-	asj_fft_sglstream_inst (
+	asj_fft_si_se_so_bb_inst (
 		.clk(clk),
 		.clk_ena(1'b1),
 		.reset_n(reset_n),

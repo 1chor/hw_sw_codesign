@@ -7,7 +7,7 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/h01325347/TILAB/maintask/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
 Ecyclonev_and1
 Z1 w1536814824
 Z2 DPx4 ieee 16 vital_primitives 0 22 G>kiXP8Q9dRClKfK1Zn7j1
@@ -24,9 +24,9 @@ V9=QAB<7mHiUm><OBRj8@K3
 !s100 cYVazjV?NO60mZ7>ibd>S0
 Z9 OE;C;10.6c_1;65
 32
-Z10 !s110 1550758409
+Z10 !s110 1553612797
 !i10b 1
-Z11 !s108 1550758409.000000
+Z11 !s108 1553612797.000000
 Z12 !s90 -work|libraries/cyclonev|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/cyclonev_atoms.vhd|
 Z13 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/cyclonev_atoms.vhd|
 !i113 0
