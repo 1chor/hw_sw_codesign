@@ -192,6 +192,26 @@ architecture rtl of reverb_template is
 		);
 	end component fir;
 
+	component mac_sram is
+		port (
+			clk             : in  std_logic                     := 'X';             -- clk
+			res_n           : in  std_logic                     := 'X';             -- reset_n
+			m_address       : out std_logic_vector(31 downto 0);                    -- address
+			m_write         : out std_logic;                                        -- write
+			m_read          : out std_logic;                                        -- read
+			m_writedata     : out std_logic_vector(15 downto 0);                    -- writedata
+			m_readdata      : in  std_logic_vector(15 downto 0) := (others => 'X'); -- readdata
+			m_waitrequest   : in  std_logic                     := 'X';             -- waitrequest
+			s_address       : in  std_logic_vector(15 downto 0) := (others => 'X'); -- address
+			s_write         : in  std_logic                     := 'X';             -- write
+			s_read          : in  std_logic                     := 'X';             -- read
+			s_writedata     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			s_readdata      : out std_logic_vector(31 downto 0);                    -- readdata
+			s_readdatavalid : out std_logic;                                        -- readdatavalid
+			s_waitrequest   : out std_logic                                         -- waitrequest
+		);
+	end component mac_sram;
+
 	component reverb_template_jtag_uart is
 		port (
 			clk            : in  std_logic                     := 'X';             -- clk
@@ -420,140 +440,153 @@ architecture rtl of reverb_template is
 
 	component reverb_template_mm_interconnect_0 is
 		port (
-			altpll_c0_clk                                            : in  std_logic                     := 'X';             -- clk
-			altpll_c2_clk                                            : in  std_logic                     := 'X';             -- clk
-			altpll_sram_c0_clk                                       : in  std_logic                     := 'X';             -- clk
-			sys_clk_clk_clk                                          : in  std_logic                     := 'X';             -- clk
-			altpll_inclk_interface_reset_reset_bridge_in_reset_reset : in  std_logic                     := 'X';             -- reset
-			audio_reset_reset_bridge_in_reset_reset                  : in  std_logic                     := 'X';             -- reset
-			nios2_reset_reset_bridge_in_reset_reset                  : in  std_logic                     := 'X';             -- reset
-			sdcard_interface_reset_reset_bridge_in_reset_reset       : in  std_logic                     := 'X';             -- reset
-			sram_0_reset_reset_bridge_in_reset_reset                 : in  std_logic                     := 'X';             -- reset
-			textmode_controller_reset_reset_bridge_in_reset_reset    : in  std_logic                     := 'X';             -- reset
-			nios2_data_master_address                                : in  std_logic_vector(28 downto 0) := (others => 'X'); -- address
-			nios2_data_master_waitrequest                            : out std_logic;                                        -- waitrequest
-			nios2_data_master_byteenable                             : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
-			nios2_data_master_read                                   : in  std_logic                     := 'X';             -- read
-			nios2_data_master_readdata                               : out std_logic_vector(31 downto 0);                    -- readdata
-			nios2_data_master_readdatavalid                          : out std_logic;                                        -- readdatavalid
-			nios2_data_master_write                                  : in  std_logic                     := 'X';             -- write
-			nios2_data_master_writedata                              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			nios2_data_master_debugaccess                            : in  std_logic                     := 'X';             -- debugaccess
-			nios2_instruction_master_address                         : in  std_logic_vector(28 downto 0) := (others => 'X'); -- address
-			nios2_instruction_master_waitrequest                     : out std_logic;                                        -- waitrequest
-			nios2_instruction_master_read                            : in  std_logic                     := 'X';             -- read
-			nios2_instruction_master_readdata                        : out std_logic_vector(31 downto 0);                    -- readdata
-			nios2_instruction_master_readdatavalid                   : out std_logic;                                        -- readdatavalid
-			altpll_pll_slave_address                                 : out std_logic_vector(1 downto 0);                     -- address
-			altpll_pll_slave_write                                   : out std_logic;                                        -- write
-			altpll_pll_slave_read                                    : out std_logic;                                        -- read
-			altpll_pll_slave_readdata                                : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			altpll_pll_slave_writedata                               : out std_logic_vector(31 downto 0);                    -- writedata
-			altpll_sram_pll_slave_address                            : out std_logic_vector(1 downto 0);                     -- address
-			altpll_sram_pll_slave_write                              : out std_logic;                                        -- write
-			altpll_sram_pll_slave_read                               : out std_logic;                                        -- read
-			altpll_sram_pll_slave_readdata                           : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			altpll_sram_pll_slave_writedata                          : out std_logic_vector(31 downto 0);                    -- writedata
-			audio_avalon_audio_slave_address                         : out std_logic_vector(1 downto 0);                     -- address
-			audio_avalon_audio_slave_write                           : out std_logic;                                        -- write
-			audio_avalon_audio_slave_read                            : out std_logic;                                        -- read
-			audio_avalon_audio_slave_readdata                        : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			audio_avalon_audio_slave_writedata                       : out std_logic_vector(31 downto 0);                    -- writedata
-			audio_avalon_audio_slave_chipselect                      : out std_logic;                                        -- chipselect
-			av_config_avalon_av_config_slave_address                 : out std_logic_vector(1 downto 0);                     -- address
-			av_config_avalon_av_config_slave_write                   : out std_logic;                                        -- write
-			av_config_avalon_av_config_slave_read                    : out std_logic;                                        -- read
-			av_config_avalon_av_config_slave_readdata                : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			av_config_avalon_av_config_slave_writedata               : out std_logic_vector(31 downto 0);                    -- writedata
-			av_config_avalon_av_config_slave_byteenable              : out std_logic_vector(3 downto 0);                     -- byteenable
-			av_config_avalon_av_config_slave_waitrequest             : in  std_logic                     := 'X';             -- waitrequest
-			fir_l_avalon_slave_0_address                             : out std_logic_vector(8 downto 0);                     -- address
-			fir_l_avalon_slave_0_write                               : out std_logic;                                        -- write
-			fir_l_avalon_slave_0_read                                : out std_logic;                                        -- read
-			fir_l_avalon_slave_0_readdata                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			fir_l_avalon_slave_0_writedata                           : out std_logic_vector(31 downto 0);                    -- writedata
-			fir_r_avalon_slave_0_address                             : out std_logic_vector(8 downto 0);                     -- address
-			fir_r_avalon_slave_0_write                               : out std_logic;                                        -- write
-			fir_r_avalon_slave_0_read                                : out std_logic;                                        -- read
-			fir_r_avalon_slave_0_readdata                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			fir_r_avalon_slave_0_writedata                           : out std_logic_vector(31 downto 0);                    -- writedata
-			jtag_uart_avalon_jtag_slave_address                      : out std_logic_vector(0 downto 0);                     -- address
-			jtag_uart_avalon_jtag_slave_write                        : out std_logic;                                        -- write
-			jtag_uart_avalon_jtag_slave_read                         : out std_logic;                                        -- read
-			jtag_uart_avalon_jtag_slave_readdata                     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			jtag_uart_avalon_jtag_slave_writedata                    : out std_logic_vector(31 downto 0);                    -- writedata
-			jtag_uart_avalon_jtag_slave_waitrequest                  : in  std_logic                     := 'X';             -- waitrequest
-			jtag_uart_avalon_jtag_slave_chipselect                   : out std_logic;                                        -- chipselect
-			m2s_fifo_ffth_in_address                                 : out std_logic_vector(0 downto 0);                     -- address
-			m2s_fifo_ffth_in_write                                   : out std_logic;                                        -- write
-			m2s_fifo_ffth_in_writedata                               : out std_logic_vector(31 downto 0);                    -- writedata
-			m2s_fifo_ffth_in_waitrequest                             : in  std_logic                     := 'X';             -- waitrequest
-			m2s_fifo_fir_l_in_address                                : out std_logic_vector(0 downto 0);                     -- address
-			m2s_fifo_fir_l_in_write                                  : out std_logic;                                        -- write
-			m2s_fifo_fir_l_in_writedata                              : out std_logic_vector(31 downto 0);                    -- writedata
-			m2s_fifo_fir_l_in_waitrequest                            : in  std_logic                     := 'X';             -- waitrequest
-			m2s_fifo_fir_r_in_address                                : out std_logic_vector(0 downto 0);                     -- address
-			m2s_fifo_fir_r_in_write                                  : out std_logic;                                        -- write
-			m2s_fifo_fir_r_in_writedata                              : out std_logic_vector(31 downto 0);                    -- writedata
-			m2s_fifo_fir_r_in_waitrequest                            : in  std_logic                     := 'X';             -- waitrequest
-			nios2_debug_mem_slave_address                            : out std_logic_vector(8 downto 0);                     -- address
-			nios2_debug_mem_slave_write                              : out std_logic;                                        -- write
-			nios2_debug_mem_slave_read                               : out std_logic;                                        -- read
-			nios2_debug_mem_slave_readdata                           : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			nios2_debug_mem_slave_writedata                          : out std_logic_vector(31 downto 0);                    -- writedata
-			nios2_debug_mem_slave_byteenable                         : out std_logic_vector(3 downto 0);                     -- byteenable
-			nios2_debug_mem_slave_waitrequest                        : in  std_logic                     := 'X';             -- waitrequest
-			nios2_debug_mem_slave_debugaccess                        : out std_logic;                                        -- debugaccess
-			pio_0_s1_address                                         : out std_logic_vector(1 downto 0);                     -- address
-			pio_0_s1_write                                           : out std_logic;                                        -- write
-			pio_0_s1_readdata                                        : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			pio_0_s1_writedata                                       : out std_logic_vector(31 downto 0);                    -- writedata
-			pio_0_s1_chipselect                                      : out std_logic;                                        -- chipselect
-			s2m_fifo_ffth_out_address                                : out std_logic_vector(0 downto 0);                     -- address
-			s2m_fifo_ffth_out_read                                   : out std_logic;                                        -- read
-			s2m_fifo_ffth_out_readdata                               : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			s2m_fifo_ffth_out_waitrequest                            : in  std_logic                     := 'X';             -- waitrequest
-			s2m_fifo_fir_l_out_address                               : out std_logic_vector(0 downto 0);                     -- address
-			s2m_fifo_fir_l_out_read                                  : out std_logic;                                        -- read
-			s2m_fifo_fir_l_out_readdata                              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			s2m_fifo_fir_l_out_waitrequest                           : in  std_logic                     := 'X';             -- waitrequest
-			s2m_fifo_fir_r_out_address                               : out std_logic_vector(0 downto 0);                     -- address
-			s2m_fifo_fir_r_out_read                                  : out std_logic;                                        -- read
-			s2m_fifo_fir_r_out_readdata                              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			s2m_fifo_fir_r_out_waitrequest                           : in  std_logic                     := 'X';             -- waitrequest
-			sdcard_interface_avalon_sdcard_slave_address             : out std_logic_vector(7 downto 0);                     -- address
-			sdcard_interface_avalon_sdcard_slave_write               : out std_logic;                                        -- write
-			sdcard_interface_avalon_sdcard_slave_read                : out std_logic;                                        -- read
-			sdcard_interface_avalon_sdcard_slave_readdata            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			sdcard_interface_avalon_sdcard_slave_writedata           : out std_logic_vector(31 downto 0);                    -- writedata
-			sdcard_interface_avalon_sdcard_slave_byteenable          : out std_logic_vector(3 downto 0);                     -- byteenable
-			sdcard_interface_avalon_sdcard_slave_waitrequest         : in  std_logic                     := 'X';             -- waitrequest
-			sdcard_interface_avalon_sdcard_slave_chipselect          : out std_logic;                                        -- chipselect
-			sdram_s1_address                                         : out std_logic_vector(24 downto 0);                    -- address
-			sdram_s1_write                                           : out std_logic;                                        -- write
-			sdram_s1_read                                            : out std_logic;                                        -- read
-			sdram_s1_readdata                                        : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			sdram_s1_writedata                                       : out std_logic_vector(31 downto 0);                    -- writedata
-			sdram_s1_byteenable                                      : out std_logic_vector(3 downto 0);                     -- byteenable
-			sdram_s1_readdatavalid                                   : in  std_logic                     := 'X';             -- readdatavalid
-			sdram_s1_waitrequest                                     : in  std_logic                     := 'X';             -- waitrequest
-			sdram_s1_chipselect                                      : out std_logic;                                        -- chipselect
-			sram_0_avalon_sram_slave_address                         : out std_logic_vector(19 downto 0);                    -- address
-			sram_0_avalon_sram_slave_write                           : out std_logic;                                        -- write
-			sram_0_avalon_sram_slave_read                            : out std_logic;                                        -- read
-			sram_0_avalon_sram_slave_readdata                        : in  std_logic_vector(15 downto 0) := (others => 'X'); -- readdata
-			sram_0_avalon_sram_slave_writedata                       : out std_logic_vector(15 downto 0);                    -- writedata
-			sram_0_avalon_sram_slave_byteenable                      : out std_logic_vector(1 downto 0);                     -- byteenable
-			sram_0_avalon_sram_slave_readdatavalid                   : in  std_logic                     := 'X';             -- readdatavalid
-			textmode_controller_avalon_slave_address                 : out std_logic_vector(3 downto 0);                     -- address
-			textmode_controller_avalon_slave_write                   : out std_logic;                                        -- write
-			textmode_controller_avalon_slave_readdata                : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			textmode_controller_avalon_slave_writedata               : out std_logic_vector(31 downto 0);                    -- writedata
-			touch_cntrl_avalon_slave_address                         : out std_logic_vector(1 downto 0);                     -- address
-			touch_cntrl_avalon_slave_write                           : out std_logic;                                        -- write
-			touch_cntrl_avalon_slave_read                            : out std_logic;                                        -- read
-			touch_cntrl_avalon_slave_readdata                        : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
-			touch_cntrl_avalon_slave_writedata                       : out std_logic_vector(31 downto 0)                     -- writedata
+			altpll_c0_clk                                                 : in  std_logic                     := 'X';             -- clk
+			altpll_c2_clk                                                 : in  std_logic                     := 'X';             -- clk
+			altpll_sram_c0_clk                                            : in  std_logic                     := 'X';             -- clk
+			sys_clk_clk_clk                                               : in  std_logic                     := 'X';             -- clk
+			altpll_sram_inclk_interface_reset_reset_bridge_in_reset_reset : in  std_logic                     := 'X';             -- reset
+			audio_reset_reset_bridge_in_reset_reset                       : in  std_logic                     := 'X';             -- reset
+			header_mac_0_reset_sink_reset_bridge_in_reset_reset           : in  std_logic                     := 'X';             -- reset
+			nios2_reset_reset_bridge_in_reset_reset                       : in  std_logic                     := 'X';             -- reset
+			sdcard_interface_reset_reset_bridge_in_reset_reset            : in  std_logic                     := 'X';             -- reset
+			textmode_controller_reset_reset_bridge_in_reset_reset         : in  std_logic                     := 'X';             -- reset
+			header_mac_0_avalon_master_address                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			header_mac_0_avalon_master_waitrequest                        : out std_logic;                                        -- waitrequest
+			header_mac_0_avalon_master_read                               : in  std_logic                     := 'X';             -- read
+			header_mac_0_avalon_master_readdata                           : out std_logic_vector(15 downto 0);                    -- readdata
+			header_mac_0_avalon_master_write                              : in  std_logic                     := 'X';             -- write
+			header_mac_0_avalon_master_writedata                          : in  std_logic_vector(15 downto 0) := (others => 'X'); -- writedata
+			nios2_data_master_address                                     : in  std_logic_vector(28 downto 0) := (others => 'X'); -- address
+			nios2_data_master_waitrequest                                 : out std_logic;                                        -- waitrequest
+			nios2_data_master_byteenable                                  : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
+			nios2_data_master_read                                        : in  std_logic                     := 'X';             -- read
+			nios2_data_master_readdata                                    : out std_logic_vector(31 downto 0);                    -- readdata
+			nios2_data_master_readdatavalid                               : out std_logic;                                        -- readdatavalid
+			nios2_data_master_write                                       : in  std_logic                     := 'X';             -- write
+			nios2_data_master_writedata                                   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			nios2_data_master_debugaccess                                 : in  std_logic                     := 'X';             -- debugaccess
+			nios2_instruction_master_address                              : in  std_logic_vector(28 downto 0) := (others => 'X'); -- address
+			nios2_instruction_master_waitrequest                          : out std_logic;                                        -- waitrequest
+			nios2_instruction_master_read                                 : in  std_logic                     := 'X';             -- read
+			nios2_instruction_master_readdata                             : out std_logic_vector(31 downto 0);                    -- readdata
+			nios2_instruction_master_readdatavalid                        : out std_logic;                                        -- readdatavalid
+			altpll_pll_slave_address                                      : out std_logic_vector(1 downto 0);                     -- address
+			altpll_pll_slave_write                                        : out std_logic;                                        -- write
+			altpll_pll_slave_read                                         : out std_logic;                                        -- read
+			altpll_pll_slave_readdata                                     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			altpll_pll_slave_writedata                                    : out std_logic_vector(31 downto 0);                    -- writedata
+			altpll_sram_pll_slave_address                                 : out std_logic_vector(1 downto 0);                     -- address
+			altpll_sram_pll_slave_write                                   : out std_logic;                                        -- write
+			altpll_sram_pll_slave_read                                    : out std_logic;                                        -- read
+			altpll_sram_pll_slave_readdata                                : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			altpll_sram_pll_slave_writedata                               : out std_logic_vector(31 downto 0);                    -- writedata
+			audio_avalon_audio_slave_address                              : out std_logic_vector(1 downto 0);                     -- address
+			audio_avalon_audio_slave_write                                : out std_logic;                                        -- write
+			audio_avalon_audio_slave_read                                 : out std_logic;                                        -- read
+			audio_avalon_audio_slave_readdata                             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			audio_avalon_audio_slave_writedata                            : out std_logic_vector(31 downto 0);                    -- writedata
+			audio_avalon_audio_slave_chipselect                           : out std_logic;                                        -- chipselect
+			av_config_avalon_av_config_slave_address                      : out std_logic_vector(1 downto 0);                     -- address
+			av_config_avalon_av_config_slave_write                        : out std_logic;                                        -- write
+			av_config_avalon_av_config_slave_read                         : out std_logic;                                        -- read
+			av_config_avalon_av_config_slave_readdata                     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			av_config_avalon_av_config_slave_writedata                    : out std_logic_vector(31 downto 0);                    -- writedata
+			av_config_avalon_av_config_slave_byteenable                   : out std_logic_vector(3 downto 0);                     -- byteenable
+			av_config_avalon_av_config_slave_waitrequest                  : in  std_logic                     := 'X';             -- waitrequest
+			fir_l_avalon_slave_0_address                                  : out std_logic_vector(8 downto 0);                     -- address
+			fir_l_avalon_slave_0_write                                    : out std_logic;                                        -- write
+			fir_l_avalon_slave_0_read                                     : out std_logic;                                        -- read
+			fir_l_avalon_slave_0_readdata                                 : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			fir_l_avalon_slave_0_writedata                                : out std_logic_vector(31 downto 0);                    -- writedata
+			fir_r_avalon_slave_0_address                                  : out std_logic_vector(8 downto 0);                     -- address
+			fir_r_avalon_slave_0_write                                    : out std_logic;                                        -- write
+			fir_r_avalon_slave_0_read                                     : out std_logic;                                        -- read
+			fir_r_avalon_slave_0_readdata                                 : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			fir_r_avalon_slave_0_writedata                                : out std_logic_vector(31 downto 0);                    -- writedata
+			header_mac_0_avalon_slave_address                             : out std_logic_vector(15 downto 0);                    -- address
+			header_mac_0_avalon_slave_write                               : out std_logic;                                        -- write
+			header_mac_0_avalon_slave_read                                : out std_logic;                                        -- read
+			header_mac_0_avalon_slave_readdata                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			header_mac_0_avalon_slave_writedata                           : out std_logic_vector(31 downto 0);                    -- writedata
+			header_mac_0_avalon_slave_readdatavalid                       : in  std_logic                     := 'X';             -- readdatavalid
+			header_mac_0_avalon_slave_waitrequest                         : in  std_logic                     := 'X';             -- waitrequest
+			jtag_uart_avalon_jtag_slave_address                           : out std_logic_vector(0 downto 0);                     -- address
+			jtag_uart_avalon_jtag_slave_write                             : out std_logic;                                        -- write
+			jtag_uart_avalon_jtag_slave_read                              : out std_logic;                                        -- read
+			jtag_uart_avalon_jtag_slave_readdata                          : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			jtag_uart_avalon_jtag_slave_writedata                         : out std_logic_vector(31 downto 0);                    -- writedata
+			jtag_uart_avalon_jtag_slave_waitrequest                       : in  std_logic                     := 'X';             -- waitrequest
+			jtag_uart_avalon_jtag_slave_chipselect                        : out std_logic;                                        -- chipselect
+			m2s_fifo_ffth_in_address                                      : out std_logic_vector(0 downto 0);                     -- address
+			m2s_fifo_ffth_in_write                                        : out std_logic;                                        -- write
+			m2s_fifo_ffth_in_writedata                                    : out std_logic_vector(31 downto 0);                    -- writedata
+			m2s_fifo_ffth_in_waitrequest                                  : in  std_logic                     := 'X';             -- waitrequest
+			m2s_fifo_fir_l_in_address                                     : out std_logic_vector(0 downto 0);                     -- address
+			m2s_fifo_fir_l_in_write                                       : out std_logic;                                        -- write
+			m2s_fifo_fir_l_in_writedata                                   : out std_logic_vector(31 downto 0);                    -- writedata
+			m2s_fifo_fir_l_in_waitrequest                                 : in  std_logic                     := 'X';             -- waitrequest
+			m2s_fifo_fir_r_in_address                                     : out std_logic_vector(0 downto 0);                     -- address
+			m2s_fifo_fir_r_in_write                                       : out std_logic;                                        -- write
+			m2s_fifo_fir_r_in_writedata                                   : out std_logic_vector(31 downto 0);                    -- writedata
+			m2s_fifo_fir_r_in_waitrequest                                 : in  std_logic                     := 'X';             -- waitrequest
+			nios2_debug_mem_slave_address                                 : out std_logic_vector(8 downto 0);                     -- address
+			nios2_debug_mem_slave_write                                   : out std_logic;                                        -- write
+			nios2_debug_mem_slave_read                                    : out std_logic;                                        -- read
+			nios2_debug_mem_slave_readdata                                : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			nios2_debug_mem_slave_writedata                               : out std_logic_vector(31 downto 0);                    -- writedata
+			nios2_debug_mem_slave_byteenable                              : out std_logic_vector(3 downto 0);                     -- byteenable
+			nios2_debug_mem_slave_waitrequest                             : in  std_logic                     := 'X';             -- waitrequest
+			nios2_debug_mem_slave_debugaccess                             : out std_logic;                                        -- debugaccess
+			pio_0_s1_address                                              : out std_logic_vector(1 downto 0);                     -- address
+			pio_0_s1_write                                                : out std_logic;                                        -- write
+			pio_0_s1_readdata                                             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			pio_0_s1_writedata                                            : out std_logic_vector(31 downto 0);                    -- writedata
+			pio_0_s1_chipselect                                           : out std_logic;                                        -- chipselect
+			s2m_fifo_ffth_out_address                                     : out std_logic_vector(0 downto 0);                     -- address
+			s2m_fifo_ffth_out_read                                        : out std_logic;                                        -- read
+			s2m_fifo_ffth_out_readdata                                    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			s2m_fifo_ffth_out_waitrequest                                 : in  std_logic                     := 'X';             -- waitrequest
+			s2m_fifo_fir_l_out_address                                    : out std_logic_vector(0 downto 0);                     -- address
+			s2m_fifo_fir_l_out_read                                       : out std_logic;                                        -- read
+			s2m_fifo_fir_l_out_readdata                                   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			s2m_fifo_fir_l_out_waitrequest                                : in  std_logic                     := 'X';             -- waitrequest
+			s2m_fifo_fir_r_out_address                                    : out std_logic_vector(0 downto 0);                     -- address
+			s2m_fifo_fir_r_out_read                                       : out std_logic;                                        -- read
+			s2m_fifo_fir_r_out_readdata                                   : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			s2m_fifo_fir_r_out_waitrequest                                : in  std_logic                     := 'X';             -- waitrequest
+			sdcard_interface_avalon_sdcard_slave_address                  : out std_logic_vector(7 downto 0);                     -- address
+			sdcard_interface_avalon_sdcard_slave_write                    : out std_logic;                                        -- write
+			sdcard_interface_avalon_sdcard_slave_read                     : out std_logic;                                        -- read
+			sdcard_interface_avalon_sdcard_slave_readdata                 : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			sdcard_interface_avalon_sdcard_slave_writedata                : out std_logic_vector(31 downto 0);                    -- writedata
+			sdcard_interface_avalon_sdcard_slave_byteenable               : out std_logic_vector(3 downto 0);                     -- byteenable
+			sdcard_interface_avalon_sdcard_slave_waitrequest              : in  std_logic                     := 'X';             -- waitrequest
+			sdcard_interface_avalon_sdcard_slave_chipselect               : out std_logic;                                        -- chipselect
+			sdram_s1_address                                              : out std_logic_vector(24 downto 0);                    -- address
+			sdram_s1_write                                                : out std_logic;                                        -- write
+			sdram_s1_read                                                 : out std_logic;                                        -- read
+			sdram_s1_readdata                                             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			sdram_s1_writedata                                            : out std_logic_vector(31 downto 0);                    -- writedata
+			sdram_s1_byteenable                                           : out std_logic_vector(3 downto 0);                     -- byteenable
+			sdram_s1_readdatavalid                                        : in  std_logic                     := 'X';             -- readdatavalid
+			sdram_s1_waitrequest                                          : in  std_logic                     := 'X';             -- waitrequest
+			sdram_s1_chipselect                                           : out std_logic;                                        -- chipselect
+			sram_0_avalon_sram_slave_address                              : out std_logic_vector(19 downto 0);                    -- address
+			sram_0_avalon_sram_slave_write                                : out std_logic;                                        -- write
+			sram_0_avalon_sram_slave_read                                 : out std_logic;                                        -- read
+			sram_0_avalon_sram_slave_readdata                             : in  std_logic_vector(15 downto 0) := (others => 'X'); -- readdata
+			sram_0_avalon_sram_slave_writedata                            : out std_logic_vector(15 downto 0);                    -- writedata
+			sram_0_avalon_sram_slave_byteenable                           : out std_logic_vector(1 downto 0);                     -- byteenable
+			sram_0_avalon_sram_slave_readdatavalid                        : in  std_logic                     := 'X';             -- readdatavalid
+			textmode_controller_avalon_slave_address                      : out std_logic_vector(3 downto 0);                     -- address
+			textmode_controller_avalon_slave_write                        : out std_logic;                                        -- write
+			textmode_controller_avalon_slave_readdata                     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			textmode_controller_avalon_slave_writedata                    : out std_logic_vector(31 downto 0);                    -- writedata
+			touch_cntrl_avalon_slave_address                              : out std_logic_vector(1 downto 0);                     -- address
+			touch_cntrl_avalon_slave_write                                : out std_logic;                                        -- write
+			touch_cntrl_avalon_slave_read                                 : out std_logic;                                        -- read
+			touch_cntrl_avalon_slave_readdata                             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			touch_cntrl_avalon_slave_writedata                            : out std_logic_vector(31 downto 0)                     -- writedata
 		);
 	end component reverb_template_mm_interconnect_0;
 
@@ -777,10 +810,16 @@ architecture rtl of reverb_template is
 		);
 	end component reverb_template_rst_controller_001;
 
-	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, avalon_st_adapter_004:in_clk_0_clk, avalon_st_adapter_005:in_clk_0_clk, fft_wrapper_header_0:clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_ffth:wrclock, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, pio_0:clk, rst_controller_002:clk, rst_controller_003:clk, s2m_fifo_ffth:wrclock, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
-	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [mm_interconnect_0:altpll_sram_c0_clk, rst_controller_004:clk, sram_0:clk]
+	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, avalon_st_adapter_004:in_clk_0_clk, avalon_st_adapter_005:in_clk_0_clk, fft_wrapper_header_0:clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_ffth:wrclock, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, pio_0:clk, rst_controller_002:clk, rst_controller_004:clk, s2m_fifo_ffth:wrclock, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
+	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [header_mac_0:clk, mm_interconnect_0:altpll_sram_c0_clk, rst_controller_003:clk, sram_0:clk]
 	signal altpll_c2_clk                                                      : std_logic;                     -- altpll:c2 -> [clk_25_clk, irq_synchronizer_001:receiver_clk, mm_interconnect_0:altpll_c2_clk, rst_controller_005:clk, textmode_controller:clk]
 	signal pio_0_external_connection_export                                   : std_logic;                     -- pio_0:out_port -> fft_wrapper_header_0:inverse
+	signal header_mac_0_avalon_master_readdata                                : std_logic_vector(15 downto 0); -- mm_interconnect_0:header_mac_0_avalon_master_readdata -> header_mac_0:m_readdata
+	signal header_mac_0_avalon_master_waitrequest                             : std_logic;                     -- mm_interconnect_0:header_mac_0_avalon_master_waitrequest -> header_mac_0:m_waitrequest
+	signal header_mac_0_avalon_master_address                                 : std_logic_vector(31 downto 0); -- header_mac_0:m_address -> mm_interconnect_0:header_mac_0_avalon_master_address
+	signal header_mac_0_avalon_master_read                                    : std_logic;                     -- header_mac_0:m_read -> mm_interconnect_0:header_mac_0_avalon_master_read
+	signal header_mac_0_avalon_master_write                                   : std_logic;                     -- header_mac_0:m_write -> mm_interconnect_0:header_mac_0_avalon_master_write
+	signal header_mac_0_avalon_master_writedata                               : std_logic_vector(15 downto 0); -- header_mac_0:m_writedata -> mm_interconnect_0:header_mac_0_avalon_master_writedata
 	signal nios2_data_master_readdata                                         : std_logic_vector(31 downto 0); -- mm_interconnect_0:nios2_data_master_readdata -> nios2:d_readdata
 	signal nios2_data_master_waitrequest                                      : std_logic;                     -- mm_interconnect_0:nios2_data_master_waitrequest -> nios2:d_waitrequest
 	signal nios2_data_master_debugaccess                                      : std_logic;                     -- nios2:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:nios2_data_master_debugaccess
@@ -795,6 +834,13 @@ architecture rtl of reverb_template is
 	signal nios2_instruction_master_address                                   : std_logic_vector(28 downto 0); -- nios2:i_address -> mm_interconnect_0:nios2_instruction_master_address
 	signal nios2_instruction_master_read                                      : std_logic;                     -- nios2:i_read -> mm_interconnect_0:nios2_instruction_master_read
 	signal nios2_instruction_master_readdatavalid                             : std_logic;                     -- mm_interconnect_0:nios2_instruction_master_readdatavalid -> nios2:i_readdatavalid
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_readdata                : std_logic_vector(15 downto 0); -- sram_0:readdata -> mm_interconnect_0:sram_0_avalon_sram_slave_readdata
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_address                 : std_logic_vector(19 downto 0); -- mm_interconnect_0:sram_0_avalon_sram_slave_address -> sram_0:address
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_read                    : std_logic;                     -- mm_interconnect_0:sram_0_avalon_sram_slave_read -> sram_0:read
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_byteenable              : std_logic_vector(1 downto 0);  -- mm_interconnect_0:sram_0_avalon_sram_slave_byteenable -> sram_0:byteenable
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_readdatavalid           : std_logic;                     -- sram_0:readdatavalid -> mm_interconnect_0:sram_0_avalon_sram_slave_readdatavalid
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_write                   : std_logic;                     -- mm_interconnect_0:sram_0_avalon_sram_slave_write -> sram_0:write
+	signal mm_interconnect_0_sram_0_avalon_sram_slave_writedata               : std_logic_vector(15 downto 0); -- mm_interconnect_0:sram_0_avalon_sram_slave_writedata -> sram_0:writedata
 	signal mm_interconnect_0_audio_avalon_audio_slave_chipselect              : std_logic;                     -- mm_interconnect_0:audio_avalon_audio_slave_chipselect -> audio:chipselect
 	signal mm_interconnect_0_audio_avalon_audio_slave_readdata                : std_logic_vector(31 downto 0); -- audio:readdata -> mm_interconnect_0:audio_avalon_audio_slave_readdata
 	signal mm_interconnect_0_audio_avalon_audio_slave_address                 : std_logic_vector(1 downto 0);  -- mm_interconnect_0:audio_avalon_audio_slave_address -> audio:address
@@ -832,6 +878,13 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_touch_cntrl_avalon_slave_read                    : std_logic;                     -- mm_interconnect_0:touch_cntrl_avalon_slave_read -> touch_cntrl:read
 	signal mm_interconnect_0_touch_cntrl_avalon_slave_write                   : std_logic;                     -- mm_interconnect_0:touch_cntrl_avalon_slave_write -> touch_cntrl:write
 	signal mm_interconnect_0_touch_cntrl_avalon_slave_writedata               : std_logic_vector(31 downto 0); -- mm_interconnect_0:touch_cntrl_avalon_slave_writedata -> touch_cntrl:writedata
+	signal mm_interconnect_0_header_mac_0_avalon_slave_readdata               : std_logic_vector(31 downto 0); -- header_mac_0:s_readdata -> mm_interconnect_0:header_mac_0_avalon_slave_readdata
+	signal mm_interconnect_0_header_mac_0_avalon_slave_waitrequest            : std_logic;                     -- header_mac_0:s_waitrequest -> mm_interconnect_0:header_mac_0_avalon_slave_waitrequest
+	signal mm_interconnect_0_header_mac_0_avalon_slave_address                : std_logic_vector(15 downto 0); -- mm_interconnect_0:header_mac_0_avalon_slave_address -> header_mac_0:s_address
+	signal mm_interconnect_0_header_mac_0_avalon_slave_read                   : std_logic;                     -- mm_interconnect_0:header_mac_0_avalon_slave_read -> header_mac_0:s_read
+	signal mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid          : std_logic;                     -- header_mac_0:s_readdatavalid -> mm_interconnect_0:header_mac_0_avalon_slave_readdatavalid
+	signal mm_interconnect_0_header_mac_0_avalon_slave_write                  : std_logic;                     -- mm_interconnect_0:header_mac_0_avalon_slave_write -> header_mac_0:s_write
+	signal mm_interconnect_0_header_mac_0_avalon_slave_writedata              : std_logic_vector(31 downto 0); -- mm_interconnect_0:header_mac_0_avalon_slave_writedata -> header_mac_0:s_writedata
 	signal mm_interconnect_0_fir_l_avalon_slave_0_readdata                    : std_logic_vector(31 downto 0); -- fir_l:mm_readdata -> mm_interconnect_0:fir_l_avalon_slave_0_readdata
 	signal mm_interconnect_0_fir_l_avalon_slave_0_address                     : std_logic_vector(8 downto 0);  -- mm_interconnect_0:fir_l_avalon_slave_0_address -> fir_l:mm_address
 	signal mm_interconnect_0_fir_l_avalon_slave_0_read                        : std_logic;                     -- mm_interconnect_0:fir_l_avalon_slave_0_read -> fir_l:mm_read
@@ -842,13 +895,6 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_fir_r_avalon_slave_0_read                        : std_logic;                     -- mm_interconnect_0:fir_r_avalon_slave_0_read -> fir_r:mm_read
 	signal mm_interconnect_0_fir_r_avalon_slave_0_write                       : std_logic;                     -- mm_interconnect_0:fir_r_avalon_slave_0_write -> fir_r:mm_write
 	signal mm_interconnect_0_fir_r_avalon_slave_0_writedata                   : std_logic_vector(31 downto 0); -- mm_interconnect_0:fir_r_avalon_slave_0_writedata -> fir_r:mm_writedata
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_readdata                : std_logic_vector(15 downto 0); -- sram_0:readdata -> mm_interconnect_0:sram_0_avalon_sram_slave_readdata
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_address                 : std_logic_vector(19 downto 0); -- mm_interconnect_0:sram_0_avalon_sram_slave_address -> sram_0:address
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_read                    : std_logic;                     -- mm_interconnect_0:sram_0_avalon_sram_slave_read -> sram_0:read
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_byteenable              : std_logic_vector(1 downto 0);  -- mm_interconnect_0:sram_0_avalon_sram_slave_byteenable -> sram_0:byteenable
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_readdatavalid           : std_logic;                     -- sram_0:readdatavalid -> mm_interconnect_0:sram_0_avalon_sram_slave_readdatavalid
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_write                   : std_logic;                     -- mm_interconnect_0:sram_0_avalon_sram_slave_write -> sram_0:write
-	signal mm_interconnect_0_sram_0_avalon_sram_slave_writedata               : std_logic_vector(15 downto 0); -- mm_interconnect_0:sram_0_avalon_sram_slave_writedata -> sram_0:writedata
 	signal mm_interconnect_0_nios2_debug_mem_slave_readdata                   : std_logic_vector(31 downto 0); -- nios2:debug_mem_slave_readdata -> mm_interconnect_0:nios2_debug_mem_slave_readdata
 	signal mm_interconnect_0_nios2_debug_mem_slave_waitrequest                : std_logic;                     -- nios2:debug_mem_slave_waitrequest -> mm_interconnect_0:nios2_debug_mem_slave_waitrequest
 	signal mm_interconnect_0_nios2_debug_mem_slave_debugaccess                : std_logic;                     -- mm_interconnect_0:nios2_debug_mem_slave_debugaccess -> nios2:debug_mem_slave_debugaccess
@@ -948,12 +994,12 @@ architecture rtl of reverb_template is
 	signal avalon_st_adapter_005_out_0_valid                                  : std_logic;                     -- avalon_st_adapter_005:out_0_valid -> fir_r:stin_valid
 	signal avalon_st_adapter_005_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_005:out_0_data -> fir_r:stin_data
 	signal avalon_st_adapter_005_out_0_ready                                  : std_logic;                     -- fir_r:stin_ready -> avalon_st_adapter_005:out_0_ready
-	signal rst_controller_reset_out_reset                                     : std_logic;                     -- rst_controller:reset_out -> [altpll:reset, altpll_sram:reset, mm_interconnect_0:altpll_inclk_interface_reset_reset_bridge_in_reset_reset]
-	signal nios2_debug_reset_request_reset                                    : std_logic;                     -- nios2:debug_reset_request -> [rst_controller:reset_in1, rst_controller_003:reset_in1]
+	signal rst_controller_reset_out_reset                                     : std_logic;                     -- rst_controller:reset_out -> [altpll:reset, altpll_sram:reset, mm_interconnect_0:altpll_sram_inclk_interface_reset_reset_bridge_in_reset_reset]
+	signal nios2_debug_reset_request_reset                                    : std_logic;                     -- nios2:debug_reset_request -> [rst_controller:reset_in1, rst_controller_004:reset_in1]
 	signal rst_controller_001_reset_out_reset                                 : std_logic;                     -- rst_controller_001:reset_out -> [audio:reset, audio_pll:ref_reset_reset, av_config:reset, irq_synchronizer:receiver_reset, mm_interconnect_0:audio_reset_reset_bridge_in_reset_reset]
 	signal rst_controller_002_reset_out_reset                                 : std_logic;                     -- rst_controller_002:reset_out -> [avalon_st_adapter:in_rst_0_reset, avalon_st_adapter_001:in_rst_0_reset, avalon_st_adapter_002:in_rst_0_reset, avalon_st_adapter_003:in_rst_0_reset, avalon_st_adapter_004:in_rst_0_reset, avalon_st_adapter_005:in_rst_0_reset, mm_interconnect_0:sdcard_interface_reset_reset_bridge_in_reset_reset, rst_controller_002_reset_out_reset:in]
-	signal rst_controller_003_reset_out_reset                                 : std_logic;                     -- rst_controller_003:reset_out -> [irq_mapper:reset, irq_synchronizer:sender_reset, irq_synchronizer_001:sender_reset, mm_interconnect_0:nios2_reset_reset_bridge_in_reset_reset, rst_controller_003_reset_out_reset:in]
-	signal rst_controller_004_reset_out_reset                                 : std_logic;                     -- rst_controller_004:reset_out -> [mm_interconnect_0:sram_0_reset_reset_bridge_in_reset_reset, sram_0:reset]
+	signal rst_controller_003_reset_out_reset                                 : std_logic;                     -- rst_controller_003:reset_out -> [mm_interconnect_0:header_mac_0_reset_sink_reset_bridge_in_reset_reset, rst_controller_003_reset_out_reset:in, sram_0:reset]
+	signal rst_controller_004_reset_out_reset                                 : std_logic;                     -- rst_controller_004:reset_out -> [irq_mapper:reset, irq_synchronizer:sender_reset, irq_synchronizer_001:sender_reset, mm_interconnect_0:nios2_reset_reset_bridge_in_reset_reset, rst_controller_004_reset_out_reset:in]
 	signal rst_controller_005_reset_out_reset                                 : std_logic;                     -- rst_controller_005:reset_out -> [irq_synchronizer_001:receiver_reset, mm_interconnect_0:textmode_controller_reset_reset_bridge_in_reset_reset, rst_controller_005_reset_out_reset:in]
 	signal reset_reset_n_ports_inv                                            : std_logic;                     -- reset_reset_n:inv -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0, rst_controller_003:reset_in0, rst_controller_004:reset_in0, rst_controller_005:reset_in0]
 	signal mm_interconnect_0_jtag_uart_avalon_jtag_slave_read_ports_inv       : std_logic;                     -- mm_interconnect_0_jtag_uart_avalon_jtag_slave_read:inv -> jtag_uart:av_read_n
@@ -964,7 +1010,8 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_sdram_s1_write_ports_inv                         : std_logic;                     -- mm_interconnect_0_sdram_s1_write:inv -> sdram:az_wr_n
 	signal mm_interconnect_0_pio_0_s1_write_ports_inv                         : std_logic;                     -- mm_interconnect_0_pio_0_s1_write:inv -> pio_0:write_n
 	signal rst_controller_002_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_002_reset_out_reset:inv -> [fft_wrapper_header_0:reset_n, fir_l:res_n, fir_r:res_n, m2s_fifo_ffth:reset_n, m2s_fifo_fir_l:reset_n, m2s_fifo_fir_r:reset_n, pio_0:reset_n, s2m_fifo_ffth:reset_n, s2m_fifo_fir_l:reset_n, s2m_fifo_fir_r:reset_n, sdcard_interface:i_reset_n, sdram:reset_n, touch_cntrl:res_n]
-	signal rst_controller_003_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_003_reset_out_reset:inv -> [jtag_uart:rst_n, nios2:reset_n]
+	signal rst_controller_003_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_003_reset_out_reset:inv -> header_mac_0:res_n
+	signal rst_controller_004_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_004_reset_out_reset:inv -> [jtag_uart:rst_n, nios2:reset_n]
 	signal rst_controller_005_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_005_reset_out_reset:inv -> textmode_controller:reset_n
 
 begin
@@ -1118,10 +1165,29 @@ begin
 			stout_valid  => fir_r_avalon_streaming_source_valid               --                        .valid
 		);
 
+	header_mac_0 : component mac_sram
+		port map (
+			clk             => altpll_sram_c0_clk,                                        --         clock.clk
+			res_n           => rst_controller_003_reset_out_reset_ports_inv,              --    reset_sink.reset_n
+			m_address       => header_mac_0_avalon_master_address,                        -- avalon_master.address
+			m_write         => header_mac_0_avalon_master_write,                          --              .write
+			m_read          => header_mac_0_avalon_master_read,                           --              .read
+			m_writedata     => header_mac_0_avalon_master_writedata,                      --              .writedata
+			m_readdata      => header_mac_0_avalon_master_readdata,                       --              .readdata
+			m_waitrequest   => header_mac_0_avalon_master_waitrequest,                    --              .waitrequest
+			s_address       => mm_interconnect_0_header_mac_0_avalon_slave_address,       --  avalon_slave.address
+			s_write         => mm_interconnect_0_header_mac_0_avalon_slave_write,         --              .write
+			s_read          => mm_interconnect_0_header_mac_0_avalon_slave_read,          --              .read
+			s_writedata     => mm_interconnect_0_header_mac_0_avalon_slave_writedata,     --              .writedata
+			s_readdata      => mm_interconnect_0_header_mac_0_avalon_slave_readdata,      --              .readdata
+			s_readdatavalid => mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid, --              .readdatavalid
+			s_waitrequest   => mm_interconnect_0_header_mac_0_avalon_slave_waitrequest    --              .waitrequest
+		);
+
 	jtag_uart : component reverb_template_jtag_uart
 		port map (
 			clk            => altpll_c0_clk,                                                 --               clk.clk
-			rst_n          => rst_controller_003_reset_out_reset_ports_inv,                  --             reset.reset_n
+			rst_n          => rst_controller_004_reset_out_reset_ports_inv,                  --             reset.reset_n
 			av_chipselect  => mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect,      -- avalon_jtag_slave.chipselect
 			av_address     => mm_interconnect_0_jtag_uart_avalon_jtag_slave_address(0),      --                  .address
 			av_read_n      => mm_interconnect_0_jtag_uart_avalon_jtag_slave_read_ports_inv,  --                  .read_n
@@ -1174,7 +1240,7 @@ begin
 	nios2 : component reverb_template_nios2
 		port map (
 			clk                                 => altpll_c0_clk,                                       --                       clk.clk
-			reset_n                             => rst_controller_003_reset_out_reset_ports_inv,        --                     reset.reset_n
+			reset_n                             => rst_controller_004_reset_out_reset_ports_inv,        --                     reset.reset_n
 			d_address                           => nios2_data_master_address,                           --               data_master.address
 			d_byteenable                        => nios2_data_master_byteenable,                        --                          .byteenable
 			d_read                              => nios2_data_master_read,                              --                          .read
@@ -1298,7 +1364,7 @@ begin
 	sram_0 : component reverb_template_sram_0
 		port map (
 			clk           => altpll_sram_c0_clk,                                       --                clk.clk
-			reset         => rst_controller_004_reset_out_reset,                       --              reset.reset
+			reset         => rst_controller_003_reset_out_reset,                       --              reset.reset
 			SRAM_DQ       => sram_DQ,                                                  -- external_interface.export
 			SRAM_ADDR     => sram_ADDR,                                                --                   .export
 			SRAM_LB_N     => sram_LB_N,                                                --                   .export
@@ -1360,146 +1426,159 @@ begin
 
 	mm_interconnect_0 : component reverb_template_mm_interconnect_0
 		port map (
-			altpll_c0_clk                                            => altpll_c0_clk,                                                      --                                          altpll_c0.clk
-			altpll_c2_clk                                            => altpll_c2_clk,                                                      --                                          altpll_c2.clk
-			altpll_sram_c0_clk                                       => altpll_sram_c0_clk,                                                 --                                     altpll_sram_c0.clk
-			sys_clk_clk_clk                                          => clk_clk,                                                            --                                        sys_clk_clk.clk
-			altpll_inclk_interface_reset_reset_bridge_in_reset_reset => rst_controller_reset_out_reset,                                     -- altpll_inclk_interface_reset_reset_bridge_in_reset.reset
-			audio_reset_reset_bridge_in_reset_reset                  => rst_controller_001_reset_out_reset,                                 --                  audio_reset_reset_bridge_in_reset.reset
-			nios2_reset_reset_bridge_in_reset_reset                  => rst_controller_003_reset_out_reset,                                 --                  nios2_reset_reset_bridge_in_reset.reset
-			sdcard_interface_reset_reset_bridge_in_reset_reset       => rst_controller_002_reset_out_reset,                                 --       sdcard_interface_reset_reset_bridge_in_reset.reset
-			sram_0_reset_reset_bridge_in_reset_reset                 => rst_controller_004_reset_out_reset,                                 --                 sram_0_reset_reset_bridge_in_reset.reset
-			textmode_controller_reset_reset_bridge_in_reset_reset    => rst_controller_005_reset_out_reset,                                 --    textmode_controller_reset_reset_bridge_in_reset.reset
-			nios2_data_master_address                                => nios2_data_master_address,                                          --                                  nios2_data_master.address
-			nios2_data_master_waitrequest                            => nios2_data_master_waitrequest,                                      --                                                   .waitrequest
-			nios2_data_master_byteenable                             => nios2_data_master_byteenable,                                       --                                                   .byteenable
-			nios2_data_master_read                                   => nios2_data_master_read,                                             --                                                   .read
-			nios2_data_master_readdata                               => nios2_data_master_readdata,                                         --                                                   .readdata
-			nios2_data_master_readdatavalid                          => nios2_data_master_readdatavalid,                                    --                                                   .readdatavalid
-			nios2_data_master_write                                  => nios2_data_master_write,                                            --                                                   .write
-			nios2_data_master_writedata                              => nios2_data_master_writedata,                                        --                                                   .writedata
-			nios2_data_master_debugaccess                            => nios2_data_master_debugaccess,                                      --                                                   .debugaccess
-			nios2_instruction_master_address                         => nios2_instruction_master_address,                                   --                           nios2_instruction_master.address
-			nios2_instruction_master_waitrequest                     => nios2_instruction_master_waitrequest,                               --                                                   .waitrequest
-			nios2_instruction_master_read                            => nios2_instruction_master_read,                                      --                                                   .read
-			nios2_instruction_master_readdata                        => nios2_instruction_master_readdata,                                  --                                                   .readdata
-			nios2_instruction_master_readdatavalid                   => nios2_instruction_master_readdatavalid,                             --                                                   .readdatavalid
-			altpll_pll_slave_address                                 => mm_interconnect_0_altpll_pll_slave_address,                         --                                   altpll_pll_slave.address
-			altpll_pll_slave_write                                   => mm_interconnect_0_altpll_pll_slave_write,                           --                                                   .write
-			altpll_pll_slave_read                                    => mm_interconnect_0_altpll_pll_slave_read,                            --                                                   .read
-			altpll_pll_slave_readdata                                => mm_interconnect_0_altpll_pll_slave_readdata,                        --                                                   .readdata
-			altpll_pll_slave_writedata                               => mm_interconnect_0_altpll_pll_slave_writedata,                       --                                                   .writedata
-			altpll_sram_pll_slave_address                            => mm_interconnect_0_altpll_sram_pll_slave_address,                    --                              altpll_sram_pll_slave.address
-			altpll_sram_pll_slave_write                              => mm_interconnect_0_altpll_sram_pll_slave_write,                      --                                                   .write
-			altpll_sram_pll_slave_read                               => mm_interconnect_0_altpll_sram_pll_slave_read,                       --                                                   .read
-			altpll_sram_pll_slave_readdata                           => mm_interconnect_0_altpll_sram_pll_slave_readdata,                   --                                                   .readdata
-			altpll_sram_pll_slave_writedata                          => mm_interconnect_0_altpll_sram_pll_slave_writedata,                  --                                                   .writedata
-			audio_avalon_audio_slave_address                         => mm_interconnect_0_audio_avalon_audio_slave_address,                 --                           audio_avalon_audio_slave.address
-			audio_avalon_audio_slave_write                           => mm_interconnect_0_audio_avalon_audio_slave_write,                   --                                                   .write
-			audio_avalon_audio_slave_read                            => mm_interconnect_0_audio_avalon_audio_slave_read,                    --                                                   .read
-			audio_avalon_audio_slave_readdata                        => mm_interconnect_0_audio_avalon_audio_slave_readdata,                --                                                   .readdata
-			audio_avalon_audio_slave_writedata                       => mm_interconnect_0_audio_avalon_audio_slave_writedata,               --                                                   .writedata
-			audio_avalon_audio_slave_chipselect                      => mm_interconnect_0_audio_avalon_audio_slave_chipselect,              --                                                   .chipselect
-			av_config_avalon_av_config_slave_address                 => mm_interconnect_0_av_config_avalon_av_config_slave_address,         --                   av_config_avalon_av_config_slave.address
-			av_config_avalon_av_config_slave_write                   => mm_interconnect_0_av_config_avalon_av_config_slave_write,           --                                                   .write
-			av_config_avalon_av_config_slave_read                    => mm_interconnect_0_av_config_avalon_av_config_slave_read,            --                                                   .read
-			av_config_avalon_av_config_slave_readdata                => mm_interconnect_0_av_config_avalon_av_config_slave_readdata,        --                                                   .readdata
-			av_config_avalon_av_config_slave_writedata               => mm_interconnect_0_av_config_avalon_av_config_slave_writedata,       --                                                   .writedata
-			av_config_avalon_av_config_slave_byteenable              => mm_interconnect_0_av_config_avalon_av_config_slave_byteenable,      --                                                   .byteenable
-			av_config_avalon_av_config_slave_waitrequest             => mm_interconnect_0_av_config_avalon_av_config_slave_waitrequest,     --                                                   .waitrequest
-			fir_l_avalon_slave_0_address                             => mm_interconnect_0_fir_l_avalon_slave_0_address,                     --                               fir_l_avalon_slave_0.address
-			fir_l_avalon_slave_0_write                               => mm_interconnect_0_fir_l_avalon_slave_0_write,                       --                                                   .write
-			fir_l_avalon_slave_0_read                                => mm_interconnect_0_fir_l_avalon_slave_0_read,                        --                                                   .read
-			fir_l_avalon_slave_0_readdata                            => mm_interconnect_0_fir_l_avalon_slave_0_readdata,                    --                                                   .readdata
-			fir_l_avalon_slave_0_writedata                           => mm_interconnect_0_fir_l_avalon_slave_0_writedata,                   --                                                   .writedata
-			fir_r_avalon_slave_0_address                             => mm_interconnect_0_fir_r_avalon_slave_0_address,                     --                               fir_r_avalon_slave_0.address
-			fir_r_avalon_slave_0_write                               => mm_interconnect_0_fir_r_avalon_slave_0_write,                       --                                                   .write
-			fir_r_avalon_slave_0_read                                => mm_interconnect_0_fir_r_avalon_slave_0_read,                        --                                                   .read
-			fir_r_avalon_slave_0_readdata                            => mm_interconnect_0_fir_r_avalon_slave_0_readdata,                    --                                                   .readdata
-			fir_r_avalon_slave_0_writedata                           => mm_interconnect_0_fir_r_avalon_slave_0_writedata,                   --                                                   .writedata
-			jtag_uart_avalon_jtag_slave_address                      => mm_interconnect_0_jtag_uart_avalon_jtag_slave_address,              --                        jtag_uart_avalon_jtag_slave.address
-			jtag_uart_avalon_jtag_slave_write                        => mm_interconnect_0_jtag_uart_avalon_jtag_slave_write,                --                                                   .write
-			jtag_uart_avalon_jtag_slave_read                         => mm_interconnect_0_jtag_uart_avalon_jtag_slave_read,                 --                                                   .read
-			jtag_uart_avalon_jtag_slave_readdata                     => mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata,             --                                                   .readdata
-			jtag_uart_avalon_jtag_slave_writedata                    => mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata,            --                                                   .writedata
-			jtag_uart_avalon_jtag_slave_waitrequest                  => mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest,          --                                                   .waitrequest
-			jtag_uart_avalon_jtag_slave_chipselect                   => mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect,           --                                                   .chipselect
-			m2s_fifo_ffth_in_address                                 => mm_interconnect_0_m2s_fifo_ffth_in_address,                         --                                   m2s_fifo_ffth_in.address
-			m2s_fifo_ffth_in_write                                   => mm_interconnect_0_m2s_fifo_ffth_in_write,                           --                                                   .write
-			m2s_fifo_ffth_in_writedata                               => mm_interconnect_0_m2s_fifo_ffth_in_writedata,                       --                                                   .writedata
-			m2s_fifo_ffth_in_waitrequest                             => mm_interconnect_0_m2s_fifo_ffth_in_waitrequest,                     --                                                   .waitrequest
-			m2s_fifo_fir_l_in_address                                => mm_interconnect_0_m2s_fifo_fir_l_in_address,                        --                                  m2s_fifo_fir_l_in.address
-			m2s_fifo_fir_l_in_write                                  => mm_interconnect_0_m2s_fifo_fir_l_in_write,                          --                                                   .write
-			m2s_fifo_fir_l_in_writedata                              => mm_interconnect_0_m2s_fifo_fir_l_in_writedata,                      --                                                   .writedata
-			m2s_fifo_fir_l_in_waitrequest                            => mm_interconnect_0_m2s_fifo_fir_l_in_waitrequest,                    --                                                   .waitrequest
-			m2s_fifo_fir_r_in_address                                => mm_interconnect_0_m2s_fifo_fir_r_in_address,                        --                                  m2s_fifo_fir_r_in.address
-			m2s_fifo_fir_r_in_write                                  => mm_interconnect_0_m2s_fifo_fir_r_in_write,                          --                                                   .write
-			m2s_fifo_fir_r_in_writedata                              => mm_interconnect_0_m2s_fifo_fir_r_in_writedata,                      --                                                   .writedata
-			m2s_fifo_fir_r_in_waitrequest                            => mm_interconnect_0_m2s_fifo_fir_r_in_waitrequest,                    --                                                   .waitrequest
-			nios2_debug_mem_slave_address                            => mm_interconnect_0_nios2_debug_mem_slave_address,                    --                              nios2_debug_mem_slave.address
-			nios2_debug_mem_slave_write                              => mm_interconnect_0_nios2_debug_mem_slave_write,                      --                                                   .write
-			nios2_debug_mem_slave_read                               => mm_interconnect_0_nios2_debug_mem_slave_read,                       --                                                   .read
-			nios2_debug_mem_slave_readdata                           => mm_interconnect_0_nios2_debug_mem_slave_readdata,                   --                                                   .readdata
-			nios2_debug_mem_slave_writedata                          => mm_interconnect_0_nios2_debug_mem_slave_writedata,                  --                                                   .writedata
-			nios2_debug_mem_slave_byteenable                         => mm_interconnect_0_nios2_debug_mem_slave_byteenable,                 --                                                   .byteenable
-			nios2_debug_mem_slave_waitrequest                        => mm_interconnect_0_nios2_debug_mem_slave_waitrequest,                --                                                   .waitrequest
-			nios2_debug_mem_slave_debugaccess                        => mm_interconnect_0_nios2_debug_mem_slave_debugaccess,                --                                                   .debugaccess
-			pio_0_s1_address                                         => mm_interconnect_0_pio_0_s1_address,                                 --                                           pio_0_s1.address
-			pio_0_s1_write                                           => mm_interconnect_0_pio_0_s1_write,                                   --                                                   .write
-			pio_0_s1_readdata                                        => mm_interconnect_0_pio_0_s1_readdata,                                --                                                   .readdata
-			pio_0_s1_writedata                                       => mm_interconnect_0_pio_0_s1_writedata,                               --                                                   .writedata
-			pio_0_s1_chipselect                                      => mm_interconnect_0_pio_0_s1_chipselect,                              --                                                   .chipselect
-			s2m_fifo_ffth_out_address                                => mm_interconnect_0_s2m_fifo_ffth_out_address,                        --                                  s2m_fifo_ffth_out.address
-			s2m_fifo_ffth_out_read                                   => mm_interconnect_0_s2m_fifo_ffth_out_read,                           --                                                   .read
-			s2m_fifo_ffth_out_readdata                               => mm_interconnect_0_s2m_fifo_ffth_out_readdata,                       --                                                   .readdata
-			s2m_fifo_ffth_out_waitrequest                            => mm_interconnect_0_s2m_fifo_ffth_out_waitrequest,                    --                                                   .waitrequest
-			s2m_fifo_fir_l_out_address                               => mm_interconnect_0_s2m_fifo_fir_l_out_address,                       --                                 s2m_fifo_fir_l_out.address
-			s2m_fifo_fir_l_out_read                                  => mm_interconnect_0_s2m_fifo_fir_l_out_read,                          --                                                   .read
-			s2m_fifo_fir_l_out_readdata                              => mm_interconnect_0_s2m_fifo_fir_l_out_readdata,                      --                                                   .readdata
-			s2m_fifo_fir_l_out_waitrequest                           => mm_interconnect_0_s2m_fifo_fir_l_out_waitrequest,                   --                                                   .waitrequest
-			s2m_fifo_fir_r_out_address                               => mm_interconnect_0_s2m_fifo_fir_r_out_address,                       --                                 s2m_fifo_fir_r_out.address
-			s2m_fifo_fir_r_out_read                                  => mm_interconnect_0_s2m_fifo_fir_r_out_read,                          --                                                   .read
-			s2m_fifo_fir_r_out_readdata                              => mm_interconnect_0_s2m_fifo_fir_r_out_readdata,                      --                                                   .readdata
-			s2m_fifo_fir_r_out_waitrequest                           => mm_interconnect_0_s2m_fifo_fir_r_out_waitrequest,                   --                                                   .waitrequest
-			sdcard_interface_avalon_sdcard_slave_address             => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_address,     --               sdcard_interface_avalon_sdcard_slave.address
-			sdcard_interface_avalon_sdcard_slave_write               => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_write,       --                                                   .write
-			sdcard_interface_avalon_sdcard_slave_read                => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_read,        --                                                   .read
-			sdcard_interface_avalon_sdcard_slave_readdata            => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_readdata,    --                                                   .readdata
-			sdcard_interface_avalon_sdcard_slave_writedata           => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_writedata,   --                                                   .writedata
-			sdcard_interface_avalon_sdcard_slave_byteenable          => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_byteenable,  --                                                   .byteenable
-			sdcard_interface_avalon_sdcard_slave_waitrequest         => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_waitrequest, --                                                   .waitrequest
-			sdcard_interface_avalon_sdcard_slave_chipselect          => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_chipselect,  --                                                   .chipselect
-			sdram_s1_address                                         => mm_interconnect_0_sdram_s1_address,                                 --                                           sdram_s1.address
-			sdram_s1_write                                           => mm_interconnect_0_sdram_s1_write,                                   --                                                   .write
-			sdram_s1_read                                            => mm_interconnect_0_sdram_s1_read,                                    --                                                   .read
-			sdram_s1_readdata                                        => mm_interconnect_0_sdram_s1_readdata,                                --                                                   .readdata
-			sdram_s1_writedata                                       => mm_interconnect_0_sdram_s1_writedata,                               --                                                   .writedata
-			sdram_s1_byteenable                                      => mm_interconnect_0_sdram_s1_byteenable,                              --                                                   .byteenable
-			sdram_s1_readdatavalid                                   => mm_interconnect_0_sdram_s1_readdatavalid,                           --                                                   .readdatavalid
-			sdram_s1_waitrequest                                     => mm_interconnect_0_sdram_s1_waitrequest,                             --                                                   .waitrequest
-			sdram_s1_chipselect                                      => mm_interconnect_0_sdram_s1_chipselect,                              --                                                   .chipselect
-			sram_0_avalon_sram_slave_address                         => mm_interconnect_0_sram_0_avalon_sram_slave_address,                 --                           sram_0_avalon_sram_slave.address
-			sram_0_avalon_sram_slave_write                           => mm_interconnect_0_sram_0_avalon_sram_slave_write,                   --                                                   .write
-			sram_0_avalon_sram_slave_read                            => mm_interconnect_0_sram_0_avalon_sram_slave_read,                    --                                                   .read
-			sram_0_avalon_sram_slave_readdata                        => mm_interconnect_0_sram_0_avalon_sram_slave_readdata,                --                                                   .readdata
-			sram_0_avalon_sram_slave_writedata                       => mm_interconnect_0_sram_0_avalon_sram_slave_writedata,               --                                                   .writedata
-			sram_0_avalon_sram_slave_byteenable                      => mm_interconnect_0_sram_0_avalon_sram_slave_byteenable,              --                                                   .byteenable
-			sram_0_avalon_sram_slave_readdatavalid                   => mm_interconnect_0_sram_0_avalon_sram_slave_readdatavalid,           --                                                   .readdatavalid
-			textmode_controller_avalon_slave_address                 => mm_interconnect_0_textmode_controller_avalon_slave_address,         --                   textmode_controller_avalon_slave.address
-			textmode_controller_avalon_slave_write                   => mm_interconnect_0_textmode_controller_avalon_slave_write,           --                                                   .write
-			textmode_controller_avalon_slave_readdata                => mm_interconnect_0_textmode_controller_avalon_slave_readdata,        --                                                   .readdata
-			textmode_controller_avalon_slave_writedata               => mm_interconnect_0_textmode_controller_avalon_slave_writedata,       --                                                   .writedata
-			touch_cntrl_avalon_slave_address                         => mm_interconnect_0_touch_cntrl_avalon_slave_address,                 --                           touch_cntrl_avalon_slave.address
-			touch_cntrl_avalon_slave_write                           => mm_interconnect_0_touch_cntrl_avalon_slave_write,                   --                                                   .write
-			touch_cntrl_avalon_slave_read                            => mm_interconnect_0_touch_cntrl_avalon_slave_read,                    --                                                   .read
-			touch_cntrl_avalon_slave_readdata                        => mm_interconnect_0_touch_cntrl_avalon_slave_readdata,                --                                                   .readdata
-			touch_cntrl_avalon_slave_writedata                       => mm_interconnect_0_touch_cntrl_avalon_slave_writedata                --                                                   .writedata
+			altpll_c0_clk                                                 => altpll_c0_clk,                                                      --                                               altpll_c0.clk
+			altpll_c2_clk                                                 => altpll_c2_clk,                                                      --                                               altpll_c2.clk
+			altpll_sram_c0_clk                                            => altpll_sram_c0_clk,                                                 --                                          altpll_sram_c0.clk
+			sys_clk_clk_clk                                               => clk_clk,                                                            --                                             sys_clk_clk.clk
+			altpll_sram_inclk_interface_reset_reset_bridge_in_reset_reset => rst_controller_reset_out_reset,                                     -- altpll_sram_inclk_interface_reset_reset_bridge_in_reset.reset
+			audio_reset_reset_bridge_in_reset_reset                       => rst_controller_001_reset_out_reset,                                 --                       audio_reset_reset_bridge_in_reset.reset
+			header_mac_0_reset_sink_reset_bridge_in_reset_reset           => rst_controller_003_reset_out_reset,                                 --           header_mac_0_reset_sink_reset_bridge_in_reset.reset
+			nios2_reset_reset_bridge_in_reset_reset                       => rst_controller_004_reset_out_reset,                                 --                       nios2_reset_reset_bridge_in_reset.reset
+			sdcard_interface_reset_reset_bridge_in_reset_reset            => rst_controller_002_reset_out_reset,                                 --            sdcard_interface_reset_reset_bridge_in_reset.reset
+			textmode_controller_reset_reset_bridge_in_reset_reset         => rst_controller_005_reset_out_reset,                                 --         textmode_controller_reset_reset_bridge_in_reset.reset
+			header_mac_0_avalon_master_address                            => header_mac_0_avalon_master_address,                                 --                              header_mac_0_avalon_master.address
+			header_mac_0_avalon_master_waitrequest                        => header_mac_0_avalon_master_waitrequest,                             --                                                        .waitrequest
+			header_mac_0_avalon_master_read                               => header_mac_0_avalon_master_read,                                    --                                                        .read
+			header_mac_0_avalon_master_readdata                           => header_mac_0_avalon_master_readdata,                                --                                                        .readdata
+			header_mac_0_avalon_master_write                              => header_mac_0_avalon_master_write,                                   --                                                        .write
+			header_mac_0_avalon_master_writedata                          => header_mac_0_avalon_master_writedata,                               --                                                        .writedata
+			nios2_data_master_address                                     => nios2_data_master_address,                                          --                                       nios2_data_master.address
+			nios2_data_master_waitrequest                                 => nios2_data_master_waitrequest,                                      --                                                        .waitrequest
+			nios2_data_master_byteenable                                  => nios2_data_master_byteenable,                                       --                                                        .byteenable
+			nios2_data_master_read                                        => nios2_data_master_read,                                             --                                                        .read
+			nios2_data_master_readdata                                    => nios2_data_master_readdata,                                         --                                                        .readdata
+			nios2_data_master_readdatavalid                               => nios2_data_master_readdatavalid,                                    --                                                        .readdatavalid
+			nios2_data_master_write                                       => nios2_data_master_write,                                            --                                                        .write
+			nios2_data_master_writedata                                   => nios2_data_master_writedata,                                        --                                                        .writedata
+			nios2_data_master_debugaccess                                 => nios2_data_master_debugaccess,                                      --                                                        .debugaccess
+			nios2_instruction_master_address                              => nios2_instruction_master_address,                                   --                                nios2_instruction_master.address
+			nios2_instruction_master_waitrequest                          => nios2_instruction_master_waitrequest,                               --                                                        .waitrequest
+			nios2_instruction_master_read                                 => nios2_instruction_master_read,                                      --                                                        .read
+			nios2_instruction_master_readdata                             => nios2_instruction_master_readdata,                                  --                                                        .readdata
+			nios2_instruction_master_readdatavalid                        => nios2_instruction_master_readdatavalid,                             --                                                        .readdatavalid
+			altpll_pll_slave_address                                      => mm_interconnect_0_altpll_pll_slave_address,                         --                                        altpll_pll_slave.address
+			altpll_pll_slave_write                                        => mm_interconnect_0_altpll_pll_slave_write,                           --                                                        .write
+			altpll_pll_slave_read                                         => mm_interconnect_0_altpll_pll_slave_read,                            --                                                        .read
+			altpll_pll_slave_readdata                                     => mm_interconnect_0_altpll_pll_slave_readdata,                        --                                                        .readdata
+			altpll_pll_slave_writedata                                    => mm_interconnect_0_altpll_pll_slave_writedata,                       --                                                        .writedata
+			altpll_sram_pll_slave_address                                 => mm_interconnect_0_altpll_sram_pll_slave_address,                    --                                   altpll_sram_pll_slave.address
+			altpll_sram_pll_slave_write                                   => mm_interconnect_0_altpll_sram_pll_slave_write,                      --                                                        .write
+			altpll_sram_pll_slave_read                                    => mm_interconnect_0_altpll_sram_pll_slave_read,                       --                                                        .read
+			altpll_sram_pll_slave_readdata                                => mm_interconnect_0_altpll_sram_pll_slave_readdata,                   --                                                        .readdata
+			altpll_sram_pll_slave_writedata                               => mm_interconnect_0_altpll_sram_pll_slave_writedata,                  --                                                        .writedata
+			audio_avalon_audio_slave_address                              => mm_interconnect_0_audio_avalon_audio_slave_address,                 --                                audio_avalon_audio_slave.address
+			audio_avalon_audio_slave_write                                => mm_interconnect_0_audio_avalon_audio_slave_write,                   --                                                        .write
+			audio_avalon_audio_slave_read                                 => mm_interconnect_0_audio_avalon_audio_slave_read,                    --                                                        .read
+			audio_avalon_audio_slave_readdata                             => mm_interconnect_0_audio_avalon_audio_slave_readdata,                --                                                        .readdata
+			audio_avalon_audio_slave_writedata                            => mm_interconnect_0_audio_avalon_audio_slave_writedata,               --                                                        .writedata
+			audio_avalon_audio_slave_chipselect                           => mm_interconnect_0_audio_avalon_audio_slave_chipselect,              --                                                        .chipselect
+			av_config_avalon_av_config_slave_address                      => mm_interconnect_0_av_config_avalon_av_config_slave_address,         --                        av_config_avalon_av_config_slave.address
+			av_config_avalon_av_config_slave_write                        => mm_interconnect_0_av_config_avalon_av_config_slave_write,           --                                                        .write
+			av_config_avalon_av_config_slave_read                         => mm_interconnect_0_av_config_avalon_av_config_slave_read,            --                                                        .read
+			av_config_avalon_av_config_slave_readdata                     => mm_interconnect_0_av_config_avalon_av_config_slave_readdata,        --                                                        .readdata
+			av_config_avalon_av_config_slave_writedata                    => mm_interconnect_0_av_config_avalon_av_config_slave_writedata,       --                                                        .writedata
+			av_config_avalon_av_config_slave_byteenable                   => mm_interconnect_0_av_config_avalon_av_config_slave_byteenable,      --                                                        .byteenable
+			av_config_avalon_av_config_slave_waitrequest                  => mm_interconnect_0_av_config_avalon_av_config_slave_waitrequest,     --                                                        .waitrequest
+			fir_l_avalon_slave_0_address                                  => mm_interconnect_0_fir_l_avalon_slave_0_address,                     --                                    fir_l_avalon_slave_0.address
+			fir_l_avalon_slave_0_write                                    => mm_interconnect_0_fir_l_avalon_slave_0_write,                       --                                                        .write
+			fir_l_avalon_slave_0_read                                     => mm_interconnect_0_fir_l_avalon_slave_0_read,                        --                                                        .read
+			fir_l_avalon_slave_0_readdata                                 => mm_interconnect_0_fir_l_avalon_slave_0_readdata,                    --                                                        .readdata
+			fir_l_avalon_slave_0_writedata                                => mm_interconnect_0_fir_l_avalon_slave_0_writedata,                   --                                                        .writedata
+			fir_r_avalon_slave_0_address                                  => mm_interconnect_0_fir_r_avalon_slave_0_address,                     --                                    fir_r_avalon_slave_0.address
+			fir_r_avalon_slave_0_write                                    => mm_interconnect_0_fir_r_avalon_slave_0_write,                       --                                                        .write
+			fir_r_avalon_slave_0_read                                     => mm_interconnect_0_fir_r_avalon_slave_0_read,                        --                                                        .read
+			fir_r_avalon_slave_0_readdata                                 => mm_interconnect_0_fir_r_avalon_slave_0_readdata,                    --                                                        .readdata
+			fir_r_avalon_slave_0_writedata                                => mm_interconnect_0_fir_r_avalon_slave_0_writedata,                   --                                                        .writedata
+			header_mac_0_avalon_slave_address                             => mm_interconnect_0_header_mac_0_avalon_slave_address,                --                               header_mac_0_avalon_slave.address
+			header_mac_0_avalon_slave_write                               => mm_interconnect_0_header_mac_0_avalon_slave_write,                  --                                                        .write
+			header_mac_0_avalon_slave_read                                => mm_interconnect_0_header_mac_0_avalon_slave_read,                   --                                                        .read
+			header_mac_0_avalon_slave_readdata                            => mm_interconnect_0_header_mac_0_avalon_slave_readdata,               --                                                        .readdata
+			header_mac_0_avalon_slave_writedata                           => mm_interconnect_0_header_mac_0_avalon_slave_writedata,              --                                                        .writedata
+			header_mac_0_avalon_slave_readdatavalid                       => mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid,          --                                                        .readdatavalid
+			header_mac_0_avalon_slave_waitrequest                         => mm_interconnect_0_header_mac_0_avalon_slave_waitrequest,            --                                                        .waitrequest
+			jtag_uart_avalon_jtag_slave_address                           => mm_interconnect_0_jtag_uart_avalon_jtag_slave_address,              --                             jtag_uart_avalon_jtag_slave.address
+			jtag_uart_avalon_jtag_slave_write                             => mm_interconnect_0_jtag_uart_avalon_jtag_slave_write,                --                                                        .write
+			jtag_uart_avalon_jtag_slave_read                              => mm_interconnect_0_jtag_uart_avalon_jtag_slave_read,                 --                                                        .read
+			jtag_uart_avalon_jtag_slave_readdata                          => mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata,             --                                                        .readdata
+			jtag_uart_avalon_jtag_slave_writedata                         => mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata,            --                                                        .writedata
+			jtag_uart_avalon_jtag_slave_waitrequest                       => mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest,          --                                                        .waitrequest
+			jtag_uart_avalon_jtag_slave_chipselect                        => mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect,           --                                                        .chipselect
+			m2s_fifo_ffth_in_address                                      => mm_interconnect_0_m2s_fifo_ffth_in_address,                         --                                        m2s_fifo_ffth_in.address
+			m2s_fifo_ffth_in_write                                        => mm_interconnect_0_m2s_fifo_ffth_in_write,                           --                                                        .write
+			m2s_fifo_ffth_in_writedata                                    => mm_interconnect_0_m2s_fifo_ffth_in_writedata,                       --                                                        .writedata
+			m2s_fifo_ffth_in_waitrequest                                  => mm_interconnect_0_m2s_fifo_ffth_in_waitrequest,                     --                                                        .waitrequest
+			m2s_fifo_fir_l_in_address                                     => mm_interconnect_0_m2s_fifo_fir_l_in_address,                        --                                       m2s_fifo_fir_l_in.address
+			m2s_fifo_fir_l_in_write                                       => mm_interconnect_0_m2s_fifo_fir_l_in_write,                          --                                                        .write
+			m2s_fifo_fir_l_in_writedata                                   => mm_interconnect_0_m2s_fifo_fir_l_in_writedata,                      --                                                        .writedata
+			m2s_fifo_fir_l_in_waitrequest                                 => mm_interconnect_0_m2s_fifo_fir_l_in_waitrequest,                    --                                                        .waitrequest
+			m2s_fifo_fir_r_in_address                                     => mm_interconnect_0_m2s_fifo_fir_r_in_address,                        --                                       m2s_fifo_fir_r_in.address
+			m2s_fifo_fir_r_in_write                                       => mm_interconnect_0_m2s_fifo_fir_r_in_write,                          --                                                        .write
+			m2s_fifo_fir_r_in_writedata                                   => mm_interconnect_0_m2s_fifo_fir_r_in_writedata,                      --                                                        .writedata
+			m2s_fifo_fir_r_in_waitrequest                                 => mm_interconnect_0_m2s_fifo_fir_r_in_waitrequest,                    --                                                        .waitrequest
+			nios2_debug_mem_slave_address                                 => mm_interconnect_0_nios2_debug_mem_slave_address,                    --                                   nios2_debug_mem_slave.address
+			nios2_debug_mem_slave_write                                   => mm_interconnect_0_nios2_debug_mem_slave_write,                      --                                                        .write
+			nios2_debug_mem_slave_read                                    => mm_interconnect_0_nios2_debug_mem_slave_read,                       --                                                        .read
+			nios2_debug_mem_slave_readdata                                => mm_interconnect_0_nios2_debug_mem_slave_readdata,                   --                                                        .readdata
+			nios2_debug_mem_slave_writedata                               => mm_interconnect_0_nios2_debug_mem_slave_writedata,                  --                                                        .writedata
+			nios2_debug_mem_slave_byteenable                              => mm_interconnect_0_nios2_debug_mem_slave_byteenable,                 --                                                        .byteenable
+			nios2_debug_mem_slave_waitrequest                             => mm_interconnect_0_nios2_debug_mem_slave_waitrequest,                --                                                        .waitrequest
+			nios2_debug_mem_slave_debugaccess                             => mm_interconnect_0_nios2_debug_mem_slave_debugaccess,                --                                                        .debugaccess
+			pio_0_s1_address                                              => mm_interconnect_0_pio_0_s1_address,                                 --                                                pio_0_s1.address
+			pio_0_s1_write                                                => mm_interconnect_0_pio_0_s1_write,                                   --                                                        .write
+			pio_0_s1_readdata                                             => mm_interconnect_0_pio_0_s1_readdata,                                --                                                        .readdata
+			pio_0_s1_writedata                                            => mm_interconnect_0_pio_0_s1_writedata,                               --                                                        .writedata
+			pio_0_s1_chipselect                                           => mm_interconnect_0_pio_0_s1_chipselect,                              --                                                        .chipselect
+			s2m_fifo_ffth_out_address                                     => mm_interconnect_0_s2m_fifo_ffth_out_address,                        --                                       s2m_fifo_ffth_out.address
+			s2m_fifo_ffth_out_read                                        => mm_interconnect_0_s2m_fifo_ffth_out_read,                           --                                                        .read
+			s2m_fifo_ffth_out_readdata                                    => mm_interconnect_0_s2m_fifo_ffth_out_readdata,                       --                                                        .readdata
+			s2m_fifo_ffth_out_waitrequest                                 => mm_interconnect_0_s2m_fifo_ffth_out_waitrequest,                    --                                                        .waitrequest
+			s2m_fifo_fir_l_out_address                                    => mm_interconnect_0_s2m_fifo_fir_l_out_address,                       --                                      s2m_fifo_fir_l_out.address
+			s2m_fifo_fir_l_out_read                                       => mm_interconnect_0_s2m_fifo_fir_l_out_read,                          --                                                        .read
+			s2m_fifo_fir_l_out_readdata                                   => mm_interconnect_0_s2m_fifo_fir_l_out_readdata,                      --                                                        .readdata
+			s2m_fifo_fir_l_out_waitrequest                                => mm_interconnect_0_s2m_fifo_fir_l_out_waitrequest,                   --                                                        .waitrequest
+			s2m_fifo_fir_r_out_address                                    => mm_interconnect_0_s2m_fifo_fir_r_out_address,                       --                                      s2m_fifo_fir_r_out.address
+			s2m_fifo_fir_r_out_read                                       => mm_interconnect_0_s2m_fifo_fir_r_out_read,                          --                                                        .read
+			s2m_fifo_fir_r_out_readdata                                   => mm_interconnect_0_s2m_fifo_fir_r_out_readdata,                      --                                                        .readdata
+			s2m_fifo_fir_r_out_waitrequest                                => mm_interconnect_0_s2m_fifo_fir_r_out_waitrequest,                   --                                                        .waitrequest
+			sdcard_interface_avalon_sdcard_slave_address                  => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_address,     --                    sdcard_interface_avalon_sdcard_slave.address
+			sdcard_interface_avalon_sdcard_slave_write                    => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_write,       --                                                        .write
+			sdcard_interface_avalon_sdcard_slave_read                     => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_read,        --                                                        .read
+			sdcard_interface_avalon_sdcard_slave_readdata                 => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_readdata,    --                                                        .readdata
+			sdcard_interface_avalon_sdcard_slave_writedata                => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_writedata,   --                                                        .writedata
+			sdcard_interface_avalon_sdcard_slave_byteenable               => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_byteenable,  --                                                        .byteenable
+			sdcard_interface_avalon_sdcard_slave_waitrequest              => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_waitrequest, --                                                        .waitrequest
+			sdcard_interface_avalon_sdcard_slave_chipselect               => mm_interconnect_0_sdcard_interface_avalon_sdcard_slave_chipselect,  --                                                        .chipselect
+			sdram_s1_address                                              => mm_interconnect_0_sdram_s1_address,                                 --                                                sdram_s1.address
+			sdram_s1_write                                                => mm_interconnect_0_sdram_s1_write,                                   --                                                        .write
+			sdram_s1_read                                                 => mm_interconnect_0_sdram_s1_read,                                    --                                                        .read
+			sdram_s1_readdata                                             => mm_interconnect_0_sdram_s1_readdata,                                --                                                        .readdata
+			sdram_s1_writedata                                            => mm_interconnect_0_sdram_s1_writedata,                               --                                                        .writedata
+			sdram_s1_byteenable                                           => mm_interconnect_0_sdram_s1_byteenable,                              --                                                        .byteenable
+			sdram_s1_readdatavalid                                        => mm_interconnect_0_sdram_s1_readdatavalid,                           --                                                        .readdatavalid
+			sdram_s1_waitrequest                                          => mm_interconnect_0_sdram_s1_waitrequest,                             --                                                        .waitrequest
+			sdram_s1_chipselect                                           => mm_interconnect_0_sdram_s1_chipselect,                              --                                                        .chipselect
+			sram_0_avalon_sram_slave_address                              => mm_interconnect_0_sram_0_avalon_sram_slave_address,                 --                                sram_0_avalon_sram_slave.address
+			sram_0_avalon_sram_slave_write                                => mm_interconnect_0_sram_0_avalon_sram_slave_write,                   --                                                        .write
+			sram_0_avalon_sram_slave_read                                 => mm_interconnect_0_sram_0_avalon_sram_slave_read,                    --                                                        .read
+			sram_0_avalon_sram_slave_readdata                             => mm_interconnect_0_sram_0_avalon_sram_slave_readdata,                --                                                        .readdata
+			sram_0_avalon_sram_slave_writedata                            => mm_interconnect_0_sram_0_avalon_sram_slave_writedata,               --                                                        .writedata
+			sram_0_avalon_sram_slave_byteenable                           => mm_interconnect_0_sram_0_avalon_sram_slave_byteenable,              --                                                        .byteenable
+			sram_0_avalon_sram_slave_readdatavalid                        => mm_interconnect_0_sram_0_avalon_sram_slave_readdatavalid,           --                                                        .readdatavalid
+			textmode_controller_avalon_slave_address                      => mm_interconnect_0_textmode_controller_avalon_slave_address,         --                        textmode_controller_avalon_slave.address
+			textmode_controller_avalon_slave_write                        => mm_interconnect_0_textmode_controller_avalon_slave_write,           --                                                        .write
+			textmode_controller_avalon_slave_readdata                     => mm_interconnect_0_textmode_controller_avalon_slave_readdata,        --                                                        .readdata
+			textmode_controller_avalon_slave_writedata                    => mm_interconnect_0_textmode_controller_avalon_slave_writedata,       --                                                        .writedata
+			touch_cntrl_avalon_slave_address                              => mm_interconnect_0_touch_cntrl_avalon_slave_address,                 --                                touch_cntrl_avalon_slave.address
+			touch_cntrl_avalon_slave_write                                => mm_interconnect_0_touch_cntrl_avalon_slave_write,                   --                                                        .write
+			touch_cntrl_avalon_slave_read                                 => mm_interconnect_0_touch_cntrl_avalon_slave_read,                    --                                                        .read
+			touch_cntrl_avalon_slave_readdata                             => mm_interconnect_0_touch_cntrl_avalon_slave_readdata,                --                                                        .readdata
+			touch_cntrl_avalon_slave_writedata                            => mm_interconnect_0_touch_cntrl_avalon_slave_writedata                --                                                        .writedata
 		);
 
 	irq_mapper : component reverb_template_irq_mapper
 		port map (
 			clk           => altpll_c0_clk,                      --       clk.clk
-			reset         => rst_controller_003_reset_out_reset, -- clk_reset.reset
+			reset         => rst_controller_004_reset_out_reset, -- clk_reset.reset
 			receiver0_irq => irq_mapper_receiver0_irq,           -- receiver0.irq
 			receiver1_irq => irq_mapper_receiver1_irq,           -- receiver1.irq
 			receiver2_irq => irq_mapper_receiver2_irq,           -- receiver2.irq
@@ -1515,7 +1594,7 @@ begin
 			receiver_clk   => clk_clk,                            --       receiver_clk.clk
 			sender_clk     => altpll_c0_clk,                      --         sender_clk.clk
 			receiver_reset => rst_controller_001_reset_out_reset, -- receiver_clk_reset.reset
-			sender_reset   => rst_controller_003_reset_out_reset, --   sender_clk_reset.reset
+			sender_reset   => rst_controller_004_reset_out_reset, --   sender_clk_reset.reset
 			receiver_irq   => irq_synchronizer_receiver_irq,      --           receiver.irq
 			sender_irq(0)  => irq_mapper_receiver0_irq            --             sender.irq
 		);
@@ -1528,7 +1607,7 @@ begin
 			receiver_clk   => altpll_c2_clk,                      --       receiver_clk.clk
 			sender_clk     => altpll_c0_clk,                      --         sender_clk.clk
 			receiver_reset => rst_controller_005_reset_out_reset, -- receiver_clk_reset.reset
-			sender_reset   => rst_controller_003_reset_out_reset, --   sender_clk_reset.reset
+			sender_reset   => rst_controller_004_reset_out_reset, --   sender_clk_reset.reset
 			receiver_irq   => irq_synchronizer_001_receiver_irq,  --           receiver.irq
 			sender_irq(0)  => irq_mapper_receiver1_irq            --             sender.irq
 		);
@@ -1908,9 +1987,9 @@ begin
 			reset_req_in15 => '0'                                 -- (terminated)
 		);
 
-	rst_controller_003 : component reverb_template_rst_controller
+	rst_controller_003 : component reverb_template_rst_controller_001
 		generic map (
-			NUM_RESET_INPUTS          => 2,
+			NUM_RESET_INPUTS          => 1,
 			OUTPUT_RESET_SYNC_EDGES   => "deassert",
 			SYNC_DEPTH                => 2,
 			RESET_REQUEST_PRESENT     => 0,
@@ -1937,11 +2016,11 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
-			reset_in1      => nios2_debug_reset_request_reset,    -- reset_in1.reset
-			clk            => altpll_c0_clk,                      --       clk.clk
+			clk            => altpll_sram_c0_clk,                 --       clk.clk
 			reset_out      => rst_controller_003_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)
+			reset_in1      => '0',                                -- (terminated)
 			reset_req_in1  => '0',                                -- (terminated)
 			reset_in2      => '0',                                -- (terminated)
 			reset_req_in2  => '0',                                -- (terminated)
@@ -1973,9 +2052,9 @@ begin
 			reset_req_in15 => '0'                                 -- (terminated)
 		);
 
-	rst_controller_004 : component reverb_template_rst_controller_001
+	rst_controller_004 : component reverb_template_rst_controller
 		generic map (
-			NUM_RESET_INPUTS          => 1,
+			NUM_RESET_INPUTS          => 2,
 			OUTPUT_RESET_SYNC_EDGES   => "deassert",
 			SYNC_DEPTH                => 2,
 			RESET_REQUEST_PRESENT     => 0,
@@ -2002,11 +2081,11 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
-			clk            => altpll_sram_c0_clk,                 --       clk.clk
+			reset_in1      => nios2_debug_reset_request_reset,    -- reset_in1.reset
+			clk            => altpll_c0_clk,                      --       clk.clk
 			reset_out      => rst_controller_004_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)
-			reset_in1      => '0',                                -- (terminated)
 			reset_req_in1  => '0',                                -- (terminated)
 			reset_in2      => '0',                                -- (terminated)
 			reset_req_in2  => '0',                                -- (terminated)
@@ -2122,6 +2201,8 @@ begin
 	rst_controller_002_reset_out_reset_ports_inv <= not rst_controller_002_reset_out_reset;
 
 	rst_controller_003_reset_out_reset_ports_inv <= not rst_controller_003_reset_out_reset;
+
+	rst_controller_004_reset_out_reset_ports_inv <= not rst_controller_004_reset_out_reset;
 
 	rst_controller_005_reset_out_reset_ports_inv <= not rst_controller_005_reset_out_reset;
 

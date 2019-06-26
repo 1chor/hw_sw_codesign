@@ -142,6 +142,14 @@
          type = "String";
       }
    }
+   element header_mac_0
+   {
+      datum _sortIndex
+      {
+         value = "26";
+         type = "int";
+      }
+   }
    element jtag_uart
    {
       datum _sortIndex
@@ -1010,6 +1018,7 @@
   <parameter name="DATA_WIDTH" value="32" />
   <parameter name="NUM_COEFFICIENTS" value="512" />
  </module>
+ <module name="header_mac_0" kind="header_mac" version="1.0" enabled="1" />
  <module
    name="jtag_uart"
    kind="altera_avalon_jtag_uart"
@@ -1156,7 +1165,7 @@
   <parameter name="dataAddrWidth" value="29" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x10000000' end='0x10200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='nios2.debug_mem_slave' start='0x10200800' end='0x10201000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_r.avalon_slave_0' start='0x10201000' end='0x10201800' type='fir.avalon_slave_0' /><slave name='fir_l.avalon_slave_0' start='0x10201800' end='0x10202000' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x10202000' end='0x10202400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x10202400' end='0x10202440' type='textmode_controller.avalon_slave' /><slave name='pio_0.s1' start='0x10202440' end='0x10202450' type='altera_avalon_pio.s1' /><slave name='altpll.pll_slave' start='0x10202450' end='0x10202460' type='altpll.pll_slave' /><slave name='altpll_sram.pll_slave' start='0x10202460' end='0x10202470' type='altpll.pll_slave' /><slave name='touch_cntrl.avalon_slave' start='0x10202470' end='0x10202480' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x10202480' end='0x10202490' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x10202490' end='0x102024A0' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='s2m_fifo_fir_r.out' start='0x102024A0' end='0x102024A8' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_fir_l.out' start='0x102024A8' end='0x102024B0' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_ffth.out' start='0x102024B0' end='0x102024B8' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_fir_r.in' start='0x102024B8' end='0x102024C0' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_fir_l.in' start='0x102024C0' end='0x102024C8' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_ffth.in' start='0x102024C8' end='0x102024D0' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x102024D0' end='0x102024D8' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='header_mac_0.avalon_slave' start='0x0' end='0x40000' type='header_mac.avalon_slave' /><slave name='sdram.s1' start='0x8000000' end='0x10000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='sram_0.avalon_sram_slave' start='0x10000000' end='0x10200000' type='altera_up_avalon_sram.avalon_sram_slave' /><slave name='nios2.debug_mem_slave' start='0x10200800' end='0x10201000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='fir_r.avalon_slave_0' start='0x10201000' end='0x10201800' type='fir.avalon_slave_0' /><slave name='fir_l.avalon_slave_0' start='0x10201800' end='0x10202000' type='fir.avalon_slave_0' /><slave name='sdcard_interface.avalon_sdcard_slave' start='0x10202000' end='0x10202400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='textmode_controller.avalon_slave' start='0x10202400' end='0x10202440' type='textmode_controller.avalon_slave' /><slave name='pio_0.s1' start='0x10202440' end='0x10202450' type='altera_avalon_pio.s1' /><slave name='altpll.pll_slave' start='0x10202450' end='0x10202460' type='altpll.pll_slave' /><slave name='altpll_sram.pll_slave' start='0x10202460' end='0x10202470' type='altpll.pll_slave' /><slave name='touch_cntrl.avalon_slave' start='0x10202470' end='0x10202480' type='avalon_touch_cntrl.avalon_slave' /><slave name='av_config.avalon_av_config_slave' start='0x10202480' end='0x10202490' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='audio.avalon_audio_slave' start='0x10202490' end='0x102024A0' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='s2m_fifo_fir_r.out' start='0x102024A0' end='0x102024A8' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_fir_l.out' start='0x102024A8' end='0x102024B0' type='altera_avalon_fifo.out' /><slave name='s2m_fifo_ffth.out' start='0x102024B0' end='0x102024B8' type='altera_avalon_fifo.out' /><slave name='m2s_fifo_fir_r.in' start='0x102024B8' end='0x102024C0' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_fir_l.in' start='0x102024C0' end='0x102024C8' type='altera_avalon_fifo.in' /><slave name='m2s_fifo_ffth.in' start='0x102024C8' end='0x102024D0' type='altera_avalon_fifo.in' /><slave name='jtag_uart.avalon_jtag_slave' start='0x102024D0' end='0x102024D8' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -1471,6 +1480,15 @@
  <connection
    kind="avalon"
    version="18.1"
+   start="header_mac_0.avalon_master"
+   end="sram_0.avalon_sram_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
    start="nios2.data_master"
    end="audio.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1520,6 +1538,15 @@
    end="touch_cntrl.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x10202470" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="nios2.data_master"
+   end="header_mac_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1758,6 +1785,11 @@
  <connection
    kind="clock"
    version="18.1"
+   start="altpll_sram.c0"
+   end="header_mac_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
    start="altpll.c0"
    end="clock_bridge_sdram.in_clk" />
  <connection
@@ -1937,6 +1969,11 @@
    version="18.1"
    start="sys_clk.clk_reset"
    end="fir_r.reset_sink" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="sys_clk.clk_reset"
+   end="header_mac_0.reset_sink" />
  <connection
    kind="reset"
    version="18.1"

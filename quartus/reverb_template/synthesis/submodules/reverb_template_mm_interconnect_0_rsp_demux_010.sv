@@ -27,11 +27,11 @@
 
 // ------------------------------------------
 // Generation parameters:
-//   output_name:         reverb_template_mm_interconnect_0_cmd_demux_002
+//   output_name:         reverb_template_mm_interconnect_0_rsp_demux_010
 //   ST_DATA_W:           112
 //   ST_CHANNEL_W:        21
 //   NUM_OUTPUTS:         2
-//   VALID_WIDTH:         21
+//   VALID_WIDTH:         1
 // ------------------------------------------
 
 //------------------------------------------
@@ -40,12 +40,12 @@
 // 15610 - Warning: Design contains x input pin(s) that do not drive logic
 //------------------------------------------
 
-module reverb_template_mm_interconnect_0_cmd_demux_002
+module reverb_template_mm_interconnect_0_rsp_demux_010
 (
     // -------------------
     // Sink
     // -------------------
-    input  [21-1      : 0]   sink_valid,
+    input  [1-1      : 0]   sink_valid,
     input  [112-1    : 0]   sink_data, // ST_DATA_W=112
     input  [21-1 : 0]   sink_channel, // ST_CHANNEL_W=21
     input                         sink_startofpacket,
@@ -92,14 +92,14 @@ module reverb_template_mm_interconnect_0_cmd_demux_002
         src0_endofpacket   = sink_endofpacket;
         src0_channel       = sink_channel >> NUM_OUTPUTS;
 
-        src0_valid         = sink_channel[0] && sink_valid[0];
+        src0_valid         = sink_channel[0] && sink_valid;
 
         src1_data          = sink_data;
         src1_startofpacket = sink_startofpacket;
         src1_endofpacket   = sink_endofpacket;
         src1_channel       = sink_channel >> NUM_OUTPUTS;
 
-        src1_valid         = sink_channel[1] && sink_valid[1];
+        src1_valid         = sink_channel[1] && sink_valid;
 
     end
 

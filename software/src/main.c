@@ -37,6 +37,9 @@ NIOS2_WRITE_IENABLE(0); \
 
 #define FAT_OFFSET 0
 
+// Add to defines.h
+#define HEADER_BLOCK_SIZE_ZE 512
+
 alt_up_audio_dev * audio_dev;
 
 extern volatile char *buffer_memory;
@@ -828,47 +831,89 @@ void test()
             // F R E Q U E N C Y   M A C
             // ---------------------------------------------------------
             
-            // clear output buffer nachdem er angelegt wurde
-            // behebt dinge die eigentlich durch timig shit verursacht werden
-            
-            // freed in ifft_on_mac_buffer func
-            
-            complex_32_t* mac_buffer_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
-            complex_32_t* mac_buffer_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
-            
-            sram_clear_block( mac_buffer_1 );
-            sram_clear_block( mac_buffer_2 );
-            
-            // index der I bloecke.
-            // wir beginnen mit dem neusten, also nehmen wir die addr
-            // wo gerade der block gespeichert wurde.
-            
-            ibi = i_pointer;
-            
-            // wir gehen alle ir blocks durch
-            
-            printf( "performing mac\n" );
-            
-            for ( j = 0; j < 14; j++ )
-            {
-                freq_mac_blocks( mac_buffer_1, ibi, j );
-                freq_mac_blocks( mac_buffer_2, 14 + ibi, 14 + j );
-                
-                // der naechste i block der geholt wird.
-                // die i bloecke werden in einem ringbuffer abgespeichert
-                // den wir von der akteullen position nach hinten
-                // durchlaufen.
-                // wenn der neue I block auf 42 gespeichert wurde, dann
-                // ist der vorige auf addr 41 und der davor auf 28.
-                // anmerkung: wir speichern genau so viele I bloecke
-                // wie H bloecke.
-                
-                //~ print_c_block_9q23( output_buffer_2, 10, 20 );
-                //~ return;
-                
-                if ( ibi == 28 ) { ibi = 41; }
-                else             { ibi -= 1; }
-            }
+	    complex_32_t* mac_buffer_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+	    complex_32_t* mac_buffer_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+		
+	    #if ( MAC_H_HW ) // Hardware Header-MAC_B_HW
+		// ------------
+		// left channel
+		// ------------
+    
+		// set hw mac to left channel
+    
+		IOWR( MAC_SRAM_0_BASE, 3, 1 );
+    
+		// activate hw mac
+    
+		IOWR( MAC_SRAM_0_BASE, 1, 2 );
+    
+		// read data from hw mac
+    
+		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
+		{
+		    mac_buffer_1[ i ].r = IORD( MAC_SRAM_0_BASE, i );
+		    mac_buffer_1[ i ].i = IORD( MAC_SRAM_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		}
+    
+		// ------------
+		// right channel
+		// ------------
+    
+		// set hw mac to right channel
+    
+		IOWR( MAC_SRAM_0_BASE, 3, 2 );
+    
+		// activate hw mac
+    
+		IOWR( MAC_SRAM_0_BASE, 1, 2 );
+    
+		// read data from hw mac
+    
+		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
+		{
+		    mac_buffer_2[ i ].r = IORD( MAC_SRAM_0_BASE, i );
+		    mac_buffer_2[ i ].i = IORD( MAC_SRAM_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		}
+	    #else // Software Header-MAC
+		// clear output buffer nachdem er angelegt wurde
+		// behebt dinge die eigentlich durch timig shit verursacht werden
+		
+		// freed in ifft_on_mac_buffer func
+		
+		sram_clear_block( mac_buffer_1 );
+		sram_clear_block( mac_buffer_2 );
+		
+		// index der I bloecke.
+		// wir beginnen mit dem neusten, also nehmen wir die addr
+		// wo gerade der block gespeichert wurde.
+		
+		ibi = i_pointer;
+		
+		// wir gehen alle ir blocks durch
+		
+		printf( "performing mac\n" );
+		
+		for ( j = 0; j < 14; j++ )
+		{
+		    freq_mac_blocks( mac_buffer_1, ibi, j );
+		    freq_mac_blocks( mac_buffer_2, 14 + ibi, 14 + j );
+		    
+		    // der naechste i block der geholt wird.
+		    // die i bloecke werden in einem ringbuffer abgespeichert
+		    // den wir von der akteullen position nach hinten
+		    // durchlaufen.
+		    // wenn der neue I block auf 42 gespeichert wurde, dann
+		    // ist der vorige auf addr 41 und der davor auf 28.
+		    // anmerkung: wir speichern genau so viele I bloecke
+		    // wie H bloecke.
+		    
+		    //~ print_c_block_9q23( output_buffer_2, 10, 20 );
+		    //~ return;
+		    
+		    if ( ibi == 28 ) { ibi = 41; }
+		    else             { ibi -= 1; }
+		}
+	    #endif
             
             // ---------------------------------------------------------
             // I F F T
