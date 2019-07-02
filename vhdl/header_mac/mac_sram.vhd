@@ -110,6 +110,24 @@ type output_state_type is (
 signal output_state : output_state_type;
 --signal output_state : std_logic_vector( 2 downto 0 );
 
+type proc_state_type is (
+    MODE_00,
+    MODE_01,
+    MODE_10,
+    MODE_11,
+    MODE_0001,
+    MODE_0010,
+    MODE_0011,
+    MODE_0100,
+    MODE_0101,
+    MODE_0110,
+    MODE_0111,
+    MODE_1000,
+    MODE_1001,
+    MODE_1010
+);
+signal proc_state : proc_state_type;
+
 -- wir beginnen eigentlich bei 41, aber wenn das zum ersten mal
 -- aufgerufen wird, dann wird das gleich erhoeht.
 
@@ -183,7 +201,7 @@ begin
             
             ------------------------------------------------------------
             -- output
-            ------------------------------------------------------------
+            --------------------mode----------------------------------------
             
             if output_state = STATE_00 then
                 
@@ -326,8 +344,8 @@ variable acc_i_temp : signed( 63 downto 0 );
 variable ir_addr : unsigned( 31 downto 0 );
 variable in_addr : unsigned( 31 downto 0 );
 
-variable mode : std_logic_vector( 1 downto 0 );
-variable state : std_logic_vector( 3 downto 0 );
+--variable mode : std_logic_vector( 1 downto 0 );
+--variable state : std_logic_vector( 3 downto 0 );
 
 --variable skip : std_logic;
 
@@ -338,7 +356,7 @@ begin
     
     if res_n = '0' then
         
-        mode := "00";
+        proc_state <= MODE_00;
         a <= (others=>'0');
         m_read <= '0';
         
@@ -350,63 +368,57 @@ begin
         busy <= '1';
         --resetting <= '0';
         
-        if mode = "00" then -- idle
+        case proc_state is
+		
+	    when MODE_00 => -- idle
+		if fucking_reset = '1' then
+		    
+		    i := 0;
+		    proc_state <= MODE_10;
+		    
+		elsif fucking_start = '1' then
+		    
+		    i := 0;
+		    proc_state <= MODE_01;
+		    
+		else
+		    
+		    busy <= '0';
+		    proc_state <= MODE_00;
+		    
+		end if;
             
-            if fucking_reset = '1' then
+            when MODE_01 => -- starting
+        	acc_r_array( i ) <= (others => '0');
+		acc_i_array( i ) <= (others => '0');
+		
+		if i = ( BLOCK_SIZE - 1 ) then
+		    proc_state <= MODE_11;
+		else
+		    i := i + 1;
+		end if;
+            
+            when MODE_10 => -- resetting
+		acc_r_array( i ) <= (others => '0');
+		acc_i_array( i ) <= (others => '0');
+		
+		if i = ( BLOCK_SIZE - 1 ) then
+		    proc_state <= MODE_00;
+		else
+		    i := i + 1;
+		end if;
+            
+	    when MODE_11 => -- running
+            
+		-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
+		
+		if m_waitrequest = '0' then
                 
-                i := 0;
-                mode := "10";
+		    m_read <= '1'; -- wir lesen immer
+		    
+		    -- die ersten beiden states werden nur beim start des macs ausgefuehrt.
                 
-            elsif fucking_start = '1' then
-                
-                i := 0;
-                mode := "01";
-                state := "0000";
-                --skip := '1';
-                
-            else
-                
-                busy <= '0';
-                
-            end if;
-            
-        elsif mode = "01" then -- starting
-            
-            --resetting <= '1';
-            
-            acc_r_array( i ) <= (others => '0');
-            acc_i_array( i ) <= (others => '0');
-            
-            if i = ( BLOCK_SIZE - 1 ) then
-                mode := "11";
-            else
-                i := i + 1;
-            end if;
-            
-        elsif mode = "10" then -- resetting
-            
-            --resetting <= '1';
-            
-            acc_r_array( i ) <= (others => '0');
-            acc_i_array( i ) <= (others => '0');
-            
-            if i = ( BLOCK_SIZE - 1 ) then
-                mode := "00";
-            else
-                i := i + 1;
-            end if;
-            
-        elsif mode = "11" then -- running
-            
-            -- wenn ich nichts lesen kann bringt mir das ganze eh nichts
-            
-            if m_waitrequest = '0' then
-                
-                m_read <= '1'; -- wir lesen immer
-                
-                -- die ersten beiden states werden nur beim start des macs ausgefuehrt.
-                
-                if state = "0000" then
+		    -- if state = "0000" then
                     
                     -- wenn ich hier bin mach ich ganz neue bloecke.
                     -- also eine ganz neue fft berechnung.
@@ -427,20 +439,10 @@ begin
                     --~ m_address <= x"00000000"; -- a_h
                     -- TODO - hier koennte ich eingetlich 0 schreiben.
                     m_address <= std_logic_vector( ir_addr + ( 2 * 0 ) ); -- a_h
+                                        
+                    proc_state <= MODE_0001;
                     
-                    --~ state := "1111";
-                    state := "0001";
-                
-                -- addr a_l
-                
-                -- not used
-                --elsif state = "1111" then
-                    
-                    --~ m_address <= x"00000002"; -- a_l
-                    --m_address <= std_logic_vector( ir_addr + ( 2 * 1 ) ); -- a_l
-                    
-                    --state := "0001";
-                    
+                end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -455,8 +457,12 @@ begin
                 
                 -- addr c_h
                 
-                elsif state = "0001" then -- a_h available
-                    
+            when MODE_0001 => -- a_h available 
+                
+                if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
+                                    
                     if post_pipeline = '0' then
                         
                         --~ m_address <= x"00000008"; -- c_h
@@ -474,8 +480,10 @@ begin
                         
                     end if;
                     
-                    state := "0010";
-                
+                    proc_state <= MODE_0010;
+                    
+		end if;
+                                   
                 --------------------------------------------------------
                 -- 
                 -- a_l
@@ -490,7 +498,11 @@ begin
                 -- addr c_h X
                 -- addr c_l
                 
-                elsif state = "0010" then -- a_l available
+	    when MODE_0010 => -- a_l available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     if post_pipeline = '0' then
                         
@@ -509,7 +521,9 @@ begin
                         
                     end if;
                     
-                    state := "0011";
+                    proc_state <= MODE_0011;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -525,8 +539,12 @@ begin
                 -- addr c_l X
                 -- addr d_h
                 
-                elsif state = "0011" then -- c_h available
-                    
+	    when MODE_0011 => -- c_h available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
+                   
                     -- c_h ist das von dem in wert
                     
                     if post_pipeline = '0' then
@@ -546,7 +564,9 @@ begin
                         
                     end if;
                     
-                    state := "0100";
+                    proc_state <= MODE_0100;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -562,7 +582,11 @@ begin
                 -- addr d_h X
                 -- addr d_l
                 
-                elsif state = "0100" then -- c_l available
+	    when MODE_0100 => -- c_l available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     if post_pipeline = '0' then
                         
@@ -581,7 +605,9 @@ begin
                         
                     end if;
                     
-                    state := "0101";
+                    proc_state <= MODE_0101;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -597,7 +623,11 @@ begin
                 -- addr d_l X
                 -- addr b_h
                 
-                elsif state = "0101" then -- d_h available
+	    when MODE_0101 => -- d_h available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     if post_pipeline = '0' then
                         
@@ -616,7 +646,9 @@ begin
                         
                     end if;
                     
-                    state := "0110";
+                    proc_state <= MODE_0110;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -631,7 +663,11 @@ begin
                 -- addr b_h X
                 -- addr b_l
                 
-                elsif state = "0110" then -- b_l available
+	    when MODE_0110 => -- b_l available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     if post_pipeline = '0' then
                         
@@ -650,7 +686,9 @@ begin
                         
                     end if;
                     
-                    state := "0111";
+                    proc_state <= MODE_0111;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -664,7 +702,11 @@ begin
                 -- addr b_l X
                 -- addr a_h
                 
-                elsif state = "0111" then -- d_h available
+	    when MODE_0111 => -- d_h available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     -- auch wenn ich in der post pipeline stage bin moechte ich,
                     -- dass hier a_h anliegt.
@@ -687,7 +729,9 @@ begin
                         
                     end if;
                     
-                    state := "1000";
+                    proc_state <= MODE_1000;
+                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -700,7 +744,11 @@ begin
                 -- addr a_h X
                 -- addr a_l
                 
-                elsif state = "1000" then -- d_l available
+	    when MODE_1000 => -- d_l available
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     -- ich gehe hier beim ersten mal rein und wenn ich
                     -- den state ein zweites mal aufrufe, dann bin ich
@@ -729,14 +777,14 @@ begin
                         i_prev := i;
                         i := i + 1;
                         
-                        state := "0001";
+                        proc_state <= MODE_0001;
                         
                     elsif i = BLOCK_SIZE then
                         
                         -- hier nehme ich den naechsten block oder beende das ganze,
                         -- wenn ich beim block index = 13 bin.
                         
-                        state := "1001";
+                        proc_state <= MODE_1001;
                         
                     else
                         
@@ -753,10 +801,10 @@ begin
                         i_prev := i;
                         i := i + 1;
                         
-                        state := "0001";
+                        proc_state <= MODE_0001;
                         
                     end if;
-                    
+		end if;
                 
                 --------------------------------------------------------
                 -- 
@@ -764,7 +812,11 @@ begin
                 -- 
                 --------------------------------------------------------
                 
-                elsif state = "1001" then
+	    when MODE_1001 =>
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     -- reset pipeline stuff
                     
@@ -774,7 +826,7 @@ begin
                     -- wenn alle ir bloecke fertig sind, wird das beendet
                     
                     if ir_pointer = ir_block_max then
-                        mode := "00";
+                        proc_state <= MODE_00;
                     else
                         ir_pointer := ir_pointer + 1;
                     end if;
@@ -798,22 +850,29 @@ begin
                     
                     m_address <= std_logic_vector( ir_addr + ( 2 * 0 ) ); -- a_h
                     
-                    state := "1010";
+                    proc_state <= MODE_1010;
                     
-                elsif state = "1010" then
+		end if;
+                    
+	    when MODE_1010 =>
+	    
+		if m_waitrequest = '0' then
+                
+		    m_read <= '1'; -- wir lesen immer
                     
                     -- explizit a_l anlegen
                     
                     --~ m_address <= std_logic_vector( ir_addr + ( 2 * 1 ) ); -- a_l
                     m_address <= std_logic_vector( ir_addr + ( 2 * 0 ) ); -- a_h
                     
-                    state := "0001";
+                    proc_state <= MODE_0001;
                     
-                end if;
-                
-            end if;
-            
-        end if;
+		end if;
+		
+	    when others =>
+		proc_state <= MODE_00;
+		
+	end case;
         
     end if;
     
