@@ -1740,9 +1740,9 @@
    version="18.1"
    start="altpll.c0"
    end="sdcard_interface.clk" />
- <connection kind="clock" version="18.1" start="altpll_sram.c0" end="sram_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="sdram.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="pio_0.clk" />
+ <connection kind="clock" version="18.1" start="altpll_sram.c0" end="sram_0.clk" />
  <connection kind="clock" version="18.1" start="altpll.c0" end="main_memory.clk1" />
  <connection
    kind="clock"

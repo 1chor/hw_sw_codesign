@@ -116,7 +116,7 @@ signal output_state : output_state_type;
 signal latest_in_block : integer range 0 to 55 := 40; -- TODO - kann kleiner sein
 
 signal busy : std_logic;
-signal resetting : std_logic;
+--signal resetting : std_logic;
 
 signal trigger : std_logic := '0';
 
@@ -129,9 +129,17 @@ attribute keep of trigger : signal is "true";
 
 begin
 
+-- default signal declarations
+-- not used in design
+
+m_write <= '0';
+m_writedata <= (others => '0');
+
 ------------------------------------------------------------------------
 -- memory mapped slave
 ------------------------------------------------------------------------
+
+output_addr <= to_integer(unsigned(s_address));
 
 mms : process ( clk, res_n )
 
@@ -183,7 +191,7 @@ begin
                 
             elsif output_state = STATE_01 then
                 
-                output_addr <= to_integer(unsigned(s_address));
+                -- output_addr <= to_integer(unsigned(s_address));
                 output_state <= STATE_10;
                 
             elsif output_state = STATE_10 then
@@ -230,8 +238,8 @@ begin
                     
                     output_state <= STATE_00;
                     
-                    output_addr  <= 0;
-                    output_value <= (others=>'0');
+                    -- output_addr  <= 0;
+                    -- output_value <= (others=>'0');
                     
                     latest_in_block_1 := ( IN_BLOCK_1_MAX - 1 );
                     latest_in_block_2 := ( IN_BLOCK_2_MAX - 1 );
@@ -321,7 +329,7 @@ variable in_addr : unsigned( 31 downto 0 );
 variable mode : std_logic_vector( 1 downto 0 );
 variable state : std_logic_vector( 3 downto 0 );
 
-variable skip : std_logic;
+--variable skip : std_logic;
 
 variable ram_readout : signed( 63 downto 0 );
 variable result_test : std_logic_vector( 31 downto 0 );
@@ -340,7 +348,7 @@ begin
         -- TODO warum?
         
         busy <= '1';
-        resetting <= '0';
+        --resetting <= '0';
         
         if mode = "00" then -- idle
             
@@ -354,7 +362,7 @@ begin
                 i := 0;
                 mode := "01";
                 state := "0000";
-                skip := '1';
+                --skip := '1';
                 
             else
                 
@@ -364,7 +372,7 @@ begin
             
         elsif mode = "01" then -- starting
             
-            resetting <= '1';
+            --resetting <= '1';
             
             acc_r_array( i ) <= (others => '0');
             acc_i_array( i ) <= (others => '0');
@@ -377,7 +385,7 @@ begin
             
         elsif mode = "10" then -- resetting
             
-            resetting <= '1';
+            --resetting <= '1';
             
             acc_r_array( i ) <= (others => '0');
             acc_i_array( i ) <= (others => '0');
@@ -425,12 +433,13 @@ begin
                 
                 -- addr a_l
                 
-                elsif state = "1111" then
+                -- not used
+                --elsif state = "1111" then
                     
                     --~ m_address <= x"00000002"; -- a_l
-                    m_address <= std_logic_vector( ir_addr + ( 2 * 1 ) ); -- a_l
+                    --m_address <= std_logic_vector( ir_addr + ( 2 * 1 ) ); -- a_l
                     
-                    state := "0001";
+                    --state := "0001";
                     
                 
                 --------------------------------------------------------
