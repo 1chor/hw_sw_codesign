@@ -1,0 +1,146 @@
+# //  Questa Sim
+# //  Version 10.6c_1 linux Sep 15 2017
+# //
+# //  Copyright 1991-2017 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# vsim tb_mac_sram -novopt -msgmode both
+# vsim tb_mac_sram -novopt -msgmode both 
+# Start time: 17:33:04 on Jul 09,2019
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading work.tb_mac_sram(tb)
+# Loading work.top(arch)
+# ** Warning: (vsim-3473) Component instance "mac_sram_i : mac_sram" is not bound.
+#    Time: 0 ns  Iteration: 0  Instance: /tb_mac_sram/dut File: top.vhd
+# Loading ieee.numeric_std(body)
+# Loading work.fake_sram(behavioral)
+# ** Warning: (vsim-8684) No drivers exist on out port /tb_mac_sram/dut/s_readdata, and its initial value is not used.
+# Therefore, simulation behavior may occur that is not in compliance with
+# the VHDL standard as the initial values come from the base signal /tb_mac_sram/s_readdata.
+# ** Warning: (vsim-8684) No drivers exist on out port /tb_mac_sram/dut/s_readdatavalid, and its initial value is not used.
+# Therefore, simulation behavior may occur that is not in compliance with
+# the VHDL standard as the initial values come from the base signal /tb_mac_sram/s_readdatavalid.
+# ** Warning: (vsim-8684) No drivers exist on out port /tb_mac_sram/dut/s_waitrequest, and its initial value is not used.
+# Therefore, simulation behavior may occur that is not in compliance with
+# the VHDL standard as the initial values come from the base signal /tb_mac_sram/s_waitrequest.
+#  do wave.do
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_writedata'.
+# Executing ONERROR command at macro ./wave.do line 3
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_write'.
+# Executing ONERROR command at macro ./wave.do line 4
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_waitrequest'.
+# Executing ONERROR command at macro ./wave.do line 5
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_readdatavalid'.
+# Executing ONERROR command at macro ./wave.do line 6
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_readdata'.
+# Executing ONERROR command at macro ./wave.do line 7
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_read'.
+# Executing ONERROR command at macro ./wave.do line 8
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/s_address'.
+# Executing ONERROR command at macro ./wave.do line 9
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/res_n'.
+# Executing ONERROR command at macro ./wave.do line 10
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/output_state'.
+# Executing ONERROR command at macro ./wave.do line 11
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/new_r'.
+# Executing ONERROR command at macro ./wave.do line 12
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/new_i'.
+# Executing ONERROR command at macro ./wave.do line 13
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_writedata'.
+# Executing ONERROR command at macro ./wave.do line 14
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_write'.
+# Executing ONERROR command at macro ./wave.do line 15
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_waitrequest'.
+# Executing ONERROR command at macro ./wave.do line 16
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/clk'.
+# Executing ONERROR command at macro ./wave.do line 17
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/fucking_start'.
+# Executing ONERROR command at macro ./wave.do line 18
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/fucking_reset'.
+# Executing ONERROR command at macro ./wave.do line 19
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/busy'.
+# Executing ONERROR command at macro ./wave.do line 20
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/resetting'.
+# Executing ONERROR command at macro ./wave.do line 21
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/pre_pipeline'.
+# Executing ONERROR command at macro ./wave.do line 22
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/post_pipeline'.
+# Executing ONERROR command at macro ./wave.do line 23
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/a'.
+# Executing ONERROR command at macro ./wave.do line 24
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/c'.
+# Executing ONERROR command at macro ./wave.do line 25
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/d'.
+# Executing ONERROR command at macro ./wave.do line 26
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/b'.
+# Executing ONERROR command at macro ./wave.do line 27
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/clk'.
+# Executing ONERROR command at macro ./wave.do line 28
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/a_mul_d'.
+# Executing ONERROR command at macro ./wave.do line 31
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/a_mul_c'.
+# Executing ONERROR command at macro ./wave.do line 32
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/b_mul_d'.
+# Executing ONERROR command at macro ./wave.do line 33
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/b_mul_c'.
+# Executing ONERROR command at macro ./wave.do line 34
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/acc_r_array'.
+# Executing ONERROR command at macro ./wave.do line 35
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/acc_r_array(0)'.
+# Executing ONERROR command at macro ./wave.do line 36
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/fake_output_array(0)'.
+# Executing ONERROR command at macro ./wave.do line 37
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/acc_i_array'.
+# Executing ONERROR command at macro ./wave.do line 38
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/result_test'.
+# Executing ONERROR command at macro ./wave.do line 39
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/mms/channel'.
+# Executing ONERROR command at macro ./wave.do line 43
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/mms/latest_in_block_1'.
+# Executing ONERROR command at macro ./wave.do line 44
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/mms/latest_in_block_2'.
+# Executing ONERROR command at macro ./wave.do line 45
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/mms/latest_in_block_tmp'.
+# Executing ONERROR command at macro ./wave.do line 46
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/ir_pointer'.
+# Executing ONERROR command at macro ./wave.do line 47
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/in_pointer'.
+# Executing ONERROR command at macro ./wave.do line 48
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/trigger'.
+# Executing ONERROR command at macro ./wave.do line 50
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/i'.
+# Executing ONERROR command at macro ./wave.do line 51
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/i_prev'.
+# Executing ONERROR command at macro ./wave.do line 52
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/acc_r_temp'.
+# Executing ONERROR command at macro ./wave.do line 53
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/acc_i_temp'.
+# Executing ONERROR command at macro ./wave.do line 54
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/ir_addr'.
+# Executing ONERROR command at macro ./wave.do line 55
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/in_addr'.
+# Executing ONERROR command at macro ./wave.do line 56
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/mode'.
+# Executing ONERROR command at macro ./wave.do line 57
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/proc/state'.
+# Executing ONERROR command at macro ./wave.do line 58
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_read'.
+# Executing ONERROR command at macro ./wave.do line 59
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_address'.
+# Executing ONERROR command at macro ./wave.do line 60
+# ** Error: (vish-4014) No objects found matching '/tb_mac_sram/dut/mac_sram_i/m_readdata'.
+# Executing ONERROR command at macro ./wave.do line 61
+# run 6ms
+# End time: 18:12:44 on Jul 09,2019, Elapsed time: 0:39:40
+# Errors: 159, Warnings: 5

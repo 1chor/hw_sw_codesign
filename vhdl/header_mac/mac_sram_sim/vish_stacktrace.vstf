@@ -1,0 +1,9 @@
+# Current time Fri Jan 18 16:12:26 2019
+# Program = vish
+# Id = "10.6c_1"
+# Version = "2017.09"
+# Date = "Sep 15 2017"
+# Platform = linux
+# 0    0x082b5ecb: '<unknown (@0x82b5ecb)>'
+# 1    0x085cbdd0: 'Tcl_Release + 0x90' in '/opt/questa_core_prime_10.6-for_quartus18.1-10.6c.1/mentor/2017-18/RHELx86/QUESTA-CORE-PRIME_10.6c-1/questasim/linux/vish'
+# 2    0xe588fffb: '<unknown (@0xe588fffb)>'

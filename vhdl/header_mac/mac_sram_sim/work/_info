@@ -1,0 +1,129 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/header_mac/mac_sram_sim
+Efake_sram
+Z1 w1550499916
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8fake_sram.vhd
+Z6 Ffake_sram.vhd
+l0
+L34
+VT9WfC;PB=g^XG[fnD4KbC0
+!s100 ?8O5>GTlYbCCJe<HfABiC0
+Z7 OE;C;10.6c_1;65
+33
+Z8 !s110 1562686381
+!i10b 1
+Z9 !s108 1562686381.000000
+Z10 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|fake_sram.vhd|
+Z11 !s107 fake_sram.vhd|
+!i113 1
+Z12 o-suppress 1236 -check_synthesis -2008 -work work
+Z13 tExplicit 1 CvgOpt 0
+Abehavioral
+R2
+R3
+R4
+DEx4 work 9 fake_sram 0 22 T9WfC;PB=g^XG[fnD4KbC0
+l49
+L48
+V`IfGPa1S8kgd>PcFfoE`P2
+!s100 kAg::HOE8oAdBFIYXH>O13
+R7
+33
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Etb_mac_sram
+Z14 w1552676129
+R3
+R4
+R0
+Z15 8tb.vhd
+Z16 Ftb.vhd
+l0
+L5
+V7z;QBhb=0NoCLjLF9eZMU2
+!s100 81D]LXc>EVgAc>dPSJ3kj1
+R7
+33
+R8
+!i10b 1
+R9
+Z17 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|tb.vhd|
+!s107 tb.vhd|
+!i113 1
+R12
+R13
+Atb
+R3
+R4
+DEx4 work 11 tb_mac_sram 0 22 7z;QBhb=0NoCLjLF9eZMU2
+l35
+L8
+V1M^085NFG4ahgmUa0^DSZ0
+!s100 oYb^IGE_`GMnCiRF;4LX=0
+R7
+33
+R8
+!i10b 1
+R9
+R17
+Z18 !s107 tb.vhd|
+!i113 1
+R12
+R13
+Etop
+R1
+R3
+R4
+R0
+Z19 8top.vhd
+Z20 Ftop.vhd
+l0
+L5
+VgCJJzSOeR9Jc7Ik[ll5M_0
+!s100 j]3AY1UZHHDLz>ZGCDhRh1
+R7
+33
+R8
+!i10b 1
+R9
+Z21 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|top.vhd|
+Z22 !s107 top.vhd|
+!i113 1
+R12
+R13
+Aarch
+R3
+R4
+DEx4 work 3 top 0 22 gCJJzSOeR9Jc7Ik[ll5M_0
+l72
+L20
+VzJ33Q4]Qj[_MnL>d<YK`91
+!s100 R31U<ZTXc<[Ej<2PObfG_3
+R7
+33
+R8
+!i10b 1
+R9
+R21
+R22
+!i113 1
+R12
+R13

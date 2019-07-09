@@ -1,0 +1,31 @@
+/homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/top.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/top.vhd
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity top
+-- Compiling architecture arch of top
+
+} {} {}} /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/fake_sram.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/fake_sram.vhd
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity fake_sram
+-- Compiling architecture Behavioral of fake_sram
+
+} {} {}} /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd {2 {vcom -work work -2002 -explicit -vopt -stats=none /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity tb_mac_sram
+-- Compiling architecture tb of tb_mac_sram
+** Warning: /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd(57): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+** Warning: /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd(59): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+** Warning: /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd(100): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+** Warning: /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd(111): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+** Warning: /homes/h01027799/hw_sw_codesign/vhdl/mac_sram_sim/tb.vhd(119): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+
+} {} {}}
