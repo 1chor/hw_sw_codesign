@@ -29,7 +29,7 @@ architecture arch of top is
         s_writedata     : in std_logic_vector (31 downto 0);
         s_readdata      : out std_logic_vector (31 downto 0);
         s_readdatavalid : out std_logic;
-        s_waitrequest   : out std_logic;
+        
         m_address       : out std_logic_vector (31 downto 0);
         m_write         : out std_logic;
         m_read          : out std_logic;
@@ -81,7 +81,7 @@ begin
         s_writedata     => s_writedata,
         s_readdata      => s_readdata,
         s_readdatavalid => s_readdatavalid,
-        s_waitrequest   => s_waitrequest,
+        
         m_address       => m_address,
         m_write         => m_write,
         m_read          => m_read,

@@ -8,28 +8,69 @@ z2
 !i10f 100
 cModel Technology
 Z0 d/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/header_mac/mac_sram_sim
-Efake_sram
-Z1 w1550499916
+Edp_ram_1c1r1w
+Z1 w1553087390
 Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
 R0
-Z5 8fake_sram.vhd
-Z6 Ffake_sram.vhd
+Z5 8../../ram/dp_ram_1c1r1w.vhd
+Z6 F../../ram/dp_ram_1c1r1w.vhd
+l0
+L15
+V:MB14`FbKCKb:Fm<6ZZCB2
+!s100 H=Z3Tj@Go3j=djDIO31AE2
+Z7 OE;C;10.6c_1;65
+33
+Z8 !s110 1562853543
+!i10b 1
+Z9 !s108 1562853543.000000
+Z10 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|../../ram/dp_ram_1c1r1w.vhd|
+Z11 !s107 ../../ram/dp_ram_1c1r1w.vhd|
+!i113 1
+Z12 o-suppress 1236 -check_synthesis -2008 -work work
+Z13 tExplicit 1 CvgOpt 0
+Abeh
+R2
+R3
+R4
+DEx4 work 13 dp_ram_1c1r1w 0 22 :MB14`FbKCKb:Fm<6ZZCB2
+l44
+L40
+V=YPJo2PldedQf`i5Z5A9_2
+!s100 FTVLD6_66jZG=ZERHf[Ig3
+R7
+33
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Efake_sram
+Z14 w1550499916
+R2
+R3
+R4
+R0
+Z15 8fake_sram.vhd
+Z16 Ffake_sram.vhd
 l0
 L34
 VT9WfC;PB=g^XG[fnD4KbC0
 !s100 ?8O5>GTlYbCCJe<HfABiC0
-Z7 OE;C;10.6c_1;65
+R7
 33
-Z8 !s110 1562686381
+R8
 !i10b 1
-Z9 !s108 1562686381.000000
-Z10 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|fake_sram.vhd|
-Z11 !s107 fake_sram.vhd|
+R9
+Z17 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|fake_sram.vhd|
+Z18 !s107 fake_sram.vhd|
 !i113 1
-Z12 o-suppress 1236 -check_synthesis -2008 -work work
-Z13 tExplicit 1 CvgOpt 0
+R12
+R13
 Abehavioral
 R2
 R3
@@ -44,28 +85,131 @@ R7
 R8
 !i10b 1
 R9
-R10
-R11
+R17
+R18
+!i113 1
+R12
+R13
+Emac_sram
+Z19 w1562853537
+Z20 DPx4 work 8 math_pkg 0 22 [eJ^RDBFm4LTMOzhCESm02
+Z21 DPx4 work 7 ram_pkg 0 22 j1S4VkIPD2HzcdC?NDJ;;1
+R2
+R3
+R4
+R0
+Z22 8../mac_sram.vhd
+Z23 F../mac_sram.vhd
+l0
+L8
+VG7ggNG:jOk27>i>DS<45B3
+!s100 i;`5NSRUdTI?5khi:EMO_2
+R7
+33
+R8
+!i10b 1
+R9
+Z24 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|../mac_sram.vhd|
+Z25 !s107 ../mac_sram.vhd|
+!i113 1
+R12
+R13
+Aarch
+R20
+R21
+R2
+R3
+R4
+DEx4 work 8 mac_sram 0 22 G7ggNG:jOk27>i>DS<45B3
+l247
+L33
+V87aBUPlCke6H]88=l80Ih3
+!s100 Ok0a9a[l`Y4ANHal>XLU70
+R7
+33
+R8
+!i10b 1
+R9
+R24
+R25
+!i113 1
+R12
+R13
+Pmath_pkg
+R1
+R0
+Z26 8../../math/src/math_pkg.vhd
+Z27 F../../math/src/math_pkg.vhd
+l0
+L20
+V[eJ^RDBFm4LTMOzhCESm02
+!s100 `h@G>n`O?ba`a[A3O<nDA3
+R7
+33
+b1
+R8
+!i10b 1
+R9
+Z28 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|../../math/src/math_pkg.vhd|
+Z29 !s107 ../../math/src/math_pkg.vhd|
+!i113 1
+R12
+R13
+Bbody
+R20
+l0
+L40
+VF?c]_VlM?9iFaK]>8WgQQ1
+!s100 n[@=7Amo=8;6=i]C78L4W3
+R7
+33
+R8
+!i10b 1
+R9
+R28
+R29
+!i113 1
+R12
+R13
+Pram_pkg
+R20
+R3
+R4
+R1
+R0
+8../../ram/ram_pkg.vhd
+F../../ram/ram_pkg.vhd
+l0
+L7
+Vj1S4VkIPD2HzcdC?NDJ;;1
+!s100 ORYjem@3k4WmZhBfdWQbT3
+R7
+33
+R8
+!i10b 1
+R9
+!s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|../../ram/ram_pkg.vhd|
+!s107 ../../ram/ram_pkg.vhd|
 !i113 1
 R12
 R13
 Etb_mac_sram
-Z14 w1552676129
+Z30 w1562851612
 R3
 R4
 R0
-Z15 8tb.vhd
-Z16 Ftb.vhd
+Z31 8tb.vhd
+Z32 Ftb.vhd
 l0
 L5
 V7z;QBhb=0NoCLjLF9eZMU2
 !s100 81D]LXc>EVgAc>dPSJ3kj1
 R7
 33
-R8
+Z33 !s110 1562853544
 !i10b 1
 R9
-Z17 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|tb.vhd|
+Z34 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|tb.vhd|
 !s107 tb.vhd|
 !i113 1
 R12
@@ -80,21 +224,21 @@ V1M^085NFG4ahgmUa0^DSZ0
 !s100 oYb^IGE_`GMnCiRF;4LX=0
 R7
 33
-R8
+R33
 !i10b 1
 R9
-R17
-Z18 !s107 tb.vhd|
+R34
+Z35 !s107 tb.vhd|
 !i113 1
 R12
 R13
 Etop
-R1
+Z36 w1562851648
 R3
 R4
 R0
-Z19 8top.vhd
-Z20 Ftop.vhd
+Z37 8top.vhd
+Z38 Ftop.vhd
 l0
 L5
 VgCJJzSOeR9Jc7Ik[ll5M_0
@@ -104,8 +248,8 @@ R7
 R8
 !i10b 1
 R9
-Z21 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|top.vhd|
-Z22 !s107 top.vhd|
+Z39 !s90 -check_synthesis|-2008|-work|work|-suppress|1236|-novopt|top.vhd|
+Z40 !s107 top.vhd|
 !i113 1
 R12
 R13
@@ -115,15 +259,15 @@ R4
 DEx4 work 3 top 0 22 gCJJzSOeR9Jc7Ik[ll5M_0
 l72
 L20
-VzJ33Q4]Qj[_MnL>d<YK`91
-!s100 R31U<ZTXc<[Ej<2PObfG_3
+V0C7zLeDN4e8VBBTQZ?FM80
+!s100 JjBZC0LeY<ghCKbZbGfI23
 R7
 33
 R8
 !i10b 1
 R9
-R21
-R22
+R39
+R40
 !i113 1
 R12
 R13

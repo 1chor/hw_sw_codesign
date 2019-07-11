@@ -27,7 +27,7 @@
 #define FIR_HW (1) 	// If 1 then use FIR filter hardware component
 #define FFT_H_HW (1) 	// If 1 then use header FFT hardware component
 #define FFT_B_HW (0) 	// If 1 then use body FFT hardware component
-#define MAC_H_HW (0) 	// If 1 then use MAC hardware component
+#define MAC_H_HW (1) 	// If 1 then use MAC hardware component
 #define MAC_B_HW (0) 	// If 1 then use MAC hardware component
 
 #define HAL_PLATFORM_RESET() \
@@ -834,29 +834,29 @@ void test()
 	    complex_32_t* mac_buffer_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
 	    complex_32_t* mac_buffer_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
 		
-	    #if ( MAC_H_HW ) // Hardware Header-MAC_B_HW
+	    #if ( MAC_H_HW ) // Hardware Header-MAC
 		// ------------
 		// left channel
 		// ------------
     
 		// set hw mac to left channel
     
-		IOWR( MAC_SRAM_0_BASE, 3, 1 );
+		IOWR( HEADER_MAC_0_BASE, 3, 1 );
 		
-// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
 		
 		// activate hw mac
     
-		IOWR( MAC_SRAM_0_BASE, 1, 2 );
+		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
-// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
 		
 		// read data from hw mac
     
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 		{
-		    mac_buffer_1[ i ].r = IORD( MAC_SRAM_0_BASE, i );
-		    mac_buffer_1[ i ].i = IORD( MAC_SRAM_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		    mac_buffer_1[ i ].r = IORD( HEADER_MAC_0_BASE, i );
+		    mac_buffer_1[ i ].i = IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
 		}
     
 		// ------------
@@ -865,22 +865,22 @@ void test()
     
 		// set hw mac to right channel
     
-		IOWR( MAC_SRAM_0_BASE, 3, 2 );
+		IOWR( HEADER_MAC_0_BASE, 3, 2 );
 		
-// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
 		
 		// activate hw mac
     
-		IOWR( MAC_SRAM_0_BASE, 1, 2 );
+		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
-// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
 		
 		// read data from hw mac
     
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 		{
-		    mac_buffer_2[ i ].r = IORD( MAC_SRAM_0_BASE, i );
-		    mac_buffer_2[ i ].i = IORD( MAC_SRAM_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		    mac_buffer_2[ i ].r = IORD( HEADER_MAC_0_BASE, i );
+		    mac_buffer_2[ i ].i = IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
 		}
 	    #else // Software Header-MAC
 		// clear output buffer nachdem er angelegt wurde

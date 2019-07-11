@@ -16,6 +16,7 @@ module reverb_template_mm_interconnect_0 (
 		input  wire        header_mac_0_reset_sink_reset_bridge_in_reset_reset,           //           header_mac_0_reset_sink_reset_bridge_in_reset.reset
 		input  wire        nios2_reset_reset_bridge_in_reset_reset,                       //                       nios2_reset_reset_bridge_in_reset.reset
 		input  wire        sdcard_interface_reset_reset_bridge_in_reset_reset,            //            sdcard_interface_reset_reset_bridge_in_reset.reset
+		input  wire        sram_0_reset_reset_bridge_in_reset_reset,                      //                      sram_0_reset_reset_bridge_in_reset.reset
 		input  wire        textmode_controller_reset_reset_bridge_in_reset_reset,         //         textmode_controller_reset_reset_bridge_in_reset.reset
 		input  wire [31:0] header_mac_0_avalon_master_address,                            //                              header_mac_0_avalon_master.address
 		output wire        header_mac_0_avalon_master_waitrequest,                        //                                                        .waitrequest
@@ -1869,41 +1870,41 @@ module reverb_template_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) sram_0_avalon_sram_slave_translator (
-		.clk                    (altpll_sram_c0_clk),                                  //                      clk.clk
-		.reset                  (header_mac_0_reset_sink_reset_bridge_in_reset_reset), //                    reset.reset
-		.uav_address            (sram_0_avalon_sram_slave_agent_m0_address),           // avalon_universal_slave_0.address
-		.uav_burstcount         (sram_0_avalon_sram_slave_agent_m0_burstcount),        //                         .burstcount
-		.uav_read               (sram_0_avalon_sram_slave_agent_m0_read),              //                         .read
-		.uav_write              (sram_0_avalon_sram_slave_agent_m0_write),             //                         .write
-		.uav_waitrequest        (sram_0_avalon_sram_slave_agent_m0_waitrequest),       //                         .waitrequest
-		.uav_readdatavalid      (sram_0_avalon_sram_slave_agent_m0_readdatavalid),     //                         .readdatavalid
-		.uav_byteenable         (sram_0_avalon_sram_slave_agent_m0_byteenable),        //                         .byteenable
-		.uav_readdata           (sram_0_avalon_sram_slave_agent_m0_readdata),          //                         .readdata
-		.uav_writedata          (sram_0_avalon_sram_slave_agent_m0_writedata),         //                         .writedata
-		.uav_lock               (sram_0_avalon_sram_slave_agent_m0_lock),              //                         .lock
-		.uav_debugaccess        (sram_0_avalon_sram_slave_agent_m0_debugaccess),       //                         .debugaccess
-		.av_address             (sram_0_avalon_sram_slave_address),                    //      avalon_anti_slave_0.address
-		.av_write               (sram_0_avalon_sram_slave_write),                      //                         .write
-		.av_read                (sram_0_avalon_sram_slave_read),                       //                         .read
-		.av_readdata            (sram_0_avalon_sram_slave_readdata),                   //                         .readdata
-		.av_writedata           (sram_0_avalon_sram_slave_writedata),                  //                         .writedata
-		.av_byteenable          (sram_0_avalon_sram_slave_byteenable),                 //                         .byteenable
-		.av_readdatavalid       (sram_0_avalon_sram_slave_readdatavalid),              //                         .readdatavalid
-		.av_begintransfer       (),                                                    //              (terminated)
-		.av_beginbursttransfer  (),                                                    //              (terminated)
-		.av_burstcount          (),                                                    //              (terminated)
-		.av_waitrequest         (1'b0),                                                //              (terminated)
-		.av_writebyteenable     (),                                                    //              (terminated)
-		.av_lock                (),                                                    //              (terminated)
-		.av_chipselect          (),                                                    //              (terminated)
-		.av_clken               (),                                                    //              (terminated)
-		.uav_clken              (1'b0),                                                //              (terminated)
-		.av_debugaccess         (),                                                    //              (terminated)
-		.av_outputenable        (),                                                    //              (terminated)
-		.uav_response           (),                                                    //              (terminated)
-		.av_response            (2'b00),                                               //              (terminated)
-		.uav_writeresponsevalid (),                                                    //              (terminated)
-		.av_writeresponsevalid  (1'b0)                                                 //              (terminated)
+		.clk                    (altpll_sram_c0_clk),                              //                      clk.clk
+		.reset                  (sram_0_reset_reset_bridge_in_reset_reset),        //                    reset.reset
+		.uav_address            (sram_0_avalon_sram_slave_agent_m0_address),       // avalon_universal_slave_0.address
+		.uav_burstcount         (sram_0_avalon_sram_slave_agent_m0_burstcount),    //                         .burstcount
+		.uav_read               (sram_0_avalon_sram_slave_agent_m0_read),          //                         .read
+		.uav_write              (sram_0_avalon_sram_slave_agent_m0_write),         //                         .write
+		.uav_waitrequest        (sram_0_avalon_sram_slave_agent_m0_waitrequest),   //                         .waitrequest
+		.uav_readdatavalid      (sram_0_avalon_sram_slave_agent_m0_readdatavalid), //                         .readdatavalid
+		.uav_byteenable         (sram_0_avalon_sram_slave_agent_m0_byteenable),    //                         .byteenable
+		.uav_readdata           (sram_0_avalon_sram_slave_agent_m0_readdata),      //                         .readdata
+		.uav_writedata          (sram_0_avalon_sram_slave_agent_m0_writedata),     //                         .writedata
+		.uav_lock               (sram_0_avalon_sram_slave_agent_m0_lock),          //                         .lock
+		.uav_debugaccess        (sram_0_avalon_sram_slave_agent_m0_debugaccess),   //                         .debugaccess
+		.av_address             (sram_0_avalon_sram_slave_address),                //      avalon_anti_slave_0.address
+		.av_write               (sram_0_avalon_sram_slave_write),                  //                         .write
+		.av_read                (sram_0_avalon_sram_slave_read),                   //                         .read
+		.av_readdata            (sram_0_avalon_sram_slave_readdata),               //                         .readdata
+		.av_writedata           (sram_0_avalon_sram_slave_writedata),              //                         .writedata
+		.av_byteenable          (sram_0_avalon_sram_slave_byteenable),             //                         .byteenable
+		.av_readdatavalid       (sram_0_avalon_sram_slave_readdatavalid),          //                         .readdatavalid
+		.av_begintransfer       (),                                                //              (terminated)
+		.av_beginbursttransfer  (),                                                //              (terminated)
+		.av_burstcount          (),                                                //              (terminated)
+		.av_waitrequest         (1'b0),                                            //              (terminated)
+		.av_writebyteenable     (),                                                //              (terminated)
+		.av_lock                (),                                                //              (terminated)
+		.av_chipselect          (),                                                //              (terminated)
+		.av_clken               (),                                                //              (terminated)
+		.uav_clken              (1'b0),                                            //              (terminated)
+		.av_debugaccess         (),                                                //              (terminated)
+		.av_outputenable        (),                                                //              (terminated)
+		.uav_response           (),                                                //              (terminated)
+		.av_response            (2'b00),                                           //              (terminated)
+		.uav_writeresponsevalid (),                                                //              (terminated)
+		.av_writeresponsevalid  (1'b0)                                             //              (terminated)
 	);
 
 	altera_merlin_slave_translator #(
@@ -3469,7 +3470,7 @@ module reverb_template_mm_interconnect_0 (
 		.ECC_ENABLE                (0)
 	) sram_0_avalon_sram_slave_agent (
 		.clk                     (altpll_sram_c0_clk),                                           //             clk.clk
-		.reset                   (header_mac_0_reset_sink_reset_bridge_in_reset_reset),          //       clk_reset.reset
+		.reset                   (sram_0_reset_reset_bridge_in_reset_reset),                     //       clk_reset.reset
 		.m0_address              (sram_0_avalon_sram_slave_agent_m0_address),                    //              m0.address
 		.m0_burstcount           (sram_0_avalon_sram_slave_agent_m0_burstcount),                 //                .burstcount
 		.m0_byteenable           (sram_0_avalon_sram_slave_agent_m0_byteenable),                 //                .byteenable
@@ -3528,7 +3529,7 @@ module reverb_template_mm_interconnect_0 (
 		.USE_ALMOST_EMPTY_IF (0)
 	) sram_0_avalon_sram_slave_agent_rsp_fifo (
 		.clk               (altpll_sram_c0_clk),                                        //       clk.clk
-		.reset             (header_mac_0_reset_sink_reset_bridge_in_reset_reset),       // clk_reset.reset
+		.reset             (sram_0_reset_reset_bridge_in_reset_reset),                  // clk_reset.reset
 		.in_data           (sram_0_avalon_sram_slave_agent_rf_source_data),             //        in.data
 		.in_valid          (sram_0_avalon_sram_slave_agent_rf_source_valid),            //          .valid
 		.in_ready          (sram_0_avalon_sram_slave_agent_rf_source_ready),            //          .ready
@@ -3569,7 +3570,7 @@ module reverb_template_mm_interconnect_0 (
 		.USE_ALMOST_EMPTY_IF (0)
 	) sram_0_avalon_sram_slave_agent_rdata_fifo (
 		.clk               (altpll_sram_c0_clk),                                  //       clk.clk
-		.reset             (header_mac_0_reset_sink_reset_bridge_in_reset_reset), // clk_reset.reset
+		.reset             (sram_0_reset_reset_bridge_in_reset_reset),            // clk_reset.reset
 		.in_data           (sram_0_avalon_sram_slave_agent_rdata_fifo_src_data),  //        in.data
 		.in_valid          (sram_0_avalon_sram_slave_agent_rdata_fifo_src_valid), //          .valid
 		.in_ready          (sram_0_avalon_sram_slave_agent_rdata_fifo_src_ready), //          .ready
@@ -6964,19 +6965,19 @@ module reverb_template_mm_interconnect_0 (
 	);
 
 	reverb_template_mm_interconnect_0_router_003 router_003 (
-		.sink_ready         (sram_0_avalon_sram_slave_agent_rp_ready),             //      sink.ready
-		.sink_valid         (sram_0_avalon_sram_slave_agent_rp_valid),             //          .valid
-		.sink_data          (sram_0_avalon_sram_slave_agent_rp_data),              //          .data
-		.sink_startofpacket (sram_0_avalon_sram_slave_agent_rp_startofpacket),     //          .startofpacket
-		.sink_endofpacket   (sram_0_avalon_sram_slave_agent_rp_endofpacket),       //          .endofpacket
-		.clk                (altpll_sram_c0_clk),                                  //       clk.clk
-		.reset              (header_mac_0_reset_sink_reset_bridge_in_reset_reset), // clk_reset.reset
-		.src_ready          (router_003_src_ready),                                //       src.ready
-		.src_valid          (router_003_src_valid),                                //          .valid
-		.src_data           (router_003_src_data),                                 //          .data
-		.src_channel        (router_003_src_channel),                              //          .channel
-		.src_startofpacket  (router_003_src_startofpacket),                        //          .startofpacket
-		.src_endofpacket    (router_003_src_endofpacket)                           //          .endofpacket
+		.sink_ready         (sram_0_avalon_sram_slave_agent_rp_ready),         //      sink.ready
+		.sink_valid         (sram_0_avalon_sram_slave_agent_rp_valid),         //          .valid
+		.sink_data          (sram_0_avalon_sram_slave_agent_rp_data),          //          .data
+		.sink_startofpacket (sram_0_avalon_sram_slave_agent_rp_startofpacket), //          .startofpacket
+		.sink_endofpacket   (sram_0_avalon_sram_slave_agent_rp_endofpacket),   //          .endofpacket
+		.clk                (altpll_sram_c0_clk),                              //       clk.clk
+		.reset              (sram_0_reset_reset_bridge_in_reset_reset),        // clk_reset.reset
+		.src_ready          (router_003_src_ready),                            //       src.ready
+		.src_valid          (router_003_src_valid),                            //          .valid
+		.src_data           (router_003_src_data),                             //          .data
+		.src_channel        (router_003_src_channel),                          //          .channel
+		.src_startofpacket  (router_003_src_startofpacket),                    //          .startofpacket
+		.src_endofpacket    (router_003_src_endofpacket)                       //          .endofpacket
 	);
 
 	reverb_template_mm_interconnect_0_router_004 router_004 (
@@ -7434,7 +7435,7 @@ module reverb_template_mm_interconnect_0 (
 		.ADAPTER_VERSION           ("13.1")
 	) sram_0_avalon_sram_slave_burst_adapter (
 		.clk                   (altpll_sram_c0_clk),                                           //       cr0.clk
-		.reset                 (header_mac_0_reset_sink_reset_bridge_in_reset_reset),          // cr0_reset.reset
+		.reset                 (sram_0_reset_reset_bridge_in_reset_reset),                     // cr0_reset.reset
 		.sink0_valid           (cmd_mux_src_valid),                                            //     sink0.valid
 		.sink0_data            (cmd_mux_src_data),                                             //          .data
 		.sink0_channel         (cmd_mux_src_channel),                                          //          .channel
@@ -7627,26 +7628,26 @@ module reverb_template_mm_interconnect_0 (
 	);
 
 	reverb_template_mm_interconnect_0_cmd_mux cmd_mux (
-		.clk                 (altpll_sram_c0_clk),                                  //       clk.clk
-		.reset               (header_mac_0_reset_sink_reset_bridge_in_reset_reset), // clk_reset.reset
-		.src_ready           (cmd_mux_src_ready),                                   //       src.ready
-		.src_valid           (cmd_mux_src_valid),                                   //          .valid
-		.src_data            (cmd_mux_src_data),                                    //          .data
-		.src_channel         (cmd_mux_src_channel),                                 //          .channel
-		.src_startofpacket   (cmd_mux_src_startofpacket),                           //          .startofpacket
-		.src_endofpacket     (cmd_mux_src_endofpacket),                             //          .endofpacket
-		.sink0_ready         (cmd_demux_src0_ready),                                //     sink0.ready
-		.sink0_valid         (cmd_demux_src0_valid),                                //          .valid
-		.sink0_channel       (cmd_demux_src0_channel),                              //          .channel
-		.sink0_data          (cmd_demux_src0_data),                                 //          .data
-		.sink0_startofpacket (cmd_demux_src0_startofpacket),                        //          .startofpacket
-		.sink0_endofpacket   (cmd_demux_src0_endofpacket),                          //          .endofpacket
-		.sink1_ready         (crosser_012_out_ready),                               //     sink1.ready
-		.sink1_valid         (crosser_012_out_valid),                               //          .valid
-		.sink1_channel       (crosser_012_out_channel),                             //          .channel
-		.sink1_data          (crosser_012_out_data),                                //          .data
-		.sink1_startofpacket (crosser_012_out_startofpacket),                       //          .startofpacket
-		.sink1_endofpacket   (crosser_012_out_endofpacket)                          //          .endofpacket
+		.clk                 (altpll_sram_c0_clk),                       //       clk.clk
+		.reset               (sram_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.src_ready           (cmd_mux_src_ready),                        //       src.ready
+		.src_valid           (cmd_mux_src_valid),                        //          .valid
+		.src_data            (cmd_mux_src_data),                         //          .data
+		.src_channel         (cmd_mux_src_channel),                      //          .channel
+		.src_startofpacket   (cmd_mux_src_startofpacket),                //          .startofpacket
+		.src_endofpacket     (cmd_mux_src_endofpacket),                  //          .endofpacket
+		.sink0_ready         (cmd_demux_src0_ready),                     //     sink0.ready
+		.sink0_valid         (cmd_demux_src0_valid),                     //          .valid
+		.sink0_channel       (cmd_demux_src0_channel),                   //          .channel
+		.sink0_data          (cmd_demux_src0_data),                      //          .data
+		.sink0_startofpacket (cmd_demux_src0_startofpacket),             //          .startofpacket
+		.sink0_endofpacket   (cmd_demux_src0_endofpacket),               //          .endofpacket
+		.sink1_ready         (crosser_012_out_ready),                    //     sink1.ready
+		.sink1_valid         (crosser_012_out_valid),                    //          .valid
+		.sink1_channel       (crosser_012_out_channel),                  //          .channel
+		.sink1_data          (crosser_012_out_data),                     //          .data
+		.sink1_startofpacket (crosser_012_out_startofpacket),            //          .startofpacket
+		.sink1_endofpacket   (crosser_012_out_endofpacket)               //          .endofpacket
 	);
 
 	reverb_template_mm_interconnect_0_cmd_mux_001 cmd_mux_001 (
@@ -8002,26 +8003,26 @@ module reverb_template_mm_interconnect_0 (
 	);
 
 	reverb_template_mm_interconnect_0_rsp_demux rsp_demux (
-		.clk                (altpll_sram_c0_clk),                                  //       clk.clk
-		.reset              (header_mac_0_reset_sink_reset_bridge_in_reset_reset), // clk_reset.reset
-		.sink_ready         (router_003_src_ready),                                //      sink.ready
-		.sink_channel       (router_003_src_channel),                              //          .channel
-		.sink_data          (router_003_src_data),                                 //          .data
-		.sink_startofpacket (router_003_src_startofpacket),                        //          .startofpacket
-		.sink_endofpacket   (router_003_src_endofpacket),                          //          .endofpacket
-		.sink_valid         (router_003_src_valid),                                //          .valid
-		.src0_ready         (rsp_demux_src0_ready),                                //      src0.ready
-		.src0_valid         (rsp_demux_src0_valid),                                //          .valid
-		.src0_data          (rsp_demux_src0_data),                                 //          .data
-		.src0_channel       (rsp_demux_src0_channel),                              //          .channel
-		.src0_startofpacket (rsp_demux_src0_startofpacket),                        //          .startofpacket
-		.src0_endofpacket   (rsp_demux_src0_endofpacket),                          //          .endofpacket
-		.src1_ready         (rsp_demux_src1_ready),                                //      src1.ready
-		.src1_valid         (rsp_demux_src1_valid),                                //          .valid
-		.src1_data          (rsp_demux_src1_data),                                 //          .data
-		.src1_channel       (rsp_demux_src1_channel),                              //          .channel
-		.src1_startofpacket (rsp_demux_src1_startofpacket),                        //          .startofpacket
-		.src1_endofpacket   (rsp_demux_src1_endofpacket)                           //          .endofpacket
+		.clk                (altpll_sram_c0_clk),                       //       clk.clk
+		.reset              (sram_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.sink_ready         (router_003_src_ready),                     //      sink.ready
+		.sink_channel       (router_003_src_channel),                   //          .channel
+		.sink_data          (router_003_src_data),                      //          .data
+		.sink_startofpacket (router_003_src_startofpacket),             //          .startofpacket
+		.sink_endofpacket   (router_003_src_endofpacket),               //          .endofpacket
+		.sink_valid         (router_003_src_valid),                     //          .valid
+		.src0_ready         (rsp_demux_src0_ready),                     //      src0.ready
+		.src0_valid         (rsp_demux_src0_valid),                     //          .valid
+		.src0_data          (rsp_demux_src0_data),                      //          .data
+		.src0_channel       (rsp_demux_src0_channel),                   //          .channel
+		.src0_startofpacket (rsp_demux_src0_startofpacket),             //          .startofpacket
+		.src0_endofpacket   (rsp_demux_src0_endofpacket),               //          .endofpacket
+		.src1_ready         (rsp_demux_src1_ready),                     //      src1.ready
+		.src1_valid         (rsp_demux_src1_valid),                     //          .valid
+		.src1_data          (rsp_demux_src1_data),                      //          .data
+		.src1_channel       (rsp_demux_src1_channel),                   //          .channel
+		.src1_startofpacket (rsp_demux_src1_startofpacket),             //          .startofpacket
+		.src1_endofpacket   (rsp_demux_src1_endofpacket)                //          .endofpacket
 	);
 
 	reverb_template_mm_interconnect_0_rsp_demux_001 rsp_demux_001 (
@@ -8669,7 +8670,7 @@ module reverb_template_mm_interconnect_0 (
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) sram_0_avalon_sram_slave_to_nios2_data_master_rsp_width_adapter (
 		.clk                  (altpll_sram_c0_clk),                                                                //       clk.clk
-		.reset                (header_mac_0_reset_sink_reset_bridge_in_reset_reset),                               // clk_reset.reset
+		.reset                (sram_0_reset_reset_bridge_in_reset_reset),                                          // clk_reset.reset
 		.in_valid             (rsp_demux_src1_valid),                                                              //      sink.valid
 		.in_channel           (rsp_demux_src1_channel),                                                            //          .channel
 		.in_startofpacket     (rsp_demux_src1_startofpacket),                                                      //          .startofpacket
@@ -9108,7 +9109,7 @@ module reverb_template_mm_interconnect_0 (
 		.in_clk            (altpll_c0_clk),                                                                     //        in_clk.clk
 		.in_reset          (nios2_reset_reset_bridge_in_reset_reset),                                           //  in_clk_reset.reset
 		.out_clk           (altpll_sram_c0_clk),                                                                //       out_clk.clk
-		.out_reset         (header_mac_0_reset_sink_reset_bridge_in_reset_reset),                               // out_clk_reset.reset
+		.out_reset         (sram_0_reset_reset_bridge_in_reset_reset),                                          // out_clk_reset.reset
 		.in_ready          (nios2_data_master_to_sram_0_avalon_sram_slave_cmd_width_adapter_src_ready),         //            in.ready
 		.in_valid          (nios2_data_master_to_sram_0_avalon_sram_slave_cmd_width_adapter_src_valid),         //              .valid
 		.in_startofpacket  (nios2_data_master_to_sram_0_avalon_sram_slave_cmd_width_adapter_src_startofpacket), //              .startofpacket
@@ -9140,7 +9141,7 @@ module reverb_template_mm_interconnect_0 (
 		.USE_OUTPUT_PIPELINE (0)
 	) crosser_013 (
 		.in_clk            (altpll_sram_c0_clk),                                                                //        in_clk.clk
-		.in_reset          (header_mac_0_reset_sink_reset_bridge_in_reset_reset),                               //  in_clk_reset.reset
+		.in_reset          (sram_0_reset_reset_bridge_in_reset_reset),                                          //  in_clk_reset.reset
 		.out_clk           (altpll_c0_clk),                                                                     //       out_clk.clk
 		.out_reset         (nios2_reset_reset_bridge_in_reset_reset),                                           // out_clk_reset.reset
 		.in_ready          (sram_0_avalon_sram_slave_to_nios2_data_master_rsp_width_adapter_src_ready),         //            in.ready
@@ -9180,7 +9181,7 @@ module reverb_template_mm_interconnect_0 (
 		.outReadyLatency (0)
 	) avalon_st_adapter (
 		.in_clk_0_clk   (altpll_sram_c0_clk),                                  // in_clk_0.clk
-		.in_rst_0_reset (header_mac_0_reset_sink_reset_bridge_in_reset_reset), // in_rst_0.reset
+		.in_rst_0_reset (sram_0_reset_reset_bridge_in_reset_reset),            // in_rst_0.reset
 		.in_0_data      (sram_0_avalon_sram_slave_agent_rdata_fifo_out_data),  //     in_0.data
 		.in_0_valid     (sram_0_avalon_sram_slave_agent_rdata_fifo_out_valid), //         .valid
 		.in_0_ready     (sram_0_avalon_sram_slave_agent_rdata_fifo_out_ready), //         .ready

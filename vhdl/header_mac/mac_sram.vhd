@@ -241,6 +241,9 @@ signal m_read_next : std_logic;
 signal m_writedata_s : std_logic_vector(15 downto 0);
 signal m_writedata_next : std_logic_vector(15 downto 0);
 
+signal skip : std_logic := '1';
+signal skip_next : std_logic := '1';
+
 begin
 
 -- RAM block for acc_r
@@ -359,6 +362,8 @@ begin
 		m_read_s <= '0';
 		m_writedata_s <= (others => '0');
 		
+		skip <= '1';
+		
     elsif rising_edge(clk) then
 		
 		state_mode <= state_mode_next;
@@ -415,6 +420,8 @@ begin
 		m_read_s <= m_read_next;
 		m_writedata_s <= m_writedata_next;
 		
+		skip <= skip_next;
+		
 	end if;
 	
 end process sync_state_proc;
@@ -423,7 +430,7 @@ end process sync_state_proc;
 -- proc
 ------------------------------------------------------------------------
 
-proc : process (state_mode, read_state, s_readdata_s, s_readdatavalid_s, m_address_s, m_write_s, m_read_s, m_writedata_s, a, i, i_prev, pre_pipeline, post_pipeline, ir_pointer, in_pointer, ir_addr, in_addr, a_mul_c, b_mul_c, b_mul_d, a_mul_d, new_r, new_i, acc_r_temp, acc_i_temp, reset, start, output_addr, output_value, latest_in_block, latest_in_block_1, latest_in_block_2, ir_block_min, ir_block_max, in_block_min, in_block_max, channel, s_write, s_writedata, s_address, s_read, m_waitrequest, m_readdata, b, c, d, ram_r_rd_data, ram_i_rd_data)
+proc : process (skip, state_mode, read_state, s_readdata_s, s_readdatavalid_s, m_address_s, m_write_s, m_read_s, m_writedata_s, a, i, i_prev, pre_pipeline, post_pipeline, ir_pointer, in_pointer, ir_addr, in_addr, a_mul_c, b_mul_c, b_mul_d, a_mul_d, new_r, new_i, acc_r_temp, acc_i_temp, reset, start, output_addr, output_value, latest_in_block, latest_in_block_1, latest_in_block_2, ir_block_min, ir_block_max, in_block_min, in_block_max, channel, s_write, s_writedata, s_address, s_read, m_waitrequest, m_readdata, b, c, d, ram_r_rd_data, ram_i_rd_data)
 
 begin
     
@@ -495,10 +502,18 @@ begin
 	m_write_next <= m_write_s;
 	m_read_next <= m_read_s;
 	m_writedata_next <= m_writedata_s;
+	
+	skip_next <= skip;
 		
 	-- die signale die vom slave interface kommen sollten hier gespeichert werden.
 	-- TODO warum?
-		
+	
+	if skip = '1' then
+	  skip_next <= '0';
+	else
+	  skip_next <= '1';
+	
+	
 	case state_mode is
         
         when STATE_IDLE =>
@@ -1192,6 +1207,8 @@ begin
 		state_mode_next <= STATE_IDLE;
         
     end case;
+    
+    end if;
     
     case read_state is
         

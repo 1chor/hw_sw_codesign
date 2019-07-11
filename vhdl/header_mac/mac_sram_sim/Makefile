@@ -5,8 +5,11 @@ VCOM_ARGS=-check_synthesis -2008 -work work -suppress 1236 -novopt
 
 #additional source files can be added here (compilation order is important!)
 VHDL_FILES = \
+	../../math/src/math_pkg.vhd\
+	../../ram/ram_pkg.vhd\
+	../../ram/dp_ram_1c1r1w.vhd\
 	fake_sram.vhd\
-	mac_sram.vhd\
+	../mac_sram.vhd\
 	top.vhd
 
 #list of source files needed for simulation

@@ -448,6 +448,7 @@ architecture rtl of reverb_template is
 			header_mac_0_reset_sink_reset_bridge_in_reset_reset           : in  std_logic                     := 'X';             -- reset
 			nios2_reset_reset_bridge_in_reset_reset                       : in  std_logic                     := 'X';             -- reset
 			sdcard_interface_reset_reset_bridge_in_reset_reset            : in  std_logic                     := 'X';             -- reset
+			sram_0_reset_reset_bridge_in_reset_reset                      : in  std_logic                     := 'X';             -- reset
 			textmode_controller_reset_reset_bridge_in_reset_reset         : in  std_logic                     := 'X';             -- reset
 			header_mac_0_avalon_master_address                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
 			header_mac_0_avalon_master_waitrequest                        : out std_logic;                                        -- waitrequest
@@ -809,8 +810,8 @@ architecture rtl of reverb_template is
 	end component reverb_template_rst_controller_001;
 
 	signal altpll_c0_clk                                                      : std_logic;                     -- altpll:c0 -> [sdram_clk_clk, avalon_st_adapter:in_clk_0_clk, avalon_st_adapter_001:in_clk_0_clk, avalon_st_adapter_002:in_clk_0_clk, avalon_st_adapter_003:in_clk_0_clk, avalon_st_adapter_004:in_clk_0_clk, avalon_st_adapter_005:in_clk_0_clk, fft_wrapper_header_0:clk, fir_l:clk, fir_r:clk, irq_mapper:clk, irq_synchronizer:sender_clk, irq_synchronizer_001:sender_clk, jtag_uart:clk, m2s_fifo_ffth:wrclock, m2s_fifo_fir_l:wrclock, m2s_fifo_fir_r:wrclock, mm_interconnect_0:altpll_c0_clk, nios2:clk, pio_0:clk, rst_controller_002:clk, rst_controller_004:clk, s2m_fifo_ffth:wrclock, s2m_fifo_fir_l:wrclock, s2m_fifo_fir_r:wrclock, sdcard_interface:i_clock, sdram:clk, touch_cntrl:clk]
-	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [header_mac_0:clk, mm_interconnect_0:altpll_sram_c0_clk, rst_controller_003:clk, sram_0:clk]
-	signal altpll_c2_clk                                                      : std_logic;                     -- altpll:c2 -> [clk_25_clk, irq_synchronizer_001:receiver_clk, mm_interconnect_0:altpll_c2_clk, rst_controller_005:clk, textmode_controller:clk]
+	signal altpll_sram_c0_clk                                                 : std_logic;                     -- altpll_sram:c0 -> [header_mac_0:clk, mm_interconnect_0:altpll_sram_c0_clk, rst_controller_003:clk, rst_controller_005:clk, sram_0:clk]
+	signal altpll_c2_clk                                                      : std_logic;                     -- altpll:c2 -> [clk_25_clk, irq_synchronizer_001:receiver_clk, mm_interconnect_0:altpll_c2_clk, rst_controller_006:clk, textmode_controller:clk]
 	signal pio_0_external_connection_export                                   : std_logic;                     -- pio_0:out_port -> fft_wrapper_header_0:inverse
 	signal header_mac_0_avalon_master_readdata                                : std_logic_vector(15 downto 0); -- mm_interconnect_0:header_mac_0_avalon_master_readdata -> header_mac_0:m_readdata
 	signal header_mac_0_avalon_master_waitrequest                             : std_logic;                     -- mm_interconnect_0:header_mac_0_avalon_master_waitrequest -> header_mac_0:m_waitrequest
@@ -992,13 +993,14 @@ architecture rtl of reverb_template is
 	signal avalon_st_adapter_005_out_0_data                                   : std_logic_vector(31 downto 0); -- avalon_st_adapter_005:out_0_data -> fir_r:stin_data
 	signal avalon_st_adapter_005_out_0_ready                                  : std_logic;                     -- fir_r:stin_ready -> avalon_st_adapter_005:out_0_ready
 	signal rst_controller_reset_out_reset                                     : std_logic;                     -- rst_controller:reset_out -> [altpll:reset, altpll_sram:reset, mm_interconnect_0:altpll_sram_inclk_interface_reset_reset_bridge_in_reset_reset]
-	signal nios2_debug_reset_request_reset                                    : std_logic;                     -- nios2:debug_reset_request -> [rst_controller:reset_in1, rst_controller_004:reset_in1]
+	signal nios2_debug_reset_request_reset                                    : std_logic;                     -- nios2:debug_reset_request -> [rst_controller:reset_in1, rst_controller_003:reset_in1, rst_controller_004:reset_in1]
 	signal rst_controller_001_reset_out_reset                                 : std_logic;                     -- rst_controller_001:reset_out -> [audio:reset, audio_pll:ref_reset_reset, av_config:reset, irq_synchronizer:receiver_reset, mm_interconnect_0:audio_reset_reset_bridge_in_reset_reset]
 	signal rst_controller_002_reset_out_reset                                 : std_logic;                     -- rst_controller_002:reset_out -> [avalon_st_adapter:in_rst_0_reset, avalon_st_adapter_001:in_rst_0_reset, avalon_st_adapter_002:in_rst_0_reset, avalon_st_adapter_003:in_rst_0_reset, avalon_st_adapter_004:in_rst_0_reset, avalon_st_adapter_005:in_rst_0_reset, mm_interconnect_0:sdcard_interface_reset_reset_bridge_in_reset_reset, rst_controller_002_reset_out_reset:in]
-	signal rst_controller_003_reset_out_reset                                 : std_logic;                     -- rst_controller_003:reset_out -> [mm_interconnect_0:header_mac_0_reset_sink_reset_bridge_in_reset_reset, rst_controller_003_reset_out_reset:in, sram_0:reset]
+	signal rst_controller_003_reset_out_reset                                 : std_logic;                     -- rst_controller_003:reset_out -> [mm_interconnect_0:header_mac_0_reset_sink_reset_bridge_in_reset_reset, rst_controller_003_reset_out_reset:in]
 	signal rst_controller_004_reset_out_reset                                 : std_logic;                     -- rst_controller_004:reset_out -> [irq_mapper:reset, irq_synchronizer:sender_reset, irq_synchronizer_001:sender_reset, mm_interconnect_0:nios2_reset_reset_bridge_in_reset_reset, rst_controller_004_reset_out_reset:in]
-	signal rst_controller_005_reset_out_reset                                 : std_logic;                     -- rst_controller_005:reset_out -> [irq_synchronizer_001:receiver_reset, mm_interconnect_0:textmode_controller_reset_reset_bridge_in_reset_reset, rst_controller_005_reset_out_reset:in]
-	signal reset_reset_n_ports_inv                                            : std_logic;                     -- reset_reset_n:inv -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0, rst_controller_003:reset_in0, rst_controller_004:reset_in0, rst_controller_005:reset_in0]
+	signal rst_controller_005_reset_out_reset                                 : std_logic;                     -- rst_controller_005:reset_out -> [mm_interconnect_0:sram_0_reset_reset_bridge_in_reset_reset, sram_0:reset]
+	signal rst_controller_006_reset_out_reset                                 : std_logic;                     -- rst_controller_006:reset_out -> [irq_synchronizer_001:receiver_reset, mm_interconnect_0:textmode_controller_reset_reset_bridge_in_reset_reset, rst_controller_006_reset_out_reset:in]
+	signal reset_reset_n_ports_inv                                            : std_logic;                     -- reset_reset_n:inv -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0, rst_controller_003:reset_in0, rst_controller_004:reset_in0, rst_controller_005:reset_in0, rst_controller_006:reset_in0]
 	signal mm_interconnect_0_jtag_uart_avalon_jtag_slave_read_ports_inv       : std_logic;                     -- mm_interconnect_0_jtag_uart_avalon_jtag_slave_read:inv -> jtag_uart:av_read_n
 	signal mm_interconnect_0_jtag_uart_avalon_jtag_slave_write_ports_inv      : std_logic;                     -- mm_interconnect_0_jtag_uart_avalon_jtag_slave_write:inv -> jtag_uart:av_write_n
 	signal mm_interconnect_0_textmode_controller_avalon_slave_write_ports_inv : std_logic;                     -- mm_interconnect_0_textmode_controller_avalon_slave_write:inv -> textmode_controller:write_n
@@ -1009,7 +1011,7 @@ architecture rtl of reverb_template is
 	signal rst_controller_002_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_002_reset_out_reset:inv -> [fft_wrapper_header_0:reset_n, fir_l:res_n, fir_r:res_n, m2s_fifo_ffth:reset_n, m2s_fifo_fir_l:reset_n, m2s_fifo_fir_r:reset_n, pio_0:reset_n, s2m_fifo_ffth:reset_n, s2m_fifo_fir_l:reset_n, s2m_fifo_fir_r:reset_n, sdcard_interface:i_reset_n, sdram:reset_n, touch_cntrl:res_n]
 	signal rst_controller_003_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_003_reset_out_reset:inv -> header_mac_0:res_n
 	signal rst_controller_004_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_004_reset_out_reset:inv -> [jtag_uart:rst_n, nios2:reset_n]
-	signal rst_controller_005_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_005_reset_out_reset:inv -> textmode_controller:reset_n
+	signal rst_controller_006_reset_out_reset_ports_inv                       : std_logic;                     -- rst_controller_006_reset_out_reset:inv -> textmode_controller:reset_n
 
 begin
 
@@ -1360,7 +1362,7 @@ begin
 	sram_0 : component reverb_template_sram_0
 		port map (
 			clk           => altpll_sram_c0_clk,                                       --                clk.clk
-			reset         => rst_controller_003_reset_out_reset,                       --              reset.reset
+			reset         => rst_controller_005_reset_out_reset,                       --              reset.reset
 			SRAM_DQ       => sram_DQ,                                                  -- external_interface.export
 			SRAM_ADDR     => sram_ADDR,                                                --                   .export
 			SRAM_LB_N     => sram_LB_N,                                                --                   .export
@@ -1385,7 +1387,7 @@ begin
 		)
 		port map (
 			clk       => altpll_c2_clk,                                                      --        clock.clk
-			reset_n   => rst_controller_005_reset_out_reset_ports_inv,                       --        reset.reset_n
+			reset_n   => rst_controller_006_reset_out_reset_ports_inv,                       --        reset.reset_n
 			address   => mm_interconnect_0_textmode_controller_avalon_slave_address,         -- avalon_slave.address
 			write_n   => mm_interconnect_0_textmode_controller_avalon_slave_write_ports_inv, --             .write_n
 			writedata => mm_interconnect_0_textmode_controller_avalon_slave_writedata,       --             .writedata
@@ -1431,7 +1433,8 @@ begin
 			header_mac_0_reset_sink_reset_bridge_in_reset_reset           => rst_controller_003_reset_out_reset,                                 --           header_mac_0_reset_sink_reset_bridge_in_reset.reset
 			nios2_reset_reset_bridge_in_reset_reset                       => rst_controller_004_reset_out_reset,                                 --                       nios2_reset_reset_bridge_in_reset.reset
 			sdcard_interface_reset_reset_bridge_in_reset_reset            => rst_controller_002_reset_out_reset,                                 --            sdcard_interface_reset_reset_bridge_in_reset.reset
-			textmode_controller_reset_reset_bridge_in_reset_reset         => rst_controller_005_reset_out_reset,                                 --         textmode_controller_reset_reset_bridge_in_reset.reset
+			sram_0_reset_reset_bridge_in_reset_reset                      => rst_controller_005_reset_out_reset,                                 --                      sram_0_reset_reset_bridge_in_reset.reset
+			textmode_controller_reset_reset_bridge_in_reset_reset         => rst_controller_006_reset_out_reset,                                 --         textmode_controller_reset_reset_bridge_in_reset.reset
 			header_mac_0_avalon_master_address                            => header_mac_0_avalon_master_address,                                 --                              header_mac_0_avalon_master.address
 			header_mac_0_avalon_master_waitrequest                        => header_mac_0_avalon_master_waitrequest,                             --                                                        .waitrequest
 			header_mac_0_avalon_master_read                               => header_mac_0_avalon_master_read,                                    --                                                        .read
@@ -1601,7 +1604,7 @@ begin
 		port map (
 			receiver_clk   => altpll_c2_clk,                      --       receiver_clk.clk
 			sender_clk     => altpll_c0_clk,                      --         sender_clk.clk
-			receiver_reset => rst_controller_005_reset_out_reset, -- receiver_clk_reset.reset
+			receiver_reset => rst_controller_006_reset_out_reset, -- receiver_clk_reset.reset
 			sender_reset   => rst_controller_004_reset_out_reset, --   sender_clk_reset.reset
 			receiver_irq   => irq_synchronizer_001_receiver_irq,  --           receiver.irq
 			sender_irq(0)  => irq_mapper_receiver1_irq            --             sender.irq
@@ -1982,9 +1985,9 @@ begin
 			reset_req_in15 => '0'                                 -- (terminated)
 		);
 
-	rst_controller_003 : component reverb_template_rst_controller_001
+	rst_controller_003 : component reverb_template_rst_controller
 		generic map (
-			NUM_RESET_INPUTS          => 1,
+			NUM_RESET_INPUTS          => 2,
 			OUTPUT_RESET_SYNC_EDGES   => "deassert",
 			SYNC_DEPTH                => 2,
 			RESET_REQUEST_PRESENT     => 0,
@@ -2011,11 +2014,11 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
+			reset_in1      => nios2_debug_reset_request_reset,    -- reset_in1.reset
 			clk            => altpll_sram_c0_clk,                 --       clk.clk
 			reset_out      => rst_controller_003_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)
-			reset_in1      => '0',                                -- (terminated)
 			reset_req_in1  => '0',                                -- (terminated)
 			reset_in2      => '0',                                -- (terminated)
 			reset_req_in2  => '0',                                -- (terminated)
@@ -2141,8 +2144,73 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
-			clk            => altpll_c2_clk,                      --       clk.clk
+			clk            => altpll_sram_c0_clk,                 --       clk.clk
 			reset_out      => rst_controller_005_reset_out_reset, -- reset_out.reset
+			reset_req      => open,                               -- (terminated)
+			reset_req_in0  => '0',                                -- (terminated)
+			reset_in1      => '0',                                -- (terminated)
+			reset_req_in1  => '0',                                -- (terminated)
+			reset_in2      => '0',                                -- (terminated)
+			reset_req_in2  => '0',                                -- (terminated)
+			reset_in3      => '0',                                -- (terminated)
+			reset_req_in3  => '0',                                -- (terminated)
+			reset_in4      => '0',                                -- (terminated)
+			reset_req_in4  => '0',                                -- (terminated)
+			reset_in5      => '0',                                -- (terminated)
+			reset_req_in5  => '0',                                -- (terminated)
+			reset_in6      => '0',                                -- (terminated)
+			reset_req_in6  => '0',                                -- (terminated)
+			reset_in7      => '0',                                -- (terminated)
+			reset_req_in7  => '0',                                -- (terminated)
+			reset_in8      => '0',                                -- (terminated)
+			reset_req_in8  => '0',                                -- (terminated)
+			reset_in9      => '0',                                -- (terminated)
+			reset_req_in9  => '0',                                -- (terminated)
+			reset_in10     => '0',                                -- (terminated)
+			reset_req_in10 => '0',                                -- (terminated)
+			reset_in11     => '0',                                -- (terminated)
+			reset_req_in11 => '0',                                -- (terminated)
+			reset_in12     => '0',                                -- (terminated)
+			reset_req_in12 => '0',                                -- (terminated)
+			reset_in13     => '0',                                -- (terminated)
+			reset_req_in13 => '0',                                -- (terminated)
+			reset_in14     => '0',                                -- (terminated)
+			reset_req_in14 => '0',                                -- (terminated)
+			reset_in15     => '0',                                -- (terminated)
+			reset_req_in15 => '0'                                 -- (terminated)
+		);
+
+	rst_controller_006 : component reverb_template_rst_controller_001
+		generic map (
+			NUM_RESET_INPUTS          => 1,
+			OUTPUT_RESET_SYNC_EDGES   => "deassert",
+			SYNC_DEPTH                => 2,
+			RESET_REQUEST_PRESENT     => 0,
+			RESET_REQ_WAIT_TIME       => 1,
+			MIN_RST_ASSERTION_TIME    => 3,
+			RESET_REQ_EARLY_DSRT_TIME => 1,
+			USE_RESET_REQUEST_IN0     => 0,
+			USE_RESET_REQUEST_IN1     => 0,
+			USE_RESET_REQUEST_IN2     => 0,
+			USE_RESET_REQUEST_IN3     => 0,
+			USE_RESET_REQUEST_IN4     => 0,
+			USE_RESET_REQUEST_IN5     => 0,
+			USE_RESET_REQUEST_IN6     => 0,
+			USE_RESET_REQUEST_IN7     => 0,
+			USE_RESET_REQUEST_IN8     => 0,
+			USE_RESET_REQUEST_IN9     => 0,
+			USE_RESET_REQUEST_IN10    => 0,
+			USE_RESET_REQUEST_IN11    => 0,
+			USE_RESET_REQUEST_IN12    => 0,
+			USE_RESET_REQUEST_IN13    => 0,
+			USE_RESET_REQUEST_IN14    => 0,
+			USE_RESET_REQUEST_IN15    => 0,
+			ADAPT_RESET_REQUEST       => 0
+		)
+		port map (
+			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
+			clk            => altpll_c2_clk,                      --       clk.clk
+			reset_out      => rst_controller_006_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)
 			reset_in1      => '0',                                -- (terminated)
@@ -2199,7 +2267,7 @@ begin
 
 	rst_controller_004_reset_out_reset_ports_inv <= not rst_controller_004_reset_out_reset;
 
-	rst_controller_005_reset_out_reset_ports_inv <= not rst_controller_005_reset_out_reset;
+	rst_controller_006_reset_out_reset_ports_inv <= not rst_controller_006_reset_out_reset;
 
 	sdram_clk_clk <= altpll_c0_clk;
 

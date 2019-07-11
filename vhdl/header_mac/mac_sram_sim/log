@@ -1,5 +1,35 @@
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:33:01 on Jul 09,2019
+Start time: 15:59:03 on Jul 11,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 -novopt ../../math/src/math_pkg.vhd 
+-- Loading package STANDARD
+-- Compiling package math_pkg
+-- Compiling package body math_pkg
+-- Loading package math_pkg
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 15:59:03 on Jul 11,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 -novopt ../../ram/ram_pkg.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package math_pkg
+-- Compiling package ram_pkg
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 15:59:03 on Jul 11,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 -novopt ../../ram/dp_ram_1c1r1w.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity dp_ram_1c1r1w
+-- Compiling architecture beh of dp_ram_1c1r1w
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
+Start time: 15:59:03 on Jul 11,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 -novopt fake_sram.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -7,33 +37,33 @@ vcom -check_synthesis -2008 -work work -suppress 1236 -novopt fake_sram.vhd
 -- Loading package NUMERIC_STD
 -- Compiling entity fake_sram
 -- Compiling architecture Behavioral of fake_sram
-End time: 17:33:01 on Jul 09,2019, Elapsed time: 0:00:00
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:33:01 on Jul 09,2019
-vcom -check_synthesis -2008 -work work -suppress 1236 -novopt mac_sram.vhd 
+Start time: 15:59:03 on Jul 11,2019
+vcom -check_synthesis -2008 -work work -suppress 1236 -novopt ../mac_sram.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
-** Error: (vcom-11) Could not find work.ram_pkg.
-** Error (suppressible): mac_sram.vhd(6): (vcom-1195) Cannot find expanded name "work.ram_pkg".
-** Error: mac_sram.vhd(6): Unknown expanded name.
-** Error: mac_sram.vhd(8): VHDL Compiler exiting
-End time: 17:33:01 on Jul 09,2019, Elapsed time: 0:00:00
-Errors: 4, Warnings: 0
+-- Loading package math_pkg
+-- Loading package ram_pkg
+-- Compiling entity mac_sram
+-- Compiling architecture arch of mac_sram
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:33:01 on Jul 09,2019
+Start time: 15:59:03 on Jul 11,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 -novopt top.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling entity top
 -- Compiling architecture arch of top
-End time: 17:33:01 on Jul 09,2019, Elapsed time: 0:00:00
+End time: 15:59:03 on Jul 11,2019, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 QuestaSim vcom 10.6c_1 Compiler 2017.09 Sep 15 2017
-Start time: 17:33:01 on Jul 09,2019
+Start time: 15:59:03 on Jul 11,2019
 vcom -check_synthesis -2008 -work work -suppress 1236 -novopt tb.vhd 
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -47,5 +77,5 @@ vcom -check_synthesis -2008 -work work -suppress 1236 -novopt tb.vhd
 ** Warning: tb.vhd(104): (vcom-1207) An abstract literal and an identifier must have a separator between them.
 ** Warning: tb.vhd(112): (vcom-1207) An abstract literal and an identifier must have a separator between them.
 ** Warning: tb.vhd(118): (vcom-1207) An abstract literal and an identifier must have a separator between them.
-End time: 17:33:01 on Jul 09,2019, Elapsed time: 0:00:00
+End time: 15:59:04 on Jul 11,2019, Elapsed time: 0:00:01
 Errors: 0, Warnings: 7

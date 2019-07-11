@@ -1994,6 +1994,11 @@
    version="18.1"
    start="nios2.debug_reset_request"
    end="nios2.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="nios2.debug_reset_request"
+   end="header_mac_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
