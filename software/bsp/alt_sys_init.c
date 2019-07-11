@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Thu Jul 11 16:04:57 CEST 2019
+ * Generated: Thu Jul 11 17:17:25 CEST 2019
  */
 
 /*
