@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Wed Jun 26 14:57:43 CEST 2019
+ * Generated: Thu Jul 11 14:42:08 CEST 2019
  */
 
 /*
@@ -153,6 +153,7 @@
 #define __ALTPLL
 #define __AVALON_TOUCH_CNTRL
 #define __FIR
+#define __HEADER_MAC
 #define __TEXTMODE_CONTROLLER
 
 
@@ -285,6 +286,20 @@
 #define ALT_MAX_FD 32
 #define ALT_SYS_CLK none
 #define ALT_TIMESTAMP_CLK none
+
+
+/*
+ * header_mac_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_header_mac_0 header_mac
+#define HEADER_MAC_0_BASE 0x0
+#define HEADER_MAC_0_IRQ -1
+#define HEADER_MAC_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEADER_MAC_0_NAME "/dev/header_mac_0"
+#define HEADER_MAC_0_SPAN 262144
+#define HEADER_MAC_0_TYPE "header_mac"
 
 
 /*

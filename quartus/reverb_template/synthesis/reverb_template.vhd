@@ -207,8 +207,7 @@ architecture rtl of reverb_template is
 			s_read          : in  std_logic                     := 'X';             -- read
 			s_writedata     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
 			s_readdata      : out std_logic_vector(31 downto 0);                    -- readdata
-			s_readdatavalid : out std_logic;                                        -- readdatavalid
-			s_waitrequest   : out std_logic                                         -- waitrequest
+			s_readdatavalid : out std_logic                                         -- readdatavalid
 		);
 	end component mac_sram;
 
@@ -509,7 +508,6 @@ architecture rtl of reverb_template is
 			header_mac_0_avalon_slave_readdata                            : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
 			header_mac_0_avalon_slave_writedata                           : out std_logic_vector(31 downto 0);                    -- writedata
 			header_mac_0_avalon_slave_readdatavalid                       : in  std_logic                     := 'X';             -- readdatavalid
-			header_mac_0_avalon_slave_waitrequest                         : in  std_logic                     := 'X';             -- waitrequest
 			jtag_uart_avalon_jtag_slave_address                           : out std_logic_vector(0 downto 0);                     -- address
 			jtag_uart_avalon_jtag_slave_write                             : out std_logic;                                        -- write
 			jtag_uart_avalon_jtag_slave_read                              : out std_logic;                                        -- read
@@ -879,7 +877,6 @@ architecture rtl of reverb_template is
 	signal mm_interconnect_0_touch_cntrl_avalon_slave_write                   : std_logic;                     -- mm_interconnect_0:touch_cntrl_avalon_slave_write -> touch_cntrl:write
 	signal mm_interconnect_0_touch_cntrl_avalon_slave_writedata               : std_logic_vector(31 downto 0); -- mm_interconnect_0:touch_cntrl_avalon_slave_writedata -> touch_cntrl:writedata
 	signal mm_interconnect_0_header_mac_0_avalon_slave_readdata               : std_logic_vector(31 downto 0); -- header_mac_0:s_readdata -> mm_interconnect_0:header_mac_0_avalon_slave_readdata
-	signal mm_interconnect_0_header_mac_0_avalon_slave_waitrequest            : std_logic;                     -- header_mac_0:s_waitrequest -> mm_interconnect_0:header_mac_0_avalon_slave_waitrequest
 	signal mm_interconnect_0_header_mac_0_avalon_slave_address                : std_logic_vector(15 downto 0); -- mm_interconnect_0:header_mac_0_avalon_slave_address -> header_mac_0:s_address
 	signal mm_interconnect_0_header_mac_0_avalon_slave_read                   : std_logic;                     -- mm_interconnect_0:header_mac_0_avalon_slave_read -> header_mac_0:s_read
 	signal mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid          : std_logic;                     -- header_mac_0:s_readdatavalid -> mm_interconnect_0:header_mac_0_avalon_slave_readdatavalid
@@ -1180,8 +1177,7 @@ begin
 			s_read          => mm_interconnect_0_header_mac_0_avalon_slave_read,          --              .read
 			s_writedata     => mm_interconnect_0_header_mac_0_avalon_slave_writedata,     --              .writedata
 			s_readdata      => mm_interconnect_0_header_mac_0_avalon_slave_readdata,      --              .readdata
-			s_readdatavalid => mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid, --              .readdatavalid
-			s_waitrequest   => mm_interconnect_0_header_mac_0_avalon_slave_waitrequest    --              .waitrequest
+			s_readdatavalid => mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid  --              .readdatavalid
 		);
 
 	jtag_uart : component reverb_template_jtag_uart
@@ -1495,7 +1491,6 @@ begin
 			header_mac_0_avalon_slave_readdata                            => mm_interconnect_0_header_mac_0_avalon_slave_readdata,               --                                                        .readdata
 			header_mac_0_avalon_slave_writedata                           => mm_interconnect_0_header_mac_0_avalon_slave_writedata,              --                                                        .writedata
 			header_mac_0_avalon_slave_readdatavalid                       => mm_interconnect_0_header_mac_0_avalon_slave_readdatavalid,          --                                                        .readdatavalid
-			header_mac_0_avalon_slave_waitrequest                         => mm_interconnect_0_header_mac_0_avalon_slave_waitrequest,            --                                                        .waitrequest
 			jtag_uart_avalon_jtag_slave_address                           => mm_interconnect_0_jtag_uart_avalon_jtag_slave_address,              --                             jtag_uart_avalon_jtag_slave.address
 			jtag_uart_avalon_jtag_slave_write                             => mm_interconnect_0_jtag_uart_avalon_jtag_slave_write,                --                                                        .write
 			jtag_uart_avalon_jtag_slave_read                              => mm_interconnect_0_jtag_uart_avalon_jtag_slave_read,                 --                                                        .read

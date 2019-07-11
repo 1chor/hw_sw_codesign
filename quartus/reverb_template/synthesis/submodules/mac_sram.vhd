@@ -17,8 +17,7 @@ entity mac_sram is
         s_writedata : in  std_logic_vector(31 downto 0);
         s_readdata  : out std_logic_vector(31 downto 0);
         s_readdatavalid : out std_logic;
-        s_waitrequest   : out std_logic;
-        
+                
         -- memory mapped master
         m_address   : out  std_logic_vector(31 downto 0);
         m_write     : out  std_logic;
@@ -66,6 +65,10 @@ constant IN_BLOCK_2_MAX : integer := 55;
 -- block size
 
 constant BLOCK_SIZE : integer := 512;
+
+-- Address where the actual state is written
+
+constant ADDRESS_STATE : integer := 1700;
 
 -- block signals
 
@@ -122,12 +125,7 @@ type state_mode_type is (
     STATE_B_H,
     STATE_B_L,
     STATE_NEXT_BLOCK,
-    STATE_EX_A_L,
-    STATE_ADDRESS,
-    STATE_ARRAY,
-    STATE_ARRAY_I,
-    STATE_ARRAY_R,
-    STATE_OUTPUT
+    STATE_EX_A_L
 );
 signal state_mode : state_mode_type;
 signal state_mode_next : state_mode_type;
@@ -200,6 +198,19 @@ signal ram_i_wr_addr : std_logic_vector(ADDR_WIDTH - 1 downto 0);
 signal ram_i_wr_data : std_logic_vector(DATA_WIDTH - 1 downto 0);
 signal ram_i_wr : std_logic;
 	
+------------------------------------------------------------------------
+
+type read_state_type is (
+    STATE_IDLE,
+    STATE_ADDRESS,
+    STATE_ARRAY,
+    STATE_ARRAY_I,
+    STATE_ARRAY_R,
+    STATE_OUTPUT
+);
+signal read_state : read_state_type;
+signal read_state_next : read_state_type;
+
 begin
 
 -- RAM block for acc_r
@@ -243,7 +254,7 @@ port map (
 );
 
 ------------------------------------------------------------------------
--- proc
+-- sync_state_proc
 ------------------------------------------------------------------------
 
 sync_state_proc : process (clk, res_n)
@@ -253,6 +264,7 @@ begin
 	if res_n = '0' then
         
 		state_mode <= STATE_IDLE;
+		read_state <= STATE_IDLE;
 
 		a <= (others=>'0');
 		b <= (others=>'0');
@@ -298,6 +310,7 @@ begin
     elsif rising_edge(clk) then
 		
 		state_mode <= state_mode_next;
+		read_state <= read_state_next;
 		
 		a <= a_next;
 		b <= b_next;
@@ -344,16 +357,22 @@ begin
 	
 end process sync_state_proc;
 
-proc : process (state_mode, a, i, i_prev, pre_pipeline, post_pipeline, in_addr, a_mul_c, b_mul_c, b_mul_d, a_mul_d, new_r, new_i, acc_r_temp, acc_i_temp, reset, start, output_addr, output_value, latest_in_block, latest_in_block_1, latest_in_block_2, ir_block_min, ir_block_max, in_block_min, in_block_max, channel, s_write, s_writedata, s_address, s_read, m_waitrequest, m_readdata, b, c, d, in_block_max, in_block_min, ram_r_rd_data, ram_i_rd_data)
+------------------------------------------------------------------------
+-- proc
+------------------------------------------------------------------------
+
+proc : process (state_mode, read_state, a, i, i_prev, pre_pipeline, post_pipeline, in_addr, a_mul_c, b_mul_c, b_mul_d, a_mul_d, new_r, new_i, acc_r_temp, acc_i_temp, reset, start, output_addr, output_value, latest_in_block, latest_in_block_1, latest_in_block_2, ir_block_min, ir_block_max, in_block_min, in_block_max, channel, s_write, s_writedata, s_address, s_read, m_waitrequest, m_readdata, b, c, d, in_block_max, in_block_min, ram_r_rd_data, ram_i_rd_data)
 
 variable ir_pointer : integer range 0 to 55; -- TODO - kann kleiner sein.
 variable in_pointer : integer range 0 to 55;
 variable ir_addr : unsigned( 31 downto 0 );
+variable latest_in_block_tmp : integer range 0 to 55;
 
 begin
     
     -- default values to prevent latches
 	state_mode_next <= state_mode;
+	read_state_next <= read_state;
 		
 	a_next <= a;
 	b_next <= b;
@@ -400,12 +419,10 @@ begin
 	channel_next <= channel;
 	
 	s_readdatavalid <= '0'; -- das read ist nicht valid
-	s_waitrequest <= '1'; -- ich bin nicht bereit
 	
 	s_readdata <= (others => '0');
 	
 	ram_r_rd_addr <= (others=>'0');
-	ram_r_rd_data <= (others=>'0');
 	ram_r_rd <= '0';
 
 	ram_r_wr_addr <= (others=>'0');
@@ -413,7 +430,6 @@ begin
 	ram_r_wr <= '0';
 
 	ram_i_rd_addr <= (others=>'0');
-	ram_i_rd_data <= (others=>'0');
 	ram_i_rd <= '0';
 
 	ram_i_wr_addr <= (others=>'0');
@@ -440,9 +456,7 @@ begin
                 state_mode_next <= STATE_START;
                 
             else
-                
-                s_waitrequest <= '0'; -- wenn der idle state, dann bin ich bereit
-                
+                                
                 ------------------------------------------------------------
 		-- write
 		------------------------------------------------------------
@@ -513,14 +527,7 @@ begin
 				
 				channel_next <= '1';
 				
-			end if;
-			
-		elsif s_read = '1' then
-			
-			if state_mode = STATE_IDLE then
-				state_mode_next <= STATE_ADDRESS;
-			end if;
-			
+			end if;	
 		end if;
                 
             end if;
@@ -709,53 +716,53 @@ begin
              
 			-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
             
-            if m_waitrequest = '0' then
-                
-                m_read <= '1'; -- wir lesen immer
+		if m_waitrequest = '0' then
+		    
+			m_read <= '1'; -- wir lesen immer
                     
-				-- c_h ist das von dem in wert
+			-- c_h ist das von dem in wert
+			
+			if post_pipeline = '0' then
 				
-				if post_pipeline = '0' then
-					
-					--~ m_address <= x"0000000c"; -- d_h
-					--~ m_address <= std_logic_vector( in_addr + ( 2 * 2 ) ); -- d_h
-					m_address <= std_logic_vector( in_addr + ( 2 * 1 ) ); -- c_l
-					
-					c_next( 31 downto 16 ) <= m_readdata; -- curr read c_h
-					
-				end if;
+				--~ m_address <= x"0000000c"; -- d_h
+				--~ m_address <= std_logic_vector( in_addr + ( 2 * 2 ) ); -- d_h
+				m_address <= std_logic_vector( in_addr + ( 2 * 1 ) ); -- c_l
 				
-				if pre_pipeline = '0' then
-					
-					b_mul_d_next <= signed( b ) * signed( d ); -- prev b*d
-					acc_i_temp_next <= acc_i_temp + new_i; -- prev acc_i
-					
-				end if;
+				c_next( 31 downto 16 ) <= m_readdata; -- curr read c_h
 				
-				state_mode_next <= STATE_C_L;
 			end if;
 			
-		--------------------------------------------------------
-		-- 
-		-- c_l
-		-- 
-		--------------------------------------------------------
-		
-		-- prev a*c-b*d
-		-- prev w_i
-		
-		-- curr c_l
-		
-		-- addr d_h X
-		-- addr d_l
-                
-		when STATE_C_L => -- c_l available
-             
-			-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
+			if pre_pipeline = '0' then
+				
+				b_mul_d_next <= signed( b ) * signed( d ); -- prev b*d
+				acc_i_temp_next <= acc_i_temp + new_i; -- prev acc_i
+				
+			end if;
+			
+			state_mode_next <= STATE_C_L;
+		end if;
+			
+	--------------------------------------------------------
+	-- 
+	-- c_l
+	-- 
+	--------------------------------------------------------
+	
+	-- prev a*c-b*d
+	-- prev w_i
+	
+	-- curr c_l
+	
+	-- addr d_h X
+	-- addr d_l
+	
+	when STATE_C_L => -- c_l available
+      
+		-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
             
-            if m_waitrequest = '0' then
-                
-                m_read <= '1'; -- wir lesen immer
+		if m_waitrequest = '0' then
+		    
+			m_read <= '1'; -- wir lesen immer
                    
 				if post_pipeline = '0' then
 					
@@ -780,47 +787,47 @@ begin
 				state_mode_next <= STATE_D_H;
 			end if;
                 
-		--------------------------------------------------------
-		-- 
-		-- d_h
-		-- 
-		--------------------------------------------------------
-		
-		-- prev acc_r
-		
-		-- curr d_h
-		-- curr a*c
-		
-		-- addr d_l X
-		-- addr b_h
-                
-		when STATE_D_H => -- d_h available
-             
-			-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
+	--------------------------------------------------------
+	-- 
+	-- d_h
+	-- 
+	--------------------------------------------------------
+	
+	-- prev acc_r
+	
+	-- curr d_h
+	-- curr a*c
+	
+	-- addr d_l X
+	-- addr b_h
+	
+	when STATE_D_H => -- d_h available
+      
+		-- wenn ich nichts lesen kann bringt mir das ganze eh nichts
             
-            if m_waitrequest = '0' then
-                
-                m_read <= '1'; -- wir lesen immer
+		if m_waitrequest = '0' then
+		    
+			m_read <= '1'; -- wir lesen immer
                     
-				if post_pipeline = '0' then
-					
-					--~ m_address <= x"00000004"; -- b_h
-					--~ m_address <= std_logic_vector( ir_addr + ( 2 * 2 ) ); -- b_h
-					m_address <= std_logic_vector( in_addr + ( 2 * 3 ) ); -- d_l
-					
-					d_next( 31 downto 16 ) <= m_readdata; -- curr read d_h
-					a_mul_c_next <= signed( a ) * signed( c ); -- curr a*c
-					
-				end if;
+			if post_pipeline = '0' then
 				
-				if pre_pipeline = '0' then
-					
-					acc_r_temp_next <= acc_r_temp + new_r; -- prev acc_r
-					
-				end if;
+				--~ m_address <= x"00000004"; -- b_h
+				--~ m_address <= std_logic_vector( ir_addr + ( 2 * 2 ) ); -- b_h
+				m_address <= std_logic_vector( in_addr + ( 2 * 3 ) ); -- d_l
 				
-				state_mode_next <= STATE_D_L;
+				d_next( 31 downto 16 ) <= m_readdata; -- curr read d_h
+				a_mul_c_next <= signed( a ) * signed( c ); -- curr a*c
+				
 			end if;
+			
+			if pre_pipeline = '0' then
+				
+				acc_r_temp_next <= acc_r_temp + new_r; -- prev acc_r
+				
+			end if;
+			
+			state_mode_next <= STATE_D_L;
+		end if;
                 
 		--------------------------------------------------------
 		-- 
@@ -1048,49 +1055,73 @@ begin
 				
 				state_mode_next <= STATE_A_H;
 			end if;
-			
-	when STATE_ADDRESS =>
-	
-		output_addr_next <= to_integer(unsigned(s_address));
-		state_mode_next <= STATE_ARRAY;
-	
-	when STATE_ARRAY =>
-	
-		-- fuer 512 -> 512 - 512 = 0 -> index 0 im acc_i_array wird gelesen
-		
-		if output_addr > (BLOCK_SIZE - 1) then
-			ram_i_rd_addr <= std_logic_vector( to_unsigned( output_addr - BLOCK_SIZE, ram_i_rd_addr'length ));
-			ram_i_rd <= '1';
-			state_mode_next <= STATE_ARRAY_I;
-		else
-			ram_r_rd_addr <= std_logic_vector( to_unsigned( output_addr, ram_r_rd_addr'length ));
-			ram_r_rd <= '1';
-			state_mode_next <= STATE_ARRAY_R;
-		end if;
-					
-	when STATE_ARRAY_I =>
-
-		output_value_next <= ram_i_rd_data;
-		state_mode_next <= STATE_OUTPUT;
-		
-	when STATE_ARRAY_R =>
-
-		output_value_next <= ram_r_rd_data;
-		state_mode_next <= STATE_OUTPUT;
-
-	when STATE_OUTPUT =>
-	
-		s_readdatavalid <= '1'; -- jetzt ist das read valid
-		s_readdata <= output_value(54 downto 23);
-		
-		state_mode_next <= STATE_IDLE;
-                            
+			                            
         when others =>
 		
 		state_mode_next <= STATE_IDLE;
         
     end case;
     
+    case read_state is
+        
+        when STATE_IDLE =>
+	  
+		if s_read = '1' then
+			
+			read_state_next <= STATE_ADDRESS;
+			
+		end if;
+		
+	when STATE_ADDRESS =>
+	
+		output_addr_next <= to_integer(unsigned(s_address));
+		read_state_next <= STATE_ARRAY;
+	
+	when STATE_ARRAY =>
+	
+		-- fuer 512 -> 512 - 512 = 0 -> index 0 im acc_i_array wird gelesen
+		
+		if output_addr = ADDRESS_STATE then
+			if state_mode = STATE_IDLE then
+			    output_value_next <= (others => '0');
+			else
+			    output_value_next <= (others => '1');
+			end if;
+			read_state_next <= STATE_OUTPUT;
+			
+		elsif output_addr > (BLOCK_SIZE - 1) then
+			ram_i_rd_addr <= std_logic_vector( to_unsigned( output_addr - BLOCK_SIZE, ram_i_rd_addr'length ));
+			ram_i_rd <= '1';
+			read_state_next <= STATE_ARRAY_I;
+		else
+			ram_r_rd_addr <= std_logic_vector( to_unsigned( output_addr, ram_r_rd_addr'length ));
+			ram_r_rd <= '1';
+			read_state_next <= STATE_ARRAY_R;
+		end if;
+					
+	when STATE_ARRAY_I =>
+
+		output_value_next <= ram_i_rd_data;
+		read_state_next <= STATE_OUTPUT;
+		
+	when STATE_ARRAY_R =>
+
+		output_value_next <= ram_r_rd_data;
+		read_state_next <= STATE_OUTPUT;
+
+	when STATE_OUTPUT =>
+	
+		s_readdatavalid <= '1'; -- jetzt ist das read valid
+		s_readdata <= output_value(54 downto 23);
+		
+		read_state_next <= STATE_IDLE;
+                            
+        when others =>
+		
+		read_state_next <= STATE_IDLE;
+		
+	end case;
+	
 end process proc;
 
 end architecture;

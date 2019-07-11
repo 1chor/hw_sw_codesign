@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jun 26, 2019 2:57:42 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1561553862789</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jul 11, 2019 2:42:07 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1562848927549</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -898,6 +898,12 @@
                 <Enabled>false</Enabled>
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
+        <MemoryMap>
+                <slaveDescriptor>header_mac_0</slaveDescriptor>
+                <addressRange>0x00000000 - 0x0003FFFF</addressRange>
+                <addressSpan>262144</addressSpan>
+                <attributes/>
+        </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sdram</slaveDescriptor>
                 <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>

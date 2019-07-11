@@ -842,11 +842,15 @@ void test()
 		// set hw mac to left channel
     
 		IOWR( MAC_SRAM_0_BASE, 3, 1 );
-    
+		
+// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+		
 		// activate hw mac
     
 		IOWR( MAC_SRAM_0_BASE, 1, 2 );
-    
+		
+// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+		
 		// read data from hw mac
     
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
@@ -862,11 +866,15 @@ void test()
 		// set hw mac to right channel
     
 		IOWR( MAC_SRAM_0_BASE, 3, 2 );
-    
+		
+// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+		
 		// activate hw mac
     
 		IOWR( MAC_SRAM_0_BASE, 1, 2 );
-    
+		
+// 		while ( 0 != IORD(MAC_SRAM_0_BASE, 1700) ) {}
+		
 		// read data from hw mac
     
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )

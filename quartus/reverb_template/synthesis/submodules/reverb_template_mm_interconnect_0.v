@@ -76,7 +76,6 @@ module reverb_template_mm_interconnect_0 (
 		input  wire [31:0] header_mac_0_avalon_slave_readdata,                            //                                                        .readdata
 		output wire [31:0] header_mac_0_avalon_slave_writedata,                           //                                                        .writedata
 		input  wire        header_mac_0_avalon_slave_readdatavalid,                       //                                                        .readdatavalid
-		input  wire        header_mac_0_avalon_slave_waitrequest,                         //                                                        .waitrequest
 		output wire [0:0]  jtag_uart_avalon_jtag_slave_address,                           //                             jtag_uart_avalon_jtag_slave.address
 		output wire        jtag_uart_avalon_jtag_slave_write,                             //                                                        .write
 		output wire        jtag_uart_avalon_jtag_slave_read,                              //                                                        .read
@@ -2302,7 +2301,7 @@ module reverb_template_mm_interconnect_0 (
 		.UAV_BURSTCOUNT_W               (3),
 		.AV_READLATENCY                 (0),
 		.USE_READDATAVALID              (1),
-		.USE_WAITREQUEST                (1),
+		.USE_WAITREQUEST                (0),
 		.USE_UAV_CLKEN                  (0),
 		.USE_READRESPONSE               (0),
 		.USE_WRITERESPONSE              (0),
@@ -2337,11 +2336,11 @@ module reverb_template_mm_interconnect_0 (
 		.av_readdata            (header_mac_0_avalon_slave_readdata),                  //                         .readdata
 		.av_writedata           (header_mac_0_avalon_slave_writedata),                 //                         .writedata
 		.av_readdatavalid       (header_mac_0_avalon_slave_readdatavalid),             //                         .readdatavalid
-		.av_waitrequest         (header_mac_0_avalon_slave_waitrequest),               //                         .waitrequest
 		.av_begintransfer       (),                                                    //              (terminated)
 		.av_beginbursttransfer  (),                                                    //              (terminated)
 		.av_burstcount          (),                                                    //              (terminated)
 		.av_byteenable          (),                                                    //              (terminated)
+		.av_waitrequest         (1'b0),                                                //              (terminated)
 		.av_writebyteenable     (),                                                    //              (terminated)
 		.av_lock                (),                                                    //              (terminated)
 		.av_chipselect          (),                                                    //              (terminated)
