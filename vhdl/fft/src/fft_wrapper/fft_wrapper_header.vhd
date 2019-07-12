@@ -59,6 +59,11 @@ architecture arch of fft_wrapper_header is
 	signal receive_index 	  : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
 	signal receive_index_next : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
 	
+	signal exponent 	  	  : integer range -13 to 13 := 0;
+	signal exponent_next 	  : integer range -13 to 13 := 0;
+	signal exponent_abs 	  : natural range  0 to 13 := 0;
+	signal exponent_abs_next  : natural range  0 to 13 := 0;
+	
 	type state_type is (
 		TRANSFER_TO_FFT,
 		LATENCY_FFT,
@@ -143,6 +148,9 @@ begin
 			receive_index <= 0;
 			temp_in <= (others => '0');
 			temp_out <= (others => '0');
+			
+			exponent	 <= 0;
+			exponent_abs <= 0;
 								
 		elsif rising_edge(clk) then
 			state        <= state_next;
@@ -155,6 +163,9 @@ begin
 			receive_index <= receive_index_next;
 			temp_in		  <= temp_in_next;
 			temp_out	  <= temp_out_next;		
+			
+			exponent 	  <= exponent_next;
+			exponent_abs  <= exponent_abs_next;
 		end if;
 			
 	end process sync_state_proc;
@@ -225,10 +236,11 @@ begin
 	
 	--------------------------------------------------------------------
 	
-	fft_proc: process (state, index, src_sop, src_valid, receive_index, output_state)
+	fft_proc: process (state, index, src_sop, src_valid, inverse, src_exp, receive_index, output_state)
 	begin
 		-- default values to prevent latches
 		state_next <= state;
+		exponent_next <= exponent;
 		
 		case state is
 			
@@ -244,6 +256,15 @@ begin
 			end if;
 			
 			when OUTPUT_DATA =>
+				
+				if inverse = '1' then
+					-- Calculate exponent, IFFT operation
+					exponent_next <= -to_integer(signed(src_exp)) + DIV_N;
+				else
+					-- Calculate exponent, FFT operation
+					exponent_next <= -to_integer(signed(src_exp));
+				end if;
+										
 				if (receive_index = FFT_LENGTH) and ((output_state = STATE_OUTPUT_REAL) or (output_state = STATE_OUTPUT_INVERSE)) then
 					state_next <= TRANSFER_TO_FFT;
 				end if;
@@ -256,9 +277,7 @@ begin
 		
 	--------------------------------------------------------------------
 			
-	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, src_exp, src_real, src_imag) is
-		variable exponent 	  : integer range -13 to 13 := 0;
-		variable exponent_abs : natural range  0 to 13 := 0;
+	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, exponent, src_real, src_imag)
 	begin
 		-- default values to prevent latches
 		output_state_next <= output_state;
@@ -267,6 +286,8 @@ begin
 		temp_out_next <= temp_out;
 		stout_valid <= '0';
 		src_ready <= stout_ready;
+		
+		exponent_abs_next <= to_integer(abs(to_signed(exponent,src_exp'length)));
 		
 		if inverse = '1' then
 			output_state_next <= STATE_OUTPUT_INVERSE;
@@ -280,10 +301,6 @@ begin
 					temp_out_next <= (others => '0');
 				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
-					
-					-- Calculate exponent, FFT operation
-					exponent := -to_integer(signed(src_exp));
-					exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
 					
 					if receive_index = 0 then -- for first transmission
 						if exponent < 0 then -- right shift
@@ -346,11 +363,7 @@ begin
 					output_state_next <= STATE_OUTPUT_REAL;
 				elsif (stout_ready = '1') and (src_valid = '1') and ((state_next = OUTPUT_DATA) or (state = OUTPUT_DATA)) and not (receive_index = FFT_LENGTH) then
 					stout_valid <= '1';
-					
-					-- Calculate exponent, IFFT operation
-					exponent := -to_integer(signed(src_exp)) + DIV_N;
-					exponent_abs := to_integer(abs(to_signed(exponent,src_exp'length)));
-					
+										
 					if exponent < 0 then -- right shift
 						stout_data <= std_logic_vector(shift_right(signed(src_real), exponent_abs));
 					elsif exponent >= 0 then -- left shift
