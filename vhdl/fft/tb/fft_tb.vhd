@@ -28,7 +28,7 @@ architecture bench of fft_tb is
 			stout_valid : out std_logic;
 			stout_ready : in std_logic; -- back pressure from FIFO
 					
-			inverse     : in std_logic_vector(0 downto 0) -- pio(0) is used for fft header
+			inverse     : in std_logic -- pio(0) is used for fft header
 		);
 	end component;
 
@@ -43,7 +43,7 @@ architecture bench of fft_tb is
 	signal stout_data : std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal stout_valid : std_logic;
 	signal stout_ready : std_logic;
-	signal inverse : std_logic_vector(0 downto 0) := "0";
+	signal inverse : std_logic := '0';
 	
 	constant CLK_PERIOD : time := 10 ns;
 	constant stop_clock : boolean := false;
@@ -177,7 +177,7 @@ begin
 		stin_data <= (others=>'0');
 		--stout_ready <= '0';
 		stin_valid <= '0';
-		inverse <= "0";
+		inverse <= '0';
 		wait until rising_edge(clk);
         wait until rising_edge(clk);
         wait until rising_edge(clk);
@@ -219,7 +219,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "0";
+		inverse <= '0';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( m_real_in(i) );
 			stream_write( m_imag_in(i) );
@@ -252,7 +252,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_1_real(i) );
 			stream_write( output_1_imag(i) );
@@ -285,7 +285,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "0";
+		inverse <= '0';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( m_real_in1(i) ); -- send two real signals
 			stream_write( m_real_in2(i) );
@@ -347,7 +347,7 @@ begin
 		
 		-- First channel IFFT
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_1_real(i) );
 			stream_write( output_1_imag(i) );
@@ -362,7 +362,7 @@ begin
 				
 		-- Second channel IFFT
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_2_real(i) );
 			stream_write( output_2_imag(i) );
@@ -395,7 +395,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "0";
+		inverse <= '0';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( m_real_in3(i) );
 			stream_write( x"00000000"   );
@@ -428,7 +428,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_1_real(i) );
 			stream_write( output_1_imag(i) );
@@ -460,7 +460,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "0";
+		inverse <= '0';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( ir_1(i)     );
 			stream_write( x"00000000" ); -- Send only left channel
@@ -493,7 +493,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_1_real(i) );
 			stream_write( output_1_imag(i) );
@@ -525,7 +525,7 @@ begin
 		writeline(output, my_line);
 		
 		output_buffer_idx := 0;
-		inverse <= "0";
+		inverse <= '0';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( ir_1(i) );
 			stream_write( ir_2(i) ); -- Send both channels at same time
@@ -577,7 +577,7 @@ begin
 		
 		-- First channel IFFT
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_1_real(i) );
 			stream_write( output_1_imag(i) );
@@ -592,7 +592,7 @@ begin
 		
 		-- Second channel IFFT
 		output_buffer_idx := 0;
-		inverse <= "1";
+		inverse <= '1';
 		for i in 0 to FILE_LENGTH - 1 loop
 			stream_write( output_2_real(i) );
 			stream_write( output_2_imag(i) );

@@ -7,18 +7,18 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft
 T_opt
-!s110 1553612811
-VTJ0e8eb07CGzN]o9M`M2P1
+!s110 1563265922
+VQFBJ9<K`8h3LKiz@I0Z=U3
 04 6 5 work fft_tb bench 1
-=1-000ae431a4f1-5c9a400b-1576e-5827
+=1-000ae431a4f1-5d2d8b82-5ce63-4110
 o-quiet -auto_acc_if_foreign -work work -L work -L work_lib -L fft_ii_0 -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneive
 tCvgOpt 0
 n@_opt
 OE;O;10.6c_1;65
 Efft_header
-Z1 w1553611222
+Z1 w1554197478
 Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -31,9 +31,9 @@ Va5iO=8X=18XIbd^F1WdGb1
 !s100 TE46mZBM3OY?BX3fZkIJA3
 Z7 OE;C;10.6c_1;65
 32
-Z8 !s110 1553612807
+Z8 !s110 1563265919
 !i10b 1
-Z9 !s108 1553612807.000000
+Z9 !s108 1563265919.000000
 Z10 !s90 ./src/fft_header/fft_header/simulation/fft_header.vhd|
 Z11 !s107 ./src/fft_header/fft_header/simulation/fft_header.vhd|
 !i113 0
@@ -57,7 +57,7 @@ R11
 !i113 0
 R12
 Efft_tb
-Z13 w1553087390
+Z13 w1563265891
 Z14 DPx4 work 11 tb_util_pkg 0 22 L;P<Zif46:1Zh_3_en;kJ3
 Z15 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
 R2
@@ -72,13 +72,13 @@ VK=h<kGoLianG6FoFhRP8?1
 !s100 WYN3LTB`K`4dM_fQl^Cgm0
 R7
 33
-Z18 !s110 1553612808
+R8
 !i10b 1
-Z19 !s108 1553612808.000000
-Z20 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|./tb/fft_tb.vhd|
-Z21 !s107 ./tb/fft_tb.vhd|
+R9
+Z18 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|./tb/fft_tb.vhd|
+Z19 !s107 ./tb/fft_tb.vhd|
 !i113 0
-Z22 o-suppress 1236 -check_synthesis -2008 -work libraries/work
+Z20 o-suppress 1236 -check_synthesis -2008 -work libraries/work
 R12
 Abench
 R14
@@ -89,73 +89,73 @@ R3
 DEx4 work 6 fft_tb 0 22 K=h<kGoLianG6FoFhRP8?1
 l84
 L14
-VKPX_[hGKF<bjZFNl?VC0d1
-!s100 aLC3NmJGUg8@f_ZK:1l8G3
+VQ>_LPT_EaM:9:b0b2JLUb1
+!s100 dz?Z9J_SVOXJn[JVHQ=Zd2
 R7
 33
-R18
+R8
 !i10b 1
+R9
+R18
 R19
-R20
-R21
 !i113 0
-R22
+R20
 R12
 Efft_wrapper_header
-Z23 w1553608646
-Z24 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
-Z25 DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
-Z26 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+Z21 w1563265673
+Z22 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z23 DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
+Z24 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
 R2
 R3
 R4
 R0
-Z27 8./src/fft_wrapper/fft_wrapper_header.vhd
-Z28 F./src/fft_wrapper/fft_wrapper_header.vhd
+Z25 8./src/fft_wrapper/fft_wrapper_header.vhd
+Z26 F./src/fft_wrapper/fft_wrapper_header.vhd
 l0
 L7
-V0BB7WFHVZdLS8kzZ=l4U`2
-!s100 Z9[TQjh1WOjWkig>^h2Z[0
+VKjFz0L4NWnjg6<?7U`o6^2
+!s100 5VX<TE39:he81OS^PgBBD0
 R7
 33
 R8
 !i10b 1
 R9
-Z29 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|./src/fft_wrapper/fft_wrapper_header.vhd|
-Z30 !s107 ./src/fft_wrapper/fft_wrapper_header.vhd|
+Z27 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|./src/fft_wrapper/fft_wrapper_header.vhd|
+Z28 !s107 ./src/fft_wrapper/fft_wrapper_header.vhd|
 !i113 0
-R22
+R20
 R12
 Aarch
+R22
+R23
 R24
-R25
-R26
 R2
 R3
 R4
-DEx4 work 18 fft_wrapper_header 0 22 0BB7WFHVZdLS8kzZ=l4U`2
-l107
+DEx4 work 18 fft_wrapper_header 0 22 KjFz0L4NWnjg6<?7U`o6^2
+l111
 L27
-VcXPVTV3fI8a0FB_V@mPOf2
-!s100 XjbTPKnPFN<>5jW::C1mR3
+V5KIEeKeCNC7:ZZ89[?M0l0
+!s100 UV7]b8V@77A^gE17J;`Zn2
 R7
 33
 R8
 !i10b 1
 R9
-R29
-R30
+R27
+R28
 !i113 0
-R22
+R20
 R12
 Ptb_util_pkg
 R2
 R3
 R4
-R13
+Z29 w1553087390
 R0
-Z31 8../tb/tb_util_pkg.vhd
-Z32 F../tb/tb_util_pkg.vhd
+Z30 8../tb/tb_util_pkg.vhd
+Z31 F../tb/tb_util_pkg.vhd
 l0
 L5
 VL;P<Zif46:1Zh_3_en;kJ3
@@ -163,13 +163,13 @@ VL;P<Zif46:1Zh_3_en;kJ3
 R7
 33
 b1
-R18
+R8
 !i10b 1
 R9
-Z33 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|../tb/tb_util_pkg.vhd|
-Z34 !s107 ../tb/tb_util_pkg.vhd|
+Z32 !s90 -check_synthesis|-2008|-work|libraries/work|-suppress|1236|../tb/tb_util_pkg.vhd|
+Z33 !s107 ../tb/tb_util_pkg.vhd|
 !i113 0
-R22
+R20
 R12
 Bbody
 R14
@@ -182,11 +182,11 @@ VMB<o5eAB1Bd6BAIJdW?k>2
 !s100 U[<oNK?bCWJz1Q10YTWLf0
 R7
 33
-R18
+R8
 !i10b 1
 R9
+R32
 R33
-R34
 !i113 0
-R22
+R20
 R12

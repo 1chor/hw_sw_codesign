@@ -122,7 +122,7 @@ begin
 		sink_eop     => si_eop,		 	 -- Indicates the end of the incoming FFT frame  
 		sink_real    => si_real, 		 -- Real input data
 		sink_imag    => si_imag,		 -- Imaginary input data
-		inverse(0)      => inverse, 		 -- Inverse FFT calculated if asserted
+		inverse(0)   => inverse, 		 -- Inverse FFT calculated if asserted
 		source_valid => src_valid, 
 		source_ready => src_ready, 
 		source_error => src_error, 	 	 -- Indicates an error has occured either in an upstream module or within the FFT module
@@ -236,7 +236,7 @@ begin
 	
 	--------------------------------------------------------------------
 	
-	fft_proc: process (state, index, src_sop, src_valid, inverse, src_exp, receive_index, output_state)
+	fft_proc: process (state, index, src_sop, src_valid, inverse, src_exp, receive_index, output_state, exponent)
 	begin
 		-- default values to prevent latches
 		state_next <= state;
@@ -277,7 +277,7 @@ begin
 		
 	--------------------------------------------------------------------
 			
-	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, exponent, src_real, src_imag)
+	output_proc : process(output_state, receive_index, temp_out, stout_ready, src_valid, state_next, state, inverse, exponent, src_real, src_imag, exponent_abs)
 	begin
 		-- default values to prevent latches
 		output_state_next <= output_state;

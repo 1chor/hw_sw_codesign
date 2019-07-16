@@ -7,7 +7,7 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft
 Ealt_bidir_buf
 Z1 w1536791154
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
@@ -21,9 +21,9 @@ VE7N5[C:]ijT0O0S4>mBjz1
 !s100 DI<=4g:_Yg0@NlVlZ_Fn?3
 Z6 OE;C;10.6c_1;65
 32
-Z7 !s110 1553612795
+Z7 !s110 1563265906
 !i10b 1
-Z8 !s108 1553612795.000000
+Z8 !s108 1563265906.000000
 Z9 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.vhd|
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.vhd|
 !i113 0
@@ -101,11 +101,11 @@ V[i1V[e@io=EaBP3aUOH5F1
 R6
 32
 b1
-R7
+Z16 !s110 1563265905
 !i10b 1
-R8
-Z16 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/alt_dspbuilder_package.vhd|
-Z17 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/alt_dspbuilder_package.vhd|
+Z17 !s108 1563265905.000000
+Z18 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/alt_dspbuilder_package.vhd|
+Z19 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/alt_dspbuilder_package.vhd|
 !i113 0
 R10
 R11
@@ -120,11 +120,11 @@ VHCoMEz^on7EPnMPP0E_]d3
 !s100 CL`Lmz3A95VOab>k@>ZI>0
 R6
 32
-R7
-!i10b 1
-R8
 R16
+!i10b 1
 R17
+R18
+R19
 !i113 0
 R10
 R11
@@ -442,14 +442,14 @@ R10
 R11
 Paltera_europa_support_lib
 R13
-Z18 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
-Z19 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z20 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+Z21 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 R2
 R3
 R1
 R0
-Z20 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd
-Z21 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd
+Z22 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd
+Z23 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd
 l0
 L35
 Vg3I=J<R`Xm`3K3_Q_E]]G2
@@ -459,17 +459,17 @@ R6
 b1
 R7
 !i10b 1
-R8
-Z22 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd|
-Z23 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd|
+R17
+Z24 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd|
+Z25 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_europa_support_lib.vhd|
 !i113 0
 R10
 R11
 Bbody
 DPx4 work 25 altera_europa_support_lib 0 22 g3I=J<R`Xm`3K3_Q_E]]G2
 R13
-R18
-R19
+R20
+R21
 R2
 R3
 l0
@@ -480,22 +480,22 @@ R6
 32
 R7
 !i10b 1
-R8
-R22
-R23
+R17
+R24
+R25
 !i113 0
 R10
 R11
 Paltera_primitives_components
-Z24 DPx4 ieee 16 vital_primitives 0 22 G>kiXP8Q9dRClKfK1Zn7j1
-Z25 DPx4 work 11 dffeas_pack 0 22 :UOm>HGahQM4iJGI4BTJh1
-Z26 DPx4 ieee 12 vital_timing 0 22 J>EBealN09f8GzldA[z2>3
+Z26 DPx4 ieee 16 vital_primitives 0 22 G>kiXP8Q9dRClKfK1Zn7j1
+Z27 DPx4 work 11 dffeas_pack 0 22 :UOm>HGahQM4iJGI4BTJh1
+Z28 DPx4 ieee 12 vital_timing 0 22 J>EBealN09f8GzldA[z2>3
 R2
 R3
-Z27 w1536791153
+Z29 w1536791153
 R0
-Z28 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd
-Z29 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd
+Z30 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd
+Z31 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd
 l0
 L46
 VSCoeh@ZdMmZik5cF^_o812
@@ -505,16 +505,16 @@ R6
 R7
 !i10b 1
 R8
-Z30 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd|
-Z31 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd|
+Z32 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd|
+Z33 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives_components.vhd|
 !i113 0
 R10
 R11
 Paltera_standard_functions
 R1
 R0
-Z32 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd
-Z33 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd
+Z34 8/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd
+Z35 F/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd
 l0
 L18
 VWfClLzHeFR4N]60?J2gB32
@@ -522,9 +522,9 @@ VWfClLzHeFR4N]60?J2gB32
 R6
 32
 b1
-Z34 !s110 1553612794
+R16
 !i10b 1
-Z35 !s108 1553612794.000000
+R17
 Z36 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd|
 Z37 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_standard_functions.vhd|
 !i113 0
@@ -538,9 +538,9 @@ VMkfT=B52bL5fem>O:KZ2V1
 !s100 =<FLg8ZKkLV@VXbo0janR3
 R6
 32
-R34
+R16
 !i10b 1
-R35
+R17
 R36
 R37
 !i113 0
@@ -557,9 +557,9 @@ Vcc1bH1Ae5aDbIFh;jT]IM0
 !s100 D<VSi0UhCK5``[i=X8;e>1
 R6
 32
-R34
+R16
 !i10b 1
-R35
+R17
 !s90 -work|libraries/altera|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_syn_attributes.vhd|
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_syn_attributes.vhd|
 !i113 0
@@ -843,9 +843,9 @@ R10
 R11
 Edffeas
 R1
-R25
-R24
+R27
 R26
+R28
 R2
 R3
 R0
@@ -866,9 +866,9 @@ R12
 R10
 R11
 Avital_dffeas
-R25
-R24
+R27
 R26
+R28
 R2
 R3
 DEx4 work 6 dffeas 0 22 TWa_C5>GajjgK2lSJ0F_]1
@@ -887,14 +887,14 @@ R12
 R10
 R11
 Pdffeas_pack
-R24
 R26
+R28
 R2
 R3
-R27
-R0
-R28
 R29
+R0
+R30
+R31
 l0
 L25
 V:UOm>HGahQM4iJGI4BTJh1
@@ -904,8 +904,8 @@ R6
 R7
 !i10b 1
 R8
-R30
-R31
+R32
+R33
 !i113 0
 R10
 R11

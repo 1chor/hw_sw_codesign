@@ -7,9 +7,9 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/homes/s01325347/Desktop/TILAB/fft_debug/vhdl/fft
+Z0 d/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft
 valt_bidir_buf
-Z1 !s110 1553612788
+Z1 !s110 1563265900
 !i10b 1
 !s100 ;V>1ae:dINfZl1hgG^CJK2
 I2Hj`hakTRRJ[GZb@Hm?4Y2
@@ -23,7 +23,7 @@ Z6 OE;L;10.6c_1;65
 r1
 !s85 0
 31
-Z7 !s108 1553612788.000000
+Z7 !s108 1563265899.000000
 !s107 /opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.v|
 Z8 !s90 -work|libraries/altera_ver|/opt/quartus_18.1-18.1.0.625/quartus/eda/sim_lib/altera_primitives.v|
 !i113 0
@@ -219,7 +219,7 @@ R8
 R9
 R10
 vcarry
-R1
+Z12 !s110 1563265899
 !i10b 1
 !s100 FD@5kG0C:mLW@6I8nlO>Z2
 IL;l=WNA_g`O^Ga8RUaX>43
@@ -240,7 +240,7 @@ R8
 R9
 R10
 vcarry_sum
-R1
+R12
 !i10b 1
 !s100 AIWGZakUF8]V789[a`cWk3
 Iai3]SM7Ni:O0LDb8o9Wa21
@@ -261,7 +261,7 @@ R8
 R9
 R10
 vcascade
-R1
+R12
 !i10b 1
 !s100 cQV1KYGA<9HX[CBYT^l:n1
 I@7X`6POHCZXWX;Z9B?NgX1
@@ -429,7 +429,7 @@ R8
 R9
 R10
 vexp
-R1
+R12
 !i10b 1
 !s100 ?=3m4CE>YoSX13jbH8ogi1
 I^:Hio_=85Z_PDl_DJfZiH1
@@ -450,7 +450,7 @@ R8
 R9
 R10
 vglobal
-R1
+R12
 !i10b 1
 !s100 lKmX7;gI`XO0>GV6il];01
 IP@3XgRS?QDhkPRd`1@ZP?2
@@ -513,7 +513,7 @@ R8
 R9
 R10
 vlatch
-R1
+R12
 !i10b 1
 !s100 6L<i:EM=Ceea7LcF^H3ol1
 Ii]0F5FdHd>6Wkz@7[9:>Z1
@@ -534,7 +534,7 @@ R8
 R9
 R10
 vlut_input
-R1
+R12
 !i10b 1
 !s100 ;CRUY3Bm]JPg2bQRG^W580
 IJ6FN2VF3hoD;22EYeYXhb1
@@ -555,7 +555,7 @@ R8
 R9
 R10
 vlut_output
-R1
+R12
 !i10b 1
 !s100 89:o4;F_XN6:`diQkd4HH0
 IBNFc^5nM`@]@?h@DaOS^B0
@@ -576,7 +576,7 @@ R8
 R9
 R10
 vopndrn
-R1
+R12
 !i10b 1
 !s100 Q2]a2IlhiC3gXYN?;SeKV3
 Iz_;abL<okY3a`P<5Q;R]01
@@ -769,7 +769,7 @@ R8
 R9
 R10
 vrow_global
-R1
+R12
 !i10b 1
 !s100 0jQm6Khk6V:5;];PPXjl:0
 IAoRW9d^f^1C;DGa_fY[L@0
@@ -790,7 +790,7 @@ R8
 R9
 R10
 vsoft
-R1
+R12
 !i10b 1
 !s100 ;;iS>g<=H3GT6Kd?L3F?M3
 I[RNZ5KUKSIWPzC^jaQMY42
@@ -895,7 +895,7 @@ R8
 R9
 R10
 vTRI
-R1
+R12
 !i10b 1
 !s100 iA0`k<U35f`MYG^;nP1oG1
 IY7nYojglfT2ejzPZY@MmH3
