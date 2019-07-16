@@ -47,7 +47,7 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 			for ( i = 0; i < 512; i++ )
 			{
 				// Set Coefficients
-				IOWR( FIR_R_BASE, i, (int32_t)wav_get_int16( ir, 2*i ) );
+				IOWR( FIR_L_BASE, i, (int32_t)wav_get_int16( ir, 2*i ) );
 			}
 			
 			for ( i = 0; i < 512; i++ )
