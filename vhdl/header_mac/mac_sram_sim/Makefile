@@ -9,7 +9,7 @@ VHDL_FILES = \
 	../../ram/ram_pkg.vhd\
 	../../ram/dp_ram_1c1r1w.vhd\
 	fake_sram.vhd\
-	../mac_sram.vhd\
+	../mac_sram_sim.vhd\
 	top.vhd
 
 #list of source files needed for simulation

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Thu Jul 11 17:17:25 CEST 2019
+ * Generated: Tue Aug 06 13:37:25 CEST 2019
  */
 
 /*
@@ -62,7 +62,7 @@
 
 #define ALT_CPU_ARCHITECTURE "altera_nios2_gen2"
 #define ALT_CPU_BIG_ENDIAN 0
-#define ALT_CPU_BREAK_ADDR 0x10200820
+#define ALT_CPU_BREAK_ADDR 0x10240820
 #define ALT_CPU_CPU_ARCH_NIOS2_R1
 #define ALT_CPU_CPU_FREQ 100000000u
 #define ALT_CPU_CPU_ID_SIZE 1
@@ -103,7 +103,7 @@
  */
 
 #define NIOS2_BIG_ENDIAN 0
-#define NIOS2_BREAK_ADDR 0x10200820
+#define NIOS2_BREAK_ADDR 0x10240820
 #define NIOS2_CPU_ARCH_NIOS2_R1
 #define NIOS2_CPU_FREQ 100000000u
 #define NIOS2_CPU_ID_SIZE 1
@@ -148,12 +148,12 @@
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_UP_AVALON_AUDIO
 #define __ALTERA_UP_AVALON_AUDIO_AND_VIDEO_CONFIG
-#define __ALTERA_UP_AVALON_SRAM
 #define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
 #define __ALTPLL
 #define __AVALON_TOUCH_CNTRL
 #define __FIR
 #define __HEADER_MAC
+#define __MULTIPLEXER_SRAM
 #define __TEXTMODE_CONTROLLER
 
 
@@ -173,19 +173,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x102024d0
+#define ALT_STDERR_BASE 0x102424d0
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x102024d0
+#define ALT_STDIN_BASE 0x102424d0
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x102024d0
+#define ALT_STDOUT_BASE 0x102424d0
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -198,7 +198,7 @@
  *
  */
 
-#define ALTPLL_BASE 0x10202450
+#define ALTPLL_BASE 0x10242450
 #define ALTPLL_IRQ -1
 #define ALTPLL_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define ALTPLL_NAME "/dev/altpll"
@@ -212,7 +212,7 @@
  *
  */
 
-#define ALTPLL_SRAM_BASE 0x10202460
+#define ALTPLL_SRAM_BASE 0x10242460
 #define ALTPLL_SRAM_IRQ -1
 #define ALTPLL_SRAM_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define ALTPLL_SRAM_NAME "/dev/altpll_sram"
@@ -227,7 +227,7 @@
  */
 
 #define ALT_MODULE_CLASS_audio altera_up_avalon_audio
-#define AUDIO_BASE 0x10202490
+#define AUDIO_BASE 0x10242490
 #define AUDIO_IRQ 2
 #define AUDIO_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define AUDIO_NAME "/dev/audio"
@@ -241,7 +241,7 @@
  */
 
 #define ALT_MODULE_CLASS_av_config altera_up_avalon_audio_and_video_config
-#define AV_CONFIG_BASE 0x10202480
+#define AV_CONFIG_BASE 0x10242480
 #define AV_CONFIG_IRQ -1
 #define AV_CONFIG_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define AV_CONFIG_NAME "/dev/av_config"
@@ -255,7 +255,7 @@
  */
 
 #define ALT_MODULE_CLASS_fir_l fir
-#define FIR_L_BASE 0x10201800
+#define FIR_L_BASE 0x10241800
 #define FIR_L_IRQ -1
 #define FIR_L_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define FIR_L_NAME "/dev/fir_l"
@@ -269,7 +269,7 @@
  */
 
 #define ALT_MODULE_CLASS_fir_r fir
-#define FIR_R_BASE 0x10201000
+#define FIR_R_BASE 0x10241000
 #define FIR_R_IRQ -1
 #define FIR_R_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define FIR_R_NAME "/dev/fir_r"
@@ -294,7 +294,7 @@
  */
 
 #define ALT_MODULE_CLASS_header_mac_0 header_mac
-#define HEADER_MAC_0_BASE 0x0
+#define HEADER_MAC_0_BASE 0x10200000
 #define HEADER_MAC_0_IRQ -1
 #define HEADER_MAC_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define HEADER_MAC_0_NAME "/dev/header_mac_0"
@@ -308,7 +308,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x102024d0
+#define JTAG_UART_BASE 0x102424d0
 #define JTAG_UART_IRQ 4
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -328,7 +328,7 @@
 #define ALT_MODULE_CLASS_m2s_fifo_ffth altera_avalon_fifo
 #define M2S_FIFO_FFTH_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define M2S_FIFO_FFTH_AVALONMM_AVALONST_DATA_WIDTH 32
-#define M2S_FIFO_FFTH_BASE 0x102024c8
+#define M2S_FIFO_FFTH_BASE 0x102424c8
 #define M2S_FIFO_FFTH_BITS_PER_SYMBOL 32
 #define M2S_FIFO_FFTH_CHANNEL_WIDTH 0
 #define M2S_FIFO_FFTH_ERROR_WIDTH 0
@@ -360,7 +360,7 @@
 #define ALT_MODULE_CLASS_m2s_fifo_fir_l altera_avalon_fifo
 #define M2S_FIFO_FIR_L_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define M2S_FIFO_FIR_L_AVALONMM_AVALONST_DATA_WIDTH 32
-#define M2S_FIFO_FIR_L_BASE 0x102024c0
+#define M2S_FIFO_FIR_L_BASE 0x102424c0
 #define M2S_FIFO_FIR_L_BITS_PER_SYMBOL 32
 #define M2S_FIFO_FIR_L_CHANNEL_WIDTH 0
 #define M2S_FIFO_FIR_L_ERROR_WIDTH 0
@@ -392,7 +392,7 @@
 #define ALT_MODULE_CLASS_m2s_fifo_fir_r altera_avalon_fifo
 #define M2S_FIFO_FIR_R_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define M2S_FIFO_FIR_R_AVALONMM_AVALONST_DATA_WIDTH 32
-#define M2S_FIFO_FIR_R_BASE 0x102024b8
+#define M2S_FIFO_FIR_R_BASE 0x102424b8
 #define M2S_FIFO_FIR_R_BITS_PER_SYMBOL 32
 #define M2S_FIFO_FIR_R_CHANNEL_WIDTH 0
 #define M2S_FIFO_FIR_R_ERROR_WIDTH 0
@@ -417,12 +417,26 @@
 
 
 /*
+ * multiplexer_sram_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_multiplexer_sram_0 multiplexer_sram
+#define MULTIPLEXER_SRAM_0_BASE 0x10000000
+#define MULTIPLEXER_SRAM_0_IRQ -1
+#define MULTIPLEXER_SRAM_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define MULTIPLEXER_SRAM_0_NAME "/dev/multiplexer_sram_0"
+#define MULTIPLEXER_SRAM_0_SPAN 2097152
+#define MULTIPLEXER_SRAM_0_TYPE "multiplexer_sram"
+
+
+/*
  * pio_0 configuration
  *
  */
 
 #define ALT_MODULE_CLASS_pio_0 altera_avalon_pio
-#define PIO_0_BASE 0x10202440
+#define PIO_0_BASE 0x10242440
 #define PIO_0_BIT_CLEARING_EDGE_REGISTER 0
 #define PIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PIO_0_CAPTURE 0
@@ -451,7 +465,7 @@
 #define ALT_MODULE_CLASS_s2m_fifo_ffth altera_avalon_fifo
 #define S2M_FIFO_FFTH_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define S2M_FIFO_FFTH_AVALONMM_AVALONST_DATA_WIDTH 32
-#define S2M_FIFO_FFTH_BASE 0x102024b0
+#define S2M_FIFO_FFTH_BASE 0x102424b0
 #define S2M_FIFO_FFTH_BITS_PER_SYMBOL 32
 #define S2M_FIFO_FFTH_CHANNEL_WIDTH 0
 #define S2M_FIFO_FFTH_ERROR_WIDTH 0
@@ -483,7 +497,7 @@
 #define ALT_MODULE_CLASS_s2m_fifo_fir_l altera_avalon_fifo
 #define S2M_FIFO_FIR_L_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define S2M_FIFO_FIR_L_AVALONMM_AVALONST_DATA_WIDTH 32
-#define S2M_FIFO_FIR_L_BASE 0x102024a8
+#define S2M_FIFO_FIR_L_BASE 0x102424a8
 #define S2M_FIFO_FIR_L_BITS_PER_SYMBOL 32
 #define S2M_FIFO_FIR_L_CHANNEL_WIDTH 0
 #define S2M_FIFO_FIR_L_ERROR_WIDTH 0
@@ -515,7 +529,7 @@
 #define ALT_MODULE_CLASS_s2m_fifo_fir_r altera_avalon_fifo
 #define S2M_FIFO_FIR_R_AVALONMM_AVALONMM_DATA_WIDTH 32
 #define S2M_FIFO_FIR_R_AVALONMM_AVALONST_DATA_WIDTH 32
-#define S2M_FIFO_FIR_R_BASE 0x102024a0
+#define S2M_FIFO_FIR_R_BASE 0x102424a0
 #define S2M_FIFO_FIR_R_BITS_PER_SYMBOL 32
 #define S2M_FIFO_FIR_R_CHANNEL_WIDTH 0
 #define S2M_FIFO_FIR_R_ERROR_WIDTH 0
@@ -545,7 +559,7 @@
  */
 
 #define ALT_MODULE_CLASS_sdcard_interface Altera_UP_SD_Card_Avalon_Interface
-#define SDCARD_INTERFACE_BASE 0x10202000
+#define SDCARD_INTERFACE_BASE 0x10242000
 #define SDCARD_INTERFACE_IRQ -1
 #define SDCARD_INTERFACE_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SDCARD_INTERFACE_NAME "/dev/sdcard_interface"
@@ -593,26 +607,12 @@
 
 
 /*
- * sram_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_sram_0 altera_up_avalon_sram
-#define SRAM_0_BASE 0x10000000
-#define SRAM_0_IRQ -1
-#define SRAM_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define SRAM_0_NAME "/dev/sram_0"
-#define SRAM_0_SPAN 2097152
-#define SRAM_0_TYPE "altera_up_avalon_sram"
-
-
-/*
  * textmode_controller configuration
  *
  */
 
 #define ALT_MODULE_CLASS_textmode_controller textmode_controller
-#define TEXTMODE_CONTROLLER_BASE 0x10202400
+#define TEXTMODE_CONTROLLER_BASE 0x10242400
 #define TEXTMODE_CONTROLLER_IRQ -1
 #define TEXTMODE_CONTROLLER_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define TEXTMODE_CONTROLLER_NAME "/dev/textmode_controller"
@@ -626,7 +626,7 @@
  */
 
 #define ALT_MODULE_CLASS_touch_cntrl avalon_touch_cntrl
-#define TOUCH_CNTRL_BASE 0x10202470
+#define TOUCH_CNTRL_BASE 0x10242470
 #define TOUCH_CNTRL_IRQ -1
 #define TOUCH_CNTRL_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define TOUCH_CNTRL_NAME "/dev/touch_cntrl"

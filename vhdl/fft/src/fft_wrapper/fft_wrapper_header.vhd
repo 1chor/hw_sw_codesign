@@ -27,7 +27,8 @@ end entity;
 architecture arch of fft_wrapper_header is
 
 	constant FFT_LENGTH 	  : natural := 512;
-	constant DIV_N			  : integer := -9; -- 1/512 is equivalent to 2^-9 and 9 right shifts
+	constant DIV_N		  : integer := -9; -- 1/512 is equivalent to 2^-9 and 9 right shifts
+	constant OFFSET		  : integer := 8;  -- is equivalent to 8 left shifts
 	
 	signal	si_valid    	  : std_logic;
 	signal	si_ready  	 	  : std_logic;
@@ -59,10 +60,10 @@ architecture arch of fft_wrapper_header is
 	signal receive_index 	  : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
 	signal receive_index_next : natural range 0 to FFT_LENGTH := 0; -- one more than needed 
 	
-	signal exponent 	  	  : integer range -13 to 13 := 0;
-	signal exponent_next 	  : integer range -13 to 13 := 0;
-	signal exponent_abs 	  : natural range  0 to 13 := 0;
-	signal exponent_abs_next  : natural range  0 to 13 := 0;
+	signal exponent 	  : integer;
+	signal exponent_next 	  : integer;
+	signal exponent_abs 	  : natural;
+	signal exponent_abs_next  : natural;
 	
 	type state_type is (
 		TRANSFER_TO_FFT,
@@ -262,7 +263,7 @@ begin
 					exponent_next <= -to_integer(signed(src_exp)) + DIV_N;
 				else
 					-- Calculate exponent, FFT operation
-					exponent_next <= -to_integer(signed(src_exp));
+					exponent_next <= -to_integer(signed(src_exp)) + OFFSET;
 				end if;
 										
 				if (receive_index = FFT_LENGTH) and ((output_state = STATE_OUTPUT_REAL) or (output_state = STATE_OUTPUT_INVERSE)) then

@@ -25,8 +25,8 @@ void ifft_on_mac_buffer_hw
 ( 
 	 int32_t* 
 	,int32_t* 
-	,complex_32_t* 
-	,complex_32_t*  
+	,complex_i32_t* 
+	,complex_i32_t*  
 );
 
 void zero_extend_256_hw( complex_i32_t* );

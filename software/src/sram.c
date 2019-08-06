@@ -23,13 +23,37 @@ void sram_write( complex_32_t sample, uint32_t i )
 {
     // write real part
     
-    IOWR ( SRAM_0_BASE, (4*i)  , (uint16_t)( sample.r >> 16) );
-    IOWR ( SRAM_0_BASE, (4*i)+1, (uint16_t)( sample.r      ) );
+    IOWR ( MULTIPLEXER_SRAM_0_BASE, (4*i)  , (uint16_t)( sample.r >> 16) );
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    IOWR ( MULTIPLEXER_SRAM_0_BASE, (4*i)+1, (uint16_t)( sample.r      ) );
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
     
     // write imaginary part
     
-    IOWR ( SRAM_0_BASE, (4*i)+2, (uint16_t)( sample.i >> 16) );
-    IOWR ( SRAM_0_BASE, (4*i)+3, (uint16_t)( sample.i      ) );
+    IOWR ( MULTIPLEXER_SRAM_0_BASE, (4*i)+2, (uint16_t)( sample.i >> 16) );
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    IOWR ( MULTIPLEXER_SRAM_0_BASE, (4*i)+3, (uint16_t)( sample.i      ) );
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
 }
 
 void sram_write_block( complex_32_t* samples, uint32_t block )
@@ -53,16 +77,40 @@ complex_32_t sram_read( uint32_t i )
     
     // read real part
     
-    uint16_t sample_r_msb = IORD ( SRAM_0_BASE, (4*i)   );
-    uint16_t sample_r_lsb = IORD ( SRAM_0_BASE, (4*i)+1 );
+    uint16_t sample_r_msb = IORD ( MULTIPLEXER_SRAM_0_BASE, (4*i)   );
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     printf( "%lx\n", sample_r_msb );
+    
+    uint16_t sample_r_lsb = IORD ( MULTIPLEXER_SRAM_0_BASE, (4*i)+1 );
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+    
+//     printf( "%lx\n", sample_r_lsb );
     
     c.r = ( sample_r_msb << 16 ) | sample_r_lsb;
     
     // read imaginary part
     
-    uint16_t sample_i_msb = IORD ( SRAM_0_BASE, (4*i)+2 );
-    uint16_t sample_i_lsb = IORD ( SRAM_0_BASE, (4*i)+3 );
+    uint16_t sample_i_msb = IORD ( MULTIPLEXER_SRAM_0_BASE, (4*i)+2 );
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
+//     asm volatile("nop");
     
+//     printf( "%lx\n", sample_i_msb );
+    uint16_t sample_i_lsb = IORD ( MULTIPLEXER_SRAM_0_BASE, (4*i)+3 );
+//     printf( "%lx\n", sample_i_lsb );
     c.i = ( sample_i_msb << 16 ) | sample_i_lsb;
     
     return c;

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jul 11, 2019 5:17:24 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1562858244817</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Aug 6, 2019 1:37:25 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1565091445183</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/reverb_template.sopcinfo</SopcDesignFile>
@@ -899,122 +899,122 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>header_mac_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x0003FFFF</addressRange>
-                <addressSpan>262144</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>sdram</slaveDescriptor>
                 <addressRange>0x08000000 - 0x0FFFFFFF</addressRange>
                 <addressSpan>134217728</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>sram_0</slaveDescriptor>
+                <slaveDescriptor>multiplexer_sram_0</slaveDescriptor>
                 <addressRange>0x10000000 - 0x101FFFFF</addressRange>
                 <addressSpan>2097152</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>header_mac_0</slaveDescriptor>
+                <addressRange>0x10200000 - 0x1023FFFF</addressRange>
+                <addressSpan>262144</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>fir_r</slaveDescriptor>
-                <addressRange>0x10201000 - 0x102017FF</addressRange>
+                <addressRange>0x10241000 - 0x102417FF</addressRange>
                 <addressSpan>2048</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>fir_l</slaveDescriptor>
-                <addressRange>0x10201800 - 0x10201FFF</addressRange>
+                <addressRange>0x10241800 - 0x10241FFF</addressRange>
                 <addressSpan>2048</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sdcard_interface</slaveDescriptor>
-                <addressRange>0x10202000 - 0x102023FF</addressRange>
+                <addressRange>0x10242000 - 0x102423FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>textmode_controller</slaveDescriptor>
-                <addressRange>0x10202400 - 0x1020243F</addressRange>
+                <addressRange>0x10242400 - 0x1024243F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pio_0</slaveDescriptor>
-                <addressRange>0x10202440 - 0x1020244F</addressRange>
+                <addressRange>0x10242440 - 0x1024244F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>altpll</slaveDescriptor>
-                <addressRange>0x10202450 - 0x1020245F</addressRange>
+                <addressRange>0x10242450 - 0x1024245F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>altpll_sram</slaveDescriptor>
-                <addressRange>0x10202460 - 0x1020246F</addressRange>
+                <addressRange>0x10242460 - 0x1024246F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>touch_cntrl</slaveDescriptor>
-                <addressRange>0x10202470 - 0x1020247F</addressRange>
+                <addressRange>0x10242470 - 0x1024247F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>av_config</slaveDescriptor>
-                <addressRange>0x10202480 - 0x1020248F</addressRange>
+                <addressRange>0x10242480 - 0x1024248F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>audio</slaveDescriptor>
-                <addressRange>0x10202490 - 0x1020249F</addressRange>
+                <addressRange>0x10242490 - 0x1024249F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>s2m_fifo_fir_r</slaveDescriptor>
-                <addressRange>0x102024A0 - 0x102024A7</addressRange>
+                <addressRange>0x102424A0 - 0x102424A7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>s2m_fifo_fir_l</slaveDescriptor>
-                <addressRange>0x102024A8 - 0x102024AF</addressRange>
+                <addressRange>0x102424A8 - 0x102424AF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>s2m_fifo_ffth</slaveDescriptor>
-                <addressRange>0x102024B0 - 0x102024B7</addressRange>
+                <addressRange>0x102424B0 - 0x102424B7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>m2s_fifo_fir_r</slaveDescriptor>
-                <addressRange>0x102024B8 - 0x102024BF</addressRange>
+                <addressRange>0x102424B8 - 0x102424BF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>m2s_fifo_fir_l</slaveDescriptor>
-                <addressRange>0x102024C0 - 0x102024C7</addressRange>
+                <addressRange>0x102424C0 - 0x102424C7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>m2s_fifo_ffth</slaveDescriptor>
-                <addressRange>0x102024C8 - 0x102024CF</addressRange>
+                <addressRange>0x102424C8 - 0x102424CF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x102024D0 - 0x102024D7</addressRange>
+                <addressRange>0x102424D0 - 0x102424D7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>

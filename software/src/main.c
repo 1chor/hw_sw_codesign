@@ -499,6 +499,58 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
 
 void test()
 {
+  
+  // schaut gut aus.
+  
+//   printf( "write to sram\n" );
+//   
+//   IOWR( MULTIPLEXER_SRAM_0_BASE, 0, 15 );
+//   
+//   printf( "read from sram\n" );
+//   
+//   int test = 0;
+//   test = IORD( MULTIPLEXER_SRAM_0_BASE, 0 );
+//   
+//   printf( "das habe ich aus dem sram gelesen: %i\n", test );
+//   
+//   return;
+  
+  
+//   int test = 0;
+//   complex_32_t ci, test;
+//   
+//   int iii = 0;
+//   for ( iii = 1; iii <= 65535; iii++ )
+//   { 
+//       ci.r = 0b11111111000000001010101011001100;
+//       ci.i = 0;
+//       
+//       sram_write( ci, iii);
+// //       IOWR( MULTIPLEXER_SRAM_0_BASE, iii, iii );
+//       
+//       test = sram_read( iii );
+// //       test = IORD( MULTIPLEXER_SRAM_0_BASE, iii );
+//       
+//       printf( "asdf: %i, %x\n", iii, test.r );
+//       return;   
+//       if ( ci.r != test.r )
+//       {
+// 	printf( "fuck intel: %i\n", iii );
+// 	return;
+//       }
+//   }
+
+//   iii = 0;
+//   for ( iii = 0; iii < 10; iii++ )
+//   { 
+//     printf( "%i: das habe ich aus dem sram gelesen: %i\n", iii, IORD( MULTIPLEXER_SRAM_0_BASE, iii ) );
+//   }
+  
+  
+  
+//   return;
+
+  
     printf("=========================\n");
     printf("test started\n");
     printf("=========================\n");
@@ -538,8 +590,35 @@ void test()
     #endif
 	
     printf("=========================\n");
-    printf("\n\n");
-        
+    printf("\n");
+    
+    #if ( FFT_H_HW ) // Hardware Header-FFT
+    
+	#if ( MAC_H_HW == 0 ) // Software Header-MAC
+    
+	      printf("!!! ACHTUNG !!!\n");
+	      printf("In der Datei \"complex.c\" muss in der Funktion \"c_mul\" die Shift-Operation auf 31 geaendert werden!\n\n");
+	      
+	      printf("=========================\n");
+	      printf("\n");
+	      
+	#endif
+	      
+    #else // Software Header-FFT
+	    
+	#if ( MAC_H_HW == 0 ) // Software Header-MAC
+    
+	      printf("!!! ACHTUNG !!!\n");
+	      printf("In der Datei \"complex.c\" muss in der Funktion \"c_mul\" die Shift-Operation auf 23 geaendert werden!\n\n");
+	      
+	      printf("=========================\n");
+	      printf("\n");
+	      
+	#endif
+	      
+    #endif
+	
+    printf("\n");        
     printf("loading ir file\n");
     struct wav* ir = wav_read("/ir_short.wav");
     printf(">done\n\n");
@@ -556,7 +635,7 @@ void test()
 	int32_t r_buf;
 	
 	fft_h_setup_hw(); // Init FFT
-
+	
 	pre_process_h_header_hw( ir );
     
     #else // Software Header-FFT
@@ -613,7 +692,7 @@ void test()
     // F I R
     // =========================================================
     
-    printf( "fir\n" );
+    printf( "setup fir\n" );
     
     #if ( FIR_HW ) // Hardware FIR
 		
@@ -665,9 +744,7 @@ void test()
         output_buffer_header_1[i] = 0;
         output_buffer_header_2[i] = 0;
     }
-    
-    printf( "das haben wir jetzt im output buffer\n" );
-    
+  
     uint32_t sample_counter = 0;
     uint32_t sample_counter_local = 0;
     
@@ -693,6 +770,21 @@ void test()
     uint32_t i_h = 0;
     
     uint8_t asdf = 0;
+    
+    // =========================================================
+    // M A C
+    // =========================================================
+        
+    #if ( MAC_H_HW ) // Hardware Header-MAC
+	  
+	printf( "reset mac\n" );
+			
+	// reset hw mac
+	IOWR( HEADER_MAC_0_BASE, 2, 1 );
+	
+	printf(">done\n\n");
+	
+    #endif
     
     // ---------------------------------------------------------
     // R E A D I N G   I   S A M P L E S
@@ -818,7 +910,7 @@ void test()
             // fft and save block
 			
 	    #if ( FFT_H_HW ) // Hardware Header-FFT 
-	    
+		
 		process_header_block_hw( i_in_1, i_in_2, i_pointer, 0 );
 	    
 	    #else // Software Header-FFT
@@ -831,58 +923,60 @@ void test()
             // F R E Q U E N C Y   M A C
             // ---------------------------------------------------------
             
-	    complex_32_t* mac_buffer_1 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
-	    complex_32_t* mac_buffer_2 = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+	    complex_i32_t* mac_buffer_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	    complex_i32_t* mac_buffer_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	    
+	    printf( "performing mac\n" );
 		
 	    #if ( MAC_H_HW ) // Hardware Header-MAC
+	    
 		// ------------
 		// left channel
 		// ------------
-    
+				
 		// set hw mac to left channel
-    
 		IOWR( HEADER_MAC_0_BASE, 3, 1 );
 		
-// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
-		
 		// activate hw mac
-    
 		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
-// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
+		//wait until mac is done
+		while ( 0 != IORD( HEADER_MAC_0_BASE, 1700 ) ) {}
 		
 		// read data from hw mac
-    
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 		{
-		    mac_buffer_1[ i ].r = IORD( HEADER_MAC_0_BASE, i );
-		    mac_buffer_1[ i ].i = IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		    mac_buffer_1[ i ].r = (int32_t)IORD( HEADER_MAC_0_BASE, i );
+		    mac_buffer_1[ i ].i = (int32_t)IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
 		}
-    
+		
+// 		for ( i = 0; i < 10; i++ )
+// 		{
+// 		    printf( "mac_buffer_1.r = %lx\n", mac_buffer_1[ i ].r );
+// 		}
+		
 		// ------------
 		// right channel
 		// ------------
     
 		// set hw mac to right channel
-    
 		IOWR( HEADER_MAC_0_BASE, 3, 2 );
 		
-// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
-		
 		// activate hw mac
-    
 		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
-// 		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
+		//wait until mac is done
+		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
 		
 		// read data from hw mac
-    
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 		{
-		    mac_buffer_2[ i ].r = IORD( HEADER_MAC_0_BASE, i );
-		    mac_buffer_2[ i ].i = IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
+		    mac_buffer_2[ i ].r = (int32_t)IORD( HEADER_MAC_0_BASE, i );
+		    mac_buffer_2[ i ].i = (int32_t)IORD( HEADER_MAC_0_BASE, i + HEADER_BLOCK_SIZE_ZE );
 		}
+		
 	    #else // Software Header-MAC
+	    
 		// clear output buffer nachdem er angelegt wurde
 		// behebt dinge die eigentlich durch timig shit verursacht werden
 		
@@ -898,9 +992,7 @@ void test()
 		ibi = i_pointer;
 		
 		// wir gehen alle ir blocks durch
-		
-		printf( "performing mac\n" );
-		
+				
 		for ( j = 0; j < 14; j++ )
 		{
 		    freq_mac_blocks( mac_buffer_1, ibi, j );
@@ -921,6 +1013,7 @@ void test()
 		    if ( ibi == 28 ) { ibi = 41; }
 		    else             { ibi -= 1; }
 		}
+				
 	    #endif
             
             // ---------------------------------------------------------
@@ -931,7 +1024,7 @@ void test()
             // machen.
             
             printf( "performing ifft\n" );
-            
+	    	                
 		#if ( FFT_H_HW ) // Hardware Header-FFT
 		
 		    int32_t* mac_buffer_16_1 = (int32_t*)malloc( 512 * sizeof(int32_t) );
@@ -955,7 +1048,7 @@ void test()
             
             //~ printf( "%i - %i\n", 512 + (i_h*256), 512 + ((i_h+2)*256) );
             
-//             printf( "das habe wir im output buffer:\n\n" );
+//             printf( "das haben wir im output buffer:\n\n" );
 //             
 //             printf( "bevor die neuen fft werte addiert werden\n" );
 //             
@@ -963,7 +1056,7 @@ void test()
 //             {
 //                 printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
 //             }
-            
+            	    
             uint16_t ii = 0;
             
             //~ for ( i = (i_h*256); i < ((i_h+2)*256); i++ )
@@ -1000,6 +1093,7 @@ void test()
             
             if ( asdf == 5 )
             {
+		printf( ">done\n\n" );
                 printf( "======\n" );
                 printf( "fertig\n" );
                 printf( "======\n\n" );
@@ -1112,11 +1206,7 @@ void freq_mac_blocks( complex_32_t* output_buffer, uint32_t ibi, uint32_t j )
     
     for ( k = 0; k < 512; k++ )
     {
-        //~ a = sram_read_from_block( ibi, k );
-        //~ b = sram_read_from_block(   j, k );
-        
         mul_temp = c_mul( in_block[k], ir_block[k] );
-        //~ mul_temp = c_mul( a, b );
         
         output_buffer[k].r += mul_temp.r;
         output_buffer[k].i += mul_temp.i;

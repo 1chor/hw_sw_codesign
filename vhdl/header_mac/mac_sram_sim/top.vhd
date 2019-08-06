@@ -12,8 +12,7 @@ entity top is
         s_read          : in std_logic;
         s_writedata     : in std_logic_vector (31 downto 0);
         s_readdata      : out std_logic_vector (31 downto 0);
-        s_readdatavalid : out std_logic;
-        s_waitrequest   : out std_logic
+        s_readdatavalid : out std_logic
     );
 end top;
 

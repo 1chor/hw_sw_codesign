@@ -16,8 +16,7 @@ architecture tb of tb_mac_sram is
             s_read          : in std_logic;
             s_writedata     : in std_logic_vector (31 downto 0);
             s_readdata      : out std_logic_vector (31 downto 0);
-            s_readdatavalid : out std_logic;
-            s_waitrequest   : out std_logic
+            s_readdatavalid : out std_logic
         );
     end component;
     
@@ -44,8 +43,7 @@ begin
         s_read          => s_read,
         s_writedata     => s_writedata,
         s_readdata      => s_readdata,
-        s_readdatavalid => s_readdatavalid,
-        s_waitrequest   => s_waitrequest
+        s_readdatavalid => s_readdatavalid
     );
     
     -- Clock generation
@@ -54,9 +52,9 @@ begin
     begin
         
         clk <= '1';
-        wait for 20ns;
+        wait for 20 ns;
         clk <= '0';
-        wait for 20ns;
+        wait for 20 ns;
         
     end process;
     
@@ -83,7 +81,7 @@ begin
         s_writedata <= "00000000000000000000000000000001";
         s_address <= "0000000000000011";
         
-        wait for 40ns;
+        wait for 40 ns;
         
         -- es wird aktiviert
         
@@ -91,7 +89,7 @@ begin
         s_writedata <= "00000000000000000000000000000010";
         s_address <= "0000000000000001";
         
-        wait for 40ns;
+        wait for 40 ns;
         
         -- es wird wieder deaktiviert
         
@@ -101,7 +99,7 @@ begin
         
         -- warten bis es fertig wird
         
-        wait for 4ms;
+        wait for 4 ms;
         
         -- noch einmal aktivieren
         
@@ -109,25 +107,25 @@ begin
         s_writedata <= "00000000000000000000000000000010";
         s_address <= "0000000000000001";
         
-        wait for 40ns;
+        wait for 40 ns;
         
         s_write <= '0';
         s_writedata <= "00000000000000000000000000000000";
         s_address <= "0000000000000000";
         
-        wait for 4ms;
+        wait for 4 ms;
         
         s_read <= '1';
         s_address <= "0000000000000000";
         
-        --~ wait for 80ns;
+        wait for 80 ns;
         
-        --~ s_read <= '0';
+        s_read <= '0';
         
         --~ s_address <= "0000000000000000";
         --~ s_read <= '1';
         
-        --~ wait for 40ns;
+        wait for 40 ms;
         
         --~ s_read <= '0';
         
