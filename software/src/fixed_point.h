@@ -6,6 +6,7 @@
 // read from wav file
 
 float convert_1q15( uint16_t );
+void convert_1q15_pointer( float*, uint16_t );
 uint16_t convert_to_fixed_1q15( float );
 
 // returned from kiss_fft

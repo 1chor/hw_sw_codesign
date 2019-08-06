@@ -18,6 +18,8 @@
 // For FIFO commands
 #include "altera_avalon_fifo_util.h"
 
+#include "defines.h"
+
 void fir_filter_setup_sw( uint16_t* fir_h_1, uint16_t* fir_h_2, struct wav* ir )
 {
     uint16_t l_buf;
@@ -27,7 +29,7 @@ void fir_filter_setup_sw( uint16_t* fir_h_1, uint16_t* fir_h_2, struct wav* ir )
     
     // collect ir samples
     
-    for ( i = 0; i < 512; i++ )
+    for ( i = 0; i < FIR_SIZE; i++ )
     {
         l_buf = wav_get_uint16( ir, 2*i );
         r_buf = wav_get_uint16( ir, 2*i+1 );
@@ -44,13 +46,13 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 	switch ( channel )
 	{
 		case 0: // left channel
-			for ( i = 0; i < 512; i++ )
+			for ( i = 0; i < FIR_SIZE; i++ )
 			{
 				// Set Coefficients
 				IOWR( FIR_L_BASE, i, (int32_t)wav_get_int16( ir, 2*i ) );
 			}
 			
-			for ( i = 0; i < 512; i++ )
+			for ( i = 0; i < FIR_SIZE; i++ )
 			{	
 				// init Input FIFOs 
 				IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, (int32_t)0x00000000 );
@@ -61,13 +63,13 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 			break;
 			
 		case 1: // right channel
-			for ( i = 0; i < 512; i++ )
+			for ( i = 0; i < FIR_SIZE; i++ )
 			{
 				// Set Coefficients
 				IOWR( FIR_R_BASE, i, (int32_t)wav_get_int16( ir, 2*i+1 ) );
 			}
 			
-			for ( i = 0; i < 512; i++ )
+			for ( i = 0; i < FIR_SIZE; i++ )
 			{	
 				// init Input FIFOs
 				IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, (int32_t)0x00000000 );
@@ -101,14 +103,14 @@ void fir_filter_sample_sw
     int32_t temp_result_1 = 0;
     int32_t temp_result_2 = 0;
     
-    for ( kk = 0; kk < 512; kk++ )
+    for ( kk = 0; kk < FIR_SIZE; kk++ )
     {
         // fixed point version
         
         // left channel
         
         hh = (int16_t)h_samples_1[kk];
-        ii = (int16_t)i_samples_1[511-kk];
+        ii = (int16_t)i_samples_1[FIR_SIZE-1-kk];
         
         temp_32 = ( (int32_t)hh * (int32_t)ii );
         temp_result_1 += temp_32;
@@ -116,7 +118,7 @@ void fir_filter_sample_sw
         // right channel
         
         hh = (int16_t)h_samples_2[kk];
-        ii = (int16_t)i_samples_2[511-kk];
+        ii = (int16_t)i_samples_2[FIR_SIZE-1-kk];
         
         temp_32 = ( (int32_t)hh * (int32_t)ii );
         temp_result_2 += temp_32;

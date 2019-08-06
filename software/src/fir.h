@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include "structs.h"
+#include "defines.h"
 
 // das wird am start der software ausgefuehrt um die ersten 512
 // samples von ir zu bekommen.

@@ -94,12 +94,12 @@ complex_32_t c_mul( complex_32_t i, complex_32_t r )
     int32_t temp_32;
     
     temp_64 = ( (int64_t)a * (int64_t)c ) - ( (int64_t)b * (int64_t)d );
-    temp_32 = (int32_t)(temp_64>>31); // HW --> 31, SW --> 23
+    temp_32 = (int32_t)(temp_64>>23); // HW --> 31, SW --> 23
     
     c_return.r = (uint32_t)(temp_32);
     
     temp_64 = ( (int64_t)a * (int64_t)d ) + ( (int64_t)b * (int64_t)c );
-    temp_32 = (int32_t)(temp_64 >> 31); // HW --> 31, SW --> 23
+    temp_32 = (int32_t)(temp_64 >> 23); // HW --> 31, SW --> 23
     
     c_return.i = (uint32_t)(temp_32);
     

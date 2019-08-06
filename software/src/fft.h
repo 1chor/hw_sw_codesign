@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "structs.h"
 #include "complex.h"
+#include "defines.h"
 
 void fft_h_setup_hw();
 void fft_b_setup_hw();

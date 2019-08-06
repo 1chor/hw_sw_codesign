@@ -8,4 +8,11 @@ typedef struct {
     
 } complex_float_t;
 
+typedef struct {
+    
+    float r;
+    float i;
+    
+} complex_float_tt;
+
 #endif

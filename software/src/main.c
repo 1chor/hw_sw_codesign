@@ -15,6 +15,8 @@
 #include "wav.h"
 #include "display.h"
 
+#include "defines.h"
+
 #include "fir.h"
 
 #include "kiss_fft.h"
@@ -22,13 +24,14 @@
 
 #include "fixed_point.h"
 #include "sram.h"
+#include "sdram.h"
 #include "complex.h"
 
 #define FIR_HW (1) 	// If 1 then use FIR filter hardware component
 #define FFT_H_HW (1) 	// If 1 then use header FFT hardware component
 #define FFT_B_HW (0) 	// If 1 then use body FFT hardware component
 #define MAC_H_HW (1) 	// If 1 then use MAC hardware component
-#define MAC_B_HW (0) 	// If 1 then use MAC hardware component
+#define MAC_B_HW (1) 	// If 1 then use MAC hardware component
 
 #define HAL_PLATFORM_RESET() \
 NIOS2_WRITE_STATUS(0); \
@@ -37,8 +40,22 @@ NIOS2_WRITE_IENABLE(0); \
 
 #define FAT_OFFSET 0
 
-// Add to defines.h
-#define HEADER_BLOCK_SIZE_ZE 512
+// IOWR( BASE, ADDR, DATA )
+
+#include "sys/alt_cache.h" 
+
+#define MAC_SDRAM_RESET             IOWR( BODY_MAC_0_BASE,  1, 0 )
+#define MAC_SDRAM_SET_LEFT_CHANNEL  IOWR( BODY_MAC_0_BASE,  3, 0 )
+#define MAC_SDRAM_SET_RIGHT_CHANNEL IOWR( BODY_MAC_0_BASE,  5, 0 )
+#define MAC_SDRAM_START             IOWR( BODY_MAC_0_BASE,  7, 0 )
+#define MAC_SDRAM_READ_OUT          IOWR( BODY_MAC_0_BASE,  9, 0 )
+#define MAC_SDRAM_CHUNK_BLOCK_INC   IOWR( BODY_MAC_0_BASE, 11, 0 )
+
+#define MAC_SDRAM_SET_BASE_ADDR(addr) IOWR( BODY_MAC_0_BASE, 13, addr )
+
+#define WAIT_UNTIL_IDLE while ( 1 != IORD( BODY_MAC_0_BASE, 129 ) ) {}
+
+#define HEADER_MAC_ADDRESS_STATE (1700)
 
 alt_up_audio_dev * audio_dev;
 
@@ -64,6 +81,10 @@ void freq_mac_blocks( complex_32_t*, uint32_t, uint32_t );
 void print_c_block_9q23( complex_32_t*, uint16_t, uint16_t );
 
 void zero_extend_256( kiss_fft_cpx* );
+
+void compare_mac( complex_32_t*, complex_32_t*, uint32_t );
+void compare_9q23( complex_32_t, complex_32_t );
+void compare_f( float, float );
 
 int main()
 {
@@ -498,59 +519,7 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
 }
 
 void test()
-{
-  
-  // schaut gut aus.
-  
-//   printf( "write to sram\n" );
-//   
-//   IOWR( MULTIPLEXER_SRAM_0_BASE, 0, 15 );
-//   
-//   printf( "read from sram\n" );
-//   
-//   int test = 0;
-//   test = IORD( MULTIPLEXER_SRAM_0_BASE, 0 );
-//   
-//   printf( "das habe ich aus dem sram gelesen: %i\n", test );
-//   
-//   return;
-  
-  
-//   int test = 0;
-//   complex_32_t ci, test;
-//   
-//   int iii = 0;
-//   for ( iii = 1; iii <= 65535; iii++ )
-//   { 
-//       ci.r = 0b11111111000000001010101011001100;
-//       ci.i = 0;
-//       
-//       sram_write( ci, iii);
-// //       IOWR( MULTIPLEXER_SRAM_0_BASE, iii, iii );
-//       
-//       test = sram_read( iii );
-// //       test = IORD( MULTIPLEXER_SRAM_0_BASE, iii );
-//       
-//       printf( "asdf: %i, %x\n", iii, test.r );
-//       return;   
-//       if ( ci.r != test.r )
-//       {
-// 	printf( "fuck intel: %i\n", iii );
-// 	return;
-//       }
-//   }
-
-//   iii = 0;
-//   for ( iii = 0; iii < 10; iii++ )
-//   { 
-//     printf( "%i: das habe ich aus dem sram gelesen: %i\n", iii, IORD( MULTIPLEXER_SRAM_0_BASE, iii ) );
-//   }
-  
-  
-  
-//   return;
-
-  
+{  
     printf("=========================\n");
     printf("test started\n");
     printf("=========================\n");
@@ -627,6 +596,35 @@ void test()
     uint32_t j = 0;
     uint32_t k = 0;
     
+    // 2 - real / img
+    // 4 - ir left / right und in left / right
+    
+    // sdramm ist mit 2 "m" geschreiben, damit ich immer daran denke, dass ich mit dem array arbeite.
+    uint32_t* sdramm = (uint32_t*)calloc( (2 * 4 * (BODY_BLOCK_NUM+1) * BODY_BLOCK_SIZE_ZE), sizeof(uint32_t) );
+    
+    //Set base address for sdram
+    sdram_testing_set_base_address( BODY_MAC_0_BASE, sdramm );
+    
+    printf( "clearing SRAM for input data\n" );
+    complex_32_t* dummy_samples = (complex_32_t*)malloc(512 * sizeof(complex_32_t));
+    sram_clear_block( dummy_samples );
+    
+    // 28 - 41 input left
+    // 42 - 55 input right
+    
+    for ( i = 28; i < 56; i++ )
+    {
+        sram_write_block( dummy_samples, i );
+    }
+    free( dummy_samples );
+    printf(">done\n\n");
+    
+    printf( "clearing SDRAM for input data\n" );
+    
+    sdram_reset_all( sdramm );
+    
+    printf(">done\n\n");
+    
     printf( "pre-processing header blocks (H)\n" );
 	
     #if ( FFT_H_HW ) // Hardware Header-FFT 
@@ -650,39 +648,35 @@ void test()
 	pre_process_h_header( ir );
     
     #endif
-    
-    //~ complex_32_t test_samples[512];
-    //~ sram_read_block(test_samples, 2);
-    //~ print_c_block_9q23( test_samples, 10, 20 );
-    
-    //~ printf("-----------\n");
-    
-    //~ complex_32_t test_samples_2[512];
-    //~ sram_read_block(test_samples_2, 14 + 2);
-    //~ print_c_block_9q23( test_samples_2, 10, 20 );
-    
-    //~ return;
-    
+        
     printf(">done\n\n");
     
-    //~ printf( "SRAM test\n" );
-    //~ (void) sram_test();
-    //~ printf(">done\n\n");
+    printf( "pre-processing body blocks (H)\n" );
     
-    printf( "clearing SRAM for input data\n" );
-    complex_32_t* dummy_samples = (complex_32_t*)malloc(512 * sizeof(complex_32_t));
-    sram_clear_block( dummy_samples );
+    #if ( FFT_B_HW ) // Hardware Body-FFT 
+	    
+// 	int32_t l_buf;
+// 	int32_t r_buf;
+// 	
+// 	fft_h_setup_hw(); // Init FFT
+// 	
+// 	pre_process_h_header_hw( ir );
     
-    // 28 - 41 input left
-    // 42 - 55 input right
+    #else // Software Body-FFT
     
-    for ( i = 28; i < 56; i++ )
-    {
-        sram_write_block( dummy_samples, i );
-    }
-    free( dummy_samples );
+	pre_process_h_body( sdramm, ir );
+    
+    #endif
+        
     printf(">done\n\n");
+        
+    #if ( MAC_B_HW ) // Hardware Body-MAC 
     
+	MAC_SDRAM_RESET;
+	WAIT_UNTIL_IDLE;
+	
+    #endif
+	    
     printf("loading input file\n");
     //~ struct wav* input = wav_read("/input.wav");
     struct wav* input = wav_read("/ir_cave.wav");
@@ -726,9 +720,11 @@ void test()
     
     wav_free( ir );
     
-    // =========================================================
-    // F F T
-    // =========================================================
+    // =================================================================
+    // prepare output
+    // =================================================================
+    
+    printf("preparing output\n");
     
     uint32_t samples_in_file = wav_sample_count(input);
     
@@ -736,40 +732,73 @@ void test()
     // struct wav* output = wav_new( samples_in_file, 2, input->header->sample_rate, input->header->bps);
     // printf(">done\n\n");
     
-    uint16_t output_buffer_header_1[2048];
-    uint16_t output_buffer_header_2[2048];
+    uint16_t output_buffer_1[2 * samples_in_file];
+    uint16_t output_buffer_2[2 * samples_in_file];
     
-    for ( i = 0; i < 2048; i++ )
+    for ( i = 0; i < ( 2 * samples_in_file ); i++ )
     {
-        output_buffer_header_1[i] = 0;
-        output_buffer_header_2[i] = 0;
+        output_buffer_1[i] = 0;
+        output_buffer_2[i] = 0;
     }
-  
-    uint32_t sample_counter = 0;
-    uint32_t sample_counter_local = 0;
     
+    printf(">done\n\n");
+    
+    // =================================================================
+    // prepare loop
+    // =================================================================
+    
+    uint32_t sample_counter = 0;
+    
+    uint32_t sample_counter_header_buffer = 0;
+    uint32_t sample_counter_body_buffer = 0;
+        
     // freed at the end of the endless loop
     
     #if ( FFT_H_HW ) // Hardware Header-FFT
      
-	complex_i32_t* i_in_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
-	complex_i32_t* i_in_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	complex_i32_t* i_in_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+	complex_i32_t* i_in_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
     
     #else // Software Header-FFT
     
-	kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
-	kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( 512 * sizeof(kiss_fft_cpx) );
+	kiss_fft_cpx* i_in_1 = (kiss_fft_cpx*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(kiss_fft_cpx) );
+	kiss_fft_cpx* i_in_2 = (kiss_fft_cpx*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(kiss_fft_cpx) );
+    
+    #endif
+	
+    #if ( FFT_B_HW ) // Hardware Body-FFT
+     
+// 	complex_i32_t* i_in_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+// 	complex_i32_t* i_in_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+    
+    #else // Software Body-FFT
+	
+	float l_buf_f = 0;
+	float r_buf_f = 0;
+    
+	kiss_fft_cpx* in_buffer_body_1 = (kiss_fft_cpx*)malloc( BODY_BLOCK_SIZE_ZE * sizeof(kiss_fft_cpx) );
+	kiss_fft_cpx* in_buffer_body_2 = (kiss_fft_cpx*)malloc( BODY_BLOCK_SIZE_ZE * sizeof(kiss_fft_cpx) );
     
     #endif
     
     // der input block wird dort gespeichert
     
-    uint8_t i_pointer = 41;
-    uint8_t ibi = 41;
+    uint8_t latest_in_block = HEADER_IN_BLOCK_MAX; // der input block wird dort gespeichert
+    uint8_t latest_in_body_block = BODY_IN_BLOCK_MAX;
+    
+    uint8_t in_pointer = HEADER_IN_BLOCK_MAX;
+    uint8_t ir_pointer = 0;
+    
+    uint8_t in_body_pointer = BODY_IN_BLOCK_MAX;
+    uint8_t ir_body_pointer = 0;
     
     uint32_t i_h = 0;
     
-    uint8_t asdf = 0;
+    uint8_t header_runs = 0;
+    uint8_t body_runs = 0;
+    uint8_t body_asdf = 0;
+    
+    uint32_t i_buffer = 0;
     
     // =========================================================
     // M A C
@@ -777,7 +806,7 @@ void test()
         
     #if ( MAC_H_HW ) // Hardware Header-MAC
 	  
-	printf( "reset mac\n" );
+	printf( "reset header mac\n" );
 			
 	// reset hw mac
 	IOWR( HEADER_MAC_0_BASE, 2, 1 );
@@ -786,13 +815,15 @@ void test()
 	
     #endif
     
-    // ---------------------------------------------------------
+    // =================================================================
+    // 
     // R E A D I N G   I   S A M P L E S
-    // ---------------------------------------------------------
+    // 
+    // =================================================================
     
     // int32_t sample_result_1 = 0;
     // int32_t sample_result_2 = 0;
-    
+        
     while (1)
     {
 	#if ( FFT_H_HW ) // Hardware Header-FFT 
@@ -800,26 +831,53 @@ void test()
 	    l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
 	    r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
 	    
-	    i_in_1[sample_counter_local].r = l_buf;
-	    i_in_1[sample_counter_local].i = 0;
+	    i_in_1[sample_counter_header_buffer].r = l_buf;
+	    i_in_1[sample_counter_header_buffer].i = 0;
 	    
-	    i_in_2[sample_counter_local].r = r_buf;
-	    i_in_2[sample_counter_local].i = 0;
+	    i_in_2[sample_counter_header_buffer].r = r_buf;
+	    i_in_2[sample_counter_header_buffer].i = 0;
 	
 	#else // Software Header-FFT
 	
 	    l_buf = wav_get_uint16( input, 2*sample_counter   );
 	    r_buf = wav_get_uint16( input, 2*sample_counter+1 );
 
-	    i_in_1[sample_counter_local].r = convert_1q15( l_buf );
-	    i_in_1[sample_counter_local].i = 0;
+	    i_in_1[sample_counter_header_buffer].r = convert_1q15( l_buf );
+	    i_in_1[sample_counter_header_buffer].i = 0;
 	    
-	    i_in_2[sample_counter_local].r = convert_1q15( r_buf );
-	    i_in_2[sample_counter_local].i = 0;
+	    i_in_2[sample_counter_header_buffer].r = convert_1q15( r_buf );
+	    i_in_2[sample_counter_header_buffer].i = 0;
+	
+	#endif
+	    
+	#if ( FFT_B_HW ) // Hardware Body-FFT 
+
+// 	    l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
+// 	    r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
+// 	    
+// 	    i_in_1[sample_counter_header_buffer].r = l_buf;
+// 	    i_in_1[sample_counter_header_buffer].i = 0;
+// 	    
+// 	    i_in_2[sample_counter_header_buffer].r = r_buf;
+// 	    i_in_2[sample_counter_header_buffer].i = 0;
+	
+	#else // Software Body-FFT
+	
+	    convert_1q15_pointer( &l_buf_f, l_buf );
+	    convert_1q15_pointer( &r_buf_f, r_buf );
+	    
+	    // store in body buffer
+        
+	    in_buffer_body_1[sample_counter_body_buffer].r = l_buf_f;
+	    in_buffer_body_1[sample_counter_body_buffer].i = 0;
+	    
+	    in_buffer_body_2[sample_counter_body_buffer].r = r_buf_f;
+	    in_buffer_body_2[sample_counter_body_buffer].i = 0;
 	
 	#endif
                 
-        sample_counter_local += 1;
+        sample_counter_header_buffer += 1;
+        sample_counter_body_buffer += 1;
                 
 	#if ( FIR_HW ) // Hardware FIR
 
@@ -843,14 +901,14 @@ void test()
 	    // wie ein shiftregister werden die samples weiter geschoben
 	    // und das neue hinten dran gehaengt.
 
-	    for ( j = 1; j < 512; j++ )
+	    for ( j = 1; j < FIR_SIZE; j++ )
 	    {
 		fir_i_1[j-1] = fir_i_1[j];
 		fir_i_2[j-1] = fir_i_2[j];
 	    }
 	    
-	    fir_i_1[511] = l_buf;
-	    fir_i_2[511] = r_buf;
+	    fir_i_1[FIR_SIZE-1] = l_buf;
+	    fir_i_2[FIR_SIZE-1] = r_buf;
 	    
 	    // zur sicherheit werden die sample results auf 0 gesetzt.
 	    
@@ -889,21 +947,27 @@ void test()
         int16_t sample_result_16_1 = (int16_t)(sample_result_1>>15);
         int16_t sample_result_16_2 = (int16_t)(sample_result_2>>15);
         
-        output_buffer_header_1[sample_counter] = (int16_t)output_buffer_header_1[sample_counter] + sample_result_16_1;
-        output_buffer_header_2[sample_counter] = (int16_t)output_buffer_header_2[sample_counter] + sample_result_16_2;
+        output_buffer_1[sample_counter] = (int16_t)output_buffer_1[sample_counter] + sample_result_16_1;
+        output_buffer_2[sample_counter] = (int16_t)output_buffer_2[sample_counter] + sample_result_16_2;
         
         // wir haben einen ganzen block
+	
+	// ---------------------------------------------------------
+        // P R O C E S S I N G   I   B L O C K
+        // ---------------------------------------------------------
+        
+        // =============================================================
+        // 
+        // H E A D E R
+        // 
+        // =============================================================
         
         if (
-            ( ((sample_counter+1) % 256) == 0 ) &&
+            ( ((sample_counter+1) % HEADER_BLOCK_SIZE) == 0 ) &&
             ( sample_counter > 0 )
         )
         {
-            // ---------------------------------------------------------
-            // P R O C E S S I N G   I   B L O C K
-            // ---------------------------------------------------------
-            
-            sample_counter_local = 0;
+            sample_counter_header_buffer = 0;
             
             printf( "full header I block collected\n" );
             
@@ -911,11 +975,11 @@ void test()
 			
 	    #if ( FFT_H_HW ) // Hardware Header-FFT 
 		
-		process_header_block_hw( i_in_1, i_in_2, i_pointer, 0 );
+		process_header_block_hw( i_in_1, i_in_2, latest_in_block, 0 );
 	    
 	    #else // Software Header-FFT
 
-		process_header_block( i_in_1, i_in_2, i_pointer, 0 );
+		process_header_block( i_in_1, i_in_2, latest_in_block, 0 );
 	    
 	    #endif
             
@@ -923,10 +987,10 @@ void test()
             // F R E Q U E N C Y   M A C
             // ---------------------------------------------------------
             
-	    complex_i32_t* mac_buffer_1 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
-	    complex_i32_t* mac_buffer_2 = (complex_i32_t*)calloc( 512, sizeof(complex_i32_t) );
+	    complex_i32_t* mac_buffer_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+	    complex_i32_t* mac_buffer_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
 	    
-	    printf( "performing mac\n" );
+	    printf( "performing header mac\n" );
 		
 	    #if ( MAC_H_HW ) // Hardware Header-MAC
 	    
@@ -941,7 +1005,7 @@ void test()
 		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
 		//wait until mac is done
-		while ( 0 != IORD( HEADER_MAC_0_BASE, 1700 ) ) {}
+		while ( 0 != IORD( HEADER_MAC_0_BASE, HEADER_MAC_ADDRESS_STATE ) ) {}
 		
 		// read data from hw mac
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
@@ -966,7 +1030,7 @@ void test()
 		IOWR( HEADER_MAC_0_BASE, 1, 2 );
 		
 		//wait until mac is done
-		while ( 0 != IORD(HEADER_MAC_0_BASE, 1700) ) {}
+		while ( 0 != IORD(HEADER_MAC_0_BASE, HEADER_MAC_ADDRESS_STATE) ) {}
 		
 		// read data from hw mac
 		for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
@@ -989,14 +1053,14 @@ void test()
 		// wir beginnen mit dem neusten, also nehmen wir die addr
 		// wo gerade der block gespeichert wurde.
 		
-		ibi = i_pointer;
+		in_pointer = latest_in_block;
 		
 		// wir gehen alle ir blocks durch
 				
-		for ( j = 0; j < 14; j++ )
+		for ( ir_pointer = 0; ir_pointer < HEADER_BLOCK_NUM; ir_pointer++ )
 		{
-		    freq_mac_blocks( mac_buffer_1, ibi, j );
-		    freq_mac_blocks( mac_buffer_2, 14 + ibi, 14 + j );
+		    freq_mac_blocks( mac_buffer_1, in_pointer, ir_pointer );
+		    freq_mac_blocks( mac_buffer_2, HEADER_BLOCK_NUM + in_pointer, HEADER_BLOCK_NUM + ir_pointer );
 		    
 		    // der naechste i block der geholt wird.
 		    // die i bloecke werden in einem ringbuffer abgespeichert
@@ -1010,8 +1074,8 @@ void test()
 		    //~ print_c_block_9q23( output_buffer_2, 10, 20 );
 		    //~ return;
 		    
-		    if ( ibi == 28 ) { ibi = 41; }
-		    else             { ibi -= 1; }
+		    if ( in_pointer == HEADER_IN_BLOCK_MIN ) { in_pointer = HEADER_IN_BLOCK_MAX; }
+		    else             { in_pointer -= 1; }
 		}
 				
 	    #endif
@@ -1023,19 +1087,19 @@ void test()
             // jetzt ist die ganze mac fertig und wir koennen einen ifft
             // machen.
             
-            printf( "performing ifft\n" );
+            printf( "performing header ifft\n" );
 	    	                
 		#if ( FFT_H_HW ) // Hardware Header-FFT
 		
-		    int32_t* mac_buffer_16_1 = (int32_t*)malloc( 512 * sizeof(int32_t) );
-		    int32_t* mac_buffer_16_2 = (int32_t*)malloc( 512 * sizeof(int32_t) );
+		    int32_t* mac_buffer_16_1 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
+		    int32_t* mac_buffer_16_2 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
 
 		    ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 		
 		#else // Software Header-FFT
 		
-		    uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
-		    uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( 512 * sizeof(uint16_t) );
+		    uint16_t* mac_buffer_16_1 = (uint16_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(uint16_t) );
+		    uint16_t* mac_buffer_16_2 = (uint16_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(uint16_t) );
 	    
 		    ifft_on_mac_buffer( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 		
@@ -1054,16 +1118,16 @@ void test()
 //             
 //             for ( i = 740; i < 760; i++ )
 //             {
-//                 printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+//                 printf( "%f\n", convert_1q15(output_buffer_1[i]) );
 //             }
             	    
             uint16_t ii = 0;
             
             //~ for ( i = (i_h*256); i < ((i_h+2)*256); i++ )
-            for ( i = 512 + (i_h*256); i < 512 + ((i_h+2)*256); i++ )
+            for ( i = HEADER_BLOCK_SIZE_ZE + (i_h*HEADER_BLOCK_SIZE); i < HEADER_BLOCK_SIZE_ZE + ((i_h+2)*HEADER_BLOCK_SIZE); i++ )
             {
-                output_buffer_header_1[i] = (int16_t)output_buffer_header_1[i] + (int16_t)mac_buffer_16_1[ii];
-                output_buffer_header_2[i] = (int16_t)output_buffer_header_2[i] + (int16_t)mac_buffer_16_2[ii];
+                output_buffer_1[i] = (int16_t)output_buffer_1[i] + (int16_t)mac_buffer_16_1[ii];
+                output_buffer_2[i] = (int16_t)output_buffer_2[i] + (int16_t)mac_buffer_16_2[ii];
                 
                 ii += 1;
             }
@@ -1072,7 +1136,7 @@ void test()
 //             
 //             for ( i = 740; i < 760; i++ )
 //             {
-//                 printf( "%f\n", convert_1q15(output_buffer_header_1[i]) );
+//                 printf( "%f\n", convert_1q15(output_buffer_1[i]) );
 //             }
             
             free( mac_buffer_16_1 );
@@ -1086,57 +1150,220 @@ void test()
             // daher wird die addr auf 28 gesetzt wenn man am ende (41)
             // angekommen ist.
             
-            if ( i_pointer == 41 ) { i_pointer = 28; }
-            else                   { i_pointer += 1; }
+            if ( latest_in_block == HEADER_IN_BLOCK_MAX ) { latest_in_block = HEADER_IN_BLOCK_MIN; }
+            else                   { latest_in_block += 1; }
             
-            asdf += 1;
-            
-            if ( asdf == 5 )
-            {
-		printf( ">done\n\n" );
-                printf( "======\n" );
-                printf( "fertig\n" );
-                printf( "======\n\n" );
-                
-                printf( "der 740. wert sollte 0.388245 sein!\n" );
-                
-                float test_value = convert_1q15( output_buffer_header_1[740] );
-                
-                float diff = test_value - 0.388245;
-                
-                if ( diff < 0 )
-                {
-                    diff *= -1;
-                }
-                
-                if ( diff < 0.000001 )
-                {
-                    printf( "PASST\n" );
-                }
-                else
-                {
-                    printf( "PASST NICHT! der wert ist: %f\n", test_value );
-                }
-                
-                break;
-            }
+//             asdf += 1;
+//             
+//             if ( asdf == 5 )
+//             {
+// 		printf( ">done\n\n" );
+//                 printf( "======\n" );
+//                 printf( "fertig\n" );
+//                 printf( "======\n\n" );
+//                 
+//                 printf( "der 740. wert sollte 0.388245 sein!\n" );
+//                 
+//                 float test_value = convert_1q15( output_buffer_1[740] );
+//                 
+//                 float diff = test_value - 0.388245;
+//                 
+//                 if ( diff < 0 )
+//                 {
+//                     diff *= -1;
+//                 }
+//                 
+//                 if ( diff < 0.000001 )
+//                 {
+//                     printf( "PASST\n" );
+//                 }
+//                 else
+//                 {
+//                     printf( "PASST NICHT! der wert ist: %f\n", test_value );
+//                 }
+//                 
+//                 break;
+//             }
             
             printf( ">done\n\n" );
         }
         
-        if ( sample_counter >= samples_in_file )
-        {
-            printf(">done done\n\n");
-        }
+        // ---------------------------------------------------------
+        // P R O C E S S I N G   I   B L O C K
+        // ---------------------------------------------------------
         
-        sample_counter += 1;
+        // =============================================================
+        // 
+        // B O D Y
+        // 
+        // =============================================================
+        
+        if (
+            ( ((sample_counter+1) % BODY_BLOCK_SIZE) == 0 ) &&
+            ( sample_counter > 0 )
+        )
+        {
+            printf("full body block collected\n");
+        
+	    if ( body_runs == 2 ) { 
+		printf ("2. Durchlauf\n\n" );
+		return; }
+            
+            body_runs += 1;
+        
+	    // ---------------------------------------------------------
+            // P R O C E S S I N G   I N   B L O C K
+            // ---------------------------------------------------------
+            
+            // hier machen wir die fft
+            
+            sample_counter_body_buffer = 0;
+            
+            printf("processing body block\n");
+            
+	    #if ( FFT_B_HW ) // Hardware Body-FFT
+		
+// 		int32_t* mac_buffer_16_1 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
+// 		int32_t* mac_buffer_16_2 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
+// 
+// 		ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+	    
+	    #else // Software Body-FFT
+	    
+		process_body_block( sdramm, in_buffer_body_1, in_buffer_body_2, latest_in_body_block, 0 );
+	    
+	    #endif
+		    
+	    // ---------------------------------------------------------
+            // F R E Q U E N C Y   M A C
+            // ---------------------------------------------------------
+		
+	    // freed in ifft_header func
+            
+            complex_32_t* body_mac_buffer_1 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
+            complex_32_t* body_mac_buffer_2 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
+            	
+	    printf( "performing body mac\n" );
+	    
+	    #if ( MAC_B_HW ) // Hardware Body-MAC
+		
+		// ich muss hier einen reset durchfuehren weil sonst der in_pointer nicht mehr stimmt.
+		// oder doch nicht?
+		
+		printf( "resetting acc\n" );
+		sdram_reset_acc( sdramm );
+		printf( ">done\n\n" );
+		
+		printf( "setting left channel\n" );
+		MAC_SDRAM_SET_LEFT_CHANNEL;
+		WAIT_UNTIL_IDLE;
+		printf( ">done\n\n" );
+		
+		printf( "starting mac\n" );
+		MAC_SDRAM_START;
+		WAIT_UNTIL_IDLE;
+		printf( ">done\n\n" );
+		
+		printf( "hw mac 1 finished. will copy sdramm into buffer\n" );
+            
+		i_buffer = CHUNK_OFFSET;
+		
+		for ( k = 0; k < BODY_BLOCK_SIZE_ZE; k++ )
+		{
+		    body_mac_buffer_1[k].r = sdramm[ i_buffer     ];
+		    body_mac_buffer_1[k].i = sdramm[ i_buffer + 1 ];
+		    
+		    i_buffer += 2;
+		}
+		
+		printf( ">done\n\n" );
+		
+		printf( "resetting acc\n" );
+		sdram_reset_acc( sdramm );
+		printf( ">done\n\n" );
+		
+		printf( "setting right channel\n" );
+		MAC_SDRAM_SET_RIGHT_CHANNEL;
+		WAIT_UNTIL_IDLE;
+		printf( ">done\n\n" );
+		
+		printf( "starting mac\n" );
+		MAC_SDRAM_START;
+		WAIT_UNTIL_IDLE;
+		printf( ">done\n\n" );
+		
+		printf( "hw mac 2 finished. will copy sdramm into buffer\n" );
+		
+		i_buffer = CHUNK_OFFSET;
+		
+		for ( k = 0; k < BODY_BLOCK_SIZE_ZE; k++ )
+		{
+		    body_mac_buffer_2[k].r = sdramm[ i_buffer     ];
+		    body_mac_buffer_2[k].i = sdramm[ i_buffer + 1 ];
+		    
+		    i_buffer += 2;
+		}
+		
+	    #else // Software Body-MAC
+	    
+		// index der I bloecke.
+		// wir beginnen mit dem neusten, also nehmen wir die addr
+		// wo gerade der block gespeichert wurde.
+		
+		printf( "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooof interest: %i", latest_in_body_block );
+		
+		in_body_pointer = latest_in_body_block;
+		
+		for ( ir_body_pointer = 0; ir_body_pointer < BODY_BLOCK_NUM; ir_body_pointer++ )
+		{
+		    // BODY_BLOCK_NUM wird als offset genommen
+		    
+		    mac_body( sdramm, body_mac_buffer_1, in_body_pointer, ir_body_pointer );
+		    mac_body( sdramm, body_mac_buffer_2, BODY_BLOCK_NUM + in_body_pointer, BODY_BLOCK_NUM + ir_body_pointer );
+		    
+		    // der naechste i block der geholt wird.
+		    // die i bloecke werden in einem ringbuffer abgespeichert
+		    // den wir von der akteullen position nach hinten
+		    // durchlaufen.
+		    // wenn der neue I block auf 42 gespeichert wurde, dann
+		    // ist der vorige a addr 41 und der davor auf 28.
+		    // anmerkung: wir speichern genau so viele I bloecke
+		    // wie H bloecke.
+		    		    
+		    if ( in_body_pointer == BODY_IN_BLOCK_MIN ) { in_body_pointer = BODY_IN_BLOCK_MAX; }
+		    else                                        { in_body_pointer -= 1; }
+		}
+			
+		printf( "sw mac 1 and 2 finished\n" );
+		printf( ">done\n\n" );
+	    
+	    #endif
+	                
+            printf( "free buffers\n" );
+            free(body_mac_buffer_1);
+            free(body_mac_buffer_2);
+            printf( ">done\n\n" );
+            
+            printf( "will continue to collect samples\n" );
+            
+            if ( latest_in_body_block == BODY_IN_BLOCK_MAX ) { latest_in_body_block = BODY_IN_BLOCK_MIN; }
+            else { latest_in_body_block += 1; }
+            
+        }   
+        
+	if ( sample_counter >= samples_in_file )
+	{
+	    printf(">done done\n\n");
+	}
+	
+	sample_counter += 1;
     }
     
     free( i_in_1 );
     free( i_in_2 );
         
     uint32_t sample_count = 0;
-    uint32_t samples_in_file_end = asdf*256;
+    uint32_t samples_in_file_end = 256;
     //~ uint32_t samples_in_file_end = wav_sample_count(input); 
     //~ uint32_t l_buf_test;
     //~ uint32_t r_buf_test;
@@ -1155,8 +1382,8 @@ void test()
         //~ ((uint16_t*)output->samples)[2*sample_count]   = (uint16_t)(l_buf_test>>16);
         //~ ((uint16_t*)output->samples)[2*sample_count+1] = (uint16_t)(r_buf_test>>16);
         
-        ((uint16_t*)output->samples)[2*sample_count]   = (uint16_t)(output_buffer_header_1);
-        ((uint16_t*)output->samples)[2*sample_count+1] = (uint16_t)(output_buffer_header_2);
+        ((uint16_t*)output->samples)[2*sample_count]   = (uint16_t)(output_buffer_1);
+        ((uint16_t*)output->samples)[2*sample_count+1] = (uint16_t)(output_buffer_2);
         
         sample_count += 1;
         
@@ -1214,6 +1441,46 @@ void freq_mac_blocks( complex_32_t* output_buffer, uint32_t ibi, uint32_t j )
     
     free( in_block );
     free( ir_block );
+}
+
+// ---------------------------------------------------------------------
+// C O M P A R E   S T U F F
+// ---------------------------------------------------------------------
+
+void compare_mac( complex_32_t* sw, complex_32_t* hw, uint32_t size )
+{
+    uint32_t i = 0;
+    
+    for ( i = 0; i < size; i++ )
+    {
+        //printf("i: %d\n", i);
+        compare_9q23( sw[i], hw[i] );
+    }
+}
+
+void compare_9q23( complex_32_t a, complex_32_t b )
+{
+    float a_r_f;
+    float a_i_f;
+    
+    float b_r_f;
+    float b_i_f;
+    
+    convert_9q23_pointer( &a_r_f, a.r );
+    convert_9q23_pointer( &a_i_f, a.i );
+    
+    convert_9q23_pointer( &b_r_f, b.r );
+    convert_9q23_pointer( &b_i_f, b.i );
+        
+    compare_f( a_r_f, b_r_f );
+    compare_f( a_i_f, b_i_f );
+}
+
+void compare_f( float a, float b )
+{
+    float diff = a - b;
+    if ( diff < 0 ) { diff *= -1; } // absolute
+    if ( diff > 0.01 ) { printf( "++++++++++++++++++++++++++++++++++++++ DIFF zu hoch: %f von sw - hw: %f - %f\n", diff, a, b ); }
 }
 
 void print_c_block_9q23( complex_32_t* samples, uint16_t start, uint16_t end )

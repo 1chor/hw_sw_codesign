@@ -70,6 +70,52 @@ float convert_1q15( uint16_t num )
     return num_float;
 }
 
+void convert_1q15_pointer( float* f, uint16_t num )
+{
+    uint8_t i = 0;
+    uint8_t shift_by = 0;
+    
+    float num_float = 0;
+    
+    uint8_t invert = 0;
+    
+    // wenn die zahl kleiner als 0 ist, dann invertieren wir die zahl.
+    // das += 1 ist weil es ein 2er kompliment ist
+    
+    if ( 0 > (int16_t)num )
+    {
+        invert = 1;
+        
+        num = ~num;
+        num += 1;
+    }
+    
+    // bei dem 1q15 format muessen wir bei 15 anfangen.
+    // das kleinste was addiert werden kann ist dann 2^-15
+    
+    for ( i = 15; i > 0; i-- )
+    {
+        // wenn das lsb 1 ist ...
+        
+        if ( ( (num>>shift_by) & 1 ) == 1 )
+        {
+            // ... dann wird 2^-i dazu addiert
+            num_float += pow( 2, i*(-1) );
+        }
+        
+        // das naechste mal werden wir eins weiter shiften
+        
+        shift_by += 1;
+    }
+    
+    if ( invert == 1 )
+    {
+        num_float *= -1;
+    }
+    
+    *f = num_float;
+}
+
 float convert_9q23( uint32_t num )
 {
     uint8_t i = 0;

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Tue Aug 06 13:37:25 CEST 2019
+ * Generated: Tue Aug 06 17:01:24 CEST 2019
  */
 
 /*
@@ -151,6 +151,7 @@
 #define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
 #define __ALTPLL
 #define __AVALON_TOUCH_CNTRL
+#define __BODY_MAC
 #define __FIR
 #define __HEADER_MAC
 #define __MULTIPLEXER_SRAM
@@ -247,6 +248,20 @@
 #define AV_CONFIG_NAME "/dev/av_config"
 #define AV_CONFIG_SPAN 16
 #define AV_CONFIG_TYPE "altera_up_avalon_audio_and_video_config"
+
+
+/*
+ * body_mac_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_body_mac_0 body_mac
+#define BODY_MAC_0_BASE 0x0
+#define BODY_MAC_0_IRQ -1
+#define BODY_MAC_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BODY_MAC_0_NAME "/dev/body_mac_0"
+#define BODY_MAC_0_SPAN 262144
+#define BODY_MAC_0_TYPE "body_mac"
 
 
 /*
