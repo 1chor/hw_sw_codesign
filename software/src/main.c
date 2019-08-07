@@ -1094,7 +1094,7 @@ void test()
 		    int32_t* mac_buffer_16_1 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
 		    int32_t* mac_buffer_16_2 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
 
-		    ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+		    ifft_header_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
 		
 		#else // Software Header-FFT
 		
@@ -1211,7 +1211,7 @@ void test()
             
             body_runs += 1;
         
-	    // ---------------------------------------------------------
+			// ---------------------------------------------------------
             // P R O C E S S I N G   I N   B L O C K
             // ---------------------------------------------------------
             

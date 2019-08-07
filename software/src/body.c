@@ -52,7 +52,7 @@ void pre_process_h_body( uint32_t* sdramm, struct wav* ir )
         
         //~ printf( "reading samples\n" );
         
-        // wir nehmen nur 256 da das ja zero extended sein soll.
+        // wir nehmen nur 4096 da das ja zero extended sein soll.
         
         for ( i = 0; i < BODY_BLOCK_SIZE; i++ )
         {
