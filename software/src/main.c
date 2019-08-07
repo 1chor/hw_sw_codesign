@@ -655,12 +655,7 @@ void test()
     
     #if ( FFT_B_HW ) // Hardware Body-FFT 
 	    
-		// 	int32_t l_buf;
-		// 	int32_t r_buf;
-		// 	
-		// 	fft_h_setup_hw(); // Init FFT
-		// 	
-		// 	pre_process_h_header_hw( ir );
+		pre_process_h_body_hw( sdramm, ir );
     
     #else // Software Body-FFT
     
@@ -670,13 +665,6 @@ void test()
         
     printf(">done\n\n");
         
-    #if ( MAC_B_HW ) // Hardware Body-MAC 
-    
-		MAC_SDRAM_RESET;
-		WAIT_UNTIL_IDLE;
-	
-    #endif
-	    
     printf("loading input file\n");
     //~ struct wav* input = wav_read("/input.wav");
     struct wav* input = wav_read("/ir_cave.wav");
@@ -768,8 +756,8 @@ void test()
 	
     #if ( FFT_B_HW ) // Hardware Body-FFT
      
-	// 	complex_i32_t* i_in_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
-	// 	complex_i32_t* i_in_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+		complex_i32_t* in_buffer_body_1 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+		complex_i32_t* in_buffer_body_2 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
     
     #else // Software Body-FFT
 	
@@ -808,9 +796,19 @@ void test()
     #if ( MAC_H_HW ) // Hardware Header-MAC
 	  
 		printf( "reset header mac\n" );
-				
-		// reset hw mac
+		
 		IOWR( HEADER_MAC_0_BASE, 2, 1 );
+		
+		printf(">done\n\n");
+	
+    #endif
+	
+	#if ( MAC_B_HW ) // Hardware Body-MAC 
+    
+		printf( "reset body mac\n" );
+		
+		MAC_SDRAM_RESET;
+		WAIT_UNTIL_IDLE;
 		
 		printf(">done\n\n");
 	
@@ -1190,10 +1188,7 @@ void test()
 				
 			#if ( FFT_B_HW ) // Hardware Body-FFT
 			
-				// int32_t* mac_buffer_16_1 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
-				// int32_t* mac_buffer_16_2 = (int32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(int32_t) );
-				// 
-				// ifft_on_mac_buffer_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+				process_body_block_hw( sdramm, in_buffer_body_1, in_buffer_body_2, latest_in_body_block, 0 );
 			
 			#else // Software Body-FFT
 			
@@ -1316,7 +1311,7 @@ void test()
 				int32_t* body_mac_buffer_16_1 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
 				int32_t* body_mac_buffer_16_2 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
 
-				// ifft_header_hw( mac_buffer_16_1, mac_buffer_16_2, mac_buffer_1, mac_buffer_2 );
+				ifft_body_hw( body_mac_buffer_16_1, body_mac_buffer_16_2, body_mac_buffer_1, body_mac_buffer_2 );
 			
 			#else // Software Header-FFT
 			
