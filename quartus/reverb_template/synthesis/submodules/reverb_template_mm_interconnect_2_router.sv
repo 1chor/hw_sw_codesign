@@ -47,12 +47,12 @@ module reverb_template_mm_interconnect_2_router_default_decode
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
-               DEFAULT_DESTID = 19 
+               DEFAULT_DESTID = 22 
    )
   (output [98 - 94 : 0] default_destination_id,
-   output [22-1 : 0] default_wr_channel,
-   output [22-1 : 0] default_rd_channel,
-   output [22-1 : 0] default_src_channel
+   output [25-1 : 0] default_wr_channel,
+   output [25-1 : 0] default_rd_channel,
+   output [25-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
@@ -63,7 +63,7 @@ module reverb_template_mm_interconnect_2_router_default_decode
       assign default_src_channel = '0;
     end
     else begin : default_channel_assignment
-      assign default_src_channel = 22'b1 << DEFAULT_CHANNEL;
+      assign default_src_channel = 25'b1 << DEFAULT_CHANNEL;
     end
   endgenerate
 
@@ -73,8 +73,8 @@ module reverb_template_mm_interconnect_2_router_default_decode
       assign default_rd_channel = '0;
     end
     else begin : default_rw_channel_assignment
-      assign default_wr_channel = 22'b1 << DEFAULT_WR_CHANNEL;
-      assign default_rd_channel = 22'b1 << DEFAULT_RD_CHANNEL;
+      assign default_wr_channel = 25'b1 << DEFAULT_WR_CHANNEL;
+      assign default_rd_channel = 25'b1 << DEFAULT_RD_CHANNEL;
     end
   endgenerate
 
@@ -103,7 +103,7 @@ module reverb_template_mm_interconnect_2_router
     // -------------------
     output                          src_valid,
     output reg [112-1    : 0] src_data,
-    output reg [22-1 : 0] src_channel,
+    output reg [25-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
     input                           src_ready
@@ -119,7 +119,7 @@ module reverb_template_mm_interconnect_2_router
     localparam PKT_PROTECTION_H = 102;
     localparam PKT_PROTECTION_L = 100;
     localparam ST_DATA_W = 112;
-    localparam ST_CHANNEL_W = 22;
+    localparam ST_CHANNEL_W = 25;
     localparam DECODER_TYPE = 0;
 
     localparam PKT_TRANS_WRITE = 70;
@@ -134,13 +134,13 @@ module reverb_template_mm_interconnect_2_router
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
-    localparam PAD0 = log2ceil(64'h10000000 - 64'h8000000); 
+    localparam PAD0 = log2ceil(64'h8000000 - 64'h0); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h10000000;
+    localparam ADDR_RANGE = 64'h8000000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -159,7 +159,7 @@ module reverb_template_mm_interconnect_2_router
     assign src_startofpacket = sink_startofpacket;
     assign src_endofpacket   = sink_endofpacket;
     wire [PKT_DEST_ID_W-1:0] default_destid;
-    wire [22-1 : 0] default_src_channel;
+    wire [25-1 : 0] default_src_channel;
 
 
 
@@ -184,9 +184,9 @@ module reverb_template_mm_interconnect_2_router
         // --------------------------------------------------
            
          
-          // ( 8000000 .. 10000000 )
-          src_channel = 22'b1;
-          src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 19;
+          // ( 0 .. 8000000 )
+          src_channel = 25'b1;
+          src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 22;
 	     
         
 

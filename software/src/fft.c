@@ -58,7 +58,6 @@ void fft_b_setup_hw()
 	for ( i = 0; i < BODY_BLOCK_SIZE_ZE; i++ )
 	{	
 		// init Input FIFOs 
-		// TODO: Adresse überprüfen!!
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)0 );
 		IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)0 );
 	}
@@ -66,7 +65,6 @@ void fft_b_setup_hw()
 	for ( i = 0; i < BODY_BLOCK_SIZE_ZE; i++ )
 	{	
 		// init Output FIFOs 
-		// TODO: Adresse überprüfen!!
 		(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
 		(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
 	}
@@ -114,10 +112,10 @@ void pre_process_h_header_hw( struct wav* ir )
             //printf( "r_buf[%d]: %lx\n", i, r_buf );
         }
         
-        // cin_X will be freed in func
-        
-//          if ( header_blocks_h_i == 0 )
-// 	  	test_header_fft( cin_1, cin_2 );
+	// cin_X will be freed in func
+      
+//      if ( header_blocks_h_i == 0 )
+// 	    test_header_fft( cin_1, cin_2 );
                 
         process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
     }
@@ -164,8 +162,8 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
         
         // cin_X will be freed in func
         
-        if ( body_blocks_h_i == 0 )
-			test_body_fft( cin_1, cin_2 );
+//      if ( body_blocks_h_i == 0 )
+// 	    test_body_fft( cin_1, cin_2 );
                 
         process_body_block_hw( sdramm, cin_1, cin_2, body_blocks_h_i, 1 );
     }
@@ -188,7 +186,7 @@ void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t 
     zero_extend_256_hw( in_2 );
     
     // Clear Bit 0 from PIO, configures normal FFT operation
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 0 );
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_H_BASE, 0 );
      
     printf("performing header fft\n"); // printf is needed for delay operation
     
@@ -279,9 +277,8 @@ void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t
     zero_extend_4096_hw( in_1 );
     zero_extend_4096_hw( in_2 );
     
-    // Clear Bit 0 from PIO, configures normal FFT operation	
-	// TODO: Adresse überprüfen!!
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 0 );
+    // Clear Bit 0 from PIO, configures normal FFT operation
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_B_BASE, 0 );
      
     printf("performing body fft\n"); // printf is needed for delay operation
     
@@ -293,11 +290,9 @@ void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t
 	// Both channels are calculated at the same time
 	// First transmission is real data from left channel
 	// Second transmission is real data from right channel
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i].r );
 	// printf( "l_buf[%d]: %lx\n", i, in_1[i].r  );
-	// TODO: Adresse überprüfen!!
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTV_BASE, (int32_t)in_2[i].r );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i].r );
 	// printf( "r_buf[%d]: %lx\n", i, in_2[i].r  );
     }
     
@@ -310,9 +305,7 @@ void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t
 	// First transmission is transformed real data from left channel
 	// Second transmission is transformed imaginary data from right channel
 	// printf( "%d\n", i );
-	// TODO: Adresse überprüfen!!
 	out_1[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
-	// TODO: Adresse überprüfen!!
 	out_2[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
 	
 	// printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
@@ -351,9 +344,10 @@ void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t
     
     printf( "writing block to %i | %i\n", block, BODY_BLOCK_NUM + block );
     
-	(void) sdram_write_block( sdramm, out_1, block );
+    (void) sdram_write_block( sdramm, out_1, block );
+    printf("write done1\n");
     (void) sdram_write_block( sdramm, out_2, BODY_BLOCK_NUM + block );
-	         
+    printf("write done2\n");
     if ( free_input == 1 )
     {
         free( in_1 );
@@ -373,7 +367,7 @@ void ifft_header_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex
     uint16_t i = 0;
     
     // Set Bit 0 from PIO, configures inverse FFT operation
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 1 );
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_H_BASE, 1 );
     
     // left channel
     
@@ -424,8 +418,7 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
     uint16_t i = 0;
     
     // Set Bit 0 from PIO, configures inverse FFT operation
-	// TODO: Adresse überprüfen!!
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 1 );
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_B_BASE, 1 );
     
     // left channel
     
@@ -434,9 +427,7 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
 	// Write sample to FIFO
 	// First transmission is real data 
 	// Second transmission is imaginary data
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(mac_buffer_1[i].r >> 8) );
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(mac_buffer_1[i].i >> 8) );
 // 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)mac_buffer_1[i].r );
 // 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)mac_buffer_1[i].i );
@@ -446,7 +437,6 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
     {
 	// Read result from FIFO
 	// Transmission is real data 
-	// TODO: Adresse überprüfen!!
 	mac_buffer_16_1[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
     }
     
@@ -457,9 +447,7 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
 	// Write sample to FIFO
 	// First transmission is real data 
 	// Second transmission is imaginary data
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(mac_buffer_2[i].r >> 8) );
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(mac_buffer_2[i].i >> 8) );
 // 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)mac_buffer_2[i].r );
 // 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)mac_buffer_2[i].i );
@@ -469,7 +457,6 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
     {
 	// Read result from FIFO
 	// Transmission is real data 
-	// TODO: Adresse überprüfen!!
 	mac_buffer_16_2[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
     }
     	
@@ -523,7 +510,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     zero_extend_256_hw( in_2 );
 //       
 //     // Clear Bit 0 from PIO, configures normal FFT operation
-//     IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 0 );
+//     IOWR_ALTERA_AVALON_PIO_DATA( PIO_H_BASE, 0 );
 //        
 //     printf( "Write sample to FIFO\n" );
 //     
@@ -594,7 +581,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     printf( "IFFT-Operation\n" );
 //     
 //     // Set Bit 0 from PIO, configures inverse FFT operation
-//     IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 1 );
+//     IOWR_ALTERA_AVALON_PIO_DATA( PIO_H_BASE, 1 );
 //     
 //     // left channel
 //     
@@ -630,8 +617,8 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 // 	// Write sample to FIFO
 // 	// First transmission is real data 
 // 	// Second transmission is imaginary data
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_2[i].r );
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)out_2[i].i );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)(out_2[i].r >> 8) );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)(out_2[i].i >> 8) );
 //     }
 //     
 //     printf("done\n");
@@ -685,8 +672,7 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
     zero_extend_4096_hw( in_2 );
       
     // Clear Bit 0 from PIO, configures normal FFT operation
-	// TODO: Adresse überprüfen!!
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 0 );
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_B_BASE, 0 );
        
     printf( "Write sample to FIFO\n" );
     
@@ -696,10 +682,10 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
 	// Both channels are calculated at the same time
 	// First transmission is real data from left channel
 	// Second transmission is real data from right channel
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i].r );
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i].r );
+	
+	printf( "Real data[%d]:      %lx\n", i, in_1[i].r );
     }
     
     printf( "done\n" );
@@ -710,13 +696,11 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
 	// Read result from FIFO
 	// First transmission is transformed real data from left channel
 	// Second transmission is transformed imaginary data from right channel
-	// TODO: Adresse überprüfen!!
 	out_1[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
-	// TODO: Adresse überprüfen!!
 	out_2[i].r = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
 	
-	//~ printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
-	//~ printf( "Imaginary data[%d]: %lx\n", i, out_2[i].r );
+	printf( "Real data[%d]:      %lx\n", i, out_1[i].r );
+	printf( "Imaginary data[%d]: %lx\n", i, out_2[i].r );
     }
     
     printf( "done\n" );
@@ -761,8 +745,7 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
     printf( "IFFT-Operation\n" );
     
     // Set Bit 0 from PIO, configures inverse FFT operation
-	// TODO: Adresse überprüfen!!
-    IOWR_ALTERA_AVALON_PIO_DATA( PIO_0_BASE, 1 );
+    IOWR_ALTERA_AVALON_PIO_DATA( PIO_B_BASE, 1 );
     
     // left channel
     
@@ -773,9 +756,7 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
 	// Write sample to FIFO
 	// First transmission is real data 
 	// Second transmission is imaginary data
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(out_1[i].r >> 8) );
-	// TODO: Adresse überprüfen!!
 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(out_1[i].i >> 8) );
     }
     
@@ -786,7 +767,6 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
     {
 	// Read result from FIFO
 	// Transmission is real data 
-	// TODO: Adresse überprüfen!!
 	res1[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
     }
     
@@ -801,10 +781,8 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
 	// Write sample to FIFO
 	// First transmission is real data 
 	// Second transmission is imaginary data
-	// TODO: Adresse überprüfen!!
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)out_2[i].r );
-	// TODO: Adresse überprüfen!!
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)out_2[i].i );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(out_2[i].r >> 8) );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)(out_2[i].i >> 8) );
     }
     
     printf("done\n");
@@ -814,7 +792,6 @@ void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
     {
 	// Read result from FIFO
 	// Transmission is real data 
-	// TODO: Adresse überprüfen!!
 	res2[i] = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTB_BASE );
     }
         

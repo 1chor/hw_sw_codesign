@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Tue Aug 06 17:01:25 CEST 2019
+ * Generated: Thu Aug 08 12:53:43 CEST 2019
  */
 
 /*
@@ -70,9 +70,11 @@
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2, nios2);
+ALTERA_AVALON_FIFO_INSTANCE ( M2S_FIFO_FFTB, m2s_fifo_fftb);
 ALTERA_AVALON_FIFO_INSTANCE ( M2S_FIFO_FFTH, m2s_fifo_ffth);
 ALTERA_AVALON_FIFO_INSTANCE ( M2S_FIFO_FIR_L, m2s_fifo_fir_l);
 ALTERA_AVALON_FIFO_INSTANCE ( M2S_FIFO_FIR_R, m2s_fifo_fir_r);
+ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FFTB, s2m_fifo_fftb);
 ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FFTH, s2m_fifo_ffth);
 ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FIR_L, s2m_fifo_fir_l);
 ALTERA_AVALON_FIFO_INSTANCE ( S2M_FIFO_FIR_R, s2m_fifo_fir_r);
@@ -102,9 +104,11 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
+    ALTERA_AVALON_FIFO_INIT ( M2S_FIFO_FFTB, m2s_fifo_fftb);
     ALTERA_AVALON_FIFO_INIT ( M2S_FIFO_FFTH, m2s_fifo_ffth);
     ALTERA_AVALON_FIFO_INIT ( M2S_FIFO_FIR_L, m2s_fifo_fir_l);
     ALTERA_AVALON_FIFO_INIT ( M2S_FIFO_FIR_R, m2s_fifo_fir_r);
+    ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FFTB, s2m_fifo_fftb);
     ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FFTH, s2m_fifo_ffth);
     ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FIR_L, s2m_fifo_fir_l);
     ALTERA_AVALON_FIFO_INIT ( S2M_FIFO_FIR_R, s2m_fifo_fir_r);

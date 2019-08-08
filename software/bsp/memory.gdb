@@ -3,7 +3,7 @@
 # Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
 # SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
 #
-# Generated: Tue Aug 06 17:01:25 CEST 2019
+# Generated: Thu Aug 08 12:53:43 CEST 2019
 
 # DO NOT MODIFY THIS FILE
 #
@@ -47,4 +47,4 @@
 # by allowing GDB to cache memory contents on the host.
 
 # sdram
-memory 0x8000000 0x10000000 cache
+memory 0x0 0x8000000 cache

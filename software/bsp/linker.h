@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'reverb_template'
  * SOPC Builder design path: ../../quartus/reverb_template.sopcinfo
  *
- * Generated: Tue Aug 06 17:01:25 CEST 2019
+ * Generated: Thu Aug 08 12:53:43 CEST 2019
  */
 
 /*
@@ -65,9 +65,9 @@
  *
  */
 
-#define RESET_REGION_BASE 0x8000000
+#define RESET_REGION_BASE 0x0
 #define RESET_REGION_SPAN 32
-#define SDRAM_REGION_BASE 0x8000020
+#define SDRAM_REGION_BASE 0x20
 #define SDRAM_REGION_SPAN 134217696
 
 

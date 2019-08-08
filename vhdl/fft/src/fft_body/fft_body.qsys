@@ -6,7 +6,7 @@
    version="1.0"
    description=""
    tags="INTERNAL_COMPONENT=true"
-   categories="" />
+   categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
    element fft_ii_0
@@ -70,7 +70,7 @@
    version="18.1"
    enabled="1"
    autoexport="1">
-  <parameter name="data_flow" value="Streaming" />
+  <parameter name="data_flow" value="Buffered Burst" />
   <parameter name="data_rep">Block Floating Point</parameter>
   <parameter name="design_env" value="NATIVE" />
   <parameter name="direction" value="Bi-directional" />

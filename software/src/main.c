@@ -29,7 +29,7 @@
 
 #define FIR_HW (1) 	// If 1 then use FIR filter hardware component
 #define FFT_H_HW (1) 	// If 1 then use header FFT hardware component
-#define FFT_B_HW (0) 	// If 1 then use body FFT hardware component
+#define FFT_B_HW (1) 	// If 1 then use body FFT hardware component
 #define MAC_H_HW (1) 	// If 1 then use MAC hardware component
 #define MAC_B_HW (1) 	// If 1 then use MAC hardware component
 
@@ -362,29 +362,29 @@ void pre_process_h_header( struct wav* ir )
     
     uint8_t header_blocks_h_i = 0;
     
-    for ( header_blocks_h_i = 0; header_blocks_h_i < 14; header_blocks_h_i ++ )
+    for ( header_blocks_h_i = 0; header_blocks_h_i < HEADER_BLOCK_NUM; header_blocks_h_i ++ )
     {
-        printf( "pre-processing block: %i | %i\n", header_blocks_h_i, 14+header_blocks_h_i );
+        printf( "pre-processing block: %i | %i\n", header_blocks_h_i, HEADER_BLOCK_NUM+header_blocks_h_i );
         
-        kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
-        kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
+        kiss_fft_cpx* cin_1 = (kiss_fft_cpx*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(kiss_fft_cpx) );
+        kiss_fft_cpx* cin_2 = (kiss_fft_cpx*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(kiss_fft_cpx) );
         
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
         
-        uint32_t sample_counter_ir = 512 + ( header_blocks_h_i * 256 );
+        uint32_t sample_counter_ir = HEADER_BLOCK_SIZE_ZE + ( header_blocks_h_i * HEADER_BLOCK_SIZE );
         
         // wir nehmen nur 256 da das ja zero extended sein soll.
         
-        for ( i = 0; i < 256; i++ )
+        for ( i = 0; i < HEADER_BLOCK_SIZE; i++ )
         {
             l_buf = wav_get_uint16( ir, 2*sample_counter_ir );
             r_buf = wav_get_uint16( ir, 2*sample_counter_ir+1 );
             
             // convert the binary value to float
             
-            //~ printf( "l_buf[%d]: %lx\n", 512+( header_blocks_h_i * 256 )+i, l_buf );
-            //~ printf( "r_buf[%d]: %lx\n", 512+( header_blocks_h_i * 256 )+i, r_buf );
+            //~ printf( "l_buf[%d]: %lx\n", HEADER_BLOCK_SIZE_ZE+( header_blocks_h_i * HEADER_BLOCK_SIZE )+i, l_buf );
+            //~ printf( "r_buf[%d]: %lx\n", HEADER_BLOCK_SIZE_ZE+( header_blocks_h_i * HEADER_BLOCK_SIZE )+i, r_buf );
             
             cin_1[i].r = convert_1q15(l_buf);
             cin_1[i].i = 0;
@@ -405,10 +405,10 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
 {
     uint16_t i = 0;
     
-    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
+    kiss_fft_cfg kiss_cfg = kiss_fft_alloc( HEADER_BLOCK_SIZE_ZE, 0, 0, 0 );
     
-    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
-    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)calloc( 512, sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* out_1 = (kiss_fft_cpx*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(kiss_fft_cpx) );
+    kiss_fft_cpx* out_2 = (kiss_fft_cpx*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(kiss_fft_cpx) );
     
     zero_extend_256( in_1 );
     zero_extend_256( in_2 );
@@ -424,10 +424,10 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
     
     free( kiss_cfg );
     
-    complex_32_t* samples_1 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
-    complex_32_t* samples_2 = (complex_32_t*)calloc( 512, sizeof(complex_32_t) );
+    complex_32_t* samples_1 = (complex_32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
+    complex_32_t* samples_2 = (complex_32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
     
-    for ( i = 0; i < 512; i++ )
+    for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
     {
         samples_1[i].r = convert_to_fixed_9q23( out_1[i].r );
         samples_1[i].i = convert_to_fixed_9q23( out_1[i].i );
@@ -443,11 +443,11 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
     //~ if ( block == 0 )
     //~ {
 		//~ printf( "Left Channel - Real\n" );
-		 //~ for ( i = 0; i < 512; i++ )
+		 //~ for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 			//~ printf( "%f\n", out_1[i].r );
 			
 		//~ printf( "Left Channel - Imag\n" );
-		//~ for ( i = 0; i < 512; i++ )
+		//~ for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 			//~ printf( "%f\n", out_1[i].i );
 	//~ }	
 	
@@ -459,10 +459,10 @@ void process_header_block( kiss_fft_cpx* in_1, kiss_fft_cpx* in_2, uint8_t block
     // die MAC im freq bereich laeuft. vll sollte das hier auch
     // schon irgendwie dargestellt werden.
     
-    printf( "writing block to %i | %i\n", block, 14 + block );
+    printf( "writing block to %i | %i\n", block, HEADER_BLOCK_NUM + block );
     
     (void) sram_write_block( samples_1, block );
-    (void) sram_write_block( samples_2, 14 + block );
+    (void) sram_write_block( samples_2, HEADER_BLOCK_NUM + block );
     
     free( samples_1 );
     free( samples_2 );
@@ -472,10 +472,10 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
 {
     uint16_t i = 0;
     
-    complex_float_t* f_1 = (complex_float_t*)malloc( 512 * sizeof(complex_float_t) );
-    complex_float_t* f_2 = (complex_float_t*)malloc( 512 * sizeof(complex_float_t) );
+    complex_float_t* f_1 = (complex_float_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(complex_float_t) );
+    complex_float_t* f_2 = (complex_float_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(complex_float_t) );
     
-    for ( i = 0; i < 512; i++ )
+    for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
     {
         float mac_buffer_r_1_f;
         float mac_buffer_i_1_f;
@@ -508,7 +508,7 @@ void ifft_on_mac_buffer( uint16_t* mac_buffer_16_1, uint16_t* mac_buffer_16_2, c
     
     // versuchen die floats auf 1q15 zu bekommen.
     
-    for ( i = 0; i < 512; i++ )
+    for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
     {
         mac_buffer_16_1[i] = convert_to_fixed_1q15( f_1[i].real );
         mac_buffer_16_2[i] = convert_to_fixed_1q15( f_2[i].real );
@@ -606,7 +606,7 @@ void test()
     sdram_testing_set_base_address( BODY_MAC_0_BASE, sdramm );
     
     printf( "clearing SRAM for input data\n" );
-    complex_32_t* dummy_samples = (complex_32_t*)malloc(512 * sizeof(complex_32_t));
+    complex_32_t* dummy_samples = (complex_32_t*)malloc(HEADER_BLOCK_SIZE_ZE * sizeof(complex_32_t));
     sram_clear_block( dummy_samples );
     
     // 28 - 41 input left
@@ -643,7 +643,7 @@ void test()
 
 		// das 2. argument gibt an ob es eine inverse fft ist
 
-		kiss_fft_cfg kiss_cfg = kiss_fft_alloc( 512, 0, 0, 0 );
+		kiss_fft_cfg kiss_cfg = kiss_fft_alloc( HEADER_BLOCK_SIZE_ZE, 0, 0, 0 );
 
 		pre_process_h_header( ir );
     
@@ -685,13 +685,13 @@ void test()
 		
 		// wird fuer das setup benoetigt.
 		
-		uint16_t* fir_h_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		uint16_t* fir_h_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+		uint16_t* fir_h_1 = (uint16_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(uint16_t) );
+		uint16_t* fir_h_2 = (uint16_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(uint16_t) );
 		
 		// wird unten bei dem endless loop als shift reg verwendet.
 		
-		uint16_t* fir_i_1 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
-		uint16_t* fir_i_2 = (uint16_t*)calloc( 512, sizeof(uint16_t) );
+		uint16_t* fir_i_1 = (uint16_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(uint16_t) );
+		uint16_t* fir_i_2 = (uint16_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(uint16_t) );
 		
 		fir_filter_setup_sw( fir_h_1, fir_h_2, ir );
     
@@ -1330,14 +1330,14 @@ void test()
 			
 			for ( i = BODY_BLOCK_SIZE_ZE + (i_h_body*BODY_BLOCK_SIZE); i < HEADER_BLOCK_SIZE_ZE + ((i_h_body+2)*HEADER_BLOCK_SIZE); i++ )
 			{
-				output_buffer_1[i] = (int16_t)output_buffer_1[i] + (int16_t)mac_buffer_16_1[jj];
-				output_buffer_2[i] = (int16_t)output_buffer_2[i] + (int16_t)mac_buffer_16_2[jj];
+				output_buffer_1[i] = (int16_t)output_buffer_1[i] + (int16_t)body_mac_buffer_16_1[jj];
+				output_buffer_2[i] = (int16_t)output_buffer_2[i] + (int16_t)body_mac_buffer_16_2[jj];
 				
 				jj += 1;
 			}
 				
-			free( mac_buffer_16_1 );
-			free( mac_buffer_16_2 );
+			free( body_mac_buffer_16_1 );
+			free( body_mac_buffer_16_2 );
 			
 			i_h_body += 1;
 			
@@ -1418,11 +1418,11 @@ void freq_mac_blocks( complex_32_t* output_buffer, uint32_t ibi, uint32_t j )
     // get ir and in blocks from sram
     
     complex_32_t mul_temp;
-    //~ complex_32_t in_block[512];
-    //~ complex_32_t ir_block[512];
+    //~ complex_32_t in_block[HEADER_BLOCK_SIZE_ZE];
+    //~ complex_32_t ir_block[HEADER_BLOCK_SIZE_ZE];
     
-    complex_32_t* in_block = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
-    complex_32_t* ir_block = (complex_32_t*)malloc( 512 * sizeof(complex_32_t) );
+    complex_32_t* in_block = (complex_32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(complex_32_t) );
+    complex_32_t* ir_block = (complex_32_t*)malloc( HEADER_BLOCK_SIZE_ZE * sizeof(complex_32_t) );
     
     (void) sram_read_block( in_block, ibi );
     (void) sram_read_block( ir_block,   j );
@@ -1434,7 +1434,7 @@ void freq_mac_blocks( complex_32_t* output_buffer, uint32_t ibi, uint32_t j )
     
     uint16_t k = 0;
     
-    for ( k = 0; k < 512; k++ )
+    for ( k = 0; k < HEADER_BLOCK_SIZE_ZE; k++ )
     {
         mul_temp = c_mul( in_block[k], ir_block[k] );
         
@@ -1506,7 +1506,7 @@ void zero_extend_256( kiss_fft_cpx* samples )
 {
     uint16_t i = 0;
     
-    for ( i = 256; i < 512; i++ )
+    for ( i = HEADER_BLOCK_SIZE; i < HEADER_BLOCK_SIZE_ZE; i++ )
     {
         samples[i].r = 0;
         samples[i].i = 0;

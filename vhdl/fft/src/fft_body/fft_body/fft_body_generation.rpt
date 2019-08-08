@@ -1,5 +1,46 @@
+Info: Starting: Create simulation model
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body.qsys --simulation=VHDL --allow-mixed-language-simulation --output-directory=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation --family="Cyclone IV E" --part=EP4CE115F29C7
+Progress: Loading fft_body/fft_body.qsys
+Progress: Reading input file
+Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
+Progress: Parameterizing module fft_ii_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: fft_body.fft_ii_0: Radix-2 digit reverse implied
+Info: fft_body: Generating fft_body "fft_body" for SIM_VHDL
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_3n8192cos.hex
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_2n8192sin.hex
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_3n8192sin.hex
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_1n8192cos.hex
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_2n8192cos.hex
+Info: fft_ii_0: --- add file: fft_body_fft_ii_0_1n8192sin.hex
+Info: fft_ii_0: "fft_body" instantiated altera_fft_ii "fft_ii_0"
+Info: fft_body: Done "fft_body" with 2 modules, 410 files
+Info: qsys-generate succeeded.
+Info: Finished: Create simulation model
+Info: Starting: Create Modelsim Project.
+Info: sim-script-gen --spd=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/fft_body.spd --output-directory=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/fft_body.spd --output-directory=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ directory:
+Info: 	mentor/msim_setup.tcl
+Info: Skipping VCS script generation since VHDL file $QUARTUS_INSTALL_DIR/eda/sim_lib/altera_syn_attributes.vhd is required for simulation
+Info: Generating the following file(s) for VCSMX simulator in /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ directory:
+Info: 	synopsys/vcsmx/synopsys_sim.setup
+Info: 	synopsys/vcsmx/vcsmx_setup.sh
+Info: Generating the following file(s) for NCSIM simulator in /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ directory:
+Info: 	cadence/cds.lib
+Info: 	cadence/hdl.var
+Info: 	cadence/ncsim_setup.sh
+Info: 	1 .cds.lib files in cadence/cds_libs/ directory
+Info: Generating the following file(s) for RIVIERA simulator in /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/ directory:
+Info: 	aldec/rivierapro_setup.tcl
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/simulation/.
+Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
+Info: Finished: Create Modelsim Project.
 Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/fft_body/fft_body.qsys --block-symbol-file --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/fft_body/fft_body --family="Cyclone IV E" --part=EP4CE115F29C7
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body.qsys --block-symbol-file --output-directory=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body --family="Cyclone IV E" --part=EP4CE115F29C7
 Progress: Loading fft_body/fft_body.qsys
 Progress: Reading input file
 Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
@@ -13,7 +54,7 @@ Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate /homes/h01325347/TILAB/maintask/vhdl/fft/fft_body/fft_body.qsys --synthesis=VHDL --output-directory=/homes/h01325347/TILAB/maintask/vhdl/fft/fft_body/fft_body/synthesis --family="Cyclone IV E" --part=EP4CE115F29C7
+Info: qsys-generate /homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body.qsys --synthesis=VHDL --output-directory=/homes/s01325347/Desktop/TILAB/hw_sw_codesign/vhdl/fft/src/fft_body/fft_body/synthesis --family="Cyclone IV E" --part=EP4CE115F29C7
 Progress: Loading fft_body/fft_body.qsys
 Progress: Reading input file
 Progress: Adding fft_ii_0 [altera_fft_ii 18.1]
