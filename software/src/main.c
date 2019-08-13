@@ -1353,10 +1353,14 @@ void test()
     
     free( sdramm );
     
-    free( fir_i_1 );
-    free( fir_i_2 );
-    free( fir_h_1 );
-    free( fir_h_2 );
+    #if ( FIR_HW == 0) // Software FIR
+    
+	free( fir_i_1 );
+	free( fir_i_2 );
+	free( fir_h_1 );
+	free( fir_h_2 );
+    
+    #endif
         
     uint32_t sample_count = 0;
     uint32_t samples_in_file_end = 256;
