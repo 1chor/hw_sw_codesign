@@ -339,7 +339,7 @@ void sdram_testing_set_base_address(uint32_t base, uint32_t* sdramm)
     
     printf( "setting base address to 0x%x, %d\n", sdramm, sdramm );
     
-    MAC_SDRAM_SET_BASE_ADDR( base,sdramm );
+    MAC_SDRAM_SET_BASE_ADDR( base, sdramm );
     
     printf( "base address set. wait until idle.\n" );
     

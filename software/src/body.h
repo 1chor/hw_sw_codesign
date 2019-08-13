@@ -16,7 +16,6 @@
 #include "complex.h"
 
 #include "fir.h"
-#include "fft_header.h"
 
 #include "kiss_fft.h"
 #include "fft_fp.h"

@@ -19,6 +19,7 @@
 
 #include "fir.h"
 
+#include "fft.h"
 #include "kiss_fft.h"
 #include "fft_fp.h"
 
@@ -73,6 +74,7 @@ void line_in_demo();
 void play_file_demo();
 void record_demo();
 
+void test();
 void pre_process_h_header( struct wav* );
 void process_header_block( kiss_fft_cpx*, kiss_fft_cpx*, uint8_t, uint8_t );
 void ifft_on_mac_buffer( uint16_t*, uint16_t*, complex_32_t*, complex_32_t* );
@@ -596,15 +598,6 @@ void test()
     uint32_t j = 0;
     uint32_t k = 0;
     
-    // 2 - real / img
-    // 4 - ir left / right und in left / right
-    
-    // sdramm ist mit 2 "m" geschreiben, damit ich immer daran denke, dass ich mit dem array arbeite.
-    uint32_t* sdramm = (uint32_t*)calloc( (2 * 4 * (BODY_BLOCK_NUM+1) * BODY_BLOCK_SIZE_ZE), sizeof(uint32_t) );
-    
-    //Set base address for sdram
-    sdram_testing_set_base_address( BODY_MAC_0_BASE, sdramm );
-    
     printf( "clearing SRAM for input data\n" );
     complex_32_t* dummy_samples = (complex_32_t*)malloc(HEADER_BLOCK_SIZE_ZE * sizeof(complex_32_t));
     sram_clear_block( dummy_samples );
@@ -617,7 +610,17 @@ void test()
         sram_write_block( dummy_samples, i );
     }
     free( dummy_samples );
+    
     printf(">done\n\n");
+    
+    // 2 - real / img
+    // 4 - ir left / right und in left / right
+    
+    // sdramm ist mit 2 "m" geschreiben, damit ich immer daran denke, dass ich mit dem array arbeite.
+    uint32_t* sdramm = (uint32_t*)calloc( (2 * 4 * (BODY_BLOCK_NUM+1) * BODY_BLOCK_SIZE_ZE), sizeof(uint32_t) );
+    
+    //Set base address for sdram
+    sdram_testing_set_base_address( BODY_MAC_0_BASE, sdramm );
     
     printf( "clearing SDRAM for input data\n" );
     
@@ -1194,8 +1197,8 @@ void test()
 				// ---------------------------------------------------------
 			
 			// freed in ifft_body func
-			complex_32_t* body_mac_buffer_1 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
-			complex_32_t* body_mac_buffer_2 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
+			complex_i32_t* body_mac_buffer_1 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
+			complex_i32_t* body_mac_buffer_2 = (complex_32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_32_t) );
 					
 			printf( "performing body mac\n" );
 			
@@ -1357,6 +1360,8 @@ void test()
     
     free( i_in_1 );
     free( i_in_2 );
+    
+    free( sdramm );
         
     uint32_t sample_count = 0;
     uint32_t samples_in_file_end = 256;

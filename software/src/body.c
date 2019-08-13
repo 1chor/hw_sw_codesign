@@ -22,6 +22,8 @@
 #include "fixed_point.h"
 #include "sdram.h"
 
+#include "body.h"
+
 // =====================================================================
 // 
 // pre_process_h_body
@@ -76,7 +78,7 @@ void pre_process_h_body( uint32_t* sdramm, struct wav* ir )
         
         for ( j = 0; j < 20; j++ )
         {
-            printf( "sdram: %d\n", sdramm[j] );
+            printf( "sdram: %ld\n", sdramm[j] );
         }
         
         if ( body_blocks_h_i == 1 )
@@ -148,8 +150,8 @@ void process_body_block( uint32_t* sdramm, kiss_fft_cpx* in_1, kiss_fft_cpx* in_
         
         for ( i = 0; i < 20; i++ )
         {
-            printf( "%i %f %f i\n", i, out_1[i].r, out_1[i].i );
-            printf( "%i %d %d i\n", i, samples_1[i].r, samples_1[i].i );
+            printf( "%ld %f %f i\n", i, out_1[i].r, out_1[i].i );
+            printf( "%ld %ld %ld i\n", i, samples_1[i].r, samples_1[i].i );
         }
     }
     
@@ -224,8 +226,8 @@ void mac_body( uint32_t* sdramm, complex_32_t* output_buffer, uint32_t in_pointe
     
     // overflow is ignored.
     
-    printf( "in_pointer: %d\n", in_pointer );
-    printf( "ir_pointer: %d\n", ir_pointer );
+    printf( "in_pointer: %ld\n", in_pointer );
+    printf( "ir_pointer: %ld\n", ir_pointer );
     
     printf( "\n" );
     
@@ -237,9 +239,7 @@ void mac_body( uint32_t* sdramm, complex_32_t* output_buffer, uint32_t in_pointe
     //~ print_c_block_9q23( in_block, 5, 5 );
     
     uint16_t k = 0;
-    
-    int64_t acc_temp = 0;
-    
+        
     for ( k = 0; k < BODY_BLOCK_SIZE_ZE; k++ )
     {
         mul_temp = c_mul( in_block[k], ir_block[k] );

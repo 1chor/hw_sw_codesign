@@ -1,5 +1,5 @@
-#ifndef _SRAM_H_
-#define _SRAM_H_
+#ifndef _SDRAM_H_
+#define _SDRAM_H_
 
 #include <inttypes.h>
 

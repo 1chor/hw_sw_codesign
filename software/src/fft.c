@@ -19,6 +19,7 @@
 
 #include "fixed_point.h"
 #include "sram.h"
+#include "sdram.h"
 #include "complex.h"
 #include "defines.h"
 
@@ -117,7 +118,6 @@ void pre_process_h_header_hw( struct wav* ir )
 void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
 {    
     uint32_t i = 0;
-    uint32_t j = 0;
     
     uint16_t body_blocks_h_i = 0;
     
@@ -126,22 +126,26 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
         printf( "pre-processing block: %i | %i\n", body_blocks_h_i, BODY_BLOCK_NUM + body_blocks_h_i );
         
         int32_t* cin_1 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
+	if (cin_1 == NULL) 
+	    printf( "error calloc\n");
+	
+	printf( "calloc 1\n");
         int32_t* cin_2 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
-        
+//         printf( "calloc 2\n");
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
         
         uint32_t sample_counter_ir = FIR_SIZE + ( HEADER_BLOCK_NUM * HEADER_BLOCK_SIZE ) + ( body_blocks_h_i * BODY_BLOCK_SIZE );
         
         // wir nehmen nur 4096 da das ja zero extended sein soll.
-        
+//         printf( "read\n");
         for ( i = 0; i < BODY_BLOCK_SIZE; i++ )
         {
             cin_1[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
             cin_2[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
                         
             sample_counter_ir += 1;
-            
+            	
             //printf( "cin_1[%d]: %lx\n", i, cin_1[i] );
             //printf( "cin_2[%d]: %lx\n", i, cin_2[i] );
         }
@@ -168,7 +172,7 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
 
 void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
-//     printf( "enter process_header_block_hw func\n" );
+    printf( "enter process_header_block_hw func\n" );
     
     // Nach der FFT haben die Werte ein 17Q15 Format!!
   
@@ -235,7 +239,7 @@ void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8
     }
     
     // printf( "done\n" );
-    // printf( "Get back both transformed channels\n" );
+    printf( "Get back both transformed channels\n" );
     
     // Get back both transformed channels
     for ( i = 1; i < HEADER_BLOCK_SIZE_ZE/2; i++ )
@@ -281,6 +285,8 @@ void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8
 
 void process_body_block_hw( uint32_t* sdramm, int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
+    printf( "enter process_body_block_hw func\n" );
+    
     // Nach der FFT haben die Werte ein 17Q15 Format!!
   
     uint32_t i = 0;

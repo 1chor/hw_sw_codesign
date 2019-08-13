@@ -8,6 +8,7 @@
 #include "system.h"
 #include "io.h"
 #include "nios2.h"
+#include <stdio.h>
 
 #include "sram.h"
 #include "complex.h"
@@ -233,4 +234,6 @@ uint8_t sram_test()
     (void) c_cmp( c_11_022, c_11_022_right );
     (void) c_cmp( c_12_022, c_12_022_right );
     (void) c_cmp( c_13_255, c_13_255_right );
+    
+    return 0;
 }
