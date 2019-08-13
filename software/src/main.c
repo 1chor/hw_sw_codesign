@@ -744,8 +744,8 @@ void test()
     
     #if ( FFT_H_HW ) // Hardware Header-FFT
      
-		complex_i32_t* i_in_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
-		complex_i32_t* i_in_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+		int32_t* i_in_1 = (int32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(int32_t) );
+		int32_t* i_in_2 = (int32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(int32_t) );
     
     #else // Software Header-FFT
     
@@ -756,8 +756,8 @@ void test()
 	
     #if ( FFT_B_HW ) // Hardware Body-FFT
      
-		complex_i32_t* in_buffer_body_1 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
-		complex_i32_t* in_buffer_body_2 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+		int32_t* in_buffer_body_1 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
+		int32_t* in_buffer_body_2 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
     
     #else // Software Body-FFT
 	
@@ -827,11 +827,9 @@ void test()
 			l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
 			r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
 			
-			i_in_1[sample_counter_header_buffer].r = l_buf;
-			i_in_1[sample_counter_header_buffer].i = 0;
+			i_in_1[sample_counter_header_buffer] = l_buf;
 			
-			i_in_2[sample_counter_header_buffer].r = r_buf;
-			i_in_2[sample_counter_header_buffer].i = 0;
+			i_in_2[sample_counter_header_buffer] = r_buf;
 		
 		#else // Software Header-FFT
 		
@@ -848,14 +846,9 @@ void test()
 			
 		#if ( FFT_B_HW ) // Hardware Body-FFT 
 
-			// l_buf = (int32_t)wav_get_int16( input, 2*sample_counter   );
-			// r_buf = (int32_t)wav_get_int16( input, 2*sample_counter+1 );
-			// 	    
-			// i_in_1[sample_counter_header_buffer].r = l_buf;
-			// i_in_1[sample_counter_header_buffer].i = 0;
-			// 	    
-			// i_in_2[sample_counter_header_buffer].r = r_buf;
-			// i_in_2[sample_counter_header_buffer].i = 0;
+			in_buffer_body_1[sample_counter_body_buffer] = l_buf;
+			
+			in_buffer_body_2[sample_counter_body_buffer] = r_buf;
 		
 		#else // Software Body-FFT
 		

@@ -75,10 +75,7 @@ void fft_b_setup_hw()
 // ---------------------------------------------------------
 
 void pre_process_h_header_hw( struct wav* ir )
-{
-    int32_t l_buf;
-    int32_t r_buf;
-    
+{    
     uint16_t i = 0;
     
     uint8_t header_blocks_h_i = 0;
@@ -87,8 +84,8 @@ void pre_process_h_header_hw( struct wav* ir )
     {
         printf( "pre-processing block: %i | %i\n", header_blocks_h_i, HEADER_BLOCK_NUM + header_blocks_h_i );
         
-        complex_i32_t* cin_1 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
-        complex_i32_t* cin_2 = (complex_i32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+        int32_t* cin_1 = (int32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(int32_t) );
+        int32_t* cin_2 = (int32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(int32_t) );
         
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
@@ -99,17 +96,13 @@ void pre_process_h_header_hw( struct wav* ir )
         
         for ( i = 0; i < HEADER_BLOCK_SIZE; i++ )
         {
-            l_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
-            r_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
-            
-			cin_1[i].r = l_buf;
-		
-			cin_2[i].r = r_buf;
-            
+            cin_1[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
+            cin_2[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
+                        
             sample_counter_ir += 1;
             
-            //printf( "l_buf[%d]: %lx\n", i, l_buf );
-            //printf( "r_buf[%d]: %lx\n", i, r_buf );
+            //printf( "cin_1[%d]: %lx\n", i, cin_1[i] );
+            //printf( "cin_2[%d]: %lx\n", i, cin_2[i] );
         }
         
 	// cin_X will be freed in func
@@ -122,10 +115,7 @@ void pre_process_h_header_hw( struct wav* ir )
 }
 
 void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
-{
-    int32_t l_buf;
-    int32_t r_buf;
-    
+{    
     uint32_t i = 0;
     uint32_t j = 0;
     
@@ -135,8 +125,8 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
     {
         printf( "pre-processing block: %i | %i\n", body_blocks_h_i, BODY_BLOCK_NUM + body_blocks_h_i );
         
-        complex_i32_t* cin_1 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
-        complex_i32_t* cin_2 = (complex_i32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(complex_i32_t) );
+        int32_t* cin_1 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
+        int32_t* cin_2 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
         
         // ich muss hier bei 512 anfange, da die geraden indices immer
         // die linken samples beinhalten
@@ -147,17 +137,13 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
         
         for ( i = 0; i < BODY_BLOCK_SIZE; i++ )
         {
-            l_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
-            r_buf = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
-            
-	    cin_1[i].r = l_buf;
-    
-	    cin_2[i].r = r_buf;
-            
+            cin_1[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir   );
+            cin_2[i] = (int32_t)wav_get_int16( ir, 2*sample_counter_ir+1 );
+                        
             sample_counter_ir += 1;
             
-            //printf( "l_buf[%d]: %lx\n", i, l_buf );
-            //printf( "r_buf[%d]: %lx\n", i, r_buf );
+            //printf( "cin_1[%d]: %lx\n", i, cin_1[i] );
+            //printf( "cin_2[%d]: %lx\n", i, cin_2[i] );
         }
         
         // cin_X will be freed in func
@@ -180,8 +166,10 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
 // FFT operation
 // ---------------------------------------------------------
 
-void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t block, uint8_t free_input )
+void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
+//     printf( "enter process_header_block_hw func\n" );
+    
     // Nach der FFT haben die Werte ein 17Q15 Format!!
   
     uint16_t i = 0;
@@ -205,20 +193,20 @@ void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t 
 	// Both channels are calculated at the same time
 	// First transmission is real data from left channel
 	// Second transmission is real data from right channel
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i].r );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i] );
 	
 	asm volatile("nop");
 	asm volatile("nop");
 	asm volatile("nop");
 	
-	// printf( "l_buf[%d]: %lx\n", i, in_1[i].r  );
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i].r );
+	// printf( "l_buf[%d]: %lx\n", i, in_1[i]  );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i] );
 	
 	asm volatile("nop");
 	asm volatile("nop");
 	asm volatile("nop");
 	
-	// printf( "r_buf[%d]: %lx\n", i, in_2[i].r  );
+	// printf( "r_buf[%d]: %lx\n", i, in_2[i]  );
     }
     
     // printf( "done\n" );
@@ -291,7 +279,7 @@ void process_header_block_hw( complex_i32_t* in_1, complex_i32_t* in_2, uint8_t 
     free( out_2 );
 }
 
-void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t* in_2, uint8_t block, uint8_t free_input )
+void process_body_block_hw( uint32_t* sdramm, int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
     // Nach der FFT haben die Werte ein 17Q15 Format!!
   
@@ -316,15 +304,15 @@ void process_body_block_hw( uint32_t* sdramm, complex_i32_t* in_1, complex_i32_t
 	// Both channels are calculated at the same time
 	// First transmission is real data from left channel
 	// Second transmission is real data from right channel
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i].r );
-// 	printf( "l_buf[%d]: %lx\n", i, in_1[i].r  );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i] );
+// 	printf( "l_buf[%d]: %lx\n", i, in_1[i]  );
 	
 	asm volatile("nop");
 	asm volatile("nop");
 	asm volatile("nop");
 	
-	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i].r );
-	// printf( "r_buf[%d]: %lx\n", i, in_2[i].r  );
+	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i] );
+	// printf( "r_buf[%d]: %lx\n", i, in_2[i]  );
 	
 	asm volatile("nop");
 	asm volatile("nop");
@@ -518,25 +506,23 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
 // zero extend functions
 // ---------------------------------------------------------
 
-void zero_extend_256_hw( complex_i32_t* samples )
+void zero_extend_256_hw( int32_t* samples )
 {
     uint16_t i = 0;
     
     for ( i = HEADER_BLOCK_SIZE; i < HEADER_BLOCK_SIZE_ZE; i++ )
     {
-        samples[i].r = 0;
-        samples[i].i = 0;
+        samples[i] = 0;
     }
 }
 
-void zero_extend_4096_hw( complex_i32_t* samples )
+void zero_extend_4096_hw( int32_t* samples )
 {
     uint16_t i = 0;
     
     for ( i = BODY_BLOCK_SIZE; i < BODY_BLOCK_SIZE_ZE; i++ )
     {
-        samples[i].r = 0;
-        samples[i].i = 0;
+        samples[i] = 0;
     }
 }
 
@@ -544,7 +530,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 // FFT test functions
 // ---------------------------------------------------------
 
-// void test_header_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
+// void test_header_fft( int32_t* in_1, int32_t* in_2 )
 // {
 //     uint16_t i = 0;
 //     int32_t* res1 = (int32_t*)calloc( HEADER_BLOCK_SIZE_ZE, sizeof(int32_t) );
@@ -570,8 +556,8 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 // 	// Both channels are calculated at the same time
 // 	// First transmission is real data from left channel
 // 	// Second transmission is real data from right channel
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i].r );
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i].r );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_1[i] );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTH_BASE, (int32_t)in_2[i] );
 //     }
 //     
 //     printf( "done\n" );
@@ -690,7 +676,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     printf( "i\t|\tSOLL\t|\tIST\n" );
 //     for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 //     { 
-// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_1[i].r, res1[i] );
+// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_1[i], res1[i] );
 //     }
 //     
 //     printf( "\n\n" );
@@ -698,7 +684,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     printf( "i\t|\tSOLL\t|\tIST\n" );
 //     for ( i = 0; i < HEADER_BLOCK_SIZE_ZE; i++ )
 //     { 
-// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_2[i].r, res2[i] );
+// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_2[i], res2[i] );
 //     }
 //     printf( "\n\n" );
 //     
@@ -706,7 +692,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     free( res2 );
 // }
 
-// void test_body_fft( complex_i32_t* in_1, complex_i32_t* in_2 )
+// void test_body_fft( int32_t* in_1, int32_t* in_2 )
 // {
 //     uint16_t i = 0;
 //     int32_t* res1 = (int32_t*)calloc( BODY_BLOCK_SIZE_ZE, sizeof(int32_t) );
@@ -732,10 +718,10 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 // 	// Both channels are calculated at the same time
 // 	// First transmission is real data from left channel
 // 	// Second transmission is real data from right channel
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i].r );
-// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i].r );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_1[i] );
+// 	IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FFTB_BASE, (int32_t)in_2[i] );
 // 	
-// 	printf( "Real data[%d]:      %lx\n", i, in_1[i].r );
+// 	printf( "Real data[%d]:      %lx\n", i, in_1[i] );
 //     }
 //     
 //     printf( "done\n" );
@@ -854,7 +840,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     printf( "i\t|\tSOLL\t|\tIST\n" );
 //     for ( i = 0; i < BODY_BLOCK_SIZE_ZE; i++ )
 //     { 
-// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_1[i].r, res1[i] );
+// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_1[i], res1[i] );
 //     }
 //     
 //     printf( "\n\n" );
@@ -862,7 +848,7 @@ void zero_extend_4096_hw( complex_i32_t* samples )
 //     printf( "i\t|\tSOLL\t|\tIST\n" );
 //     for ( i = 0; i < BODY_BLOCK_SIZE_ZE; i++ )
 //     { 
-// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_2[i].r, res2[i] );
+// 	printf( "%d\t|\t%lx\t|\t%lx\n", i, in_2[i], res2[i] );
 //     }
 //     printf( "\n\n" );
 //     
