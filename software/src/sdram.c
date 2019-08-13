@@ -17,17 +17,6 @@
 #include "sdram.h"
 #include "complex.h"
 
-#define MAC_SDRAM_RESET(b)             IOWR( b,  1, 0 )
-#define MAC_SDRAM_SET_LEFT_CHANNEL(b)  IOWR( b,  3, 0 )
-#define MAC_SDRAM_SET_RIGHT_CHANNEL(b) IOWR( b,  5, 0 )
-#define MAC_SDRAM_START(b)             IOWR( b,  7, 0 )
-#define MAC_SDRAM_READ_OUT(b)          IOWR( b,  9, 0 )
-#define MAC_SDRAM_CHUNK_BLOCK_INC(b)   IOWR( b, 11, 0 )
-
-#define MAC_SDRAM_SET_BASE_ADDR(b, addr) IOWR( b, 13, addr )
-
-#define WAIT_UNTIL_IDLE(b) while ( 1 != IORD( b, 129 ) ) {}
-
 // header blocks
 
 //  0 - 13 header left
@@ -339,11 +328,11 @@ void sdram_testing_set_base_address(uint32_t base, uint32_t* sdramm)
     
     printf( "setting base address to 0x%x, %d\n", sdramm, sdramm );
     
-    MAC_SDRAM_SET_BASE_ADDR( base, sdramm );
+    MAC_SDRAM_SET_BASE_ADDR( sdramm );
     
     printf( "base address set. wait until idle.\n" );
     
-    WAIT_UNTIL_IDLE(base);
+    WAIT_UNTIL_IDLE;
     
     printf( "waiting done. flushing cache.\n" );
     
@@ -394,9 +383,9 @@ void sdram_testing_read_out(uint32_t base, uint32_t* sdramm)
       }
     }
     
-    MAC_SDRAM_READ_OUT(base);
+    MAC_SDRAM_READ_OUT;
     
-    WAIT_UNTIL_IDLE(base);
+    WAIT_UNTIL_IDLE;
     alt_dcache_flush_all();
     
     printf( "started read out\n" );
@@ -430,9 +419,9 @@ void sdram_testing_reset(uint32_t base, uint32_t* sdramm)
     
     // wenn ich jetzt etwas raus lese sollte es 0 sein.
     
-    MAC_SDRAM_RESET(base);
+    MAC_SDRAM_RESET;
     
-    WAIT_UNTIL_IDLE(base);
+    WAIT_UNTIL_IDLE;
     alt_dcache_flush_all();
     
     // es gibt 2 acc arrays mit je 64 elemente
@@ -482,9 +471,9 @@ void sdram_testing_increment(uint32_t base, uint32_t* sdramm)
         }
     }
     
-    MAC_SDRAM_CHUNK_BLOCK_INC(base);
+    MAC_SDRAM_CHUNK_BLOCK_INC;
     
-    WAIT_UNTIL_IDLE(base);
+    WAIT_UNTIL_IDLE;
     alt_dcache_flush_all();
     
     int checked = 0;

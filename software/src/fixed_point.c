@@ -2,6 +2,7 @@
 #include <inttypes.h>
 
 #include "fixed_point.h"
+#include <math.h>
 
 /*
  * zahlen von unterschiedlichen quellen

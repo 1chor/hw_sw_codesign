@@ -20,24 +20,7 @@
 
 #include "defines.h"
 
-void fir_filter_setup_sw( uint16_t* fir_h_1, uint16_t* fir_h_2, struct wav* ir )
-{
-    uint16_t l_buf;
-    uint16_t r_buf;
-    
-    uint16_t i = 0;
-    
-    // collect ir samples
-    
-    for ( i = 0; i < FIR_SIZE; i++ )
-    {
-        l_buf = wav_get_uint16( ir, 2*i );
-        r_buf = wav_get_uint16( ir, 2*i+1 );
-        
-        fir_h_1[i] = l_buf;
-        fir_h_2[i] = r_buf;
-    }
-}
+#if ( FIR_HW )
 
 void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 {
@@ -82,6 +65,62 @@ void fir_filter_setup_hw( struct wav* ir, uint16_t channel )
 		default: printf("Channel Index error\n"); exit(1);
 	}
 }
+
+#else
+
+void fir_filter_setup_sw( uint16_t* fir_h_1, uint16_t* fir_h_2, struct wav* ir )
+{
+    uint16_t l_buf;
+    uint16_t r_buf;
+    
+    uint16_t i = 0;
+    
+    // collect ir samples
+    
+    for ( i = 0; i < FIR_SIZE; i++ )
+    {
+        l_buf = wav_get_uint16( ir, 2*i );
+        r_buf = wav_get_uint16( ir, 2*i+1 );
+        
+        fir_h_1[i] = l_buf;
+        fir_h_2[i] = r_buf;
+    }
+}
+
+#endif
+
+#if ( FIR_HW )
+
+void fir_filter_sample_hw
+(
+     int32_t* sample_result_1
+    ,int32_t* sample_result_2
+    ,uint16_t new_sample_1
+    ,uint16_t new_sample_2
+)
+{     
+    int16_t sample_1 = (int16_t)new_sample_1;
+    int16_t sample_2 = (int16_t)new_sample_2;
+    
+    // left channel
+    
+    // Write sample to FIFO
+    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, (int32_t)sample_1 );
+    
+    // Read result from FIFO
+    *sample_result_1 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
+    //~ *sample_result_1 = IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
+    
+    // right channel
+    
+    // Write sample to FIFO
+    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, (int32_t)sample_2 );
+    
+    // Read result from FIFO
+    *sample_result_2 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_R_BASE );
+}
+
+#else
 
 void fir_filter_sample_sw
 (
@@ -135,31 +174,4 @@ void fir_filter_sample_sw
     *sample_result_2 = temp_result_2;
 }
 
-void fir_filter_sample_hw
-(
-     int32_t* sample_result_1
-    ,int32_t* sample_result_2
-    ,uint16_t new_sample_1
-    ,uint16_t new_sample_2
-)
-{     
-    int16_t sample_1 = (int16_t)new_sample_1;
-    int16_t sample_2 = (int16_t)new_sample_2;
-    
-    // left channel
-    
-    // Write sample to FIFO
-    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_L_BASE, (int32_t)sample_1 );
-    
-    // Read result from FIFO
-    *sample_result_1 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
-    //~ *sample_result_1 = IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_L_BASE );
-    
-    // right channel
-    
-    // Write sample to FIFO
-    IOWR_ALTERA_AVALON_FIFO_DATA( M2S_FIFO_FIR_R_BASE, (int32_t)sample_2 );
-    
-    // Read result from FIFO
-    *sample_result_2 = (int32_t)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FIR_R_BASE );
-}
+#endif

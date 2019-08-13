@@ -32,7 +32,9 @@
 // ---------------------------------------------------------
 // FFT setup
 // ---------------------------------------------------------
-	
+
+#if ( FFT_H_HW )
+
 void fft_h_setup_hw()
 {
     uint16_t i = 0;
@@ -51,6 +53,10 @@ void fft_h_setup_hw()
 	(void)IORD_ALTERA_AVALON_FIFO_DATA( S2M_FIFO_FFTH_BASE );
     }
 }
+
+#endif
+
+#if ( FFT_B_HW )
 
 void fft_b_setup_hw()
 {
@@ -71,9 +77,13 @@ void fft_b_setup_hw()
 	}
 }
 
+#endif
+
 // ---------------------------------------------------------
 // pre-processing blocks (H)
 // ---------------------------------------------------------
+
+#if ( FFT_H_HW )
 
 void pre_process_h_header_hw( struct wav* ir )
 {    
@@ -111,9 +121,14 @@ void pre_process_h_header_hw( struct wav* ir )
 //      if ( header_blocks_h_i == 0 )
 // 	    test_header_fft( cin_1, cin_2 );
                 
-        process_header_block_hw( cin_1, cin_2, header_blocks_h_i, 1 );
+        process_header_block_hw( cin_1, cin_2, header_blocks_h_i, FREE_INPUT );
     }
 }
+
+
+#endif
+
+#if ( FFT_B_HW )
 
 void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
 {    
@@ -155,7 +170,7 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
 // 	if ( body_blocks_h_i == 0 )
 // 	    test_body_fft( cin_1, cin_2 );
                 
-        process_body_block_hw( sdramm, cin_1, cin_2, body_blocks_h_i, 1 );
+        process_body_block_hw( sdramm, cin_1, cin_2, body_blocks_h_i, FREE_INPUT );
 	
 	asm volatile("nop");
 	asm volatile("nop");
@@ -166,9 +181,13 @@ void pre_process_h_body_hw( uint32_t* sdramm, struct wav* ir )
     }
 }
 
+#endif
+
 // ---------------------------------------------------------
 // FFT operation
 // ---------------------------------------------------------
+
+#if ( FFT_H_HW )
 
 void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
@@ -282,6 +301,10 @@ void process_header_block_hw( int32_t* in_1, int32_t* in_2, uint8_t block, uint8
     free( out_1 );
     free( out_2 );
 }
+
+#endif
+
+#if ( FFT_B_HW )
 
 void process_body_block_hw( uint32_t* sdramm, int32_t* in_1, int32_t* in_2, uint8_t block, uint8_t free_input )
 {
@@ -402,9 +425,13 @@ void process_body_block_hw( uint32_t* sdramm, int32_t* in_1, int32_t* in_2, uint
     free( out_2 );
 }
 
+#endif
+
 // ---------------------------------------------------------
 // IFFT operation
 // ---------------------------------------------------------
+
+#if ( FFT_H_HW )
 
 void ifft_header_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i32_t* mac_buffer_1, complex_i32_t* mac_buffer_2 )
 {
@@ -457,6 +484,10 @@ void ifft_header_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex
     free( mac_buffer_2 );
 }
 
+#endif
+
+#if ( FFT_B_HW )
+
 void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i32_t* mac_buffer_1, complex_i32_t* mac_buffer_2 )
 {
     uint16_t i = 0;
@@ -508,9 +539,13 @@ void ifft_body_hw( int32_t* mac_buffer_16_1, int32_t* mac_buffer_16_2, complex_i
     free( mac_buffer_2 );
 }
 
+#endif
+
 // ---------------------------------------------------------
 // zero extend functions
 // ---------------------------------------------------------
+
+#if ( FFT_H_HW )
 
 void zero_extend_256_hw( int32_t* samples )
 {
@@ -522,6 +557,10 @@ void zero_extend_256_hw( int32_t* samples )
     }
 }
 
+#endif
+
+#if ( FFT_B_HW )
+
 void zero_extend_4096_hw( int32_t* samples )
 {
     uint16_t i = 0;
@@ -532,9 +571,13 @@ void zero_extend_4096_hw( int32_t* samples )
     }
 }
 
+#endif
+
 // ---------------------------------------------------------
 // FFT test functions
 // ---------------------------------------------------------
+
+// #if ( FFT_H_HW )
 
 // void test_header_fft( int32_t* in_1, int32_t* in_2 )
 // {
@@ -697,7 +740,11 @@ void zero_extend_4096_hw( int32_t* samples )
 //     free( res1 );
 //     free( res2 );
 // }
-
+// 
+// #endif
+// 
+// #if ( FFT_B_HW )
+// 
 // void test_body_fft( int32_t* in_1, int32_t* in_2 )
 // {
 //     uint16_t i = 0;
@@ -861,3 +908,5 @@ void zero_extend_4096_hw( int32_t* samples )
 //     free( res1 );
 //     free( res2 );
 // }
+// 
+// #endif

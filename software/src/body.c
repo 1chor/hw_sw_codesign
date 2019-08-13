@@ -24,6 +24,8 @@
 
 #include "body.h"
 
+#if ( FFT_B_HW == 0 ) // Software Body-FFT
+
 // =====================================================================
 // 
 // pre_process_h_body
@@ -192,6 +194,10 @@ void process_body_block( uint32_t* sdramm, kiss_fft_cpx* in_1, kiss_fft_cpx* in_
     free( samples_2 );
 }
  
+#endif
+
+#if ( MAC_B_HW == 0 ) // Software Body-MAC
+
 // =====================================================================
 // 
 // mac_body
@@ -264,6 +270,10 @@ void mac_body( uint32_t* sdramm, complex_32_t* output_buffer, uint32_t in_pointe
     free( in_block );
     free( ir_block );
 }
+
+#endif
+
+#if ( FFT_B_HW == 0 ) // Software Body-FFT
 
 // =====================================================================
 // 
@@ -357,3 +367,5 @@ void zero_extend_4096( kiss_fft_cpx* samples )
     
     for ( i = BODY_BLOCK_SIZE; i < BODY_BLOCK_SIZE_ZE; i++ ) { samples[i].r = 0; samples[i].i = 0; }
 }
+
+#endif

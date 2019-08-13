@@ -1,4 +1,14 @@
 
+#ifndef __DEFINES_H__
+#define __DEFINES_H__
+
+// Defines for setup
+#define FIR_HW (1) 	// If 1 then use FIR filter hardware component
+#define FFT_H_HW (1) 	// If 1 then use header FFT hardware component
+#define FFT_B_HW (1) 	// If 1 then use body FFT hardware component
+#define MAC_H_HW (1) 	// If 1 then use MAC hardware component
+#define MAC_B_HW (1) 	// If 1 then use MAC hardware component
+
 #define P_DONE printf(">done\n\n")
 #define P_DEAC printf(">DEACTIVATED\n\n");
 
@@ -49,4 +59,22 @@
 #define CHUNK_BLOCK_INDEX ( ( BODY_IN_BLOCK_MAX + BODY_BLOCK_NUM ) + 1 )
 
 // #define CHUNK_OFFSET ( 1507328 )
+
+#define FREE_INPUT (1)
+#define NOT_FREE_INPUT (0)
+
+#define MAC_SDRAM_RESET             IOWR( BODY_MAC_0_BASE,  1, 0 )
+#define MAC_SDRAM_SET_LEFT_CHANNEL  IOWR( BODY_MAC_0_BASE,  3, 0 )
+#define MAC_SDRAM_SET_RIGHT_CHANNEL IOWR( BODY_MAC_0_BASE,  5, 0 )
+#define MAC_SDRAM_START             IOWR( BODY_MAC_0_BASE,  7, 0 )
+#define MAC_SDRAM_READ_OUT          IOWR( BODY_MAC_0_BASE,  9, 0 )
+#define MAC_SDRAM_CHUNK_BLOCK_INC   IOWR( BODY_MAC_0_BASE, 11, 0 )
+
+#define MAC_SDRAM_SET_BASE_ADDR(addr) IOWR( BODY_MAC_0_BASE, 13, addr )
+
+#define WAIT_UNTIL_IDLE while ( 1 != IORD( BODY_MAC_0_BASE, 129 ) ) {}
+
+#define HEADER_MAC_ADDRESS_STATE (1700)
+
+#endif
 
