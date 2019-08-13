@@ -73,6 +73,9 @@ void sdram_write( uint32_t* sdramm, complex_32_t sample, uint32_t i )
     //~ IOWR ( SDRAM_BASE, (2*i)+1, (uint32_t)( sample.i ) );
     
     sdramm[ (2*i)   ] = (uint32_t)( sample.r );
+    asm volatile("nop");
+    asm volatile("nop");
+    asm volatile("nop");
     sdramm[ (2*i)+1 ] = (uint32_t)( sample.i );
 }
 
@@ -88,32 +91,38 @@ void sdram_write_block( uint32_t* sdramm, complex_32_t* samples, uint32_t block 
         printf( ">>>>>>>>>>>>>>>>>>>>>>>> ERROR (sdram.c): sdram_write_block -> block is empty\n" );
     }
     
-    uint8_t block_cnt_before = 0;
-    uint8_t block_cnt_after = 0;
+//     uint8_t block_cnt_before = 0;
+//     uint8_t block_cnt_after = 0;
     
     uint16_t i = 0;
     
     //~ uint32_t block_base = BODY_BLOCK_OFFSET + ( block * BODY_BLOCK_SIZE_ZE );
     uint32_t block_base = block * BODY_BLOCK_SIZE_ZE;
-    
-    block_cnt_before = sdram_num_filled_blocks( sdramm );
+        
+//     block_cnt_before = sdram_num_filled_blocks( sdramm );
     
     //~ printf( ">>>>>>>>>>>>>>>>>>>>>>>> block cnt before %i\n", block_cnt_before );
     
     for ( i = 0; i < BODY_BLOCK_SIZE_ZE; i++ )
     {
+	asm volatile("nop");
+	asm volatile("nop");
+	asm volatile("nop");
+	asm volatile("nop");
+	asm volatile("nop");
+	asm volatile("nop");
         (void) sdram_write( sdramm, samples[i], block_base + i );
         //~ printf( "%i\n", block_base + i );
     }
     
-    block_cnt_after = sdram_num_filled_blocks( sdramm );
+//     block_cnt_after = sdram_num_filled_blocks( sdramm );
     
     //~ printf( ">>>>>>>>>>>>>>>>>>>>>>>> block cnt after %i\n", block_cnt_after );
     
-    if ( (block_cnt_before+1) != block_cnt_after )
-    {
-        //~ printf( ">>>>>>>>>>>>>>>>>>>>>>>> block cnt fuck up: before %i, after %i\n", block_cnt_before, block_cnt_after );
-    }
+//     if ( (block_cnt_before+1) != block_cnt_after )
+//     {
+//         //~ printf( ">>>>>>>>>>>>>>>>>>>>>>>> block cnt fuck up: before %i, after %i\n", block_cnt_before, block_cnt_after );
+//     }
     
     sdram_check_block( sdramm, samples, block );
 }

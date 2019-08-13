@@ -16,7 +16,6 @@ module reverb_template_nios2 (
 		input  wire        d_waitrequest,                       //                          .waitrequest
 		output wire        d_write,                             //                          .write
 		output wire [31:0] d_writedata,                         //                          .writedata
-		input  wire        d_readdatavalid,                     //                          .readdatavalid
 		output wire        debug_mem_slave_debugaccess_to_roms, //                          .debugaccess
 		output wire [27:0] i_address,                           //        instruction_master.address
 		output wire        i_read,                              //                          .read
@@ -46,7 +45,6 @@ module reverb_template_nios2 (
 		.d_waitrequest                       (d_waitrequest),                       //                          .waitrequest
 		.d_write                             (d_write),                             //                          .write
 		.d_writedata                         (d_writedata),                         //                          .writedata
-		.d_readdatavalid                     (d_readdatavalid),                     //                          .readdatavalid
 		.debug_mem_slave_debugaccess_to_roms (debug_mem_slave_debugaccess_to_roms), //                          .debugaccess
 		.i_address                           (i_address),                           //        instruction_master.address
 		.i_read                              (i_read),                              //                          .read

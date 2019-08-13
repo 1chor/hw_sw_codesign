@@ -329,7 +329,6 @@ architecture rtl of reverb_template is
 			d_waitrequest                       : in  std_logic                     := 'X';             -- waitrequest
 			d_write                             : out std_logic;                                        -- write
 			d_writedata                         : out std_logic_vector(31 downto 0);                    -- writedata
-			d_readdatavalid                     : in  std_logic                     := 'X';             -- readdatavalid
 			debug_mem_slave_debugaccess_to_roms : out std_logic;                                        -- debugaccess
 			i_address                           : out std_logic_vector(27 downto 0);                    -- address
 			i_read                              : out std_logic;                                        -- read
@@ -527,7 +526,6 @@ architecture rtl of reverb_template is
 			nios2_data_master_byteenable                             : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
 			nios2_data_master_read                                   : in  std_logic                     := 'X';             -- read
 			nios2_data_master_readdata                               : out std_logic_vector(31 downto 0);                    -- readdata
-			nios2_data_master_readdatavalid                          : out std_logic;                                        -- readdatavalid
 			nios2_data_master_write                                  : in  std_logic                     := 'X';             -- write
 			nios2_data_master_writedata                              : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
 			nios2_data_master_debugaccess                            : in  std_logic                     := 'X';             -- debugaccess
@@ -927,7 +925,6 @@ architecture rtl of reverb_template is
 	signal nios2_data_master_address                                          : std_logic_vector(27 downto 0); -- nios2:d_address -> mm_interconnect_2:nios2_data_master_address
 	signal nios2_data_master_byteenable                                       : std_logic_vector(3 downto 0);  -- nios2:d_byteenable -> mm_interconnect_2:nios2_data_master_byteenable
 	signal nios2_data_master_read                                             : std_logic;                     -- nios2:d_read -> mm_interconnect_2:nios2_data_master_read
-	signal nios2_data_master_readdatavalid                                    : std_logic;                     -- mm_interconnect_2:nios2_data_master_readdatavalid -> nios2:d_readdatavalid
 	signal nios2_data_master_write                                            : std_logic;                     -- nios2:d_write -> mm_interconnect_2:nios2_data_master_write
 	signal nios2_data_master_writedata                                        : std_logic_vector(31 downto 0); -- nios2:d_writedata -> mm_interconnect_2:nios2_data_master_writedata
 	signal nios2_instruction_master_readdata                                  : std_logic_vector(31 downto 0); -- mm_interconnect_2:nios2_instruction_master_readdata -> nios2:i_readdata
@@ -1453,7 +1450,6 @@ begin
 			d_waitrequest                       => nios2_data_master_waitrequest,                       --                          .waitrequest
 			d_write                             => nios2_data_master_write,                             --                          .write
 			d_writedata                         => nios2_data_master_writedata,                         --                          .writedata
-			d_readdatavalid                     => nios2_data_master_readdatavalid,                     --                          .readdatavalid
 			debug_mem_slave_debugaccess_to_roms => nios2_data_master_debugaccess,                       --                          .debugaccess
 			i_address                           => nios2_instruction_master_address,                    --        instruction_master.address
 			i_read                              => nios2_instruction_master_read,                       --                          .read
@@ -1680,7 +1676,6 @@ begin
 			nios2_data_master_byteenable                             => nios2_data_master_byteenable,                                       --                                                   .byteenable
 			nios2_data_master_read                                   => nios2_data_master_read,                                             --                                                   .read
 			nios2_data_master_readdata                               => nios2_data_master_readdata,                                         --                                                   .readdata
-			nios2_data_master_readdatavalid                          => nios2_data_master_readdatavalid,                                    --                                                   .readdatavalid
 			nios2_data_master_write                                  => nios2_data_master_write,                                            --                                                   .write
 			nios2_data_master_writedata                              => nios2_data_master_writedata,                                        --                                                   .writedata
 			nios2_data_master_debugaccess                            => nios2_data_master_debugaccess,                                      --                                                   .debugaccess
