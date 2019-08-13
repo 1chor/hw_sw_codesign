@@ -12,7 +12,6 @@
 #define P_DONE printf(">done\n\n")
 #define P_DEAC printf(">DEACTIVATED\n\n");
 
-
 #define FIR_SIZE (512)
 
 #define HEADER_BLOCK_SIZE    (256)
@@ -21,7 +20,6 @@
 #define HEADER_BLOCK_NUM    (14)
 #define HEADER_IN_BLOCK_MIN (28)
 #define HEADER_IN_BLOCK_MAX (41)
-
 
 #define HEADER_BLOCK_ADDR_ALIGN  (4)
 
